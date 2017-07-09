@@ -6,7 +6,7 @@ import zlib
 import BigWorld
 
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.battlehits_constants import DEFAULT_SETTINGS, SETTINGS_FILE
+from gui.battlehits.battlehits_constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
 
 from debug_utils import *
 
@@ -47,8 +47,11 @@ class Settings(object):
 			try:
 				with open(SETTINGS_FILE, 'rb') as fh:
 					data = fh.read()
-					self.__settings = cPickle.loads(zlib.decompress(data))
-					succes = True
+					settings, version = cPickle.loads(zlib.decompress(data))
+					if version == SETTINGS_VERSION:
+						succes = True
+						self.__settings = settings
+						
 			except Exception:
 				LOG_ERROR('Error while unpickling settings data information', data) 
 		
@@ -58,5 +61,5 @@ class Settings(object):
 	def __saveData(self):
 		
 		with open(SETTINGS_FILE, 'wb') as fh:
-			data = zlib.compress(cPickle.dumps(self.__settings), 1)
+			data = zlib.compress(cPickle.dumps((self.__settings, SETTINGS_VERSION)), 1)
 			fh.write(data)

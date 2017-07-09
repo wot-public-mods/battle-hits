@@ -7,7 +7,7 @@ import BattleReplay
 from debug_utils import LOG_ERROR
 
 from gui.battlehits.controllers import g_controllers
-from gui.battlehits.battlehits_constants import CACHE_FILE
+from gui.battlehits.battlehits_constants import CACHE_FILE, CACHE_VERSION
 
 class BattlesHistory(object):
 	
@@ -69,8 +69,10 @@ class BattlesHistory(object):
 			try:
 				with open(CACHE_FILE, 'rb') as fh:
 					data = fh.read()
-					self.__battles = cPickle.loads(zlib.decompress(data))
-					succes = True
+					battles, version = cPickle.loads(zlib.decompress(data))
+					if version == CACHE_VERSION:
+						succes = True
+						self.__battles = battles
 			except Exception:
 				LOG_ERROR('Error while unpickling cache data information', data) 
 		
@@ -80,5 +82,5 @@ class BattlesHistory(object):
 	def __saveData(self):
 		
 		with open(CACHE_FILE, 'wb') as fh:
-			data = zlib.compress(cPickle.dumps(self.__battles), 1)
+			data = zlib.compress(cPickle.dumps((self.__battles, CACHE_VERSION)), 1)
 			fh.write(data)

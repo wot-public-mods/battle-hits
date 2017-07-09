@@ -6,11 +6,11 @@ import shutil
 import zipfile
 
 # software data
-ANIMATE_PATH = 'C:\\Program Files\\Adobe\\Adobe Animate CC 2015\\Animate.exe'
+ANIMATE_PATH = 'C:\\Program Files\\Adobe\\Adobe Animate CC 2017\\Animate.exe'
 
 # game data
-COPY_INTO_GAME = True
-GAME_VERSION = '0.9.19.0.2'
+COPY_INTO_GAME = False
+GAME_VERSION = '0.9.19.1'
 GAME_FOLDER = 'X:/wot'
 
 # modification data
@@ -18,7 +18,7 @@ MODIFICATION_AUTHOR = 'poliroid'
 MODIFICATION_DESCRIPTION = 'Explore received hits by your vehicle in battle'
 MODIFICATION_IDENTIFICATOR = 'battlehits'
 MODIFICATION_NAME = 'Battle Hits'
-MODIFICATION_VERSION = '1.0.9'
+MODIFICATION_VERSION = '1.1.0'
 
 # result package name
 PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format( author = MODIFICATION_AUTHOR, \
