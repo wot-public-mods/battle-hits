@@ -1,0 +1,71 @@
+<space.settings>
+	<timeOfDay>spaces/battlehits/hangar.xml</timeOfDay>
+	<skyGradientDome>spaces/battlehits/hangar.xml</skyGradientDome>
+	<flora>system/data/noflora.xml</flora>
+	<bounds>
+		<minX>-6</minX>
+		<maxX>5</maxX>
+		<minY>-6</minY>
+		<maxY>5</maxY>
+	</bounds>
+	<skyDomePartition>0</skyDomePartition>
+	<skyWorld>
+		<row0>0.989776 0.000000 -0.142629</row0>
+		<row1>0.000000 1.000000 0.000000</row1>
+		<row2>0.142629 0.000000 0.989776</row2>
+		<row3>0.000000 0.000000 0.000000</row3>
+	</skyWorld>
+	<decals>
+		<fadeStart>149.000000</fadeStart>
+		<fadeEnd>300.000000</fadeEnd>
+	</decals>
+	<startPosition>0.0 1200.0 0.0</startPosition>
+	<startDirection>0.0 0.0 0.0</startDirection>
+	<farPlane>
+		<max>1500.000000</max>
+		<high>1000.000000</high>
+		<medium>800.000000</medium>
+		<low>600.000000</low>
+	</farPlane>
+	<navmeshGenerator>navgen</navmeshGenerator>
+	<PBSConversions>
+		<Terrain>
+			<EnabledConversion>false</EnabledConversion>
+			<AlbedoParams>0.050000 0.750000 0.750000 0.270000</AlbedoParams>
+			<GlossParams>0.050000 1.400000 1.200000 2.000000</GlossParams>
+			<MetallicParams>0.020000 0.600000 2.000000 0.750000</MetallicParams>
+		</Terrain>
+		<Flora>
+			<EnabledConversion>false</EnabledConversion>
+			<AlbedoParams>0.060000 0.710000 0.700000 0.150000</AlbedoParams>
+			<GlossParams>0.050000 0.750000 0.500000 2.000000</GlossParams>
+			<MetallicParams>0.020000 0.600000 2.000000 0.600000</MetallicParams>
+		</Flora>
+		<SpeedTree>
+			<EnabledConversion>false</EnabledConversion>
+			<AlbedoParams>0.050000 0.950000 0.700000 0.300000</AlbedoParams>
+			<GlossParams>0.050000 0.750000 0.500000 2.000000</GlossParams>
+			<MetallicParams>0.020000 0.600000 2.000000 1.500000</MetallicParams>
+		</SpeedTree>
+		<Objects>
+			<EnabledConversion>false</EnabledConversion>
+			<AlbedoParams>0.050000 0.950000 0.700000 0.300000</AlbedoParams>
+			<GlossParams>0.050000 0.750000 0.500000 2.000000</GlossParams>
+			<MetallicParams>0.020000 0.600000 2.000000 1.500000</MetallicParams>
+		</Objects>
+		<Decal>
+			<EnabledConversion>false</EnabledConversion>
+			<AlbedoParams>0.050000 0.950000 0.700000 0.300000</AlbedoParams>
+			<GlossParams>0.050000 0.750000 0.500000 2.000000</GlossParams>
+			<MetallicParams>0.020000 0.600000 2.000000 1.500000</MetallicParams>
+		</Decal>
+		<Overlay>
+			<EnabledConversion>false</EnabledConversion>
+			<AlbedoParams>0.050000 0.950000 0.700000 0.300000</AlbedoParams>
+			<GlossParams>0.050000 0.750000 0.500000 2.000000</GlossParams>
+			<MetallicParams>0.020000 0.600000 2.000000 1.500000</MetallicParams>
+		</Overlay>
+		<ObjectsAlbedoConversion>0.950000</ObjectsAlbedoConversion>
+	</PBSConversions>
+	<skyDome>maps/skyboxes/02_Malinovka_sky/skydome/skybox.model</skyDome>
+</space.settings>
