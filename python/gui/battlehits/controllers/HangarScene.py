@@ -314,7 +314,7 @@ class HangarScene(object):
 			g_controllers.hangarCamera.setCameraData(
 				(worldHitDirection.yaw, -worldHitDirection.pitch),
 				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0),
-				(math.radians(20.0), math.radians(15.0), (2.7, 6.0)),
+				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)),
 				(0.005, 0.005, 0.001),
 				worldStartPoint
 			)
