@@ -28,7 +28,7 @@
 		
 		private static const CLOSE_BTN_OFFSET:int = 15;
 		
-		private static const HIT_TYPE_BTN_OFFSET:int = 105;
+		private static const HIT_TYPE_BTN_OFFSET:int = 127;
 		
 		public var background:VehPreviewBackground;
 		
