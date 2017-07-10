@@ -4,11 +4,10 @@ import os
 import zlib
 
 import BigWorld
+from debug_utils import LOG_ERROR
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.battlehits_constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
-
-from debug_utils import *
 
 class Settings(object):
 	

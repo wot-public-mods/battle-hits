@@ -3,7 +3,7 @@ from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
 import math
-from debug_utils import LOG_ERROR, LOG_NOTE
+from debug_utils import LOG_ERROR, LOG_NOTE, LOG_DEBUG
 
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from vehicle_systems.tankStructure import ModelStates, TankPartNames, TankNodeNames
@@ -63,7 +63,7 @@ class HangarScene(object):
 	
 	def assambleModels(self):
 		
-		LOG_NOTE('assambleModels')
+		LOG_DEBUG('assambleModels')
 
 		# hangar doom / plane
 		self.__doomModel = doomModel = BigWorld.Model("content/interface/battlehits/static/doom.model")
@@ -113,7 +113,7 @@ class HangarScene(object):
 	
 	def freeModels(self, freeTankModel = True, withResources = False):
 		
-		LOG_NOTE('freeModels', {'freeTankModel': freeTankModel, 'withResources': withResources})
+		LOG_DEBUG('freeModels', {'freeTankModel': freeTankModel, 'withResources': withResources})
 
 		if self.__shellModels and self.__splashModels and self.__ricochetModels and self.__effectModels:
 			for model in self.__shellModels + self.__splashModels + self.__ricochetModels + self.__effectModels:
@@ -158,12 +158,12 @@ class HangarScene(object):
 		g_eventsManager.onSettingsChanged -= self.__onSettingsChanged
 		
 	def __onBattleChanged(self):
-		LOG_NOTE('__onBattleChanged')
+		LOG_DEBUG('__onBattleChanged')
 		self.freeModels()
 	
 	def __onHitChanged(self):
 		
-		LOG_NOTE('__onHitChanged')
+		LOG_DEBUG('__onHitChanged')
 
 		self.freeModels()
 		
@@ -186,7 +186,7 @@ class HangarScene(object):
 	
 	def __onSettingsChanged(self, key, value):
 		
-		LOG_NOTE('__onSettingsChanged', {'key': key, 'value': value})
+		LOG_DEBUG('__onSettingsChanged', {'key': key, 'value': value})
 
 		if key == 'currentStyle':
 			
@@ -212,7 +212,7 @@ class HangarScene(object):
 	
 	def __onModelLoaded(self, resources):
 		
-		LOG_NOTE('__onModelLoaded', resources)
+		LOG_DEBUG('__onModelLoaded', resources)
 
 		self.__compoundModel = resources[g_data.currentBattle.victim['compactDescr'].name]
 		

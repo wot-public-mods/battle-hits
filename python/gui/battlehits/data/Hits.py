@@ -7,8 +7,6 @@ from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.utils import getShellParams
 
-from debug_utils import *
-
 _SORTING_LABELS = {
 	1: l10n('hits.sorting.tank'),
 	2: l10n('hits.sorting.result'),
