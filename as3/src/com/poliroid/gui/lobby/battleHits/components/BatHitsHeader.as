@@ -1,5 +1,7 @@
 ﻿package com.poliroid.gui.lobby.battleHits.components
 {
+	
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -8,21 +10,20 @@
 	import scaleform.clik.constants.InvalidationType;
 	import scaleform.clik.events.ButtonEvent;
 	
-	import net.wg.gui.interfaces.ISoundButtonEx;
 	import net.wg.gui.components.controls.SoundButton;
 	import net.wg.gui.components.controls.CloseButtonText;
 	import net.wg.gui.interfaces.ISoundButtonEx;
 	import net.wg.gui.lobby.vehiclePreview.controls.VehPreviewBackground;
 	import net.wg.infrastructure.base.UIComponentEx;
-	
 	import net.wg.infrastructure.interfaces.IPopOverCaller;
+	
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsHeaderVO;
 	import com.poliroid.gui.lobby.battleHits.controls.HitTypeButton;
 	import com.poliroid.gui.lobby.battleHits.events.BatHitsEvent;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IBatHitsHeader;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IHitTypeButton;
 	
-	public class BatHitsHeader extends UIComponentEx implements IBatHitsHeader
+	public class BatHitsHeader extends UIComponentEx implements IPopOverCaller, IBatHitsHeader
 	{
 		
 		private static const CLOSE_BTN_OFFSET:int = 15;
@@ -140,6 +141,18 @@
 			dispatchEvent(new BatHitsEvent(BatHitsEvent.FROM_PLAYER_CLICK, true));
 			hitsTypeToPlayer.isActive = false;
 			hitsTypeFromPlayer.isActive = true;
+		}
+		
+		// this needs for correct preferences smart popover work
+		public function getTargetButton() : DisplayObject 
+		{
+			return DisplayObject(settingsBtn);
+		}
+		
+		// this needs for correct preferences smart popover work
+		public function getHitArea() : DisplayObject 
+		{
+			return DisplayObject(settingsBtn);
 		}
 	}
 }

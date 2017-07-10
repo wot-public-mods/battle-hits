@@ -46,8 +46,9 @@
 		override protected function setPreferences(data:BattleHitsPreferencesDataVO) : void 
 		{
 			
-			var popoverWrapper:PopOver = PopOver(wrapper);
+			popoverLayout.preferredLayout = 0;
 			
+			var popoverWrapper:PopOver = PopOver(wrapper);
 			popoverWrapper.title = data.titleLabel;
 			popoverWrapper.isCloseBtnVisible = data.closeButtonVisible;
 			

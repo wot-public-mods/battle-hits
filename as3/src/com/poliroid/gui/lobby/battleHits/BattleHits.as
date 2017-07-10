@@ -202,17 +202,19 @@
 		private function onPreferencesClickHandler(e:BatHitsEvent) : void
 		{
 			preferencesClickS();
-			App.toolTipMgr.hide();
-			App.popoverMgr.show(header.preferenceBtn, POPOVER_ALIAS);
+			App.popoverMgr.hide();
+			App.popoverMgr.show(header as IPopOverCaller, POPOVER_ALIAS);
 		}
 		
 		private function onToPlayerClickHandler(e:BatHitsEvent) : void
 		{
 			hitsToPlayerClickS(true);
 		}
+		
 		private function onFromPlayerClickHandler(e:BatHitsEvent) : void
 		{
 			hitsToPlayerClickS(false);
 		}
+		
 	}
 }
