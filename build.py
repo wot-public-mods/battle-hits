@@ -29,6 +29,8 @@ def copytree(source, destination, ignore=None):
 	"""implementation of shutil.copytree 
 	original sometimes throw error on folders create"""
 	for item in os.listdir(source):
+		if '.gitkeep' in item:
+			continue
 		sourcePath = os.path.join(source, item)
 		destinationPath = os.path.join(destination, item)
 		if os.path.isfile(sourcePath):
