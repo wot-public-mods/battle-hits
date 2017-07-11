@@ -16,13 +16,15 @@ hits.shotResult.armorPierces: schaden
 hits.shotResult.criticalHit: kritisch
 hits.shotResult.splash: splash
 
+ui.typeMe: ICH
+ui.typeEnemys: GEGNER
 ui.closeButton: Schliessen
 ui.settingsButton: Einstellungen
 ui.title: Gefechts Treffer
 
 ui.battle.noData: Kein Gefecht gefunden
-ui.hits.noDataMe: Kein Treffer gefunden
-ui.hits.noDataEnemys: Kein Treffer gefunden
+ui.hits.noDataMe: Keine Treffer erhalten
+ui.hits.noDataEnemys: Keine Treffer hinzugefügt
 ui.detailedhit.noData: '################'
 
 modslist.name: Gefechts Treffer
