@@ -48,6 +48,7 @@ class CurrentBattle(object):
 			compactDescr = self.__battle['vehicles'][hitData['attacker']['id']]
 		
 		self.__victim['compactDescr'] = vehicles.VehicleDescr(compactDescr = compactDescr)
+		self.__victim['compactDescrStr'] = compactDescr
 
 		shellType, shellSplash = getShellParams(self.__victim['compactDescr'], hitData['effectsIndex'])
 		

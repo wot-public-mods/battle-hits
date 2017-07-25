@@ -26,9 +26,11 @@ class HangarScene(object):
 		self.__rootPosition = Math.Vector3(0.0, 500.0, 0.0)
 		
 		# resources
-		self.__doomModel = None
+		self.__domeModel = None
 		
 		self.__compoundModel = None
+
+		self.__previosVehicleTD = None
 		
 		self.__shellModels = None
 		self.__effectModels = None
@@ -66,7 +68,7 @@ class HangarScene(object):
 		LOG_DEBUG('assambleModels')
 
 		# hangar doom / plane
-		self.__doomModel = doomModel = BigWorld.Model("content/interface/battlehits/static/doom.model")
+		self.__domeModel = doomModel = BigWorld.Model("content/interface/battlehits/static/doom.model")
 		doomModel.position = self.__rootPosition
 		BigWorld.addModel(doomModel, BigWorld.camera().spaceID)
 		
@@ -114,7 +116,7 @@ class HangarScene(object):
 	def freeModels(self, freeTankModel = True, withResources = False):
 		
 		LOG_DEBUG('freeModels', {'freeTankModel': freeTankModel, 'withResources': withResources})
-
+		
 		if self.__shellModels and self.__splashModels and self.__ricochetModels and self.__effectModels:
 			for model in self.__shellModels + self.__splashModels + self.__ricochetModels + self.__effectModels:
 				model.visible = False
@@ -138,10 +140,10 @@ class HangarScene(object):
 	
 		if withResources:
 			
-			if self.__doomModel:
-				BigWorld.delModel(self.__doomModel)
+			if self.__domeModel:
+				BigWorld.delModel(self.__domeModel)
 			
-			self.__doomModel = None
+			self.__domeModel = None
 
 			self.__shellModels = None
 			self.__effectModels = None
@@ -165,8 +167,6 @@ class HangarScene(object):
 		
 		LOG_DEBUG('__onHitChanged')
 
-		self.freeModels()
-		
 		if not g_data.currentBattle.victim:
 			
 			self.freeModels(freeTankModel=True)
@@ -180,9 +180,16 @@ class HangarScene(object):
 			)
 			
 			return
+
+		if self.__previosVehicleTD == g_data.currentBattle.victim['compactDescrStr']:
+			self.__updateTurretAndGun()
+		else:
+			
+			self.freeModels()
 		
-		assambler = prepareCompoundAssembler(g_data.currentBattle.victim['compactDescr'], ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
-		BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
+			self.__previosVehicleTD = g_data.currentBattle.victim['compactDescrStr']
+			assambler = prepareCompoundAssembler(g_data.currentBattle.victim['compactDescr'], ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
+			BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
 	
 	def __onSettingsChanged(self, key, value):
 		
@@ -193,22 +200,6 @@ class HangarScene(object):
 			self.freeModels(freeTankModel=False)
 			self.assambleModels()
 			self.__validateVehicle()
-		
-		"""
-		elif key == 'hitsToPlayer':
-			
-			if g_data.hits.desiredID == -1:
-			
-				self.freeModels(freeTankModel=True)
-				
-				g_controllers.hangarCamera.setCameraData(
-					(math.radians(160), -math.radians(25.0)),
-					(math.radians(160), -math.radians(25.0), 10.0),
-					(math.radians(0.001), math.radians(0.001), (10.0, 10.001)),
-					(0.005, 0.005, 0.001),
-					self.__rootPosition
-				)
-		"""
 	
 	def __onModelLoaded(self, resources):
 		
