@@ -3,8 +3,9 @@ from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework import g_entitiesFactories
+from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.shared import event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
@@ -91,7 +92,7 @@ class BattleHitsView(BattleHitsMeta):
 	def preferencesClick(self):
 		app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
 		if app:
-			app.loadView(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS)
+			app.loadView(ViewLoadParams(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS), {})
 	
 	def __updateStaticData(self):
 		self.as_setStaticDataS(self.__getStaticData())

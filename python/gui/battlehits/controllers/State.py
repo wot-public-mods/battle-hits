@@ -2,6 +2,7 @@
 from gui import ClientHangarSpace as chs
 from gui.app_loader.loader import g_appLoader
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.shared.utils.HangarSpace import g_hangarSpace
 
 from gui.battlehits.controllers import g_controllers
@@ -95,11 +96,11 @@ class State(object):
 		g_hangarSpace.onSpaceCreate += g_controllers.hangarScene.create
 		g_hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
 		
-		g_appLoader.getDefLobbyApp().loadView(BATTLE_HITS_VIEW_ALIAS, BATTLE_HITS_VIEW_ALIAS, {})
+		g_appLoader.getDefLobbyApp().loadView(ViewLoadParams(BATTLE_HITS_VIEW_ALIAS, BATTLE_HITS_VIEW_ALIAS), {})
 	
 	def disable(self):
 		
-		g_eventsManager.closeUI()
+		#g_eventsManager.closeUI()
 
 		g_controllers.hangarCamera.disable()
 		g_controllers.hangarScene.destroy()

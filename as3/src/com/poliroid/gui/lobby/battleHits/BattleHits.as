@@ -106,11 +106,11 @@
 		
 		override protected function onDispose() : void
 		{
-			App.gameInputMgr.clearKeyHandler(Keyboard.UP, KeyboardEvent.KEY_DOWN);
-			App.gameInputMgr.clearKeyHandler(Keyboard.DOWN, KeyboardEvent.KEY_DOWN);
-			App.gameInputMgr.clearKeyHandler(Keyboard.LEFT, KeyboardEvent.KEY_DOWN);
-			App.gameInputMgr.clearKeyHandler(Keyboard.RIGHT, KeyboardEvent.KEY_DOWN);
-			App.gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN);
+			App.gameInputMgr.clearKeyHandler(Keyboard.UP, KeyboardEvent.KEY_DOWN, onUpKeyUpHandler);
+			App.gameInputMgr.clearKeyHandler(Keyboard.DOWN, KeyboardEvent.KEY_DOWN, onDownKeyUpHandler);
+			App.gameInputMgr.clearKeyHandler(Keyboard.LEFT, KeyboardEvent.KEY_DOWN, onLeftKeyUpHandler);
+			App.gameInputMgr.clearKeyHandler(Keyboard.RIGHT, KeyboardEvent.KEY_DOWN, onRightKeyUpHandler);
+			App.gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, onEscapeKeyUpHandler);
 			
 			App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.UNREGISTER_DRAGGING));
 			

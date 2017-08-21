@@ -182,7 +182,16 @@ class HangarScene(object):
 			return
 
 		if self.__previosVehicleTD == g_data.currentBattle.victim['compactDescrStr']:
-			self.__updateTurretAndGun()
+			
+			if not self.__compoundModel:
+				self.__previosVehicleTD = g_data.currentBattle.victim['compactDescrStr']
+				assambler = prepareCompoundAssembler(g_data.currentBattle.victim['compactDescr'], ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
+				BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
+			
+			else:
+				
+				self.__updateTurretAndGun()
+		
 		else:
 			
 			self.freeModels()
@@ -462,7 +471,7 @@ class HangarScene(object):
 				worldHitPoint = (worldStartPoint + worldEndPoint) / 2
 				
 				componentsDescr = getattr(g_data.currentBattle.victim['compactDescr'], componentName)
-				hitTester = componentsDescr['hitTester']
+				hitTester = componentsDescr.hitTester
 				if not hitTester.isBspModelLoaded():
 					hitTester.loadBspModel()
 				collision = hitTester.getBspModel().collideSegment(localStartPoint, localEndPoint)

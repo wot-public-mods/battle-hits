@@ -77,9 +77,9 @@ except: pass
 # modsListApi
 from gui.modsListApi import g_modsListApi
 g_modsListApi.addModification(
-	id = "battlehits", name = l10n('modslist.name'), description = l10n('modslist.description'), \
-	icon = "gui/maps/battlehits/modsListApi.png", enabled = True, login = False, lobby = True, \
-	callback = lambda: g_controllers.state.switch()
+	id = 'battlehits', name = l10n('modslist.name'), description = l10n('modslist.description'), \
+	icon = 'gui/maps/battlehits/modsListApi.png', enabled = True, login = False, lobby = True, \
+	callback = lambda: None if g_controllers.state.enabled else g_controllers.state.switch()
 )
 
 # disable open button in battle queue

@@ -40,19 +40,21 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 	
 	shellType, shellSplash = 0, 0.0
 	
-	for shell in vehicleDescriptor.gun['shots']:
-		if effectsIndex == shell["shell"]["effectsIndex"]:
-			if shell["shell"]["kind"] == SHELL_TYPES.ARMOR_PIERCING:
+	for shell in vehicleDescriptor.gun.shots:
+		
+		if effectsIndex == shell.shell.effectsIndex:
+			if shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
 				shellType = 0
-			elif shell["shell"]["kind"] == SHELL_TYPES.ARMOR_PIERCING_CR:
+			elif shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:
 				shellType = 1
-			elif shell["shell"]["kind"] == SHELL_TYPES.HOLLOW_CHARGE:
+			elif shell.shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
 				shellType = 2
-			elif shell["shell"]["kind"] in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
+			elif shell.shell.kind in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
 				shellType = 3
-				shellSplash = shell['shell']['explosionRadius']
+				shellSplash = shell.shell.type.explosionRadius
 			break
-	
+		
+
 	return (shellType, shellSplash, )
 
 def parseLangFields(langCode):
