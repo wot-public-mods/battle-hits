@@ -18,7 +18,7 @@ MODIFICATION_AUTHOR = 'poliroid'
 MODIFICATION_DESCRIPTION = 'Explore received hits by your vehicle in battle'
 MODIFICATION_IDENTIFICATOR = 'battlehits'
 MODIFICATION_NAME = 'Battle Hits'
-MODIFICATION_VERSION = '1.1.4'
+MODIFICATION_VERSION = '1.1.5'
 
 # result package name
 PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format( author = MODIFICATION_AUTHOR, \
