@@ -28,7 +28,7 @@ SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 1
-CACHE_VERSION = 4
+CACHE_VERSION = 6
 
 class SHELL_TYPES:
 	# бронебойный

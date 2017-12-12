@@ -10,15 +10,15 @@ ANIMATE_PATH = 'C:\\Program Files\\Adobe\\Adobe Animate CC 2015\\Animate.exe'
 
 # game data
 COPY_INTO_GAME = True
-GAME_VERSION = '0.9.20.1'
-GAME_FOLDER = 'E:/wot_ct'
+GAME_VERSION = '0.9.21.0'
+GAME_FOLDER = 'E:/wot'
 
 # modification data
 MODIFICATION_AUTHOR = 'poliroid'
 MODIFICATION_DESCRIPTION = 'Explore received hits by your vehicle in battle'
 MODIFICATION_IDENTIFICATOR = 'battlehits'
 MODIFICATION_NAME = 'Battle Hits'
-MODIFICATION_VERSION = '1.1.5'
+MODIFICATION_VERSION = '1.1.7'
 
 # result package name
 PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format( author = MODIFICATION_AUTHOR, \
