@@ -1,11 +1,10 @@
-﻿
+
 from gui.battlehits.events import g_eventsManager
 
 __all__ = ('g_controllers', )
 
 class ControllersHolder():
 	
-	analyzer = None
 	battlesHistory = None
 	battleProcessor = None
 	hangarCamera = None
@@ -15,7 +14,6 @@ class ControllersHolder():
 	
 	def init(self):
 		
-		from gui.battlehits.controllers.Analyzer import Analyzer
 		from gui.battlehits.controllers.BattlesHistory import BattlesHistory
 		from gui.battlehits.controllers.BattleProcessor import BattleProcessor
 		from gui.battlehits.controllers.HangarCamera import HangarCamera
@@ -23,7 +21,6 @@ class ControllersHolder():
 		from gui.battlehits.controllers.State import State
 		from gui.battlehits.controllers.Settings import Settings
 		
-		self.analyzer = Analyzer()
 		self.battlesHistory = BattlesHistory()
 		self.battleProcessor = BattleProcessor()
 		self.hangarCamera = HangarCamera()
@@ -31,7 +28,6 @@ class ControllersHolder():
 		self.state = State()
 		self.settings = Settings()
 
-		self.analyzer.init()
 		self.battlesHistory.init()
 		self.battleProcessor.init()
 		self.hangarCamera.init()
@@ -43,7 +39,6 @@ class ControllersHolder():
 		
 	def fini(self):
 		
-		self.analyzer.fini()
 		self.battlesHistory.fini()
 		self.battleProcessor.fini()
 		self.hangarCamera.fini()
@@ -51,7 +46,6 @@ class ControllersHolder():
 		self.state.fini()
 		self.settings.fini()
 
-		self.analyzer = None
 		self.battlesHistory = None
 		self.battleProcessor = None
 		self.hangarCamera = None
