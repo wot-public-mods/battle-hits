@@ -148,6 +148,11 @@ class HangarScene(object):
 			self.__ricochetModels = None
 			self.__ricochetMotors = None
 
+	def noDataHit(self):
+		self.freeModels(freeTankModel=True)
+		self.__previosVehicleDescriptorStr = None
+		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
+	
 	def destroy(self):
 		
 		self.freeModels(withResources=True)
