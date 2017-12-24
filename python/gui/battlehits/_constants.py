@@ -1,0 +1,62 @@
+
+import BigWorld, os, math, Math
+
+
+LANGUAGE_CODES = ('ru', 'uk', 'be', 'en', 'de', 'et', 'bg', 'da', 'fi', 'fil', 'fr', 'el', \
+					'hu', 'id', 'it', 'ja', 'ms', 'nl', 'no', 'pl', 'pt', 'pt_br', 'ro', \
+					'sr', 'vi', 'zh_sg', 'zh_tw', 'hr', 'th', 'lv', 'lt', 'cs', 'es_ar', \
+					'tr', 'zh_cn', 'es', 'kk', 'sv', )
+
+LANGUAGE_FILE_PATH = 'mods/poliroid.battlehits/text/%s.yml'
+
+DEFAULT_UI_LANGUAGE = 'ru'
+
+BATTLE_HITS_VIEW_ALIAS = "BattleHitsLobby"
+
+BATTLE_HITS_PREFERENCES_POPOVER_ALIAS = "BattleHitsPreferencesPopover"
+
+class SETTINGS:
+	PROCESS_REPLAYS = 'processReplays'
+	SAVE_ONLY_SESSION = 'saveOnlySession'
+	CURRENT_STYLE = 'currentStyle'
+	SORTING_RULE = 'sortingRule'
+	SORTING_REVERSED = 'sortingReversed'
+	HITS_TO_PLAYER = 'hitsToPlayer'
+	COLLISION_MODELS = 'collisionModels'
+
+DEFAULT_SETTINGS = {
+	SETTINGS.PROCESS_REPLAYS: False,
+	SETTINGS.SAVE_ONLY_SESSION: True,
+	SETTINGS.CURRENT_STYLE: 'style1',
+	SETTINGS.SORTING_RULE: 3,
+	SETTINGS.SORTING_REVERSED: True,
+	SETTINGS.HITS_TO_PLAYER: True,
+	SETTINGS.COLLISION_MODELS: False
+}
+
+wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8',
+									 errors='ignore'))
+SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
+CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
+
+SETTINGS_VERSION = 2
+CACHE_VERSION = 7
+
+class SHELL_TYPES:
+	# бронебойный
+	ARMOR_PIERCING = 0 
+	# подкалиберынй
+	ARMOR_PIERCING_CALIBER_REDUCED = 1
+	# камулятивный
+	HIGHT_EXPLOSIVE_ANTI_TANK = 2
+	# фугас
+	HIGHT_EXPLOSIVE = 3
+
+
+SCENE_OFFSET = Math.Vector3(0.0, 500.0, 0.0)
+
+CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160), \
+				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001), \
+				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET)
+			
+del wgAppDataFolder, BigWorld, os

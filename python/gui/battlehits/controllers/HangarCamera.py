@@ -1,8 +1,11 @@
-﻿
-from AvatarInputHandler import mathUtils
-from gui.shared.utils.HangarSpace import g_hangarSpace
+
 import math
 import Math
+
+from AvatarInputHandler import mathUtils
+from gui.shared.utils.HangarSpace import g_hangarSpace
+
+from gui.battlehits._constants import CAMERA_DEFAULTS, SCENE_OFFSET
 
 class HangarCamera(object):
 	
@@ -11,7 +14,7 @@ class HangarCamera(object):
 	def __init__(self):
 		self.__enabled = False
 		self.__originalCameraData = None
-		self.__offset = 500.0
+		self.__offset = SCENE_OFFSET[1]
 	
 	def init(self): 
 		pass
@@ -29,14 +32,8 @@ class HangarCamera(object):
 			
 			self.__enabled = True
 			
-			self.setCameraData(
-				(math.radians(160), -math.radians(25.0)),
-				(math.radians(160), -math.radians(25.0), 10.0),
-				(math.radians(0.001), math.radians(0.001), (10.0, 10.001)),
-				(0.005, 0.005, 0.001),
-				Math.Vector3(0.0, self.__offset, 0.0)
-			)
-			
+			self.setCameraData(*CAMERA_DEFAULTS)
+	
 	def disable(self):
 		
 		if g_hangarSpace.space and self.__originalCameraData:
@@ -44,7 +41,7 @@ class HangarCamera(object):
 		
 		self.__enabled = False
 		self.__originalCameraData = None
-		
+	
 	def setCameraData(self, default, current, limits, sens, target):
 		self.__yaw = current[0] + self.__offset
 		self.__pitch = current[1] + self.__offset
@@ -59,7 +56,7 @@ class HangarCamera(object):
 		if limits[2]:
 			cam.pivotMinDist = limits[2][0]
 		cam.target.setTranslate(target)
-		cam.pivotPosition = Math.Vector3(0.0, 0.0, 0.0) #Math.Vector3(1.0 if limits[0] else 0.0, 0.0, 0.0)
+		cam.pivotPosition = Math.Vector3(0.0, 0.0, 0.0)
 		
 		self.updateCamera(0.0, 0.0, 0.0)
 	

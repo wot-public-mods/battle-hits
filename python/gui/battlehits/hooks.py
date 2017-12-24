@@ -1,4 +1,4 @@
-﻿
+
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager

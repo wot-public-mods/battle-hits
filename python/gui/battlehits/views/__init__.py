@@ -1,7 +1,7 @@
 
 from gui.Scaleform.framework import g_entitiesFactories, GroupedViewSettings, ScopeTemplates, ViewSettings, ViewTypes
 
-from gui.battlehits.battlehits_constants import BATTLE_HITS_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
+from gui.battlehits._constants import BATTLE_HITS_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
 from gui.battlehits.views.BattleHitsView import BattleHitsView
 from gui.battlehits.views.BattleHitsPreferencesPopover import BattleHitsPreferencesPopover
 

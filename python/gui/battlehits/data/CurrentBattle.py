@@ -1,4 +1,4 @@
-﻿
+
 from items import vehicles
 from debug_utils import LOG_ERROR, LOG_NOTE
 
@@ -53,13 +53,13 @@ class CurrentBattle(object):
 		shellType, shellSplash = getShellParams(self.__victim['compactDescr'], hitData['effectsIndex'])
 		
 		if hitData['isExplosion']:
-			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['position'], shellSplash, hitData['damageFactor'])
+			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['position'], \
+									shellSplash, hitData['damageFactor'])
 		else:
-			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['points'], shellSplash, hitData['damageFactor'])
+			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['points'], \
+									shellSplash, hitData['damageFactor'])
 		
-		self.__atacker = {
-			'aimParts': hitData['aimParts']
-		}
+		self.__atacker = { 'aimParts': hitData['aimParts'] }
 
 		g_eventsManager.onChangedHitData()
 	

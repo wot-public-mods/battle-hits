@@ -1,4 +1,4 @@
-﻿
+
 from gui.battlehits.events import g_eventsManager
 
 __all__ = ('g_data', )

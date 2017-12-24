@@ -7,10 +7,10 @@ import BigWorld
 from debug_utils import LOG_ERROR
 
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.battlehits_constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
+from gui.battlehits._constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
 
 class Settings(object):
-	
+
 	def __init__(self):
 		self.__settings = DEFAULT_SETTINGS
 	

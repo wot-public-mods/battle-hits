@@ -1,4 +1,4 @@
-﻿
+
 import datetime
 import ArenaType
 from helpers import i18n

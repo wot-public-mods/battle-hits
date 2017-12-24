@@ -1,4 +1,4 @@
-﻿
+
 import cPickle
 import os
 import zlib
@@ -6,8 +6,8 @@ import zlib
 import BattleReplay
 from debug_utils import LOG_ERROR
 
+from gui.battlehits._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
 from gui.battlehits.controllers import g_controllers
-from gui.battlehits.battlehits_constants import CACHE_FILE, CACHE_VERSION
 
 class BattlesHistory(object):
 	
@@ -20,7 +20,7 @@ class BattlesHistory(object):
 		self.__loadData()
 	
 	def fini(self):
-		if g_controllers.settings.get('saveOnlySession', True):
+		if g_controllers.settings.get(SETTINGS.SAVE_ONLY_SESSION, True):
 			self.__battles = list()
 		self.__saveData()
 	
@@ -42,7 +42,7 @@ class BattlesHistory(object):
 	
 	def addBattle(self, data):
 		
-		if BattleReplay.isPlaying() and not g_controllers.settings.get('processReplays', False):
+		if BattleReplay.isPlaying() and not g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False):
 			return
 		
 		idx, _ = self.getBattleByUniqueID(data['arena']['arenaUniqueID'])
@@ -55,7 +55,7 @@ class BattlesHistory(object):
 	
 	def __loadData(self):
 		
-		if BattleReplay.isPlaying() and not g_controllers.settings.get('processReplays', False):
+		if BattleReplay.isPlaying() and not g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False):
 			return
 		
 		succes = False

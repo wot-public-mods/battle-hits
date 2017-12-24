@@ -11,7 +11,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from debug_utils import LOG_ERROR, LOG_NOTE
 
-from gui.battlehits.battlehits_constants import BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
+from gui.battlehits._constants import BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
@@ -20,19 +20,42 @@ from gui.battlehits.lang import l10n
 
 class BattleHitsMeta(LobbySubView, View):
 	
+	def hitsToPlayerClick(self):
+		self._printOverrideError('hitsToPlayerClick')
+	
+	def selectBattle(self):
+		self._printOverrideError('selectBattle')
+	
+	def selectHit(self):
+		self._printOverrideError('selectHit')
+	
+	def sortClick(self):
+		self._printOverrideError('sortClick')
+	
+	def preferencesClick(self):
+		self._printOverrideError('preferencesClick')
+	
 	def as_setStaticDataS(self, data):
+		""" :param data: Represented by BatHitsStaticDataVO (AS)
+		"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_setStaticData(data)
 
 	def as_updateBattlesDPDataS(self, data):
+		""" :param data: Represented by BatHitsBattlesVO (AS)
+		"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateBattlesDPData(data)
 
 	def as_updateHitsDPDataS(self, data):
+		""" :param data: Represented by BatHitsHitsVO (AS)
+		"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateHitsDPData(data)
 
 	def as_updateDetailedHitDataS(self, data):
+		""" :param data: Represented by BatHitsDetailedHitVO (AS)
+		"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateDetailedHitData(data)
 
@@ -92,7 +115,8 @@ class BattleHitsView(BattleHitsMeta):
 	def preferencesClick(self):
 		app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
 		if app:
-			app.loadView(ViewLoadParams(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS), {})
+			app.loadView(ViewLoadParams(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, \
+										BATTLE_HITS_PREFERENCES_POPOVER_ALIAS), {})
 	
 	def __updateStaticData(self):
 		self.as_setStaticDataS(self.__getStaticData())

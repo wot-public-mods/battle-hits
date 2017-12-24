@@ -2,7 +2,7 @@
 import types
 import ResMgr
 
-__all__ = ('byteify', 'override', 'getShellParams', 'parseLangFields', 'readFromVFS' )
+__all__ = ('byteify', 'override', 'getShellParams', 'parseLangFields', 'readFromVFS')
 
 def overrider(target, holder, name):
 	"""using for override any staff"""
@@ -60,7 +60,7 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 def parseLangFields(langCode):
 	"""split items by lines and key value by : 
 	like yaml format"""
-	from gui.battlehits.battlehits_constants import LANGUAGE_FILE_PATH
+	from gui.battlehits._constants import LANGUAGE_FILE_PATH
 	result = {}
 	langData = readFromVFS(LANGUAGE_FILE_PATH % langCode)
 	if langData:

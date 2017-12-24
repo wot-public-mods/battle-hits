@@ -1,7 +1,8 @@
-﻿
+
 from items import vehicles
 from debug_utils import LOG_ERROR, LOG_NOTE
 
+from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
@@ -43,9 +44,9 @@ class Hits(object):
 		self.__dataVO = []
 		self.__sortingVO = []
 		self.__selectedIndex = -1
-		self.__sortingReversed = g_controllers.settings.get('sortingReversed')
-		self.__sortingRule = g_controllers.settings.get('sortingRule')
-		self.__hitsToPlayer = g_controllers.settings.get('hitsToPlayer', True)
+		self.__sortingReversed = g_controllers.settings.get(SETTINGS.SORTING_REVERSED)
+		self.__sortingRule = g_controllers.settings.get(SETTINGS.SORTING_RULE)
+		self.__hitsToPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, True)
 		self.__sortingMap = {
 			1 : (str, "vehicle", False),
 			2 : (sum, "result", True),
@@ -62,7 +63,7 @@ class Hits(object):
 		g_eventsManager.invalidateHitsDP()
 	
 	def __onSettingsChanged(self, key, value):
-		if key == 'hitsToPlayer':
+		if key == SETTINGS.HITS_TO_PLAYER:
 			if value != self.__hitsToPlayer:
 				self.__hitsToPlayer = value
 				g_controllers.state.currentHitID = self.desiredID
@@ -89,10 +90,10 @@ class Hits(object):
 				
 				vehicle = vehicles.VehicleDescr(compactDescr = currentBattle['vehicles'][hitData['attacker']['id']])
 				if self.__hitsToPlayer:
-					shellType, shellSplash = getShellParams(vehicle, hitData['effectsIndex'])
+					shellType, _ = getShellParams(vehicle, hitData['effectsIndex'])
 				else:
 					playerVehicle = vehicles.VehicleDescr(compactDescr = currentBattle['playerCompactDescr'])
-					shellType, shellSplash = getShellParams(playerVehicle, hitData['effectsIndex'])
+					shellType, _ = getShellParams(playerVehicle, hitData['effectsIndex'])
 				
 				if self.__hitsToPlayer and hitData['isPlayer']:
 					self.__data.append({
@@ -135,7 +136,7 @@ class Hits(object):
 					"shellLabel": shellLabel,
 					"damageLabel": damageLabel
 				})
-			
+	
 	def __updateSorting(self, appendReverse = False):
 		
 		rule = self.__sortingMap[self.__sortingRule]
@@ -143,12 +144,14 @@ class Hits(object):
 		if appendReverse:
 			self.__sortingReversed = rule[2]
 		
-		self.__data = sorted(self.__data, key = lambda x: rule[0](x[rule[1]]), reverse = self.__sortingReversed)
+		self.__data = sorted(self.__data, key = lambda x: rule[0](x[rule[1]]), \
+							reverse = self.__sortingReversed)
 		
 		if self.__data:
 			
 			def genSortItemVO(id, label):
-				return { 'id': id, 'label': label, 'active': self.__sortingRule == id, 'reversed': self.__sortingReversed }
+				return { 'id': id, 'label': label, 'active': self.__sortingRule == id, \
+						'reversed': self.__sortingReversed }
 			
 			self.__sortingVO = [ genSortItemVO(x, _SORTING_LABELS[x]) for x in xrange(1, 4) ]
 		
@@ -177,11 +180,9 @@ class Hits(object):
 		
 		g_eventsManager.invalidateHitsDP()
 
-		g_controllers.settings.apply({
-			'sortingReversed': self.__sortingReversed,
-			'sortingRule': self.__sortingRule
-		})
-
+		g_controllers.settings.apply({SETTINGS.SORTING_REVERSED: self.__sortingReversed, \
+									SETTINGS.SORTING_RULE: self.__sortingRule})
+	
 	def clean(self):
 		
 		g_eventsManager.onSettingsChanged -= self.__onSettingsChanged

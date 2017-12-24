@@ -1,16 +1,18 @@
-﻿
+
 import BattleReplay
 import BigWorld
 import Math
 from vehicle_systems.tankStructure import ModelStates
 from VehicleEffects import DamageFromShotDecoder
 
+from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
 
 class BattleProcessor(object):
 	
-	trackBattle = property(lambda self: not BattleReplay.isPlaying() or (BattleReplay.isPlaying() and g_controllers.settings.get('processReplays', False)))
+	trackBattle = property(lambda self: not BattleReplay.isPlaying() or (BattleReplay.isPlaying() and \
+										g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False)))
 	
 	def __init__(self):
 		self.__battleData = None
@@ -87,8 +89,7 @@ class BattleProcessor(object):
 			self.__vehicles[vehicle.id] = int(vehicle.health) if vehicle.isCrewActive else 0
 		except:
 			self.__vehicles[vehicle.id] = -1
-		
-		
+	
 	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):
 		
 		if not self.trackBattle or not self.isAlive or not attackerID:
@@ -129,13 +130,14 @@ class BattleProcessor(object):
 		if not self.trackBattle or not self.isAlive or not attackerID:
 			return
 		
-		atacker = BigWorld.player().arena.vehicles.get(attackerID)
-		victim = BigWorld.player().arena.vehicles.get(vehicle.id)
+		player = BigWorld.player()
+		atacker = player.arena.vehicles.get(attackerID)
+		victim = player.arena.vehicles.get(vehicle.id)
 		
 		if not atacker['vehicleType'] or not victim['vehicleType']:
 			return
 		
-		if not vehicle.isPlayerVehicle and attackerID != BigWorld.player().playerVehicleID:
+		if not vehicle.isPlayerVehicle and attackerID != player.playerVehicleID:
 			return
 		
 		pointsData = []
@@ -166,20 +168,20 @@ class BattleProcessor(object):
 
 		if targetID not in self.__battleData['vehicles']:
 			self.__battleData['vehicles'][targetID] = target['vehicleType'].makeCompactDescr()
-		
 	
 	def processExplosion(self, vehicle, attackerID, center, effectsIndex, damageFactor):
 		
 		if not self.trackBattle or not self.isAlive or not attackerID:
 			return
 		
-		atacker = BigWorld.player().arena.vehicles.get(attackerID)
-		victim = BigWorld.player().arena.vehicles.get(vehicle.id)
+		player = BigWorld.player()
+		atacker = player.arena.vehicles.get(attackerID)
+		victim = player.arena.vehicles.get(vehicle.id)
 		
 		if not atacker['vehicleType'] or not victim['vehicleType']:
 			return
 		
-		if not vehicle.isPlayerVehicle and attackerID != BigWorld.player().playerVehicleID:
+		if not vehicle.isPlayerVehicle and attackerID != player.playerVehicleID:
 			return
 		
 		vehicleMatrix = Math.Matrix(vehicle.model.matrix)

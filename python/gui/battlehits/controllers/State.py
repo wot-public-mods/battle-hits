@@ -8,7 +8,7 @@ from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.battlehits_constants import BATTLE_HITS_VIEW_ALIAS
+from gui.battlehits._constants import BATTLE_HITS_VIEW_ALIAS
 
 class State(object):
 	
@@ -35,7 +35,7 @@ class State(object):
 		
 		if hitID == -1:
 			return
-
+		
 		if self.__currentHitID == hitID:
 			return
 		
@@ -56,7 +56,7 @@ class State(object):
 	
 	def init(self): 
 		pass
-
+	
 	def fini(self): 
 		pass
 	
@@ -65,9 +65,8 @@ class State(object):
 			self.enable()
 		else:
 			self.disable()
-		
+	
 	def enable(self):
-		self.__enabled = True
 		
 		if self.__currentBattleID is not None:
 			
@@ -97,11 +96,11 @@ class State(object):
 		g_hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
 		
 		g_appLoader.getDefLobbyApp().loadView(ViewLoadParams(BATTLE_HITS_VIEW_ALIAS, BATTLE_HITS_VIEW_ALIAS), {})
-	
+		
+		self.__enabled = True
+		
 	def disable(self):
 		
-		#g_eventsManager.closeUI()
-
 		g_controllers.hangarCamera.disable()
 		g_controllers.hangarScene.destroy()
 		

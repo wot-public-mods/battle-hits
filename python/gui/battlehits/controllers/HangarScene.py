@@ -1,4 +1,4 @@
-﻿
+
 from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
@@ -12,6 +12,7 @@ from vehicle_systems.model_assembler import prepareCompoundAssembler
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
+from gui.battlehits._constants import SCENE_OFFSET, CAMERA_DEFAULTS
 
 
 def modepPatch(model):
@@ -23,14 +24,14 @@ class HangarScene(object):
 	def __init__(self):
 		
 		# data
-		self.__rootPosition = Math.Vector3(0.0, 500.0, 0.0)
+		self.__rootPosition = SCENE_OFFSET
 		
 		# resources
 		self.__domeModel = None
 		
 		self.__compoundModel = None
 
-		self.__previosVehicleTD = None
+		self.__previosVehicleDescriptorStr = None
 		
 		self.__shellModels = None
 		self.__effectModels = None
@@ -65,12 +66,10 @@ class HangarScene(object):
 	
 	def assambleModels(self):
 		
-		LOG_DEBUG('assambleModels')
-
 		# hangar doom / plane
-		self.__domeModel = doomModel = BigWorld.Model("content/interface/battlehits/static/doom.model")
-		doomModel.position = self.__rootPosition
-		BigWorld.addModel(doomModel, BigWorld.camera().spaceID)
+		self.__domeModel = BigWorld.Model("content/interface/battlehits/static/doom.model")
+		self.__domeModel.position = self.__rootPosition
+		BigWorld.addModel(self.__domeModel, BigWorld.camera().spaceID)
 		
 		# shells
 		self.__shellModels = [
@@ -80,7 +79,7 @@ class HangarScene(object):
 			BigWorld.Model(modepPatch('content/interface/battlehits/{style}/shells/he/shell.model'))
 		]
 		
-		# shells
+		# effects
 		self.__effectModels = [
 			BigWorld.Model(modepPatch('content/interface/battlehits/{style}/effects/ricochet/effect.model')),
 			BigWorld.Model(modepPatch('content/interface/battlehits/{style}/effects/notpenetration/effect.model')),
@@ -103,19 +102,17 @@ class HangarScene(object):
 			BigWorld.Model(modepPatch('content/interface/battlehits/{style}/ricochets/cross/ricochet.model'))
 		]
 
-		self.__ricochetMotors = [ BigWorld.Servo(Math.Matrix()), BigWorld.Servo(Math.Matrix()), 
-									BigWorld.Servo(Math.Matrix()), BigWorld.Servo(Math.Matrix()) ]
+		self.__ricochetMotors = []
+		for model in self.__ricochetModels:
+			motor = BigWorld.Servo(Math.Matrix())
+			model.addMotor(motor)
+			self.__ricochetMotors.append(motor)
 		
-		for idx in xrange(4):
-			self.__ricochetModels[idx].addMotor(self.__ricochetMotors[idx])
-
 		for model in self.__shellModels + self.__splashModels + self.__effectModels + self.__ricochetModels:
 			model.castsShadow = False
 			model.visible = False
 	
 	def freeModels(self, freeTankModel = True, withResources = False):
-		
-		LOG_DEBUG('freeModels', {'freeTankModel': freeTankModel, 'withResources': withResources})
 		
 		if self.__shellModels and self.__splashModels and self.__ricochetModels and self.__effectModels:
 			for model in self.__shellModels + self.__splashModels + self.__ricochetModels + self.__effectModels:
@@ -158,33 +155,24 @@ class HangarScene(object):
 		g_eventsManager.onChangedBattleData -= self.__onBattleChanged
 		g_eventsManager.onChangedHitData -= self.__onHitChanged
 		g_eventsManager.onSettingsChanged -= self.__onSettingsChanged
-		
+	
 	def __onBattleChanged(self):
-		LOG_DEBUG('__onBattleChanged')
 		self.freeModels()
 	
 	def __onHitChanged(self):
 		
-		LOG_DEBUG('__onHitChanged')
-
 		if not g_data.currentBattle.victim:
 			
 			self.freeModels(freeTankModel=True)
-				
-			g_controllers.hangarCamera.setCameraData(
-				(math.radians(160), -math.radians(25.0)),
-				(math.radians(160), -math.radians(25.0), 10.0),
-				(math.radians(0.001), math.radians(0.001), (10.0, 10.001)),
-				(0.005, 0.005, 0.001),
-				self.__rootPosition
-			)
+			
+			g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 			
 			return
 
-		if self.__previosVehicleTD == g_data.currentBattle.victim['compactDescrStr']:
+		if self.__previosVehicleDescriptorStr == g_data.currentBattle.victim['compactDescrStr']:
 			
 			if not self.__compoundModel:
-				self.__previosVehicleTD = g_data.currentBattle.victim['compactDescrStr']
+				self.__previosVehicleDescriptorStr = g_data.currentBattle.victim['compactDescrStr']
 				assambler = prepareCompoundAssembler(g_data.currentBattle.victim['compactDescr'], ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
 				BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
 			
@@ -196,14 +184,12 @@ class HangarScene(object):
 			
 			self.freeModels()
 		
-			self.__previosVehicleTD = g_data.currentBattle.victim['compactDescrStr']
+			self.__previosVehicleDescriptorStr = g_data.currentBattle.victim['compactDescrStr']
 			assambler = prepareCompoundAssembler(g_data.currentBattle.victim['compactDescr'], ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
 			BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
 	
 	def __onSettingsChanged(self, key, value):
 		
-		LOG_DEBUG('__onSettingsChanged', {'key': key, 'value': value})
-
 		if key == 'currentStyle':
 			
 			self.freeModels(freeTankModel=False)
@@ -212,8 +198,6 @@ class HangarScene(object):
 	
 	def __onModelLoaded(self, resources):
 		
-		LOG_DEBUG('__onModelLoaded', resources)
-
 		self.__compoundModel = resources[g_data.currentBattle.victim['compactDescr'].name]
 		
 		BigWorld.addModel(self.__compoundModel)
@@ -344,7 +328,7 @@ class HangarScene(object):
 			self.__attachmentSplash.visible = True
 			self.__attachmentSplash.position = self.__rootPosition + Math.Vector3(points)
 			BigWorld.addModel(self.__attachmentSplash)
-		
+	
 	def __updateShell(self):
 		
 		if self.__attachmentShell:
@@ -433,8 +417,6 @@ class HangarScene(object):
 			
 			self.__effectModels[effectIndex].visible = True
 			self.__attachmentEffect = (nodeName, effectIndex, contactMatrix)
-	
-
 	
 	def __updateRicochet(self):
 		
