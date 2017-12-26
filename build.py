@@ -16,7 +16,7 @@ GAME_FOLDER = 'E:/wot'
 
 # modification data
 MODIFICATION_AUTHOR = 'poliroid'
-MODIFICATION_DESCRIPTION = 'Explore received hits by your vehicle in battle'
+MODIFICATION_DESCRIPTION = 'Explore received and given hits by your vehicle in battle'
 MODIFICATION_IDENTIFICATOR = 'battlehits'
 MODIFICATION_NAME = 'Battle Hits'
 MODIFICATION_VERSION = '1.1.9'
@@ -145,7 +145,4 @@ for dirname, _, files in os.walk('python'):
 
 if BUILD_FLASH:
 	os.remove('build.jsfl')
-	for dirname, _, files in os.walk('as3'):
-		for filename in files:
-			if filename.endswith('.swf'):
-				os.remove(os.path.join(dirname, filename))
+	
