@@ -7,6 +7,7 @@
 	import net.wg.gui.components.popovers.PopOver;
 	
 	import scaleform.clik.constants.InvalidationType;
+	import scaleform.clik.events.ButtonEvent;
 	
 	import com.poliroid.gui.lobby.battleHits.data.BattleHitsPreferencesDataVO;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IPreferencesPopover
@@ -23,6 +24,8 @@
 		
 		public var processReplays:CheckBox = null;
 		
+		public var showCollisionModel:CheckBox = null;
+		
 		public var changeStyle:SoundButton = null; 
 		
 		public function PreferencesPopover() 
@@ -32,14 +35,16 @@
 		
 		override protected function onDispose() : void 
 		{
-			invokeChangeS(processReplays.selected, saveOnlySession.selected);
+			invokeChangeS(processReplays.selected, saveOnlySession.selected, showCollisionModel.selected);
 			changeStyle.removeEventListener(MouseEvent.CLICK, handeStyleClick);
+			showCollisionModel.removeEventListener(ButtonEvent.CLICK, handeCollisionClick);
 			super.onDispose();
 		}
 		
 		override protected function configUI() : void 
 		{
 			changeStyle.addEventListener(MouseEvent.CLICK, handeStyleClick);
+			showCollisionModel.addEventListener(ButtonEvent.CLICK, handeCollisionClick);
 			super.configUI();
 		}
 		
@@ -60,9 +65,18 @@
 			processReplays.toolTip = data.processReplaysDescription;
 			processReplays.selected = data.processReplays;
 			
+			showCollisionModel.label = data.showCollisionModelLabel;
+			showCollisionModel.toolTip = data.showCollisionModelDescription;
+			showCollisionModel.selected = data.showCollisionModel;
+			
 			changeStyle.label = data.changeStyleLabel;
 			
-			height = 120;
+			height = 150;
+		}
+		
+		private function handeCollisionClick(e:ButtonEvent) 
+		{
+			invokeChangeS(processReplays.selected, saveOnlySession.selected, showCollisionModel.selected);
 		}
 		
 		private function handeStyleClick(e:MouseEvent) 

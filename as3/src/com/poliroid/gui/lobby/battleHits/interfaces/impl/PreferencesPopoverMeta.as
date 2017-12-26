@@ -26,10 +26,10 @@ package com.poliroid.gui.lobby.battleHits.interfaces.impl
 			return Linkages.SMART_POPOVER;
 		}
 		
-		public function invokeChangeS(processReplays:Boolean, saveOnlySession:Boolean) : void
+		public function invokeChangeS(processReplays:Boolean, saveOnlySession:Boolean, showCollisionModel:Boolean) : void
 		{
 			App.utils.asserter.assertNotNull(invokeChange, "invokeChange" + Errors.CANT_NULL);
-			invokeChange(processReplays, saveOnlySession);
+			invokeChange(processReplays, saveOnlySession, showCollisionModel);
 		}
 		
 		public function invokeStyleS() : void
