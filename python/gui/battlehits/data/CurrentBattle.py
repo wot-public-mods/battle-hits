@@ -2,6 +2,7 @@
 from items import vehicles
 from debug_utils import LOG_ERROR, LOG_NOTE
 
+from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.utils import getShellParams
@@ -16,6 +17,14 @@ class CurrentBattle(object):
 		self.__battle = None
 		self.__atacker = None
 		self.__victim = None
+
+		self.__hitsToPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, True)
+		
+		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
+	
+	def __onSettingsChanged(self, key, value):
+		if key == SETTINGS.HITS_TO_PLAYER:
+			self.__hitsToPlayer = value
 	
 	def battleByID(self, battleID):
 		
@@ -50,7 +59,11 @@ class CurrentBattle(object):
 		self.__victim['compactDescr'] = vehicles.VehicleDescr(compactDescr = compactDescr)
 		self.__victim['compactDescrStr'] = compactDescr
 
-		shellType, shellSplash = getShellParams(self.__victim['compactDescr'], hitData['effectsIndex'])
+		if self.__hitsToPlayer:
+			shellType, shellSplash = getShellParams(self.__victim['compactDescr'], hitData['effectsIndex'])
+		else:
+			playerVehicle = vehicles.VehicleDescr(compactDescr = self.__battle['playerCompactDescr'])
+			shellType, shellSplash = getShellParams(playerVehicle, hitData['effectsIndex'])
 		
 		if hitData['isExplosion']:
 			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['position'], \

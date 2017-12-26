@@ -22,7 +22,7 @@ class SETTINGS:
 	SORTING_RULE = 'sortingRule'
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
-	COLLISION_MODELS = 'collisionModels'
+	COLLISION_MODEL = 'collisionModel'
 
 DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,
@@ -31,15 +31,28 @@ DEFAULT_SETTINGS = {
 	SETTINGS.SORTING_RULE: 3,
 	SETTINGS.SORTING_REVERSED: True,
 	SETTINGS.HITS_TO_PLAYER: True,
-	SETTINGS.COLLISION_MODELS: False
+	SETTINGS.COLLISION_MODEL: False
 }
+
+class MODEL_TYPES:
+	SHELL = ('ap', 'apcr', 'heat', 'he')
+	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical')
+	SPLASH = ('large', 'middle', 'small')
+	RICOCHET = ('large', 'middle', 'small', 'cross')
+	
+class MODEL_PATHS:
+	SHELL = 'content/interface/battlehits/%s/shells/%s/shell.model'
+	EFFECT = 'content/interface/battlehits/%s/effects/%s/effect.model'
+	SPLASH = 'content/interface/battlehits/%s/explosions/%s/explosion.model'
+	RICOCHET = 'content/interface/battlehits/%s/ricochets/%s/ricochet.model'
+	DOME = 'content/interface/battlehits/static/doom.model'
 
 wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8',
 									 errors='ignore'))
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
-SETTINGS_VERSION = 2
+SETTINGS_VERSION = 4
 CACHE_VERSION = 7
 
 class SHELL_TYPES:

@@ -18,8 +18,8 @@ def appShowBattlePage(baseMethod, baseObject):
 
 @override(_AppLoader, 'destroyBattle')
 def appDestroyBattle(baseMethod, baseObject):
-	g_eventsManager.onDestroyBattle()
 	baseMethod(baseObject)
+	g_eventsManager.onDestroyBattle()
 
 @override(_AppLoader, 'fini')
 def appFini(baseMethod, baseObject):
@@ -100,9 +100,14 @@ def loadBattleQueue(baseMethod, baseObject):
 	return base
 
 def handleAvailability():
+	
 	isInQueue = getQueueType() != 0
+	
 	g_modsListApi.updateModification(id = "battlehits", enabled = not isInQueue)
-
+	
+	if isInQueue and g_controllers.state.enabled:
+		g_controllers.state.switch()
+	
 g_eventsManager.onDestroyBattle += handleAvailability
 
 # from gui.Scaleform.Flash import Flash
