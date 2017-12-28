@@ -11,7 +11,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from debug_utils import LOG_ERROR, LOG_NOTE
 
-from gui.battlehits._constants import BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
+from gui.battlehits._constants import SETTINGS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
@@ -96,7 +96,7 @@ class BattleHitsView(BattleHitsMeta):
 
 	def hitsToPlayerClick(self, toPlayer):
 		if g_controllers.settings:
-			g_controllers.settings.apply({'hitsToPlayer': toPlayer})
+			g_controllers.settings.apply({SETTINGS.HITS_TO_PLAYER: toPlayer})
 	
 	def selectBattle(self, battleID):
 		battleID = int(battleID)
