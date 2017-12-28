@@ -53,7 +53,7 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 				shellType = 3
 				shellSplash = shell.shell.type.explosionRadius
 			break
-		
+	
 
 	return (shellType, shellSplash, )
 

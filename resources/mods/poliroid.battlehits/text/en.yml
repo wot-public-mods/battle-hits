@@ -36,4 +36,6 @@ popover.saveOnlySessionLabel: Current session only
 popover.saveOnlySessionDescription: {HEADER}Current session only{/HEADER}{BODY}Modification will only store information about the current game session (otherwise, information about all battles will be saved).{/BODY}
 popover.processReplaysLabel: Process replays
 popover.processReplaysDescription:  {HEADER}Process replays{/HEADER}{BODY}Modification will also save information from viewed replays.{/BODY}
+popover.showCollisionModelLabel: Booking model
+popover.showCollisionModelDescription:  {HEADER}Booking model{/HEADER}{BODY}Show car booking model instead of usual.{/BODY}
 popover.changeStyleLabel: Switch styles

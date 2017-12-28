@@ -9,8 +9,6 @@
 		
 		public var mapNameLabel:String = "";
 		
-		public var hitsInfoLabel:String = "";
-		
 		public var vehicleNameLabel:String = "";
 		
 		public var battleStartLabel:String = "";

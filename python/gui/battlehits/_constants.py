@@ -35,10 +35,10 @@ DEFAULT_SETTINGS = {
 }
 
 class MODEL_TYPES:
-	SHELL = ('ap', 'apcr', 'heat', 'he')
-	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical')
-	SPLASH = ('large', 'middle', 'small')
-	RICOCHET = ('large', 'middle', 'small', 'cross')
+	SHELL = ('ap', 'apcr', 'heat', 'he', )
+	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical', )
+	SPLASH = ('large', 'middle', 'small', )
+	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', 'cross', )
 	
 class MODEL_PATHS:
 	SHELL = 'content/interface/battlehits/%s/shells/%s/shell.model'

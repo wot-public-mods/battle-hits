@@ -14,7 +14,6 @@ from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits._constants import MODEL_TYPES, MODEL_PATHS, SETTINGS, SCENE_OFFSET, CAMERA_DEFAULTS
 
-
 class HangarScene(object):
 
 	def __init__(self):
@@ -33,12 +32,12 @@ class HangarScene(object):
 		self.__shellModels = []
 		self.__effectModels = []
 		self.__splashModels = []
-		self.__shellMotors = []
+		self.__ricochetModels = []
 
 		self.__collisionMotors = []
 		self.__effectMotors = []
 		self.__splashMotors = []
-		self.__ricochetModels = []
+		self.__shellMotors = []
 		self.__ricochetMotors = []
 	
 	def init(self):
@@ -61,7 +60,7 @@ class HangarScene(object):
 		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 		
 		self.__loadVehicle()
-		
+	
 	def assambleModels(self):
 
 		currentStyle = g_controllers.settings.get(SETTINGS.CURRENT_STYLE)
@@ -94,6 +93,8 @@ class HangarScene(object):
 		
 		if freeTankModel:
 			
+			self.__preCompactDescrStr = None
+
 			if self.__compoundModel:
 				BigWorld.delModel(self.__compoundModel)
 			self.__compoundModel = None
@@ -103,8 +104,6 @@ class HangarScene(object):
 					BigWorld.delModel(model)
 			self.__collisionModels = []
 			self.__collisionMotors = []
-			
-			self.__preCompactDescrStr = None
 		
 		if withResources:
 			
@@ -155,7 +154,7 @@ class HangarScene(object):
 		if key == SETTINGS.CURRENT_STYLE:
 			self.freeModels(freeTankModel=False)
 			self.assambleModels()
-			self.__validateVehicle()
+			self.__loadVehicle()
 	
 		if key == SETTINGS.COLLISION_MODEL:
 			self.__useCollision = value
@@ -215,10 +214,10 @@ class HangarScene(object):
 		self.__collisionMotors = [BigWorld.Servo(Math.Matrix()) for idx in TankPartIndexes.ALL]
 		
 		for idx in TankPartIndexes.ALL:
-			self.__collisionModels[idx].addMotor(self.__collisionMotors[idx])
-			self.__collisionMotors[idx].signal = g_controllers.vehicle.partWorldMatrix(TankPartIndexes.getName(idx))
-		
-		for model in self.__collisionModels:
+			model, motor = self.__collisionModels[idx], self.__collisionMotors[idx]
+			model.castsShadow = False
+			model.addMotor(motor)
+			motor.signal = g_controllers.vehicle.partWorldMatrix(TankPartIndexes.getName(idx))
 			BigWorld.addModel(model)
 		
 		Waiting.hide('updateCurrentVehicle')
@@ -415,9 +414,53 @@ class HangarScene(object):
 		if isExplosion:
 			return
 		
+		previosPointData = None
+
+		modelsFreeIdx = range(15)
+
 		for (componentName, hitResult, startPoint, endPoint, ) in points:
 			
-			if hitResult == 0:
+			if previosPointData:
+				
+				preComponentName, preHitResult, preStartPoint, preEndPoint = previosPointData
+				
+				if preHitResult == 0:
+				
+					worldPreComponentMatrix = g_controllers.vehicle.partWorldMatrix(preComponentName)
+					localPreStartPoint = Math.Vector3(preStartPoint)
+					localPreEndPoint = Math.Vector3(preEndPoint)
+					worldPreStartPoint = worldPreComponentMatrix.applyPoint(localPreStartPoint)
+					worldPreEndPoint = worldPreComponentMatrix.applyPoint(localPreEndPoint)
+					worldStartRicochetPoint = (worldPreStartPoint + worldPreEndPoint) / 2
+					
+					worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+					localStartPoint = Math.Vector3(startPoint)
+					localEndPoint = Math.Vector3(endPoint)
+					worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
+					worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
+					worldEndRicochetPoint = (worldStartPoint + worldEndPoint) / 2
+
+					distance = (worldStartRicochetPoint - worldEndRicochetPoint).length
+					
+					worldRicochetDirection = worldStartRicochetPoint - worldEndRicochetPoint
+					worldRicochetMatrix = Math.Matrix()
+					worldRicochetMatrix.setRotateYPR((worldRicochetDirection.yaw, worldRicochetDirection.pitch, 0.0))
+					worldRicochetMatrix.translation = worldStartRicochetPoint
+					
+					perfectIdx = int(distance * 3.2)
+					targetIdx = min(modelsFreeIdx, key=lambda x:abs(x-perfectIdx))
+					modelsFreeIdx.pop(targetIdx)
+					
+					self.__ricochetModels[targetIdx].visible = True
+					self.__ricochetMotors[targetIdx].signal = worldRicochetMatrix
+
+			previosPointData = (componentName, hitResult, startPoint, endPoint)
+			
+		if previosPointData:
+
+			componentName, hitResult, startPoint, endPoint = previosPointData
+			
+			if hitResult in [0, 1]:
 				
 				localStartPoint = Math.Vector3(startPoint) 
 				localEndPoint = Math.Vector3(endPoint)
@@ -446,6 +489,6 @@ class HangarScene(object):
 					worldRicochetMatrix.setRotateYPR((worldRicochetDirection.yaw, worldRicochetDirection.pitch, 0.0))
 					worldRicochetMatrix.translation = worldHitPoint
 					
-					self.__ricochetModels[3].visible = True
-					self.__ricochetMotors[3].signal = worldRicochetMatrix
-	
+					self.__ricochetModels[15].visible = True
+					self.__ricochetMotors[15].signal = worldRicochetMatrix
+		

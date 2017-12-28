@@ -51,19 +51,24 @@ class CurrentBattle(object):
 			'vehicle': {}
 		}
 		
-		if hitData['isPlayer']:
-			compactDescr = self.__battle['playerCompactDescr']
-		else:
-			compactDescr = self.__battle['vehicles'][hitData['attacker']['id']]
-		
-		self.__victim['compactDescr'] = vehicles.VehicleDescr(compactDescr = compactDescr)
-		self.__victim['compactDescrStr'] = compactDescr
+		self.__atacker = { 
+			'aimParts': hitData['aimParts'] 
+		}
 
-		if self.__hitsToPlayer:
-			shellType, shellSplash = getShellParams(self.__victim['compactDescr'], hitData['effectsIndex'])
+		if hitData['isPlayer']:
+			victimCompactDescrStr = self.__battle['playerCompactDescr']
 		else:
-			playerVehicle = vehicles.VehicleDescr(compactDescr = self.__battle['playerCompactDescr'])
-			shellType, shellSplash = getShellParams(playerVehicle, hitData['effectsIndex'])
+			victimCompactDescrStr = self.__battle['vehicles'][hitData['attacker']['id']]
+		
+		if self.__hitsToPlayer:
+			atackerCompactDescr = vehicles.VehicleDescr(compactDescr = self.__battle['vehicles'][hitData['attacker']['id']])
+		else:
+			atackerCompactDescr = vehicles.VehicleDescr(compactDescr = self.__battle['playerCompactDescr'])
+		
+		self.__victim['compactDescr'] = vehicles.VehicleDescr(compactDescr = victimCompactDescrStr)
+		self.__victim['compactDescrStr'] = victimCompactDescrStr
+
+		shellType, shellSplash = getShellParams(atackerCompactDescr, hitData['effectsIndex'])	
 		
 		if hitData['isExplosion']:
 			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['position'], \
@@ -72,8 +77,6 @@ class CurrentBattle(object):
 			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['points'], \
 									shellSplash, hitData['damageFactor'])
 		
-		self.__atacker = { 'aimParts': hitData['aimParts'] }
-
 		g_eventsManager.onChangedHitData()
 	
 	def clean(self):

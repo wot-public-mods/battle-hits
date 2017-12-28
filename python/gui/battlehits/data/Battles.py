@@ -42,12 +42,10 @@ class Battles(object):
 			mapNameLabel = i18n.makeString(ArenaType.g_cache[arenaTypeID].name)
 			vehicleNameLabel = str(playerVehicle.type.shortUserString)
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
-			hitsInfoLabel = "0 / 0 / 0"
 			
 			self.__dataVO.append({
 				"id": battleID,
 				"mapNameLabel": mapNameLabel,
-				"hitsInfoLabel": hitsInfoLabel,
 				"vehicleNameLabel": vehicleNameLabel,
 				"battleStartLabel": battleStartLabel
 			})
