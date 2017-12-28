@@ -38,7 +38,8 @@ class State(object):
 		
 		if hitID == -1:
 			self.__currentHitID = None
-			g_controllers.hangarScene.noDataHit()
+			if self.__enabled:
+				g_controllers.hangarScene.noDataHit()
 			return
 		
 		for availableHitID, _ in enumerate(g_data.currentBattle.battle['hits']):
