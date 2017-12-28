@@ -11,6 +11,7 @@ class ControllersHolder():
 	hangarScene = None
 	state = None
 	settings = None
+	vehicle = None
 	
 	def init(self):
 		
@@ -20,6 +21,7 @@ class ControllersHolder():
 		from gui.battlehits.controllers.HangarScene import HangarScene
 		from gui.battlehits.controllers.State import State
 		from gui.battlehits.controllers.Settings import Settings
+		from gui.battlehits.controllers.Vehicle import Vehicle
 		
 		self.battlesHistory = BattlesHistory()
 		self.battleProcessor = BattleProcessor()
@@ -27,6 +29,7 @@ class ControllersHolder():
 		self.hangarScene = HangarScene()
 		self.state = State()
 		self.settings = Settings()
+		self.vehicle = Vehicle()
 
 		self.battlesHistory.init()
 		self.battleProcessor.init()
@@ -34,6 +37,7 @@ class ControllersHolder():
 		self.hangarScene.init()
 		self.state.init()
 		self.settings.init()
+		self.vehicle.init()
 
 		g_eventsManager.onAppFinish += self.fini
 		
@@ -45,6 +49,7 @@ class ControllersHolder():
 		self.hangarScene.fini()
 		self.state.fini()
 		self.settings.fini()
+		self.vehicle.fini()
 
 		self.battlesHistory = None
 		self.battleProcessor = None
@@ -52,5 +57,6 @@ class ControllersHolder():
 		self.hangarScene = None
 		self.state = None
 		self.settings = None
+		self.vehicle = None
 
 g_controllers = ControllersHolder()
