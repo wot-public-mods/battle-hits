@@ -23,16 +23,10 @@ class HangarCamera(object):
 		pass
 	
 	def enable(self):
-		
 		g_hangarSpace.onSpaceCreate -= self.enable
-		
 		if g_hangarSpace.space:
-			
 			self.__originalCameraData = g_hangarSpace.space.getCameraLocation()
-			
 			self.__enabled = True
-			
-			self.setCameraData(*CAMERA_DEFAULTS)
 	
 	def disable(self):
 		

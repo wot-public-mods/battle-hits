@@ -4,7 +4,7 @@ import BigWorld
 import Math
 import math
 from debug_utils import LOG_ERROR, LOG_NOTE, LOG_DEBUG
-
+from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from vehicle_systems.tankStructure import ModelStates, TankPartNames, TankPartIndexes, TankNodeNames
 from vehicle_systems.model_assembler import prepareCompoundAssembler
@@ -21,45 +21,47 @@ class HangarScene(object):
 		
 		# data
 		self.__rootPosition = SCENE_OFFSET
-		self.__previosVehicleDescriptorStr = None
+		self.__useCollision = False
+		self.__preCompactDescrStr = None
 		
 		# resources
 		self.__domeModel = None
 
 		self.__compoundModel = None
-		self.__collisionModel = None
-		self.__collisionModels = []
 
+		self.__collisionModels = []
 		self.__shellModels = []
 		self.__effectModels = []
 		self.__splashModels = []
 		self.__shellMotors = []
 
+		self.__collisionMotors = []
 		self.__effectMotors = []
 		self.__splashMotors = []
 		self.__ricochetModels = []
 		self.__ricochetMotors = []
-
+	
 	def init(self):
 		pass
-
+	
 	def fini(self):
 		self.destroy()
 	
 	def create(self):
-		
+	
 		g_hangarSpace.onSpaceCreate -= self.create
 		g_eventsManager.onChangedBattleData += self.__onBattleChanged
 		g_eventsManager.onChangedHitData += self.__onHitChanged
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
-
-		self.assambleModels()
-
-		if not g_data.currentBattle.victim:
-			return
 		
-		self.__loadVehicle(g_data.currentBattle.victim['compactDescr'])
-	
+		self.assambleModels()
+		
+		self.__useCollision = g_controllers.settings.get(SETTINGS.COLLISION_MODEL, False)
+		
+		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
+		
+		self.__loadVehicle()
+		
 	def assambleModels(self):
 
 		currentStyle = g_controllers.settings.get(SETTINGS.CURRENT_STYLE)
@@ -95,11 +97,14 @@ class HangarScene(object):
 			if self.__compoundModel:
 				BigWorld.delModel(self.__compoundModel)
 			self.__compoundModel = None
-		
-			if self.__collisionModel:
-				BigWorld.delModel(self.__collisionModel)
-			self.__collisionModel = None
-		
+
+			for model in self.__collisionModels:
+				if model in BigWorld.models():
+					BigWorld.delModel(model)
+			self.__collisionModels = []
+			self.__collisionMotors = []
+			
+			self.__preCompactDescrStr = None
 		
 		if withResources:
 			
@@ -121,7 +126,7 @@ class HangarScene(object):
 	
 	def noDataHit(self):
 		self.freeModels(freeTankModel=True)
-		self.__previosVehicleDescriptorStr = None
+		self.__preCompactDescrStr = None
 		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 	
 	def destroy(self):
@@ -139,18 +144,11 @@ class HangarScene(object):
 			self.freeModels(freeTankModel=True)
 			g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 			return
-
-		if self.__previosVehicleDescriptorStr == g_data.currentBattle.victim['compactDescrStr']:
-			if not self.__compoundModel:
-				self.__previosVehicleDescriptorStr = g_data.currentBattle.victim['compactDescrStr']
-				self.__loadVehicle(g_data.currentBattle.victim['compactDescr'])
-			else:
-				self.__updateTurretAndGun()
-				self.__buildCollisionModel(g_data.currentBattle.victim['compactDescr'])
-		else:
+		
+		if self.__preCompactDescrStr != g_data.currentBattle.victim['compactDescrStr']:
 			self.freeModels()
-			self.__previosVehicleDescriptorStr = g_data.currentBattle.victim['compactDescrStr']
-			self.__loadVehicle(g_data.currentBattle.victim['compactDescr'])
+
+		self.__loadVehicle()
 
 	def __onSettingsChanged(self, key, value):
 		
@@ -160,124 +158,86 @@ class HangarScene(object):
 			self.__validateVehicle()
 	
 		if key == SETTINGS.COLLISION_MODEL:
-			self.__updateVisability()
-
-	def __loadVehicle(self, compactDescr):
-		assambler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
-		BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
+			self.__useCollision = value
+			self.freeModels(freeTankModel=True)
+			self.__loadVehicle()
 	
+	def __loadVehicle(self):
+		
+		if not g_data.currentBattle.victim:
+			return
+
+		compactDescr = g_data.currentBattle.victim['compactDescr']
+		compactDescrStr = g_data.currentBattle.victim['compactDescrStr']
+		aimParts = g_data.currentBattle.atacker['aimParts']
+
+		g_controllers.vehicle.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
+
+		if self.__preCompactDescrStr != compactDescrStr:
+			Waiting.show('updateCurrentVehicle')
+			if self.__useCollision:
+				modelsCollision = [ compactDescr.getHitTesters()[idx].bspModelName for idx in TankPartIndexes.ALL ]
+				BigWorld.loadResourceListBG(modelsCollision, self.__onCollisionLoaded)
+			else:
+				assambler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
+				BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
+			self.__preCompactDescrStr = compactDescrStr
+		else:
+			self.__updateTurretAndGun()
+		
+		self.__updateCamera()
+		self.__updateShell()
+		self.__updateEffect()
+		self.__updateSplash()
+		self.__updateRicochet()
+
 	def __onModelLoaded(self, resources):
 		
-		self.__compoundModel = resources[g_data.currentBattle.victim['compactDescr'].name]
+		compactDescr = g_data.currentBattle.victim['compactDescr']
+		
+		self.__compoundModel = resources[compactDescr.name]
 		
 		BigWorld.addModel(self.__compoundModel)
-
-		self.__buildCollisionModel(g_data.currentBattle.victim['compactDescr'])
-
+		
 		m = Math.Matrix()
 		m.setTranslate(self.__rootPosition)
 		self.__compoundModel.matrix = m
-
 		self.__updateTurretAndGun()
-	
-	def __validateVehicle(self):
+
+		Waiting.hide('updateCurrentVehicle')
+
+	def __onCollisionLoaded(self, resources):
 		
-		atackerData = g_data.currentBattle.atacker
-		if not atackerData:
-			return
-		
-		targetTurretYaw, targetGunPitch = atackerData['aimParts']
-		
-		if not self.__compoundModel:
-			BigWorld.callback(0.01, self.__validateVehicle)
-			return
-		
-		currentPosition = Math.Matrix(self.__compoundModel.node(TankPartNames.CHASSIS)).translation
-		currentTurretYaw = Math.Matrix(self.__compoundModel.node(TankPartNames.TURRET)).yaw
-		currentGunPitch = Math.Matrix(self.__compoundModel.node(TankNodeNames.GUN_INCLINATION)).pitch
-		
-		isVehicleUpdated = currentPosition == self.__rootPosition and mathUtils.almostZero(targetTurretYaw - currentTurretYaw) and \
-						 mathUtils.almostZero(targetGunPitch - currentGunPitch)
-		
-		if isVehicleUpdated:
-			self.__updateCamera()
-			self.__updateShell()
-			self.__updateEffect()
-			self.__updateRicochet()
-			self.__updateSplash()
-			self.__updateVisability()
-		else:
-			BigWorld.callback(0., self.__validateVehicle)
-	
-	def __updateVisability(self):
-		useCollision = g_controllers.settings.get(SETTINGS.COLLISION_MODEL)
-		for idx in TankPartIndexes.ALL:
-			self.__collisionModels[idx].visibleAttachments = useCollision
-		self.__compoundModel.skipColorPass = useCollision
-	
-	def __buildCollisionModel(self, compactDescr):
-		
-		modelsNormal = [ part.models.undamaged for part in [compactDescr.chassis, compactDescr.hull, compactDescr.turret, compactDescr.gun] ]
+		compactDescr = g_data.currentBattle.victim['compactDescr']
 		modelsCollision = [ compactDescr.getHitTesters()[idx].bspModelName for idx in TankPartIndexes.ALL ]
-		
-		self.__collisionModels = [BigWorld.Model(model) for model in modelsNormal]
-		
-		collisions = [BigWorld.Model(model) for model in modelsCollision]
-		
-		atackerData = g_data.currentBattle.atacker
-		if not atackerData:
-			return
-		
-		turretYaw, gunPitch = atackerData['aimParts']
 
-		turretMatrix = Math.Matrix()
-		turretMatrix.setRotateYPR((turretYaw, 0.0, 0.0))
+		self.__collisionModels = [resources[model] for model in modelsCollision]
+		self.__collisionMotors = [BigWorld.Servo(Math.Matrix()) for idx in TankPartIndexes.ALL]
 		
-		gunMatrix = Math.Matrix()
-		gunMatrix.setRotateYPR((0.0, gunPitch, 0.0))
-		
-		self.__collisionModels[TankPartIndexes.CHASSIS].node(TankNodeNames.HULL_SWINGING).attach(self.__collisionModels[TankPartIndexes.HULL])
-		
-		TURRET_Node = self.__collisionModels[TankPartIndexes.HULL].node(compactDescr.hull.turretHardPoints[0], turretMatrix)
-		TURRET_Node.attach(self.__collisionModels[TankPartIndexes.TURRET])
-
-		GUN_Node = self.__collisionModels[TankPartIndexes.TURRET].node(TankNodeNames.GUN_JOINT, gunMatrix)
-		GUN_Node.attach(self.__collisionModels[TankPartIndexes.GUN])
-
 		for idx in TankPartIndexes.ALL:
-			collisions[idx].visible = True
-			self.__collisionModels[idx].visibleAttachments = True
-			self.__collisionModels[idx].visible = False
-			self.__collisionModels[idx].castsShadow = False
-			self.__collisionModels[idx].root.attach(collisions[idx])
+			self.__collisionModels[idx].addMotor(self.__collisionMotors[idx])
+			self.__collisionMotors[idx].signal = g_controllers.vehicle.partWorldMatrix(TankPartIndexes.getName(idx))
 		
-		if self.__collisionModel is not None:
-			BigWorld.delModel(self.__collisionModel)
-		self.__collisionModel = self.__collisionModels[TankPartIndexes.CHASSIS]
-		self.__collisionModel.position = self.__rootPosition
-		BigWorld.addModel(self.__collisionModel)
+		for model in self.__collisionModels:
+			BigWorld.addModel(model)
+		
+		Waiting.hide('updateCurrentVehicle')
 
-		for idx in TankPartIndexes.ALL:
-			self.__collisionModels[idx].visibleAttachments = False
-		
 	def __updateTurretAndGun(self):
 		
-		atackerData = g_data.currentBattle.atacker
-		if not atackerData:
-			return
+		turretYaw, gunPitch = g_data.currentBattle.atacker['aimParts']
+
+		if self.__useCollision:
+			for idx in TankPartIndexes.ALL:
+				self.__collisionMotors[idx].signal = g_controllers.vehicle.partWorldMatrix(TankPartIndexes.getName(idx))
+		else:
+			m = Math.Matrix()
+			m.setRotateYPR((turretYaw, 0.0, 0.0))
+			self.__compoundModel.node(TankPartNames.TURRET, m)
+			m = Math.Matrix()
+			m.setRotateYPR((0.0, gunPitch, 0.0))
+			self.__compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
 		
-		turretYaw, gunPitch = atackerData['aimParts']
-	
-		m = Math.Matrix()
-		m.setRotateYPR((turretYaw, 0.0, 0.0))
-		self.__compoundModel.node(TankPartNames.TURRET, m)
-	
-		m = Math.Matrix()
-		m.setRotateYPR((0.0, gunPitch, 0.0))
-		self.__compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
-		
-		self.__validateVehicle()
-	
 	def __updateCamera(self):
 		
 		victimData = g_data.currentBattle.victim
@@ -305,16 +265,13 @@ class HangarScene(object):
 			
 			componentName, _, startPoint, endPoint = points[0]
 			
-			startPoint, endPoint = Math.Vector3(startPoint), Math.Vector3(endPoint)
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
 			
-			nodeName = componentName
-			if componentName == TankPartNames.GUN:
-				nodeName = TankNodeNames.GUN_INCLINATION
+			localStartPoint = Math.Vector3(startPoint)
+			localEndPoint = Math.Vector3(endPoint)
 			
-			partWorldMat = Math.Matrix(self.__compoundModel.node(nodeName))
-			
-			worldStartPoint = partWorldMat.applyPoint(startPoint)
-			worldEndPoint = partWorldMat.applyPoint(endPoint)
+			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
+			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
 			
 			worldHitDirection = worldEndPoint - worldStartPoint
 			
@@ -326,31 +283,6 @@ class HangarScene(object):
 				(0.005, 0.005, 0.001),
 				worldStartPoint
 			)
-	
-	def __updateSplash(self):
-		
-		for model in self.__splashModels:
-			model.visible = False
-		
-		victimData = g_data.currentBattle.victim
-		if not victimData:
-			return
-		
-		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
-		
-		if isExplosion:
-			if shellSplash <= 4:
-				splashIndex = 2
-			elif shellSplash <= 8:
-				splashIndex = 1
-			else:
-				splashIndex = 0
-			
-			worldContactMatrix = Math.Matrix()
-			worldContactMatrix.translation = Math.Vector3(self.__rootPosition + Math.Vector3(points))
-
-			self.__splashMotors[splashIndex].signal = worldContactMatrix
-			self.__splashModels[splashIndex].visible = True
 	
 	def __updateShell(self):
 		
@@ -365,9 +297,8 @@ class HangarScene(object):
 		
 		if isExplosion:
 			
-			nodeName = TankPartNames.CHASSIS
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(TankPartNames.CHASSIS)
 			
-			worldComponentMatrix = Math.Matrix(self.__compoundModel.node(nodeName))
 			worldHitPoint = worldComponentMatrix.applyPoint(points)
 
 			worldContactMatrix = Math.Matrix()
@@ -381,14 +312,10 @@ class HangarScene(object):
 			
 			componentName, _,  startPoint, endPoint = points[0]
 			
-			nodeName = componentName
-			if componentName == TankPartNames.GUN:
-				nodeName = TankNodeNames.GUN_INCLINATION
-			
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = Math.Matrix(self.__compoundModel.node(nodeName))
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -430,14 +357,10 @@ class HangarScene(object):
 			else:
 				LOG_ERROR('unknown effectType')
 			
-			nodeName = componentName
-			if componentName == TankPartNames.GUN:
-				nodeName = TankNodeNames.GUN_INCLINATION
-			
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = Math.Matrix(self.__compoundModel.node(nodeName))
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -452,6 +375,31 @@ class HangarScene(object):
 			
 			self.__effectMotors[effectType].signal = worldContactMatrix
 			self.__effectModels[effectType].visible = True
+	
+	def __updateSplash(self):
+		
+		for model in self.__splashModels:
+			model.visible = False
+		
+		victimData = g_data.currentBattle.victim
+		if not victimData:
+			return
+		
+		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
+		
+		if isExplosion:
+			if shellSplash <= 4:
+				splashIndex = 2
+			elif shellSplash <= 8:
+				splashIndex = 1
+			else:
+				splashIndex = 0
+			
+			worldContactMatrix = Math.Matrix()
+			worldContactMatrix.translation = Math.Vector3(self.__rootPosition + Math.Vector3(points))
+
+			self.__splashMotors[splashIndex].signal = worldContactMatrix
+			self.__splashModels[splashIndex].visible = True
 	
 	def __updateRicochet(self):
 		
@@ -471,20 +419,16 @@ class HangarScene(object):
 			
 			if hitResult == 0:
 				
-				nodeName = componentName
-				if componentName == TankPartNames.GUN:
-					nodeName = TankNodeNames.GUN_INCLINATION
-				
 				localStartPoint = Math.Vector3(startPoint) 
 				localEndPoint = Math.Vector3(endPoint)
 				
-				worldComponentMatrix = Math.Matrix(self.__compoundModel.node(nodeName))
-				
+				worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+
 				worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 				worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
 				worldHitPoint = (worldStartPoint + worldEndPoint) / 2
 				
-				componentsDescr = getattr(g_data.currentBattle.victim['compactDescr'], componentName)
+				componentsDescr = g_controllers.vehicle.partDescriptor(componentName)
 				hitTester = componentsDescr.hitTester
 				if not hitTester.isBspModelLoaded():
 					hitTester.loadBspModel()
@@ -504,5 +448,4 @@ class HangarScene(object):
 					
 					self.__ricochetModels[3].visible = True
 					self.__ricochetMotors[3].signal = worldRicochetMatrix
-					
-					
+	
