@@ -52,8 +52,8 @@ wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
-SETTINGS_VERSION = 4
-CACHE_VERSION = 7
+SETTINGS_VERSION = 5
+CACHE_VERSION = 8
 
 class SHELL_TYPES:
 	# бронебойный
