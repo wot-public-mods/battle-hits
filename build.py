@@ -5,26 +5,42 @@ import os
 import shutil
 import zipfile
 import sys
+import json
+import collections 
 
-# software data
-ANIMATE_PATH = 'C:\\Program Files\\Adobe\\Adobe Animate CC 2015\\Animate.exe'
+assert os.path.isfile('./build.json'), 'Config not found'
 
-# game data
-COPY_INTO_GAME = True
-GAME_VERSION = '0.9.21.0.2'
-GAME_FOLDER = 'E:/wot'
+CONFIG = json.loads(open('./build.json').read(), object_hook=lambda x: collections.namedtuple('CONFIG', x.keys())(*x.values()))
 
-# modification data
-MODIFICATION_AUTHOR = 'poliroid'
-MODIFICATION_DESCRIPTION = 'Explore received and given hits by your vehicle in battle'
-MODIFICATION_IDENTIFICATOR = 'battlehits'
-MODIFICATION_NAME = 'Battle Hits'
-MODIFICATION_VERSION = '1.1.9'
+BUILD_FLASH = 'flash' in sys.argv
 
-# result package name
-PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format( author = MODIFICATION_AUTHOR, \
-				name = MODIFICATION_IDENTIFICATOR, version = MODIFICATION_VERSION )
+COPY_INTO_GAME = 'ingame' in sys.argv
 
+FLASH_WORK_DIR = os.getcwd().replace('\\', '/').replace(':', '|')
+
+PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format( author = CONFIG.info.author, \
+				name = CONFIG.info.id, version = CONFIG.info.version )
+
+WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot = CONFIG.game.folder, version = CONFIG.game.version)
+
+if COPY_INTO_GAME:
+	assert os.path.isdir(WOT_PACKAGES_DIR), 'Wot mods folder notfound'
+				
+				
+META = """<root>
+	
+	<!-- Techical MOD ID -->
+	<id>{id}</id>
+	
+	<!-- Package version -->
+	<version>{version}</version>
+	
+	<!-- Human readable name -->
+	<name>{name}</name>
+	
+	<!-- Human readable description -->
+	<description>{description}</description>
+</root>"""
 
 def copytree(source, destination, ignore=None):
 	"""implementation of shutil.copytree 
@@ -76,27 +92,25 @@ def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
 				zip.writestr(info, open(filePath, 'rb').read())
 
 # prepere folders
-if os.path.isdir('temp'):
-	shutil.rmtree('temp')
-os.makedirs('temp') 
-if os.path.isdir('build'):
-	shutil.rmtree('build')
-os.makedirs('build')
-if not os.path.isdir('resources'):
-	os.makedirs('resources')
-if not os.path.isdir('as3/bin'):
-	os.makedirs('as3/bin')
-
-BUILD_FLASH = 'noflash' not in sys.argv
+if os.path.isdir('./temp'):
+	shutil.rmtree('./temp')
+os.makedirs('./temp') 
+if os.path.isdir('./build'):
+	shutil.rmtree('./build')
+os.makedirs('./build')
+if not os.path.isdir('./resources'):
+	os.makedirs('./resources')
+if not os.path.isdir('./as3/bin'):
+	os.makedirs('./as3/bin')
 
 if BUILD_FLASH:
 	# build flash
-	with open('build.jsfl', 'wb') as fh:
-		for fileName in os.listdir('as3'):
+	with open('./build.jsfl', 'wb') as fh:
+		for fileName in os.listdir('./as3'):
 			if fileName.endswith('fla'):
-				fh.write('fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'.format(path = os.getcwd().replace('\\', '/').replace(':', '|'), fileName = fileName))
+				fh.write('fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'.format(path = FLASH_WORK_DIR, fileName = fileName))
 		fh.write('fl.quit(false);')
-	os.system('"{animate}" -e build.jsfl -AlwaysRunJSFL'.format(animate = ANIMATE_PATH))
+	os.system('"{animate}" -e build.jsfl -AlwaysRunJSFL'.format(animate = CONFIG.software.animate))
 
 # build python
 for dirName, _, files in os.walk('python'):
@@ -106,43 +120,28 @@ for dirName, _, files in os.walk('python'):
 			compileall.compile_file(filePath)
 
 # copy all staff
-copytree('as3/bin/', 'temp/res/gui/flash')
-copytree('python', 'temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
-copytree('resources', 'temp/res')
+copytree('./as3/bin/', './temp/res/gui/flash')
+copytree('./python', './temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
+copytree('./resources', './temp/res')
 
-# build META
-META = """<root>
-	
-	<!-- Techical MOD ID -->
-	<id>{id}</id>
-	
-	<!-- Package version -->
-	<version>{version}</version>
-	
-	<!-- Human readable name -->
-	<name>{name}</name>
-	
-	<!-- Human readable description -->
-	<description>{description}</description>
-</root>"""
 with open('temp/meta.xml', 'wb') as fh:
-	fh.write( META.format( id = '%s.%s' % (MODIFICATION_AUTHOR, MODIFICATION_IDENTIFICATOR), name = MODIFICATION_NAME, \
-			description = MODIFICATION_DESCRIPTION, version = MODIFICATION_VERSION ) )
+	fh.write( META.format( id = '%s.%s' % (CONFIG.info.author, CONFIG.info.id), name = CONFIG.info.name, \
+			description = CONFIG.info.description, version = CONFIG.info.version ) )
 
 # create package
-zipFolder('temp', 'build/%s' % PACKAGE_NAME)
+zipFolder('./temp', './build/%s' % PACKAGE_NAME)
 
 # copy package into game
 if COPY_INTO_GAME:
-	shutil.copy2('build/%s' % PACKAGE_NAME, '{wot}/mods/{version}/'.format(wot = GAME_FOLDER, version =GAME_VERSION))
+	shutil.copy2('build/%s' % PACKAGE_NAME, '{wot}/mods/{version}/'.format(wot = CONFIG.game.folder, \
+																			version = CONFIG.game.version))
 
 # clean up build files
 shutil.rmtree('temp')
-for dirname, _, files in os.walk('python'):
+for dirname, _, files in os.walk('./python'):
 	for filename in files:
 		if filename.endswith('.pyc'):
 			os.remove(os.path.join(dirname, filename))
-
 if BUILD_FLASH:
 	os.remove('build.jsfl')
 	
