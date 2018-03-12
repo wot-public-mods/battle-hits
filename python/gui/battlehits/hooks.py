@@ -28,9 +28,9 @@ def appFini(baseMethod, baseObject):
 
 # hangarCamera
 
-from gui.ClientHangarSpace import ClientHangarSpace
+from gui.hangar_camera_manager import HangarCameraManager
 
-@override(ClientHangarSpace, "updateCameraByMouseMove")
+@override(HangarCameraManager, "_HangarCameraManager__updateCameraByMouseMove")
 def updateCameraByMouseMove(baseMethod, baseObject, *args):
 	if g_controllers.hangarCamera.enabled:
 		g_controllers.hangarCamera.updateCamera(*args)
