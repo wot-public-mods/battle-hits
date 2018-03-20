@@ -33,6 +33,7 @@ class HangarCamera(object):
 		if g_hangarSpace.space and self.__originalCameraData:
 			manager = g_hangarSpace.space._ClientHangarSpace__cameraManager
 			if manager:
+				del self.__originalCameraData['pivotDist']
 				manager.setCameraLocation(**self.__originalCameraData)
 
 		self.__enabled = False
