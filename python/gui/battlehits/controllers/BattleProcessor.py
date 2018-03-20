@@ -141,7 +141,7 @@ class BattleProcessor(object):
 			return
 		
 		pointsData = []
-		for (compName, hitEffectCode, startPoint, endPoint) in [DamageFromShotDecoder.decodeSegment(point, vehicle.typeDescriptor) for point in points]:
+		for (compName, hitEffectCode, startPoint, endPoint) in [DamageFromShotDecoder.decodeSegment(point, vehicle.appearance.collisions) for point in points]:
 			pointsData.append((compName, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 		
 		if vehicle.isPlayerVehicle:
