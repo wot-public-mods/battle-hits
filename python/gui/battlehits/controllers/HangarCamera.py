@@ -31,8 +31,10 @@ class HangarCamera(object):
 	def disable(self):
 		
 		if g_hangarSpace.space and self.__originalCameraData:
-			g_hangarSpace.space.setCameraLocation(**self.__originalCameraData)
-		
+			manager = g_hangarSpace.space._ClientHangarSpace__cameraManager
+			if manager:
+				manager.setCameraLocation(**self.__originalCameraData)
+
 		self.__enabled = False
 		self.__originalCameraData = None
 	
@@ -46,7 +48,7 @@ class HangarCamera(object):
 		self.__sens = sens
 		self.__targetPosition = target
 		
-		cam = g_hangarSpace.space.getCamera()
+		cam = g_hangarSpace.space.camera
 		if limits[2]:
 			cam.pivotMinDist = limits[2][0]
 		cam.target.setTranslate(target)
@@ -79,6 +81,6 @@ class HangarCamera(object):
 			
 		cameraMatrix = Math.Matrix()
 		cameraMatrix.setRotateYPR((yaw, pitch, 0.0))
-		cam = g_hangarSpace.space.getCamera()
+		cam = g_hangarSpace.space.camera
 		cam.source = cameraMatrix
 		cam.pivotMaxDist = dist
