@@ -4,14 +4,14 @@
 		"animate": "C:\\Program Files\\Adobe\\Adobe Animate CC 2015\\Animate.exe"
 	},
 	"game": {
-		"folder": "E:\\wot\\common_test",
-		"version": "0.9.22.0"
+		"folder": "E:\\wot\\cis",
+		"version": "1.0.0"
 	},
 	"info": {
 		"id": "battlehits",
 		"author": "poliroid",
 		"name": "Battle Hits",
 		"description": "Explore received and given hits by your vehicle in battle",
-		"version": "1.2.0"
+		"version": "1.2.1"
 	}
 }

@@ -53,7 +53,7 @@ SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 5
-CACHE_VERSION = 8
+CACHE_VERSION = 9
 
 class SHELL_TYPES:
 	# бронебойный
@@ -66,7 +66,7 @@ class SHELL_TYPES:
 	HIGHT_EXPLOSIVE = 3
 
 
-SCENE_OFFSET = Math.Vector3(0.0, 500.0, 0.0)
+SCENE_OFFSET = Math.Vector3(0.0, 20.0, 0.0)
 
 CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160), \
 				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001), \
