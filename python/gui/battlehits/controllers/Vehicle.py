@@ -53,16 +53,24 @@ class Vehicle(object):
 		gunMatrix.invert()
 
 	def partDescriptor(self, partName):
+		partName = self.getComponentName(partName)
 		return self.__components[partName][0]
 		
 	def partLocalMatrix(self, partName):
+		partName = self.getComponentName(partName)
 		partLocalMatrix = Math.Matrix(self.__components[partName][1])
 		return partLocalMatrix
 
 	def partWorldMatrix(self, partName):
+		partName = self.getComponentName(partName)
 		partLocalMatrix = Math.Matrix(self.__components[partName][1])
 		partWorldMatrix = Math.Matrix()
 		partWorldMatrix.setRotateYPR((partLocalMatrix.yaw, partLocalMatrix.pitch, 0.0))
 		partWorldMatrix.translation = partLocalMatrix.translation + SCENE_OFFSET
 		return partWorldMatrix
 	
+	def getComponentName(self, partIndex):
+		if partIndex in TankPartIndexes.ALL:
+			return TankPartIndexes.getName(partIndex)
+		return partIndex
+		
