@@ -85,7 +85,7 @@ class State(object):
 		
 		self.__savedHangarData = {
 			"_EVENT_HANGAR_PATHS": chs._EVENT_HANGAR_PATHS,
-			"path": "spaces/hangar_v2"
+			"path": "spaces/hangar_v3"
 		}
 		
 		if chs._EVENT_HANGAR_PATHS:
