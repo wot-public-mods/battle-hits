@@ -3,6 +3,7 @@
 	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import net.wg.gui.components.controls.ScrollingListEx;
@@ -13,7 +14,6 @@
 	import net.wg.gui.components.controls.SoundButton;
 	import net.wg.gui.components.controls.CloseButtonText;
 	import net.wg.gui.interfaces.ISoundButtonEx;
-	import net.wg.gui.lobby.vehiclePreview.controls.VehPreviewBackground;
 	import net.wg.infrastructure.base.UIComponentEx;
 	import net.wg.infrastructure.interfaces.IPopOverCaller;
 	
@@ -30,7 +30,7 @@
 		
 		private static const HIT_TYPE_BTN_OFFSET:int = 127;
 		
-		public var background:VehPreviewBackground;
+		public var background:Sprite;
 		
 		public var titleTF:TextField;
 		
@@ -54,7 +54,7 @@
 			hitsTypeToPlayer.removeEventListener(ButtonEvent.CLICK, onToPlayerClickHandler);
 			hitsTypeFromPlayer.removeEventListener(ButtonEvent.CLICK, onFromPlayerClickHandler);
 			
-			background.dispose();
+			//background.dispose();
 			closeBtn.dispose();
 			settingsBtn.dispose();
 			hitsTypeToPlayer.dispose();

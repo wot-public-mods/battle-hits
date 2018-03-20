@@ -1,9 +1,9 @@
 ﻿package com.poliroid.gui.lobby.battleHits.controls
 {
 	
-	import net.wg.gui.lobby.vehiclePreview.controls.VehPreviewBackground;
+	import flash.display.Sprite;
 	
-	public class HeaderBackground extends VehPreviewBackground 
+	public class HeaderBackground extends Sprite 
 	{
 		
 		public function HeaderBackground() 

@@ -19,7 +19,6 @@
 	
 	import net.wg.gui.components.advanced.interfaces.IBackButton;
 	import net.wg.gui.interfaces.ISoundButtonEx;
-	import net.wg.gui.lobby.vehiclePreview.controls.VehPreviewBackground;
 	import net.wg.infrastructure.base.UIComponentEx;
 	
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsBattlesVO;
