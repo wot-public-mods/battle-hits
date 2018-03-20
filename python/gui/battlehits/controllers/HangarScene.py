@@ -6,7 +6,7 @@ import math
 from debug_utils import LOG_ERROR, LOG_NOTE, LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.HangarSpace import g_hangarSpace
-from vehicle_systems.tankStructure import ModelStates, TankPartNames, TankPartIndexes, TankNodeNames
+from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankPartIndexes, TankNodeNames
 from vehicle_systems.model_assembler import prepareCompoundAssembler
 
 from gui.battlehits.events import g_eventsManager
@@ -25,6 +25,7 @@ class HangarScene(object):
 		
 		# resources
 		self.__domeModel = None
+		#self.__collisions = None
 
 		self.__compoundModel = None
 
@@ -94,7 +95,8 @@ class HangarScene(object):
 			if self.__compoundModel:
 				BigWorld.delModel(self.__compoundModel)
 			self.__compoundModel = None
-		
+			#self.__collisions = None
+
 		if withResources:
 			
 			if self.__domeModel:
@@ -158,9 +160,25 @@ class HangarScene(object):
 		g_controllers.vehicle.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
 
 		if self.__preCompactDescrStr != compactDescrStr:
+			
 			Waiting.show('updateCurrentVehicle')
-			normalAssambler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
-			BigWorld.loadResourceListBG((normalAssambler, ), self.__onModelLoaded)
+			
+			spaceID = BigWorld.camera().spaceID
+			
+			normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
+			
+			BigWorld.loadResourceListBG( (normalAssembler, ), self.__onModelLoaded )
+			
+			#normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
+			#
+			#bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), compactDescr.chassis.hitTester.bspModelName),
+			#				(TankPartNames.getIdx(TankPartNames.HULL), compactDescr.hull.hitTester.bspModelName),
+			#				(TankPartNames.getIdx(TankPartNames.TURRET), compactDescr.turret.hitTester.bspModelName),
+			#				(TankPartNames.getIdx(TankPartNames.GUN), compactDescr.gun.hitTester.bspModelName))
+			#
+			#collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
+			#BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), self.__onModelLoaded )
+
 			self.__preCompactDescrStr = compactDescrStr
 		else:
 			self.__updateTurretAndGun()
@@ -182,6 +200,18 @@ class HangarScene(object):
 		m = Math.Matrix()
 		m.setTranslate(self.__rootPosition)
 		self.__compoundModel.matrix = m
+		
+		#self.__collisions = resourceRefs['collisionAssembler']
+		#chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
+		#chassisColisionMatrix.target = self.__compoundModel.matrix
+		#collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.__compoundModel.node(TankPartNames.HULL)),
+		#	(TankPartNames.getIdx(TankPartNames.TURRET), self.__compoundModel.node(TankPartNames.TURRET)),
+		#	(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix),
+		#	(TankPartNames.getIdx(TankPartNames.GUN), self.__compoundModel.node(TankNodeNames.GUN_INCLINATION)))
+		#self.__collisions.connect(-1, ColliderTypes.VEHICLE_COLLIDER, collisionData)
+		
+
+
 		self.__updateTurretAndGun()
 
 		Waiting.hide('updateCurrentVehicle')
@@ -415,7 +445,16 @@ class HangarScene(object):
 					self.__ricochetMotors[targetIdx].signal = worldRicochetMatrix
 
 			previosPointData = (componentName, hitResult, startPoint, endPoint)
-			
+		
+		return
+
+
+		"""
+			TODO
+			fuck this shit
+		"""
+
+
 		if previosPointData:
 
 			componentName, hitResult, startPoint, endPoint = previosPointData
@@ -432,11 +471,15 @@ class HangarScene(object):
 				worldHitPoint = (worldStartPoint + worldEndPoint) / 2
 				
 				componentsDescr = g_controllers.vehicle.partDescriptor(componentName)
-				hitTester = componentsDescr.hitTester
-				if not hitTester.isBspModelLoaded():
-					hitTester.loadBspModel()
-				collision = hitTester.getBspModel().collideSegment(localStartPoint, localEndPoint)
-				hitTester.releaseBspModel()
+				
+				if self.__collisions is not None:
+					print componentName
+					collisions = self.__collisions.collideAllWorld(localStartPoint, localEndPoint)
+					print collisions
+					return
+				
+				return
+				
 				if collision:
 					_, normal, hitAngleCos, _ = collision[0]
 					worldNormalDirection = -worldComponentMatrix.applyVector(normal)
