@@ -26,14 +26,13 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 		
 		self.__updateStaticData()
 
-	def invokeChange(self, processReplays, saveOnlySession, showCollisionModel):
+	def invokeChange(self, processReplays, saveOnlySession):
 		
 		if not g_controllers.settings:
 			return
 			
 		g_controllers.settings.apply({SETTINGS.PROCESS_REPLAYS: processReplays, \
-									SETTINGS.SAVE_ONLY_SESSION: saveOnlySession, \
-									SETTINGS.COLLISION_MODEL: showCollisionModel})
+									SETTINGS.SAVE_ONLY_SESSION: saveOnlySession})
 	
 	def invokeStyle(self):
 		
@@ -55,8 +54,5 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			'processReplays': g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS),
 			'processReplaysLabel': l10n('popover.processReplaysLabel'),
 			'processReplaysDescription': l10n('popover.processReplaysDescription'),
-			'showCollisionModel': g_controllers.settings.get(SETTINGS.COLLISION_MODEL),
-			'showCollisionModelLabel': l10n('popover.showCollisionModelLabel'),
-			'showCollisionModelDescription': l10n('popover.showCollisionModelDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel')
 		})

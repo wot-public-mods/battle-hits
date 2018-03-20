@@ -109,10 +109,3 @@ def handleAvailability():
 		g_controllers.state.switch()
 	
 g_eventsManager.onDestroyBattle += handleAvailability
-
-# from gui.Scaleform.Flash import Flash
-# @override(Flash, '_Flash__onLogGui')
-# def LOG_GUI(baseMethod, baseObject, type, msg, *args, **kwargs):
-# 	if type == 'ERROR':
-# 		print msg + " " + ", ".join([unicode(s) for s in args])
-# 	baseMethod(baseObject, type, msg, *args, **kwargs)

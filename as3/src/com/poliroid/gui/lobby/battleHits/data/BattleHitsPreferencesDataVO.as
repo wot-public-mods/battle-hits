@@ -21,12 +21,6 @@ package com.poliroid.gui.lobby.battleHits.data
 		
 		public var processReplaysDescription:String = "processReplaysDescription";
 		
-		public var showCollisionModel:Boolean = false;
-		
-		public var showCollisionModelLabel:String = "processReplaysLabel";
-		
-		public var showCollisionModelDescription:String = "processReplaysDescription";
-		
 		public var changeStyleLabel:String = "changeStyleLabel";
 		
 		

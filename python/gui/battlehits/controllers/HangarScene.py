@@ -28,13 +28,11 @@ class HangarScene(object):
 
 		self.__compoundModel = None
 
-		self.__collisionModels = []
 		self.__shellModels = []
 		self.__effectModels = []
 		self.__splashModels = []
 		self.__ricochetModels = []
 
-		self.__collisionMotors = []
 		self.__effectMotors = []
 		self.__splashMotors = []
 		self.__shellMotors = []
@@ -54,8 +52,6 @@ class HangarScene(object):
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
 		
 		self.assambleModels()
-		
-		self.__useCollision = g_controllers.settings.get(SETTINGS.COLLISION_MODEL, False)
 		
 		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 		
@@ -98,12 +94,6 @@ class HangarScene(object):
 			if self.__compoundModel:
 				BigWorld.delModel(self.__compoundModel)
 			self.__compoundModel = None
-
-			for model in self.__collisionModels:
-				if model in BigWorld.models():
-					BigWorld.delModel(model)
-			self.__collisionModels = []
-			self.__collisionMotors = []
 		
 		if withResources:
 			
@@ -156,11 +146,6 @@ class HangarScene(object):
 			self.assambleModels()
 			self.__loadVehicle()
 	
-		if key == SETTINGS.COLLISION_MODEL:
-			self.__useCollision = value
-			self.freeModels(freeTankModel=True)
-			self.__loadVehicle()
-	
 	def __loadVehicle(self):
 		
 		if not g_data.currentBattle.victim:
@@ -174,12 +159,8 @@ class HangarScene(object):
 
 		if self.__preCompactDescrStr != compactDescrStr:
 			Waiting.show('updateCurrentVehicle')
-			if self.__useCollision:
-				modelsCollision = [ compactDescr.getHitTesters()[idx].bspModelName for idx in TankPartIndexes.ALL ]
-				BigWorld.loadResourceListBG(modelsCollision, self.__onCollisionLoaded)
-			else:
-				assambler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
-				BigWorld.loadResourceListBG((assambler, ), self.__onModelLoaded)
+			normalAssambler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, BigWorld.camera().spaceID)
+			BigWorld.loadResourceListBG((normalAssambler, ), self.__onModelLoaded)
 			self.__preCompactDescrStr = compactDescrStr
 		else:
 			self.__updateTurretAndGun()
@@ -190,11 +171,11 @@ class HangarScene(object):
 		self.__updateSplash()
 		self.__updateRicochet()
 
-	def __onModelLoaded(self, resources):
+	def __onModelLoaded(self, resourceRefs):
 		
 		compactDescr = g_data.currentBattle.victim['compactDescr']
 		
-		self.__compoundModel = resources[compactDescr.name]
+		self.__compoundModel = resourceRefs[compactDescr.name]
 		
 		BigWorld.addModel(self.__compoundModel)
 		
@@ -205,38 +186,17 @@ class HangarScene(object):
 
 		Waiting.hide('updateCurrentVehicle')
 
-	def __onCollisionLoaded(self, resources):
-		
-		compactDescr = g_data.currentBattle.victim['compactDescr']
-		modelsCollision = [ compactDescr.getHitTesters()[idx].bspModelName for idx in TankPartIndexes.ALL ]
-
-		self.__collisionModels = [resources[model] for model in modelsCollision]
-		self.__collisionMotors = [BigWorld.Servo(Math.Matrix()) for idx in TankPartIndexes.ALL]
-		
-		for idx in TankPartIndexes.ALL:
-			model, motor = self.__collisionModels[idx], self.__collisionMotors[idx]
-			model.castsShadow = False
-			model.addMotor(motor)
-			motor.signal = g_controllers.vehicle.partWorldMatrix(TankPartIndexes.getName(idx))
-			BigWorld.addModel(model)
-		
-		Waiting.hide('updateCurrentVehicle')
-
 	def __updateTurretAndGun(self):
 		
 		turretYaw, gunPitch = g_data.currentBattle.atacker['aimParts']
 
-		if self.__useCollision:
-			for idx in TankPartIndexes.ALL:
-				self.__collisionMotors[idx].signal = g_controllers.vehicle.partWorldMatrix(TankPartIndexes.getName(idx))
-		else:
-			m = Math.Matrix()
-			m.setRotateYPR((turretYaw, 0.0, 0.0))
-			self.__compoundModel.node(TankPartNames.TURRET, m)
-			m = Math.Matrix()
-			m.setRotateYPR((0.0, gunPitch, 0.0))
-			self.__compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
-		
+		m = Math.Matrix()
+		m.setRotateYPR((turretYaw, 0.0, 0.0))
+		self.__compoundModel.node(TankPartNames.TURRET, m)
+		m = Math.Matrix()
+		m.setRotateYPR((0.0, gunPitch, 0.0))
+		self.__compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
+	
 	def __updateCamera(self):
 		
 		victimData = g_data.currentBattle.victim

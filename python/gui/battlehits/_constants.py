@@ -22,7 +22,6 @@ class SETTINGS:
 	SORTING_RULE = 'sortingRule'
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
-	COLLISION_MODEL = 'collisionModel'
 
 DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,
@@ -30,8 +29,7 @@ DEFAULT_SETTINGS = {
 	SETTINGS.CURRENT_STYLE: 'style1',
 	SETTINGS.SORTING_RULE: 3,
 	SETTINGS.SORTING_REVERSED: True,
-	SETTINGS.HITS_TO_PLAYER: True,
-	SETTINGS.COLLISION_MODEL: False
+	SETTINGS.HITS_TO_PLAYER: True
 }
 
 class MODEL_TYPES:
@@ -52,7 +50,7 @@ wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
-SETTINGS_VERSION = 5
+SETTINGS_VERSION = 6
 CACHE_VERSION = 9
 
 class SHELL_TYPES:
