@@ -39,7 +39,7 @@ class HangarCamera(object):
 		self.__enabled = False
 		self.__originalCameraData = None
 	
-	def setCameraData(self, default, current, limits, sens, target):
+	def setCameraData(self, default, current, limits, sens, target, forceUpdate = False):
 		self.__yaw = current[0] + self.__offset
 		self.__pitch = current[1] + self.__offset
 		self.__dist = current[2] + self.__offset
@@ -49,13 +49,17 @@ class HangarCamera(object):
 		self.__sens = sens
 		self.__targetPosition = target
 		
+		self.updateCamera(0.0, 0.0, 0.0)
+		
 		cam = g_hangarSpace.space.camera
 		if limits[2]:
 			cam.pivotMinDist = limits[2][0]
-		cam.target.setTranslate(target)
+		cam.target.setTranslate(Math.Vector3(target))
 		cam.pivotPosition = Math.Vector3(0.0, 0.0, 0.0)
 		
-		self.updateCamera(0.0, 0.0, 0.0)
+		# force update camera
+		if forceUpdate:
+			cam.forceUpdate()
 	
 	def updateCamera(self, dx, dy, dz):
 		self.__yaw += dx * self.__sens[0]
@@ -69,17 +73,20 @@ class HangarCamera(object):
 		
 		yaw, pitch, dist = mathUtils.reduceToPI(self.__yaw - self.__offset), (self.__pitch - self.__offset), self.__dist - self.__offset
 		
-		# we do not want the camera falling under the floor	
-		# we can collide floor with camera because it doesn't have collision
+		# we do not want the camera falling under the floor
+		# we cant collide floor with camera because it doesn't have collision
 		# filter pitch by target height and distance from target
-		# some strange shit	
+		# some strange shit
 		if pitch > 0.0 and self.__targetPosition[1] > self.__offset:
 			targetHeight = self.__targetPosition[1] - self.__offset
 			underFloorOffset = 0.25
 			cameraHeightUnderFloor = (math.sin(math.pi - pitch) * dist) + underFloorOffset
 			if cameraHeightUnderFloor > targetHeight: 
 				pitch = (math.pi / 2) - math.acos((targetHeight - underFloorOffset) / dist)
-			
+		
+		# filter pitch
+		pitch = mathUtils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitch)
+
 		cameraMatrix = Math.Matrix()
 		cameraMatrix.setRotateYPR((yaw, pitch, 0.0))
 		cam = g_hangarSpace.space.camera

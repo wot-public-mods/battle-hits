@@ -22,6 +22,7 @@ class HangarScene(object):
 		self.__rootPosition = SCENE_OFFSET
 		self.__useCollision = False
 		self.__preCompactDescrStr = None
+		self.__forceCameraUpdate = False
 		
 		# resources
 		self.__domeModel = None
@@ -56,6 +57,8 @@ class HangarScene(object):
 		
 		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 		
+		self.__forceCameraUpdate = True
+
 		self.__loadVehicle()
 	
 	def assambleModels(self):
@@ -152,7 +155,7 @@ class HangarScene(object):
 		
 		if not g_data.currentBattle.victim:
 			return
-
+		
 		compactDescr = g_data.currentBattle.victim['compactDescr']
 		compactDescrStr = g_data.currentBattle.victim['compactDescrStr']
 		aimParts = g_data.currentBattle.atacker['aimParts']
@@ -248,7 +251,8 @@ class HangarScene(object):
 				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
 				(None, math.radians(20.0), (5.0, 15.0)),
 				(0.005, 0.005, 0.001),
-				targetPoint
+				targetPoint,
+				self.__forceCameraUpdate
 			)
 		else:
 			
@@ -270,9 +274,13 @@ class HangarScene(object):
 				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0),
 				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)),
 				(0.005, 0.005, 0.001),
-				worldStartPoint
+				worldStartPoint,
+				self.__forceCameraUpdate
 			)
-	
+		
+		if self.__forceCameraUpdate:
+			self.__forceCameraUpdate = False
+
 	def __updateShell(self):
 		
 		for model in self.__shellModels:
