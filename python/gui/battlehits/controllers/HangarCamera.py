@@ -1,11 +1,12 @@
 
+import BigWorld
 import math
 import Math
 
 from AvatarInputHandler import mathUtils
 from gui.shared.utils.HangarSpace import g_hangarSpace
 
-from gui.battlehits._constants import SCENE_OFFSET
+from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET
 
 class HangarCamera(object):
 	
@@ -71,24 +72,27 @@ class HangarCamera(object):
 		self.__dist -= dz * self.__sens[2]
 		if self.__distLimits: self.__dist = mathUtils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
 		
+		camera = g_hangarSpace.space.camera
 		yaw, pitch, dist = mathUtils.reduceToPI(self.__yaw - self.__offset), (self.__pitch - self.__offset), self.__dist - self.__offset
 		
-		# we do not want the camera falling under the floor
-		# we cant collide floor with camera because it doesn't have collision
-		# filter pitch by target height and distance from target
-		# some strange shit
+		# We do not want the camera falling under the floor
+		# We cant collide floor with camera because it doesn't have collision
+		# Filter pitch by target height and distance from target
+		# Actual distance is used instead of the calculated distance 
+		# In case of a camera collide with vehicle
+		#
+		# Some strange shit
 		if pitch > 0.0 and self.__targetPosition[1] > self.__offset:
 			targetHeight = self.__targetPosition[1] - self.__offset
-			underFloorOffset = 0.25
-			cameraHeightUnderFloor = (math.sin(math.pi - pitch) * dist) + underFloorOffset
+			currentDist = (camera.position - self.__targetPosition).length
+			cameraHeightUnderFloor = (math.sin(math.pi - pitch) * currentDist) + CAMERA_UNDER_FLOOR_OFFSET
 			if cameraHeightUnderFloor > targetHeight: 
-				pitch = (math.pi / 2) - math.acos((targetHeight - underFloorOffset) / dist)
+				pitch = (math.pi / 2) - math.acos((targetHeight - CAMERA_UNDER_FLOOR_OFFSET) / currentDist)
 		
 		# filter pitch
 		pitch = mathUtils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitch)
-
+		
 		cameraMatrix = Math.Matrix()
 		cameraMatrix.setRotateYPR((yaw, pitch, 0.0))
-		cam = g_hangarSpace.space.camera
-		cam.source = cameraMatrix
-		cam.pivotMaxDist = dist
+		camera.source = cameraMatrix
+		camera.pivotMaxDist = dist
