@@ -20,15 +20,14 @@ class HangarScene(object):
 		
 		# data
 		self.__rootPosition = SCENE_OFFSET
-		self.__useCollision = False
 		self.__preCompactDescrStr = None
 		self.__forceCameraUpdate = False
 		
 		# resources
-		self.__domeModel = None
-		#self.__collisions = None
+		self.collision = None
+		self.compoundModel = None
 
-		self.__compoundModel = None
+		self.__domeModel = None
 
 		self.__shellModels = []
 		self.__effectModels = []
@@ -95,10 +94,15 @@ class HangarScene(object):
 			
 			self.__preCompactDescrStr = None
 
-			if self.__compoundModel:
-				BigWorld.delModel(self.__compoundModel)
-			self.__compoundModel = None
-			#self.__collisions = None
+			if self.compoundModel:
+				BigWorld.delModel(self.compoundModel)
+			self.compoundModel = None
+
+			if self.collision:
+				BigWorld.removeCameraCollider(self.collision.getColliderID())
+				self.collision.deactivate()
+				self.collision.destroy()
+			self.collision = None
 
 		if withResources:
 			
@@ -168,19 +172,23 @@ class HangarScene(object):
 			
 			spaceID = BigWorld.camera().spaceID
 			
+			#normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
+			
+			#BigWorld.loadResourceListBG( (normalAssembler, ), self.__onModelLoaded )
 			normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
 			
-			BigWorld.loadResourceListBG( (normalAssembler, ), self.__onModelLoaded )
+			capsuleScale = Math.Vector3(2.0, 2.0, 2.0)
+			gunScale = Math.Vector3(1.0, 1.0, 1.0)
+			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), compactDescr.chassis.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.HULL), compactDescr.hull.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.TURRET), compactDescr.turret.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.GUN), compactDescr.gun.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 1, compactDescr.hull.hitTester.bspModelName, capsuleScale),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 2, compactDescr.turret.hitTester.bspModelName, capsuleScale),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 3, compactDescr.gun.hitTester.bspModelName, gunScale))
 			
-			#normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
-			#
-			#bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), compactDescr.chassis.hitTester.bspModelName),
-			#				(TankPartNames.getIdx(TankPartNames.HULL), compactDescr.hull.hitTester.bspModelName),
-			#				(TankPartNames.getIdx(TankPartNames.TURRET), compactDescr.turret.hitTester.bspModelName),
-			#				(TankPartNames.getIdx(TankPartNames.GUN), compactDescr.gun.hitTester.bspModelName))
-			#
-			#collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
-			#BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), self.__onModelLoaded )
+			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
+			BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), self.__onModelLoaded )
 
 			self.__preCompactDescrStr = compactDescrStr
 		else:
@@ -194,29 +202,53 @@ class HangarScene(object):
 
 	def __onModelLoaded(self, resourceRefs):
 		
+		if self.collision:
+			BigWorld.removeCameraCollider(self.collision.getColliderID())
+			self.collision.deactivate()
+			self.collision.destroy()
+		self.collision = resourceRefs['collisionAssembler']
+	
+		if self.compoundModel:
+			BigWorld.delModel(self.compoundModel)
+		
 		compactDescr = g_data.currentBattle.victim['compactDescr']
 		
-		self.__compoundModel = resourceRefs[compactDescr.name]
+		self.compoundModel = resourceRefs[compactDescr.name]
 		
-		BigWorld.addModel(self.__compoundModel)
+		BigWorld.addModel(self.compoundModel)
 		
 		m = Math.Matrix()
 		m.setTranslate(self.__rootPosition)
-		self.__compoundModel.matrix = m
+		self.compoundModel.matrix = m
 		
-		#self.__collisions = resourceRefs['collisionAssembler']
-		#chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
-		#chassisColisionMatrix.target = self.__compoundModel.matrix
-		#collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.__compoundModel.node(TankPartNames.HULL)),
-		#	(TankPartNames.getIdx(TankPartNames.TURRET), self.__compoundModel.node(TankPartNames.TURRET)),
-		#	(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix),
-		#	(TankPartNames.getIdx(TankPartNames.GUN), self.__compoundModel.node(TankNodeNames.GUN_INCLINATION)))
-		#self.__collisions.connect(-1, ColliderTypes.VEHICLE_COLLIDER, collisionData)
 		
+		# connect VEHICLE_COLLIDER
+		chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
+		chassisColisionMatrix.target = self.compoundModel.matrix
+		collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.compoundModel.node(TankPartNames.HULL)),
+			(TankPartNames.getIdx(TankPartNames.TURRET), self.compoundModel.node(TankPartNames.TURRET)),
+			(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix),
+			(TankPartNames.getIdx(TankPartNames.GUN), self.compoundModel.node(TankNodeNames.GUN_INCLINATION)))
+		self.collision.connect(0, ColliderTypes.VEHICLE_COLLIDER, collisionData)
 
+		# connect HANGAR_VEHICLE_COLLIDER
+		gunColBox = self.collision.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
+		center = 0.5 * (gunColBox[1] - gunColBox[0])
+		gunoffset = Math.Matrix()
+		gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
+		gunLink = mathUtils.MatrixProviders.product(gunoffset, self.compoundModel.node(TankPartNames.GUN))
+		collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compoundModel.node(TankPartNames.HULL)), 
+			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)), 
+			(TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
+		self.collision.connect(0, ColliderTypes.HANGAR_VEHICLE_COLLIDER, collisionData)
+		
+		self.collision.activate()
 
+		colliderData = (self.collision.getColliderID(), (TankPartNames.getIdx(TankPartNames.GUN) + 1, TankPartNames.getIdx(TankPartNames.GUN) + 2, TankPartNames.getIdx(TankPartNames.GUN) + 3))
+		BigWorld.appendCameraCollider(colliderData)
+		
 		self.__updateTurretAndGun()
-
+		
 		Waiting.hide('updateCurrentVehicle')
 
 	def __updateTurretAndGun(self):
@@ -225,10 +257,10 @@ class HangarScene(object):
 
 		m = Math.Matrix()
 		m.setRotateYPR((turretYaw, 0.0, 0.0))
-		self.__compoundModel.node(TankPartNames.TURRET, m)
+		self.compoundModel.node(TankPartNames.TURRET, m)
 		m = Math.Matrix()
 		m.setRotateYPR((0.0, gunPitch, 0.0))
-		self.__compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
+		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
 	
 	def __updateCamera(self):
 		
@@ -307,12 +339,12 @@ class HangarScene(object):
 		
 		else:
 			
-			componentName, _,  startPoint, endPoint = points[0]
+			componentIdx, _,  startPoint, endPoint = points[0]
 			
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIdx)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -454,14 +486,12 @@ class HangarScene(object):
 
 			previosPointData = (componentName, hitResult, startPoint, endPoint)
 		
-		return
-
-
 		"""
 			TODO
 			fuck this shit
 		"""
-
+		
+		return
 
 		if previosPointData:
 
@@ -480,22 +510,24 @@ class HangarScene(object):
 				
 				componentsDescr = g_controllers.vehicle.partDescriptor(componentName)
 				
-				if self.__collisions is not None:
-					print componentName
-					collisions = self.__collisions.collideAllWorld(localStartPoint, localEndPoint)
-					print collisions
-					return
+				collisions = None
+
+				if self.collision is not None:
+					collisions = self.collision.collideAllWorld(localStartPoint, localEndPoint)
 				
-				return
-				
-				if collision:
-					_, normal, hitAngleCos, _ = collision[0]
+				if collisions:
+					_, hitAngleCos, _, _ = collisions[0]
+					
+					# we need normal, from collider, not this one shit
+					normal = localStartPoint - localEndPoint
+					normal.normalise()
+					
 					worldNormalDirection = -worldComponentMatrix.applyVector(normal)
 					worldNormalDirection.normalise()
 					
-					doubleKatet = hitAngleCos * (worldHitPoint - worldStartPoint).length * 2.0
+					doubleCathetus = hitAngleCos * (worldHitPoint - worldStartPoint).length * 2.0
 					
-					worldRicochetDirection = worldHitPoint - (worldEndPoint + worldNormalDirection.scale(-doubleKatet))
+					worldRicochetDirection = worldHitPoint - (worldEndPoint + worldNormalDirection.scale(-doubleCathetus))
 					worldRicochetMatrix = Math.Matrix()
 					worldRicochetMatrix.setRotateYPR((worldRicochetDirection.yaw, worldRicochetDirection.pitch, 0.0))
 					worldRicochetMatrix.translation = worldHitPoint
