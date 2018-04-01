@@ -37,6 +37,24 @@ def updateCameraByMouseMove(baseMethod, baseObject, *args):
 	else:
 		baseMethod(baseObject, *args)
 
+from hangar_camera_idle import HangarCameraIdle
+
+@override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
+def onModelsRefresh(baseMethod, baseObject):
+	if not g_controllers.hangarCamera.enabled:
+		return baseMethod(baseObject)
+	return 0.0
+
+from hangar_camera_parallax import HangarCameraParallax
+
+@override(HangarCameraParallax, "_HangarCameraParallax__update")
+def onModelsRefresh(baseMethod, baseObject):
+	if not g_controllers.hangarCamera.enabled:
+		return baseMethod(baseObject)
+	return 0.0
+
+
+
 # battlesHistory
 
 from Vehicle import Vehicle
@@ -67,22 +85,6 @@ def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 	baseMethod(baseObject, modelState, resourceList)
 	g_controllers.battleProcessor.onModelsRefresh(baseObject._CompoundAppearance__vehicle, modelState)
 
-
-# disable hangar camera features
-from hangar_camera_idle import HangarCameraIdle
-from hangar_camera_parallax import HangarCameraParallax
-
-@override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
-def onModelsRefresh(baseMethod, baseObject):
-	if not g_controllers.hangarCamera.enabled:
-		return baseMethod(baseObject)
-	return 0.0
-
-@override(HangarCameraParallax, "_HangarCameraParallax__update")
-def onModelsRefresh(baseMethod, baseObject):
-	if not g_controllers.hangarCamera.enabled:
-		return baseMethod(baseObject)
-	return 0.0
 
 
 
