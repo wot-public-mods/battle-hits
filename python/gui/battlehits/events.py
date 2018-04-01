@@ -13,6 +13,8 @@ class EventsManager(object):
 		self.invalidateBattlesDP = Event.Event()
 		self.invalidateHitsDP = Event.Event()
 		
+		self.showPopover = Event.Event()
+		self.showUI = Event.Event()
 		self.closeUI = Event.Event()
 		
 		self.onShowBattle = Event.Event()

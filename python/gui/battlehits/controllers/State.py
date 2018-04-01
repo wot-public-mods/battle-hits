@@ -98,8 +98,6 @@ class State(object):
 		g_hangarSpace.onSpaceCreate += g_controllers.hangarScene.create
 		g_hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
 		
-		g_appLoader.getDefLobbyApp().loadView(ViewLoadParams(BATTLE_HITS_VIEW_ALIAS, BATTLE_HITS_VIEW_ALIAS), {})
-		
 		self.__enabled = True
 		
 	def disable(self):

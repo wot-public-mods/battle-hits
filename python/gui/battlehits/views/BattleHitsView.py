@@ -118,10 +118,7 @@ class BattleHitsView(BattleHitsMeta):
 		g_data.hits.sort(sortRow)
 	
 	def preferencesClick(self):
-		app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
-		if app:
-			app.loadView(ViewLoadParams(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, \
-										BATTLE_HITS_PREFERENCES_POPOVER_ALIAS), {})
+		g_eventsManager.showPopover()
 	
 	def handleKeyEvent(self, event):
 		if not event.isKeyDown():

@@ -60,6 +60,8 @@ class HangarScene(object):
 		
 		self.__forceCameraUpdate = True
 
+		g_eventsManager.showUI()
+
 		self.__loadVehicle()
 	
 	def assambleModels(self):
