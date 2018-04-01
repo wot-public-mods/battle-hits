@@ -8,6 +8,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankPartIndexes, TankNodeNames
 from vehicle_systems.model_assembler import prepareCompoundAssembler
+from vehicle_systems.stricted_loading import makeCallbackWeak
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.controllers import g_controllers
@@ -19,6 +20,7 @@ class HangarScene(object):
 	def __init__(self):
 		
 		# data
+		self.__curBuildInd = 1
 		self.__rootPosition = SCENE_OFFSET
 		self.__preCompactDescrStr = None
 		self.__forceCameraUpdate = False
@@ -169,7 +171,9 @@ class HangarScene(object):
 		if self.__preCompactDescrStr != compactDescrStr:
 			
 			Waiting.show('updateCurrentVehicle')
-			
+
+			self.__curBuildInd += 1
+
 			spaceID = BigWorld.camera().spaceID
 			
 			normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
@@ -185,7 +189,7 @@ class HangarScene(object):
 				(TankPartNames.getIdx(TankPartNames.GUN) + 3, compactDescr.gun.hitTester.bspModelName, gunScale))
 			
 			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
-			BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), self.__onModelLoaded )
+			BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), makeCallbackWeak(self.__onModelLoaded, self.__curBuildInd) )
 
 			self.__preCompactDescrStr = compactDescrStr
 		else:
@@ -197,7 +201,10 @@ class HangarScene(object):
 		self.__updateSplash()
 		self.__updateRicochet()
 
-	def __onModelLoaded(self, resourceRefs):
+	def __onModelLoaded(self, buildInd, resourceRefs):
+		
+		if buildInd != self.__curBuildInd:
+			return
 		
 		if self.collision:
 			BigWorld.removeCameraCollider(self.collision.getColliderID())
