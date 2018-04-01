@@ -1,14 +1,11 @@
 
 from gui import ClientHangarSpace as chs
-from gui.app_loader.loader import g_appLoader
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.shared.utils.HangarSpace import g_hangarSpace
 
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits._constants import BATTLE_HITS_VIEW_ALIAS
 
 class State(object):
 	

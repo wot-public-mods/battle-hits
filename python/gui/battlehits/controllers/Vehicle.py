@@ -1,9 +1,8 @@
 
-from AvatarInputHandler import mathUtils
-import BigWorld
 import Math
-import math
-from vehicle_systems.tankStructure import ModelStates, TankPartNames, TankPartIndexes, TankNodeNames
+
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
+
 from gui.battlehits._constants import SCENE_OFFSET
 
 class Vehicle(object):

@@ -3,10 +3,10 @@ from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
 import math
-from debug_utils import LOG_ERROR, LOG_NOTE, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.HangarSpace import g_hangarSpace
-from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankPartIndexes, TankNodeNames
+from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankNodeNames
 from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
 

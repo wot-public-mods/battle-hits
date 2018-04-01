@@ -5,7 +5,7 @@ import Math
 from AvatarInputHandler import mathUtils
 from gui.shared.utils.HangarSpace import g_hangarSpace
 
-from gui.battlehits._constants import CAMERA_DEFAULTS, SCENE_OFFSET
+from gui.battlehits._constants import SCENE_OFFSET
 
 class HangarCamera(object):
 	

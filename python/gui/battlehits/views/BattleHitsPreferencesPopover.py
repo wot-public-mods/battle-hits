@@ -3,9 +3,7 @@ from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import Abstra
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers
-from gui.battlehits.data import g_data
 from gui.battlehits.lang import l10n
-from gui.battlehits.events import g_eventsManager
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 	

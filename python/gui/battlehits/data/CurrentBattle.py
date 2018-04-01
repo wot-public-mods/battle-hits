@@ -1,6 +1,5 @@
 
 from items import vehicles
-from debug_utils import LOG_ERROR, LOG_NOTE
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers

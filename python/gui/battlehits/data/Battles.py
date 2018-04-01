@@ -3,7 +3,6 @@ import datetime
 import ArenaType
 from helpers import i18n
 from items import vehicles
-from debug_utils import LOG_ERROR, LOG_NOTE
 
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager

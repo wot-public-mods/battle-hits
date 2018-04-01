@@ -1,24 +1,19 @@
 
 import Keys
 
-from gui.app_loader.loader import g_appLoader
-from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.shared import event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
-from debug_utils import LOG_ERROR, LOG_NOTE
 
-from gui.battlehits._constants import SETTINGS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
+from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
-
 
 class BattleHitsMeta(LobbySubView, View):
 	

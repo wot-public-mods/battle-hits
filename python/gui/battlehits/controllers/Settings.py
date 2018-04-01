@@ -3,7 +3,6 @@ import cPickle
 import os
 import zlib
 
-import BigWorld
 from debug_utils import LOG_ERROR
 
 from gui.battlehits.events import g_eventsManager
