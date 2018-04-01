@@ -22,4 +22,6 @@ class EventsManager(object):
 		
 		self.onAppFinish = Event.Event()
 		
+		self.onKeyEvent = Event.Event()
+		
 g_eventsManager = EventsManager()

@@ -1,4 +1,6 @@
 
+import Keys
+
 from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.daapi import LobbySubView
@@ -75,13 +77,16 @@ class BattleHitsView(BattleHitsMeta):
 		g_eventsManager.invalidateBattlesDP += self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP += self.__onHitsDPUpdated
 		g_eventsManager.closeUI += self.closeView
-	
+		g_controllers.hotkey.addForced(self.handleKeyEvent)
+
 	def _dispose(self):
 		if g_controllers.state and g_controllers.state.enabled:
 			g_controllers.state.switch()
 		g_eventsManager.invalidateBattlesDP -= self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP -= self.__onHitsDPUpdated
 		g_eventsManager.closeUI -= self.closeView
+		if g_controllers.hotkey:
+			g_controllers.hotkey.delForced(self.handleKeyEvent)
 		super(BattleHitsView, self)._dispose()
 	
 	def closeView(self):
@@ -117,6 +122,31 @@ class BattleHitsView(BattleHitsMeta):
 		if app:
 			app.loadView(ViewLoadParams(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, \
 										BATTLE_HITS_PREFERENCES_POPOVER_ALIAS), {})
+	
+	def handleKeyEvent(self, event):
+		if not event.isKeyDown():
+			return False
+		if event.key == Keys.KEY_UPARROW:
+			self.selectBattle(g_data.battles.prevItemID)
+			return True
+		elif event.key == Keys.KEY_DOWNARROW:
+			self.selectBattle(g_data.battles.nextItemID)
+			return True
+		elif event.key == Keys.KEY_LEFTARROW:
+			self.selectHit(g_data.hits.prevItemID)
+			return True
+		elif event.key == Keys.KEY_RIGHTARROW:
+			self.selectHit(g_data.hits.nextItemID)
+			return True
+		elif event.key == Keys.KEY_TAB:
+			toPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, False)
+			self.hitsToPlayerClick(not toPlayer)
+			self.__updateStaticData()
+			return True
+		elif event.key == Keys.KEY_ESCAPE:
+			self.closeView()
+			return True
+		return False
 	
 	def __updateStaticData(self):
 		self.as_setStaticDataS(self.__getStaticData())

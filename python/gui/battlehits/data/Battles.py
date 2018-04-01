@@ -12,6 +12,8 @@ class Battles(object):
 	
 	dataVO = property(lambda self : self.__dataVO)
 	selectedIndex = property(lambda self : self.__selectedIndex)
+	nextItemID = property(lambda self : self.__getItemID(1))
+	prevItemID = property(lambda self : self.__getItemID(-1))
 	desiredID = property(lambda self : self.__getDesiredID())
 	
 	def __init__(self):
@@ -65,6 +67,19 @@ class Battles(object):
 		if self.__dataVO:
 			result = self.__dataVO[0]["id"]
 		return result
+	
+	def __getItemID(self, offset):
+		
+		if self.__selectedIndex == -1:
+			return -1
+		
+		destination = self.__selectedIndex + offset
+		
+		if len(self.__dataVO) > destination and destination > -1:
+			return self.__dataVO[destination]['id']
+		else:
+			return self.__dataVO[self.__selectedIndex]['id']
+		return 0
 	
 	def clean(self):
 		

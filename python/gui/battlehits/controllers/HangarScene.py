@@ -172,9 +172,6 @@ class HangarScene(object):
 			
 			spaceID = BigWorld.camera().spaceID
 			
-			#normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
-			
-			#BigWorld.loadResourceListBG( (normalAssembler, ), self.__onModelLoaded )
 			normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
 			
 			capsuleScale = Math.Vector3(2.0, 2.0, 2.0)

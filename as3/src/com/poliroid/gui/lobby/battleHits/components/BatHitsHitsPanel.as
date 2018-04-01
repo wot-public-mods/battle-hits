@@ -86,19 +86,9 @@
 		{
 			var dp:BatHitsHitsVO = BatHitsHitsVO(data);
 			
-			if (hitsList.dataProvider != null)
-				hitsList.dataProvider.cleanUp();
-			
-			noDataTF.text = dp.noDataLabel;	
-			
-			hitsList.selectedIndex = dp.selectedIndex;
-			hitsList.dataProvider = new DataProvider(dp.hitsList);
-			
-			sortButtons.dataProvider = new DataProvider(dp.sortList);
-			
+			updateDP(dp);
+
 			dp.dispose();
-			
-			invalidateData();
 		}
 		
 		public function updateDP(dp:BatHitsHitsVO) : void
@@ -108,9 +98,8 @@
 			
 			noDataTF.text = dp.noDataLabel;	
 			
-			hitsList.dataProvider = new DataProvider(dp.hitsList);
-			
 			hitsList.selectedIndex = dp.selectedIndex;
+			hitsList.dataProvider = new DataProvider(dp.hitsList);
 			
 			sortButtons.dataProvider = new DataProvider(dp.sortList);
 			

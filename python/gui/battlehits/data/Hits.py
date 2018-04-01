@@ -36,6 +36,8 @@ class Hits(object):
 	dataVO = property(lambda self : self.__dataVO)
 	sortingVO = property(lambda self : self.__sortingVO)
 	selectedIndex = property(lambda self : self.__selectedIndex)
+	nextItemID = property(lambda self : self.__getItemID(1))
+	prevItemID = property(lambda self : self.__getItemID(-1))
 	hitsToPlayer = property(lambda self : self.__hitsToPlayer)
 	desiredID = property(lambda self : self.__getDesiredID())
 
@@ -163,9 +165,22 @@ class Hits(object):
 	def __getDesiredID(self):
 		result = -1
 		self.updateData()
-		if self.__data:
-			result = self.__data[0]["id"]
+		if self.__dataVO:
+			result = self.__dataVO[0]["id"]
 		return result
+	
+	def __getItemID(self, offset):
+		
+		if self.__selectedIndex == -1:
+			return -1
+		
+		destination = self.__selectedIndex + offset
+		
+		if len(self.__dataVO) > destination and destination > -1:
+			return self.__dataVO[destination]['id']
+		else:
+			return self.__dataVO[self.__selectedIndex]['id']
+		return 0
 	
 	def sort(self, row):
 		

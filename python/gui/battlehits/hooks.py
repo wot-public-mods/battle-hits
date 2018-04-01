@@ -86,6 +86,22 @@ def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 	g_controllers.battleProcessor.onModelsRefresh(baseObject._CompoundAppearance__vehicle, modelState)
 
 
+# handling keystrokes
+
+import game
+
+@override(game, 'handleKeyEvent')
+def handleKeyEvent(baseMethod, event):
+	# handling forced keylistners
+	for keyHandler in g_controllers.hotkey.forcedHandlers:
+		if keyHandler(event):
+			return True
+	# handling ingame logic
+	result = baseMethod(event)
+	# firing key event 
+	g_eventsManager.onKeyEvent(event, result)
+	return result
+
 
 
 # Data Collect

@@ -107,12 +107,6 @@
 			addEventListener(BatHitsIndexEvent.HIT_CHANGED, onHitSelectHandler);
 			addEventListener(BatHitsIndexEvent.SORT_CLICKED, onSortClickHandler);
 			
-			App.gameInputMgr.setKeyHandler(Keyboard.UP, KeyboardEvent.KEY_DOWN, onUpKeyUpHandler, true);
-			App.gameInputMgr.setKeyHandler(Keyboard.DOWN, KeyboardEvent.KEY_DOWN, onDownKeyUpHandler, true);
-			App.gameInputMgr.setKeyHandler(Keyboard.LEFT, KeyboardEvent.KEY_DOWN, onLeftKeyUpHandler, true);
-			App.gameInputMgr.setKeyHandler(Keyboard.RIGHT, KeyboardEvent.KEY_DOWN, onRightKeyUpHandler, true);
-			App.gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, onEscapeKeyUpHandler, true);
-			
 			App.stage.addEventListener(LobbyEvent.DRAGGING_START, onDraggingStartHandler);
 			App.stage.addEventListener(LobbyEvent.DRAGGING_END, onDraggingEndHandler);
 			
@@ -123,12 +117,6 @@
 		{
 			App.stage.removeEventListener(LobbyEvent.DRAGGING_START, onDraggingStartHandler);
 			App.stage.removeEventListener(LobbyEvent.DRAGGING_END, onDraggingEndHandler);
-
-			App.gameInputMgr.clearKeyHandler(Keyboard.UP, KeyboardEvent.KEY_DOWN, onUpKeyUpHandler);
-			App.gameInputMgr.clearKeyHandler(Keyboard.DOWN, KeyboardEvent.KEY_DOWN, onDownKeyUpHandler);
-			App.gameInputMgr.clearKeyHandler(Keyboard.LEFT, KeyboardEvent.KEY_DOWN, onLeftKeyUpHandler);
-			App.gameInputMgr.clearKeyHandler(Keyboard.RIGHT, KeyboardEvent.KEY_DOWN, onRightKeyUpHandler);
-			App.gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, onEscapeKeyUpHandler);
 			
 			App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.UNREGISTER_DRAGGING));
 			
@@ -163,31 +151,6 @@
 			battlesPanel = null;
 			
 			super.onDispose();
-		}
-		
-		private function onUpKeyUpHandler(e:InputEvent) : void
-		{
-			onBattleSelectS(battlesPanel._battlesList.prevItemID);
-		}
-		
-		private function onDownKeyUpHandler(e:InputEvent) : void
-		{
-			onBattleSelectS(battlesPanel._battlesList.nextItemID);
-		}
-		
-		private function onLeftKeyUpHandler(e:InputEvent) : void
-		{
-			onHitSelectS(hitsPanel._hitsList.prevItemID);
-		}
-		
-		private function onRightKeyUpHandler(e:InputEvent) : void
-		{
-			onHitSelectS(hitsPanel._hitsList.nextItemID);
-		}
-		
-		private function onEscapeKeyUpHandler(e:InputEvent) : void
-		{
-			closeViewS();
 		}
 		
 		private function onDraggingEndHandler(e:LobbyEvent) : void

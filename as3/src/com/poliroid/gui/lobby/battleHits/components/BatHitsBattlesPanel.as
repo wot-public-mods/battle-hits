@@ -26,7 +26,6 @@
 	import com.poliroid.gui.lobby.battleHits.events.BatHitsEvent;
 	import com.poliroid.gui.lobby.battleHits.events.BatHitsIndexEvent;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IBatHitsBattlesPanel;
-	import com.poliroid.gui.lobby.battleHits.interfaces.IExtendedScrollingList;
 	import com.poliroid.gui.lobby.battleHits.controls.CustomScrollingList;
 	
 	public class BatHitsBattlesPanel extends UIComponentEx implements IBatHitsBattlesPanel
@@ -71,15 +70,9 @@
 		{
 			var dp:BatHitsBattlesVO = BatHitsBattlesVO(data);
 			
-			noDataTF.text = dp.noDataLabel;	
-			
-			battlesList.dataProvider = new DataProvider(dp.battlesList);
-			battlesList.selectedIndex = dp.selectedIndex;
+			updateDP(dp);
 			
 			dp.dispose();
-			
-			invalidateData();
-		
 		}
 		
 		public function updateDP(data:BatHitsBattlesVO) : void
