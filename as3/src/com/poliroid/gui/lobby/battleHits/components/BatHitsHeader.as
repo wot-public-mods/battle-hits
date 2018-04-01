@@ -2,6 +2,7 @@
 {
 	
 	import flash.display.DisplayObject;
+	import flash.display.InteractiveObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.text.TextField;
@@ -54,7 +55,6 @@
 			hitsTypeToPlayer.removeEventListener(ButtonEvent.CLICK, onToPlayerClickHandler);
 			hitsTypeFromPlayer.removeEventListener(ButtonEvent.CLICK, onFromPlayerClickHandler);
 			
-			//background.dispose();
 			closeBtn.dispose();
 			settingsBtn.dispose();
 			hitsTypeToPlayer.dispose();
@@ -85,8 +85,14 @@
 			
 			if(isInvalid(InvalidationType.SIZE))
 			{
-				background.width = width;
-				layout();
+				var screenWidth:int = App.appWidth;
+				
+				background.width = int(screenWidth);
+				titleTF.x = int((screenWidth - titleTF.width) / 2);
+				closeBtn.x = int(screenWidth - closeBtn.width - CLOSE_BTN_OFFSET);
+				settingsBtn.x = int(closeBtn.x  - settingsBtn.width);
+				hitsTypeToPlayer.x = int((screenWidth - HIT_TYPE_BTN_OFFSET * 2) / 2);
+				hitsTypeFromPlayer.x = int(hitsTypeToPlayer.x + HIT_TYPE_BTN_OFFSET);
 			}
 		}
 		
@@ -106,17 +112,9 @@
 			hitsTypeToPlayer.isActive = ctx.typeBtnMeActive;
 			hitsTypeFromPlayer.isActive = ctx.typeBtnEnemysActive;
 			
-			layout();
 			ctx.dispose();
-		}
-		
-		private function layout() : void
-		{
-			titleTF.x = Number((width - titleTF.width) / 2);
-			closeBtn.x = width - closeBtn.width - CLOSE_BTN_OFFSET;
-			settingsBtn.x = closeBtn.x  - settingsBtn.width;
-			hitsTypeToPlayer.x = Number((width - HIT_TYPE_BTN_OFFSET * 2) / 2);
-			hitsTypeFromPlayer.x = hitsTypeToPlayer.x + HIT_TYPE_BTN_OFFSET;
+
+			invalidateSize();
 		}
 		
 		private function onCloseBtnClickHandler(e:ButtonEvent) : void

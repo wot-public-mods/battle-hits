@@ -11,8 +11,9 @@
 	import scaleform.clik.events.ButtonEvent;
 	
 	import scaleform.clik.constants.InvalidationType;
-	import scaleform.clik.events.InputEvent;
 	import scaleform.clik.data.DataProvider;
+	import scaleform.clik.events.InputEvent;
+	import scaleform.clik.motion.Tween;
 	
 	import net.wg.data.constants.generated.VEHPREVIEW_CONSTANTS;
 	import net.wg.gui.events.LobbyEvent;
@@ -40,11 +41,23 @@
 		
 		private static const POPOVER_ALIAS:String = 'BattleHitsPreferencesPopover';
 		
+		private static const ANIMATION_DURATION:int = 200;
+		
+		private static const ANIMATION_DELAY:int = 150;
+		
+		private static const SHOW_SLOTS_ALPHA:Number = 1;
+		
+		private static const HIDE_SLOTS_ALPHA:Number = 0.2;
+		
 		public var header:IBatHitsHeader = null;
 		
 		public var hitsPanel:IBatHitsHitsPanel = null;
 		
 		public var battlesPanel:IBatHitsBattlesPanel = null;
+		
+		private var _tweenInfoHide:Tween = null;
+		
+		private var _tweenInfoShow:Tween = null;
 		
 		public function BattleHits()
 		{
@@ -53,7 +66,8 @@
 		
 		override public function updateStage(_width:Number, _height:Number) : void
 		{
-			setSize(_width, _height);
+			header.invalidateSize();
+			battlesPanel.x = int(_width - battlesPanel.width);
 		}
 		
 		override protected function setStaticData(data:BatHitsStaticDataVO) : void
@@ -61,7 +75,6 @@
 			header.update(data.header);
 			battlesPanel.update(data.battles);
 			hitsPanel.update(data.hits);
-			//detailedShotPanel.update(data.detailedShot);
 		}
 		
 		override protected function updateBattlesDPData(data:BatHitsBattlesVO) : void
@@ -74,13 +87,17 @@
 			hitsPanel.updateDP(data);
 		}
 		
-		override protected function configUI() : void
+		override protected function onInitModalFocus(target:InteractiveObject) : void
 		{
-			super.configUI();
-			
+			super.onInitModalFocus(target);
+			setFocus(this);
+		}
+		
+		override protected function onPopulate() : void
+		{
+			super.onPopulate();
+
 			App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.REGISTER_DRAGGING));
-			
-			layout();
 			
 			addEventListener(BatHitsEvent.CLOSE_CLICK, onCloseClickHandler);
 			addEventListener(BatHitsEvent.PREFERENCES_CLICK, onPreferencesClickHandler);
@@ -96,16 +113,17 @@
 			App.gameInputMgr.setKeyHandler(Keyboard.RIGHT, KeyboardEvent.KEY_DOWN, onRightKeyUpHandler, true);
 			App.gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, onEscapeKeyUpHandler, true);
 			
+			App.stage.addEventListener(LobbyEvent.DRAGGING_START, onDraggingStartHandler);
+			App.stage.addEventListener(LobbyEvent.DRAGGING_END, onDraggingEndHandler);
+			
+			updateStage(App.appWidth, App.appHeight);
 		}
 		
-		override protected function onInitModalFocus(param1:InteractiveObject) : void
-        {
-            super.onInitModalFocus(param1);
-            setFocus(this);
-        }
-		
-		override protected function onDispose() : void
+		override protected function onBeforeDispose() : void
 		{
+			App.stage.removeEventListener(LobbyEvent.DRAGGING_START, onDraggingStartHandler);
+			App.stage.removeEventListener(LobbyEvent.DRAGGING_END, onDraggingEndHandler);
+
 			App.gameInputMgr.clearKeyHandler(Keyboard.UP, KeyboardEvent.KEY_DOWN, onUpKeyUpHandler);
 			App.gameInputMgr.clearKeyHandler(Keyboard.DOWN, KeyboardEvent.KEY_DOWN, onDownKeyUpHandler);
 			App.gameInputMgr.clearKeyHandler(Keyboard.LEFT, KeyboardEvent.KEY_DOWN, onLeftKeyUpHandler);
@@ -121,6 +139,22 @@
 			removeEventListener(BatHitsIndexEvent.BATTLE_CHANGED, onBattleSelectHandler);
 			removeEventListener(BatHitsIndexEvent.HIT_CHANGED, onHitSelectHandler);
 			removeEventListener(BatHitsIndexEvent.SORT_CLICKED, onSortClickHandler);
+		}
+
+		override protected function onDispose() : void
+		{
+			if(_tweenInfoHide)
+			{
+				_tweenInfoHide.paused = true;
+				_tweenInfoHide.dispose();
+				_tweenInfoHide = null;
+			}
+			if(_tweenInfoShow)
+			{
+				_tweenInfoShow.paused = true;
+				_tweenInfoShow.dispose();
+				_tweenInfoShow = null;
+			}
 			
 			header = null;
 			
@@ -128,30 +162,7 @@
 			
 			battlesPanel = null;
 			
-			//detailedShotPanel = null;
-			
 			super.onDispose();
-		}
-		
-		override protected function draw() : void
-		{
-			super.draw();
-			if(isInvalid(InvalidationType.SIZE))
-			{
-				var sceneWidth:Number = width;
-				var sceneHeight:Number = height;
-				header.width = sceneWidth;
-				layout();
-			}
-		}
-		
-		private function layout() : void
-		{
-			var sceneWidth:Number = width;
-			var sceneHeight:Number = height;
-			hitsPanel.height = sceneHeight / 2;
-			battlesPanel.height = sceneHeight / 2;
-			battlesPanel.x = sceneWidth - battlesPanel.width;
 		}
 		
 		private function onUpKeyUpHandler(e:InputEvent) : void
@@ -177,6 +188,37 @@
 		private function onEscapeKeyUpHandler(e:InputEvent) : void
 		{
 			closeViewS();
+		}
+		
+		private function onDraggingEndHandler(e:LobbyEvent) : void
+		{
+			if(_tweenInfoHide)
+			{
+				_tweenInfoHide.paused = true;
+			}
+			if(_tweenInfoShow)
+			{
+				_tweenInfoShow.paused = true;
+				_tweenInfoShow.dispose();
+			}
+			if(this.alpha != SHOW_SLOTS_ALPHA)
+			{
+				_tweenInfoShow = new Tween(ANIMATION_DURATION, this, {"alpha": SHOW_SLOTS_ALPHA}, {});
+			}
+		}
+		
+		private function onDraggingStartHandler(e:LobbyEvent) : void
+		{
+			if(_tweenInfoShow)
+			{
+				_tweenInfoShow.paused = true;
+			}
+			if(_tweenInfoHide)
+			{
+				_tweenInfoHide.paused = true;
+				_tweenInfoHide.dispose();
+			}
+			_tweenInfoHide = new Tween(ANIMATION_DURATION, this, {"alpha": HIDE_SLOTS_ALPHA}, {"delay": ANIMATION_DELAY});
 		}
 		
 		private function onCloseClickHandler(e:BatHitsEvent) : void
@@ -215,6 +257,5 @@
 		{
 			hitsToPlayerClickS(false);
 		}
-		
 	}
 }
