@@ -28,7 +28,9 @@ def appFini(baseMethod, baseObject):
 
 # hangarCamera
 
-from gui.hangar_camera_manager import HangarCameraManager
+from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
+from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
+from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 
 @override(HangarCameraManager, "_HangarCameraManager__updateCameraByMouseMove")
 def updateCameraByMouseMove(baseMethod, baseObject, *args):
@@ -37,15 +39,11 @@ def updateCameraByMouseMove(baseMethod, baseObject, *args):
 	else:
 		baseMethod(baseObject, *args)
 
-from hangar_camera_idle import HangarCameraIdle
-
 @override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
 def onModelsRefresh(baseMethod, baseObject):
 	if not g_controllers.hangarCamera.enabled:
 		return baseMethod(baseObject)
 	return 0.0
-
-from hangar_camera_parallax import HangarCameraParallax
 
 @override(HangarCameraParallax, "_HangarCameraParallax__update")
 def onModelsRefresh(baseMethod, baseObject):
