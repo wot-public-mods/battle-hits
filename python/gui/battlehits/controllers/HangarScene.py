@@ -6,7 +6,7 @@ import math
 from debug_utils import LOG_ERROR
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.HangarSpace import g_hangarSpace
-from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankNodeNames
+from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankNodeNames, ModelsSetParams
 from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
@@ -65,7 +65,7 @@ class HangarScene(object):
 		self.__loadVehicle()
 	
 	def assambleModels(self):
-
+		
 		currentStyle = g_controllers.settings.get(SETTINGS.CURRENT_STYLE)
 		currentSpaceID = BigWorld.camera().spaceID
 
@@ -88,7 +88,7 @@ class HangarScene(object):
 				motors.append(motor)
 				model.castsShadow = model.visible = False
 				BigWorld.addModel(model, currentSpaceID)
-
+	
 	def freeModels(self, freeTankModel = True, withResources = False):
 		
 		for model in self.__shellModels + self.__splashModels + self.__ricochetModels + self.__effectModels:
@@ -114,7 +114,7 @@ class HangarScene(object):
 				if self.__domeModel in BigWorld.models():
 					BigWorld.delModel(self.__domeModel)
 				self.__domeModel = None
-				
+			
 			SHELL_SET = (self.__shellModels, self.__shellMotors)
 			EFFECT_SET = (self.__effectModels, self.__effectMotors)
 			SPLASH_SET = (self.__splashModels, self.__splashMotors)
@@ -149,9 +149,9 @@ class HangarScene(object):
 		
 		if self.__preCompactDescrStr != g_data.currentBattle.victim['compactDescrStr']:
 			self.freeModels()
-
+		
 		self.__loadVehicle()
-
+	
 	def __onSettingsChanged(self, key, value):
 		
 		if key == SETTINGS.CURRENT_STYLE:
@@ -167,7 +167,7 @@ class HangarScene(object):
 		compactDescr = g_data.currentBattle.victim['compactDescr']
 		compactDescrStr = g_data.currentBattle.victim['compactDescrStr']
 		aimParts = g_data.currentBattle.atacker['aimParts']
-
+		
 		g_controllers.vehicle.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
 
 		if self.__preCompactDescrStr != compactDescrStr:
@@ -178,7 +178,7 @@ class HangarScene(object):
 
 			spaceID = BigWorld.camera().spaceID
 			
-			normalAssembler = prepareCompoundAssembler(compactDescr, ModelStates.UNDAMAGED, spaceID)
+			normalAssembler = prepareCompoundAssembler(compactDescr, ModelsSetParams('', ModelStates.UNDAMAGED), spaceID)
 			
 			capsuleScale = Math.Vector3(2.0, 2.0, 2.0)
 			gunScale = Math.Vector3(1.0, 1.0, 1.0)
@@ -206,6 +206,7 @@ class HangarScene(object):
 	def __onModelLoaded(self, buildInd, resourceRefs):
 		
 		if buildInd != self.__curBuildInd:
+			Waiting.hide('updateCurrentVehicle')
 			return
 		
 		if self.collision:
@@ -259,14 +260,18 @@ class HangarScene(object):
 
 	def __updateTurretAndGun(self):
 		
+		if not self.compoundModel:
+			return
+		
 		turretYaw, gunPitch = g_data.currentBattle.atacker['aimParts']
 
-		m = Math.Matrix()
-		m.setRotateYPR((turretYaw, 0.0, 0.0))
-		self.compoundModel.node(TankPartNames.TURRET, m)
-		m = Math.Matrix()
-		m.setRotateYPR((0.0, gunPitch, 0.0))
-		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, m)
+		matrix = Math.Matrix()
+		matrix.setRotateYPR((turretYaw, 0.0, 0.0))
+		self.compoundModel.node(TankPartNames.TURRET, matrix)
+
+		matrix = Math.Matrix()
+		matrix.setRotateYPR((0.0, gunPitch, 0.0))
+		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
 	
 	def __updateCamera(self):
 		
