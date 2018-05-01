@@ -3,11 +3,6 @@ hits.sorting.tank: vehicle
 hits.sorting.result: result
 hits.sorting.damage: damage
 
-hits.shellType.ap: ap
-hits.shellType.apcr: apcr
-hits.shellType.heap: heap
-hits.shellType.he: he
-
 hits.shotResult.intermediateRicochet: ricochet *
 hits.shotResult.finalRicochet: ricochet
 hits.shotResult.armorNotPierces: not pierced
@@ -23,6 +18,7 @@ ui.settingsButton: SETTINGS
 ui.title: Battle Hits
 
 ui.battle.noData: No battles found
+ui.battle.multiVehicle:  +%s pcs.
 ui.hits.noDataMe: No hits received
 ui.hits.noDataEnemys: No hits inflicted
 ui.detailedhit.noData: '################'
@@ -36,6 +32,4 @@ popover.saveOnlySessionLabel: Current session only
 popover.saveOnlySessionDescription: {HEADER}Current session only{/HEADER}{BODY}Modification will only store information about the current game session (otherwise, information about all battles will be saved).{/BODY}
 popover.processReplaysLabel: Process replays
 popover.processReplaysDescription:  {HEADER}Process replays{/HEADER}{BODY}Modification will also save information from viewed replays.{/BODY}
-popover.showCollisionModelLabel: Booking model
-popover.showCollisionModelDescription:  {HEADER}Booking model{/HEADER}{BODY}Show car booking model instead of usual.{/BODY}
 popover.changeStyleLabel: Switch styles

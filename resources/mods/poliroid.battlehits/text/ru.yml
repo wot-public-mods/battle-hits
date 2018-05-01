@@ -3,11 +3,6 @@ hits.sorting.tank: танк
 hits.sorting.result: результат
 hits.sorting.damage: урон
 
-hits.shellType.ap: бб
-hits.shellType.apcr: бп
-hits.shellType.heap: кс
-hits.shellType.he: оф
-
 hits.shotResult.intermediateRicochet: рикошет *
 hits.shotResult.finalRicochet: рикошет
 hits.shotResult.armorNotPierces: не пробито
@@ -23,6 +18,7 @@ ui.settingsButton: НАСТРОЙКИ
 ui.title: Просмотр попаданий
 
 ui.battle.noData: Не было сыграно ни одного боя
+ui.battle.multiVehicle:  +%s шт.
 ui.hits.noDataMe: В бою не было получено попаданий
 ui.hits.noDataEnemys: В бою не было нанесено попаданий
 ui.detailedhit.noData: '################'
@@ -36,6 +32,4 @@ popover.saveOnlySessionLabel: Только игровая сессия
 popover.saveOnlySessionDescription: {HEADER}Только игровая сессия{/HEADER}{BODY}Модификация будет сохранять информацию только о текущей игровой сессии (в противном случае будет сохраняться информация о всех боях).{/BODY}
 popover.processReplaysLabel: Обрабатывать реплеи
 popover.processReplaysDescription:  {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
-popover.showCollisionModelLabel: Модель бронирования
-popover.showCollisionModelDescription:  {HEADER}Модель бронирования{/HEADER}{BODY}Показывать модель бронирования машины вместо обычной.{/BODY}
 popover.changeStyleLabel: Изменить оформление

@@ -3,11 +3,6 @@ hits.sorting.tank: машына
 hits.sorting.result: вынік
 hits.sorting.damage: пашкоджанні
 
-hits.shellType.ap: ББ
-hits.shellType.apcr: БП
-hits.shellType.heap: КС
-hits.shellType.he: АФ
-
 hits.shotResult.intermediateRicochet: рыкашэт *
 hits.shotResult.finalRicochet: рыкашэт
 hits.shotResult.armorNotPierces: не прабіта
@@ -16,11 +11,14 @@ hits.shotResult.armorPierces: пашкоджанне
 hits.shotResult.criticalHit: крыт. пашкодж.
 hits.shotResult.splash: трапл. асколкамі
 
+ui.typeMe: ПА МНЕ
+ui.typeEnemys: ПА ВОРАГАХ
 ui.closeButton: ЗАКРЫЦЬ
 ui.settingsButton: НАЛАДЫ
 ui.title: Прагляд траплянняў
 
 ui.battle.noData: Не было адваявана ніводнага бою
+ui.battle.multiVehicle:  +%s шт.
 ui.hits.noDataMe: У баі не было атрымана траплянняў
 ui.hits.Enemys: У баі не было атрымана траплянняў
 ui.detailedhit.noData: '################'

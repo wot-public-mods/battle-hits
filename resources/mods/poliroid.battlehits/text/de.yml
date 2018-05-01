@@ -3,11 +3,6 @@ hits.sorting.tank: Panzer
 hits.sorting.result: Ergebnis
 hits.sorting.damage: Schaden
 
-hits.shellType.ap: ap
-hits.shellType.he: he
-hits.shellType.apcr: apcr
-hits.shellType.heap: heat
-
 hits.shotResult.intermediateRicochet: ricochet *
 hits.shotResult.finalRicochet: ricochet
 hits.shotResult.armorNotPierces: nicht durchschlagen
@@ -23,6 +18,7 @@ ui.settingsButton: Einstellungen
 ui.title: Gefechts Treffer
 
 ui.battle.noData: Kein Gefecht gefunden
+ui.battle.multiVehicle:  +%s stück
 ui.hits.noDataMe: Keine Treffer erhalten
 ui.hits.noDataEnemys: Keine Treffer hinzugefügt
 ui.detailedhit.noData: '################'
