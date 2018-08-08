@@ -7,8 +7,6 @@ package com.poliroid.gui.lobby.battleHits.interfaces
 	public interface IBatHitsHitsPanel extends IUpdatableComponent
 	{
 		
-		function get _hitsList() : CustomScrollingList;
-		
 		function updateDP(ctx:BatHitsHitsVO) : void;
 	}
 }

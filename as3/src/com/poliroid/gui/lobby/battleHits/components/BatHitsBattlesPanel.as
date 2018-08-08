@@ -125,9 +125,5 @@
 			}
 		}
 		
-		public function get _battlesList():CustomScrollingList 
-		{
-			return battlesList;
-		}
 	}
 }
