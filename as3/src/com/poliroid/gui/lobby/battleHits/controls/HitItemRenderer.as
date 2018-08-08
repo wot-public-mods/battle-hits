@@ -15,7 +15,9 @@ package com.poliroid.gui.lobby.battleHits.controls
 	public class HitItemRenderer extends SoundListItemRenderer
 	{
 		
-		public var enemyTankTF:TextField = null;
+		public var hitIdTF:TextField = null;
+		
+		public var vehicleTF:TextField = null;
 		
 		public var resultTF:TextField = null;
 		
@@ -55,7 +57,8 @@ package com.poliroid.gui.lobby.battleHits.controls
 		
 		override protected function onDispose(): void
 		{
-			enemyTankTF = null;
+			hitIdTF = null;
+			vehicleTF = null;
 			resultTF = null;
 			shellTF = null;
 			damageTF = null;
@@ -71,7 +74,8 @@ package com.poliroid.gui.lobby.battleHits.controls
 			{
 				if (isInvalid(InvalidationType.DATA)) 
 				{
-					enemyTankTF.text = model.enemyTankLabel;
+					hitIdTF.text = model.numberLabel;
+					vehicleTF.text = model.vehicleLabel;
 					resultTF.text = model.resultLabel;
 					shellTF.text = model.shellLabel;
 					damageTF.text = model.damageLabel;

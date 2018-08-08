@@ -5,7 +5,8 @@ import Math
 import math
 from debug_utils import LOG_ERROR
 from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils.HangarSpace import g_hangarSpace
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankNodeNames, ModelsSetParams
 from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -17,12 +18,14 @@ from gui.battlehits._constants import MODEL_TYPES, MODEL_PATHS, SETTINGS, SCENE_
 
 class HangarScene(object):
 
+	hangarSpace = dependency.descriptor(IHangarSpace)
+	
 	def __init__(self):
 		
 		# data
 		self.__curBuildInd = 1
 		self.__rootPosition = SCENE_OFFSET
-		self.__preCompactDescrStr = None
+		self.__preCompDescrStr = None
 		self.__forceCameraUpdate = False
 		
 		# resources
@@ -49,7 +52,7 @@ class HangarScene(object):
 	
 	def create(self):
 	
-		g_hangarSpace.onSpaceCreate -= self.create
+		self.hangarSpace.onSpaceCreate -= self.create
 		g_eventsManager.onChangedBattleData += self.__onBattleChanged
 		g_eventsManager.onChangedHitData += self.__onHitChanged
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
@@ -96,7 +99,7 @@ class HangarScene(object):
 		
 		if freeTankModel:
 			
-			self.__preCompactDescrStr = None
+			self.__preCompDescrStr = None
 
 			if self.compoundModel:
 				BigWorld.delModel(self.compoundModel)
@@ -128,7 +131,7 @@ class HangarScene(object):
 	
 	def noDataHit(self):
 		self.freeModels(freeTankModel=True)
-		self.__preCompactDescrStr = None
+		self.__preCompDescrStr = None
 		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 	
 	def destroy(self):
@@ -147,7 +150,7 @@ class HangarScene(object):
 			g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
 			return
 		
-		if self.__preCompactDescrStr != g_data.currentBattle.victim['compactDescrStr']:
+		if self.__preCompDescrStr != g_data.currentBattle.victim['compDescrStr']:
 			self.freeModels()
 		
 		self.__loadVehicle()
@@ -164,13 +167,13 @@ class HangarScene(object):
 		if not g_data.currentBattle.victim:
 			return
 		
-		compactDescr = g_data.currentBattle.victim['compactDescr']
-		compactDescrStr = g_data.currentBattle.victim['compactDescrStr']
-		aimParts = g_data.currentBattle.atacker['aimParts']
+		compactDescr = g_data.currentBattle.victim['compDescr']
+		compactDescrStr = g_data.currentBattle.victim['compDescrStr']
+		aimParts = g_data.currentBattle.hit['aimParts']
 		
 		g_controllers.vehicle.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
 
-		if self.__preCompactDescrStr != compactDescrStr:
+		if self.__preCompDescrStr != compactDescrStr:
 			
 			Waiting.show('updateCurrentVehicle')
 
@@ -193,9 +196,14 @@ class HangarScene(object):
 			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
 			BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), makeCallbackWeak(self.__onModelLoaded, self.__curBuildInd) )
 
-			self.__preCompactDescrStr = compactDescrStr
+			self.__preCompDescrStr = compactDescrStr
 		else:
 			self.__updateTurretAndGun()
+			self.__updateHitPoints()
+		
+		
+		if not g_data.currentBattle.hit:
+			return
 		
 		self.__updateCamera()
 		self.__updateShell()
@@ -218,7 +226,7 @@ class HangarScene(object):
 		if self.compoundModel:
 			BigWorld.delModel(self.compoundModel)
 		
-		compactDescr = g_data.currentBattle.victim['compactDescr']
+		compactDescr = g_data.currentBattle.victim['compDescr']
 		
 		self.compoundModel = resourceRefs[compactDescr.name]
 		
@@ -255,35 +263,17 @@ class HangarScene(object):
 		BigWorld.appendCameraCollider(colliderData)
 		
 		self.__updateTurretAndGun()
+		self.__updateHitPoints()
 		
 		Waiting.hide('updateCurrentVehicle')
 
-	def __updateTurretAndGun(self):
-		
-		if not self.compoundModel:
-			return
-		
-		turretYaw, gunPitch = g_data.currentBattle.atacker['aimParts']
-
-		matrix = Math.Matrix()
-		matrix.setRotateYPR((turretYaw, 0.0, 0.0))
-		self.compoundModel.node(TankPartNames.TURRET, matrix)
-
-		matrix = Math.Matrix()
-		matrix.setRotateYPR((0.0, gunPitch, 0.0))
-		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
-	
 	def __updateCamera(self):
 		
-		victimData = g_data.currentBattle.victim
-		if not victimData:
-			return
+		hitData = g_data.currentBattle.hit
 		
-		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
-		
-		if isExplosion:
+		if hitData['isExplosion']:
 			
-			fallenPoint = self.__rootPosition + Math.Vector3(points)
+			fallenPoint = self.__rootPosition + Math.Vector3(hitData['position'])
 			worldHitDirection = self.__rootPosition - fallenPoint
 			
 			targetPoint = fallenPoint + Math.Vector3(0.0, (self.__rootPosition - fallenPoint).length / 2.0, 0.0)
@@ -299,15 +289,12 @@ class HangarScene(object):
 			)
 		else:
 			
-			componentName, _, startPoint, endPoint = points[0]
+			componentIDx, _, startPoint, endPoint = hitData['points'][0]
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
 			
-			localStartPoint = Math.Vector3(startPoint)
-			localEndPoint = Math.Vector3(endPoint)
-			
-			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
-			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
+			worldStartPoint = worldComponentMatrix.applyPoint(startPoint)
+			worldEndPoint = worldComponentMatrix.applyPoint(endPoint)
 			
 			worldHitDirection = worldEndPoint - worldStartPoint
 			
@@ -329,33 +316,29 @@ class HangarScene(object):
 		for model in self.__shellModels:
 			model.visible = False
 		
-		victimData = g_data.currentBattle.victim
-		if not victimData:
-			return
+		hitData = g_data.currentBattle.hit
 		
-		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
-		
-		if isExplosion:
+		if hitData['isExplosion']:
 			
 			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(TankPartNames.CHASSIS)
 			
-			worldHitPoint = worldComponentMatrix.applyPoint(points)
+			worldHitPoint = worldComponentMatrix.applyPoint(hitData['position'])
 
 			worldContactMatrix = Math.Matrix()
 			worldContactMatrix.setRotateYPR((0.0, math.pi / 2, 0.0))
 			worldContactMatrix.translation = Math.Vector3(worldHitPoint)
 			
-			self.__shellMotors[shellType].signal = worldContactMatrix
-			self.__shellModels[shellType].visible = True
+			self.__shellMotors[hitData['shellType']].signal = worldContactMatrix
+			self.__shellModels[hitData['shellType']].visible = True
 		
 		else:
 			
-			componentIdx, _,  startPoint, endPoint = points[0]
+			componentIDx, _,  startPoint, endPoint = hitData['points'][0]
 			
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIdx)
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -368,29 +351,25 @@ class HangarScene(object):
 			worldContactMatrix.setRotateYPR((worldHitDirection.yaw, worldHitDirection.pitch, 0.0))
 			worldContactMatrix.translation = worldHitPoint
 			
-			self.__shellMotors[shellType].signal = worldContactMatrix
-			self.__shellModels[shellType].visible = True
+			self.__shellMotors[hitData['shellType']].signal = worldContactMatrix
+			self.__shellModels[hitData['shellType']].visible = True
 	
 	def __updateEffect(self):
 	
 		for model in self.__effectModels:
 			model.visible = False
 		
-		victimData = g_data.currentBattle.victim
-		if not victimData:
-			return
+		hitData = g_data.currentBattle.hit
 		
-		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
-		
-		if not isExplosion:
+		if not hitData['isExplosion']:
 			
-			componentName, shotResult, startPoint, endPoint = points[0]
+			componentIDx, shotResult, startPoint, endPoint = hitData['points'][0]
 			
 			if shotResult in [0, 1]:
 				effectType = 0
 			elif shotResult == 2:
 				effectType = 1
-			elif shotResult == 4 or shotResult == 5 and damageFactor > 0:
+			elif shotResult == 4 or shotResult == 5 and hitData['damageFactor'] > 0:
 				effectType = 2
 			elif shotResult in [3, 5]:
 				effectType = 3
@@ -400,7 +379,7 @@ class HangarScene(object):
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -421,22 +400,18 @@ class HangarScene(object):
 		for model in self.__splashModels:
 			model.visible = False
 		
-		victimData = g_data.currentBattle.victim
-		if not victimData:
-			return
+		hitData = g_data.currentBattle.hit
 		
-		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
-		
-		if isExplosion:
-			if shellSplash <= 4:
+		if hitData['isExplosion']:
+			if hitData['shellSplash'] <= 4:
 				splashIndex = 2
-			elif shellSplash <= 8:
+			elif hitData['shellSplash'] <= 8:
 				splashIndex = 1
 			else:
 				splashIndex = 0
 			
 			worldContactMatrix = Math.Matrix()
-			worldContactMatrix.translation = Math.Vector3(self.__rootPosition + Math.Vector3(points))
+			worldContactMatrix.translation = Math.Vector3(self.__rootPosition + Math.Vector3(hitData['position']))
 
 			self.__splashMotors[splashIndex].signal = worldContactMatrix
 			self.__splashModels[splashIndex].visible = True
@@ -446,35 +421,31 @@ class HangarScene(object):
 		for model in self.__ricochetModels:
 			model.visible = False
 		
-		victimData = g_data.currentBattle.victim
-		if not victimData:
-			return
-		
-		isExplosion, shellType, points, shellSplash, damageFactor = victimData['shot'] 
-		
-		if isExplosion:
+		hitData = g_data.currentBattle.hit
+	
+		if hitData['isExplosion']:
 			return
 		
 		previosPointData = None
 
 		modelsFreeIdx = range(15)
 
-		for (componentName, hitResult, startPoint, endPoint, ) in points:
+		for (componentIDx, hitResult, startPoint, endPoint, ) in hitData['points']:
 			
 			if previosPointData:
 				
-				preComponentName, preHitResult, preStartPoint, preEndPoint = previosPointData
+				preComponentIDx, preHitResult, preStartPoint, preEndPoint = previosPointData
 				
 				if preHitResult == 0:
 				
-					worldPreComponentMatrix = g_controllers.vehicle.partWorldMatrix(preComponentName)
+					worldPreComponentMatrix = g_controllers.vehicle.partWorldMatrix(preComponentIDx)
 					localPreStartPoint = Math.Vector3(preStartPoint)
 					localPreEndPoint = Math.Vector3(preEndPoint)
 					worldPreStartPoint = worldPreComponentMatrix.applyPoint(localPreStartPoint)
 					worldPreEndPoint = worldPreComponentMatrix.applyPoint(localPreEndPoint)
 					worldStartRicochetPoint = (worldPreStartPoint + worldPreEndPoint) / 2
 					
-					worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+					worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
 					localStartPoint = Math.Vector3(startPoint)
 					localEndPoint = Math.Vector3(endPoint)
 					worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
@@ -495,7 +466,7 @@ class HangarScene(object):
 					self.__ricochetModels[targetIdx].visible = True
 					self.__ricochetMotors[targetIdx].signal = worldRicochetMatrix
 
-			previosPointData = (componentName, hitResult, startPoint, endPoint)
+			previosPointData = (componentIDx, hitResult, startPoint, endPoint)
 		
 		"""
 			TODO
@@ -504,6 +475,8 @@ class HangarScene(object):
 		
 		return
 
+		debug = lambda name, matrix: '{0} x:{1}, y:{2}, z:{3}, yaw:{4}, pitch:{5}, length:{6} '.format(name, matrix.x, matrix.y, matrix.z, matrix.yaw, matrix.pitch, matrix.length)
+		
 		if previosPointData:
 
 			componentName, hitResult, startPoint, endPoint = previosPointData
@@ -522,9 +495,9 @@ class HangarScene(object):
 				componentsDescr = g_controllers.vehicle.partDescriptor(componentName)
 				
 				collisions = None
-
+				
 				if self.collision is not None:
-					collisions = self.collision.collideAllWorld(localStartPoint, localEndPoint)
+					collisions = self.collision.collideAllWorld(worldStartPoint, worldEndPoint)
 				
 				if collisions:
 					_, hitAngleCos, _, _ = collisions[0]
@@ -532,10 +505,21 @@ class HangarScene(object):
 					# we need normal, from collider, not this one shit
 					normal = localStartPoint - localEndPoint
 					normal.normalise()
+					print debug('normal local', normal)
 					
-					worldNormalDirection = -worldComponentMatrix.applyVector(normal)
+					localNormalDirection = worldComponentMatrix.applyVector(normal)
+					localNormalDirection.normalise()
+					print debug('direction local', localNormalDirection)
+					
+					normal = worldStartPoint - worldEndPoint
+					normal.normalise()
+					print debug('normal world', normal)
+					
+					worldNormalDirection = worldComponentMatrix.applyVector(normal)
 					worldNormalDirection.normalise()
+					print debug('direction world', worldNormalDirection)
 					
+
 					doubleCathetus = hitAngleCos * (worldHitPoint - worldStartPoint).length * 2.0
 					
 					worldRicochetDirection = worldHitPoint - (worldEndPoint + worldNormalDirection.scale(-doubleCathetus))
@@ -545,4 +529,22 @@ class HangarScene(object):
 					
 					self.__ricochetModels[15].visible = True
 					self.__ricochetMotors[15].signal = worldRicochetMatrix
+	
+	def __updateTurretAndGun(self):
 		
+		if not self.compoundModel:
+			return
+		
+		turretYaw, gunPitch = g_data.currentBattle.hit['aimParts']
+
+		matrix = Math.Matrix()
+		matrix.setRotateYPR((turretYaw, 0.0, 0.0))
+		self.compoundModel.node(TankPartNames.TURRET, matrix)
+
+		matrix = Math.Matrix()
+		matrix.setRotateYPR((0.0, gunPitch, 0.0))
+		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
+	
+	def __updateHitPoints(self):
+		pass
+	

@@ -1,7 +1,8 @@
 
 from gui import ClientHangarSpace as chs
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
-from gui.shared.utils.HangarSpace import g_hangarSpace
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
@@ -9,6 +10,7 @@ from gui.battlehits.events import g_eventsManager
 
 class State(object):
 	
+	hangarSpace = dependency.descriptor(IHangarSpace)
 	enabled = property(lambda self : self.__enabled)
 	
 	def __setBattleID(self, battleID):
@@ -66,6 +68,21 @@ class State(object):
 		else:
 			self.disable()
 	
+	def changeBattleID(self, battleID):
+		
+		if self.__currentBattleID == battleID:
+			return
+		
+		for availableBattleID, _ in enumerate(g_controllers.battlesHistory.history):
+			if availableBattleID != battleID:
+				continue
+			self.__currentBattleID = battleID
+			g_data.currentBattle.battleByID(battleID)
+			if len(g_data.currentBattle.battle['hits']):
+				self.__currentHitID = 0
+			else:
+				self.__currentHitID = None
+
 	def enable(self):
 		
 		if self.__currentBattleID is not None:
@@ -86,14 +103,14 @@ class State(object):
 		}
 		
 		if chs._EVENT_HANGAR_PATHS:
-			self.__savedHangarData["path"] =  chs._EVENT_HANGAR_PATHS[g_hangarSpace.isPremium]
+			self.__savedHangarData["path"] =  chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium]
 		else:
-			self.__savedHangarData["path"] =  chs._getDefaultHangarPath(g_hangarSpace.isPremium)
+			self.__savedHangarData["path"] =  chs._getDefaultHangarPath(self.hangarSpace.isPremium)
 		
-		g_clientHangarSpaceOverride.setPath('battlehits', g_hangarSpace.isPremium)
+		g_clientHangarSpaceOverride.setPath('battlehits', self.hangarSpace.isPremium)
 		
-		g_hangarSpace.onSpaceCreate += g_controllers.hangarScene.create
-		g_hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
+		self.hangarSpace.onSpaceCreate += g_controllers.hangarScene.create
+		self.hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
 		
 		self.__enabled = True
 		
@@ -105,6 +122,6 @@ class State(object):
 		g_data.currentBattle.clean()
 		
 		chs._EVENT_HANGAR_PATHS = self.__savedHangarData["_EVENT_HANGAR_PATHS"]
-		g_clientHangarSpaceOverride.setPath(self.__savedHangarData["path"], g_hangarSpace.isPremium)
+		g_clientHangarSpaceOverride.setPath(self.__savedHangarData["path"], self.hangarSpace.isPremium)
 		
 		self.__enabled = False

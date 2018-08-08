@@ -27,7 +27,7 @@ DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,
 	SETTINGS.SAVE_ONLY_SESSION: True,
 	SETTINGS.CURRENT_STYLE: 'style1',
-	SETTINGS.SORTING_RULE: 3,
+	SETTINGS.SORTING_RULE: 1,
 	SETTINGS.SORTING_REVERSED: True,
 	SETTINGS.HITS_TO_PLAYER: True
 }
@@ -50,8 +50,8 @@ wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
-SETTINGS_VERSION = 6
-CACHE_VERSION = 10
+SETTINGS_VERSION = 8
+CACHE_VERSION = 13
 
 class SHELL_TYPES:
 	# бронебойный

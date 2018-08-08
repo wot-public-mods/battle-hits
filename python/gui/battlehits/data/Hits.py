@@ -1,5 +1,6 @@
 
 from items import vehicles
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.controllers import g_controllers
@@ -8,16 +9,17 @@ from gui.battlehits.lang import l10n
 from gui.battlehits.utils import getShellParams
 
 _SORTING_LABELS = {
-	1: l10n('hits.sorting.tank'),
-	2: l10n('hits.sorting.result'),
-	3: l10n('hits.sorting.damage')
+	1: '№',
+	2: l10n('hits.sorting.tank'),
+	3: l10n('hits.sorting.result'),
+	4: l10n('hits.sorting.damage')
 }
 
 _SHELL_LABELS = {
-	0: l10n('hits.shellType.ap'),
-	1: l10n('hits.shellType.apcr'),
-	2: l10n('hits.shellType.heap'),
-	3: l10n('hits.shellType.he'),
+	0: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING,
+	1: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR,
+	2: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
+	3: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 }
 
 _RESULT_LABELS = {
@@ -48,10 +50,12 @@ class Hits(object):
 		self.__sortingReversed = g_controllers.settings.get(SETTINGS.SORTING_REVERSED)
 		self.__sortingRule = g_controllers.settings.get(SETTINGS.SORTING_RULE)
 		self.__hitsToPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, True)
+		
 		self.__sortingMap = {
-			1 : (str, "vehicle", False),
-			2 : (sum, "result", True),
-			3 : (int, "damage", True)
+			1 : (int, "id", True),
+			2 : (str, "vehicle", False),
+			3 : (sum, "result", True),
+			4 : (int, "damage", True)
 		}
 		
 		self.updateData()
@@ -82,37 +86,51 @@ class Hits(object):
 		if battlesHistory.history and g_controllers.state.currentBattleID is not None:
 			
 			currentBattle = battlesHistory.history[g_controllers.state.currentBattleID]
+			
+			playerHitID, enemyHitID = 1, 1
 
 			for hitID, hitData in enumerate(currentBattle['hits']):
+				
+				attackerID, attackerCompDescID = hitData['attacker']
+				victimID, victimCompDescID = hitData['victim']
+
+				attackerInfo = currentBattle['players'][attackerID]
+				victimInfo = currentBattle['players'][victimID]
+
+				attackerCompDescStr = currentBattle['vehicles'][attackerID][attackerCompDescID]
+				victimCompDescStr = currentBattle['vehicles'][victimID][victimCompDescID]
+				
+				attackerCompDesc = vehicles.VehicleDescr(compactDescr = attackerCompDescStr)
+				victimCompDesc = vehicles.VehicleDescr(compactDescr = victimCompDescStr)
+				
+				shellType, shellSplash = getShellParams(attackerCompDesc, hitData['effectsIndex'])
 				
 				hitResult = [6] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
 				if hitResult != [4] and hitData['damageFactor'] > 0:
 					hitResult += [4]
 				
-				vehicle = vehicles.VehicleDescr(compactDescr = currentBattle['vehicles'][hitData['attacker']['id']])
-				if self.__hitsToPlayer:
-					shellType, _ = getShellParams(vehicle, hitData['effectsIndex'])
-				else:
-					playerVehicle = vehicles.VehicleDescr(compactDescr = currentBattle['playerCompactDescr'])
-					shellType, _ = getShellParams(playerVehicle, hitData['effectsIndex'])
+				if not self.__hitsToPlayer and not victimInfo['isPlayer'] and attackerInfo['isPlayer']:
+					self.__data.append({
+						"id": hitID,
+						"number": playerHitID,
+						"vehicle": victimCompDesc.type.shortUserString,
+						"result": hitResult,
+						"shell": shellType,
+						"damage": hitData["damage"]
+					})
+					playerHitID += 1
 				
-				if self.__hitsToPlayer and hitData['isPlayer']:
+				if self.__hitsToPlayer and victimInfo['isPlayer'] and not attackerInfo['isPlayer']:
 					self.__data.append({
 						"id": hitID,
-						"vehicle": vehicle.type.shortUserString,
+						"number": enemyHitID,
+						"vehicle": attackerCompDesc.type.shortUserString,
 						"result": hitResult,
 						"shell": shellType,
 						"damage": hitData["damage"]
 					})
-				if not self.__hitsToPlayer and not hitData['isPlayer']:
-					self.__data.append({
-						"id": hitID,
-						"vehicle": vehicle.type.shortUserString,
-						"result": hitResult,
-						"shell": shellType,
-						"damage": hitData["damage"]
-					})
-			
+					enemyHitID += 1
+					
 			self.__updateSorting()
 			self.__generateVO()
 	
@@ -121,7 +139,7 @@ class Hits(object):
 		self.__dataVO = []
 		
 		if self.__data:
-		
+			
 			for itemData in self.__data:
 				
 				resultLabel = " + ".join([_RESULT_LABELS[x] for x in itemData["result"]])
@@ -132,7 +150,8 @@ class Hits(object):
 				
 				self.__dataVO.append({
 					"id": itemData["id"],
-					"enemyTankLabel": itemData["vehicle"],
+					"numberLabel": str(itemData["number"]),
+					"vehicleLabel": itemData["vehicle"],
 					"resultLabel": resultLabel,
 					"shellLabel": shellLabel,
 					"damageLabel": damageLabel
@@ -154,7 +173,7 @@ class Hits(object):
 				return { 'id': id, 'label': label, 'active': self.__sortingRule == id, \
 						'reversed': self.__sortingReversed }
 			
-			self.__sortingVO = [ genSortItemVO(x, _SORTING_LABELS[x]) for x in xrange(1, 4) ]
+			self.__sortingVO = [ genSortItemVO(x, _SORTING_LABELS[x]) for x in xrange(1, 5) ]
 		
 			for itemID, itemData in enumerate(self.__data):
 				if g_controllers.state.currentHitID == itemData["id"]:

@@ -7,27 +7,38 @@ from gui.battlehits.utils import override
 
 __all__ = ()
 
-# events hooks
+from gui.app_loader.settings import APP_NAME_SPACE, GUI_GLOBAL_SPACE_ID
+from gui.app_loader.loader import _AppLoader, g_appLoader
+from gui.shared import g_eventBus, events
 
-from gui.app_loader.loader import _AppLoader
-
-@override(_AppLoader, 'showBattlePage')
-def appShowBattlePage(baseMethod, baseObject):
-	baseMethod(baseObject)
+# app battle loaded
+def onGUISpaceEntered(spaceID):
+	if spaceID != GUI_GLOBAL_SPACE_ID.BATTLE:
+		return
 	g_eventsManager.onShowBattle()
+g_appLoader.onGUISpaceEntered += onGUISpaceEntered
 
-@override(_AppLoader, 'destroyBattle')
-def appDestroyBattle(baseMethod, baseObject):
-	baseMethod(baseObject)
+# app battle destroyed
+def onAppDestroyed(event):
+	if event.ns != APP_NAME_SPACE.SF_BATTLE:
+		return
 	g_eventsManager.onDestroyBattle()
+g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
 
+# app finished
 @override(_AppLoader, 'fini')
 def appFini(baseMethod, baseObject):
-	g_eventsManager.onAppFinish()
 	baseMethod(baseObject)
+	g_eventsManager.onAppFinish()
+
+# fix space change vehicle getVehicleEntity error
+from gui.ClientHangarSpace import ClientHangarSpace
+@override(ClientHangarSpace, 'getVehicleEntity')
+def getVehicleEntity(baseMethod, baseObject):
+	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
+
 
 # hangarCamera
-
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax

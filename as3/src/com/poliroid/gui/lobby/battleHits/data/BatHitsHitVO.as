@@ -7,7 +7,9 @@ package com.poliroid.gui.lobby.battleHits.data
 		
 		public var id:Number = 0;
 		
-		public var enemyTankLabel:String = "";
+		public var numberLabel:String = "";
+		
+		public var vehicleLabel:String = "";
 		
 		public var resultLabel:String = "";
 		

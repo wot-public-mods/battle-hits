@@ -2,6 +2,7 @@
 import BattleReplay
 import BigWorld
 import Math
+from items import vehicles
 from vehicle_systems.tankStructure import ModelStates
 from VehicleEffects import DamageFromShotDecoder
 
@@ -16,7 +17,7 @@ class BattleProcessor(object):
 	
 	def __init__(self):
 		self.__battleData = None
-		self.isAlive = True
+		self.__isAlive = True
 		self.__vehicles = {}
 		
 	def init(self):	
@@ -43,21 +44,28 @@ class BattleProcessor(object):
 			self.__battleData = processedData
 		else:
 			self.__battleData = {
-				'arena': {
+				'common': {
 					'arenaUniqueID': player.arenaUniqueID,
 					'arenaTypeID': player.arenaTypeID,
 					'arenaBonusType': player.arenaBonusType,
-					'arenaGuiType': player.arenaGuiType
+					'arenaGuiType': player.arenaGuiType,
+					'playerVehicleID': player.playerVehicleID
 				},
-				'playerCompactDescr': player.vehicle.publicInfo.compDescr,
 				'hits': [],
+				'players': {},
 				'vehicles': {}
 			}
-		
-		self.isAlive = player.vehicle.isAlive()
-	
-		self.__vehicles = {}
 
+			_vehicleID = player.playerVehicleID
+			_vehicle = player.arena.vehicles.get(_vehicleID)
+			
+			self.__saveCompactDescr(_vehicleID, _vehicle)
+			self.__savePlayerInfo(_vehicleID, _vehicle, _vehicleID)
+
+		self.__isAlive = player.vehicle.isAlive()
+		
+		self.__vehicles = {}
+		
 		for vehicleID, vehicle in player.arena.vehicles.iteritems():
 			if vehicleID not in self.__vehicles:
 				try:
@@ -72,9 +80,13 @@ class BattleProcessor(object):
 		
 		self.__vehicles = {}
 
-		self.isAlive = False
+		self.__isAlive = False
 		
-		if g_controllers.battlesHistory:
+		# validate all hititems 
+		# in case of battlereplay with x8-x16 speed
+		self.__battleData['hits'] = [hitCtx for hitCtx in self.__battleData['hits'] if isinstance(hitCtx['damage'], int)]
+
+		if g_controllers.battlesHistory and self.__battleData:
 			g_controllers.battlesHistory.addBattle(self.__battleData)
 	
 	def processEnterWorld(self, vehicle):
@@ -82,7 +94,7 @@ class BattleProcessor(object):
 		if not self.trackBattle:
 			return
 		
-		if not self.isAlive:
+		if not self.__isAlive:
 			return
 		
 		try:
@@ -92,7 +104,7 @@ class BattleProcessor(object):
 	
 	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):
 		
-		if not self.trackBattle or not self.isAlive or not attackerID:
+		if not self.trackBattle or not self.__isAlive or not attackerID:
 			return
 		
 		damage = 0
@@ -119,69 +131,70 @@ class BattleProcessor(object):
 		if vehicle is None:
 			return
 
-		if not self.trackBattle or not self.isAlive or not vehicle.isPlayerVehicle:
+		if not self.trackBattle or not self.__isAlive or not vehicle.isPlayerVehicle:
 			return
 		
 		if modelState != ModelStates.UNDAMAGED:
-			self.isAlive = True
+			self.__isAlive = True
 
 	def processShot(self, vehicle, attackerID, points, effectsIndex, damageFactor):
 		
-		if not self.trackBattle or not self.isAlive or not attackerID:
+		if not self.trackBattle or not self.__isAlive or not attackerID:
 			return
 		
-		player = BigWorld.player()
+		player, victimID = BigWorld.player(), vehicle.id
 		atacker = player.arena.vehicles.get(attackerID)
 		victim = player.arena.vehicles.get(vehicle.id)
 		
 		if not atacker['vehicleType'] or not victim['vehicleType']:
 			return
 		
-		if not vehicle.isPlayerVehicle and attackerID != player.playerVehicleID:
+		if victimID != player.playerVehicleID and attackerID != player.playerVehicleID:
 			return
 		
-		pointsData = []
-		for (compName, hitEffectCode, startPoint, endPoint) in [DamageFromShotDecoder.decodeSegment(point, vehicle.appearance.collisions) for point in points]:
-			pointsData.append((compName, hitEffectCode, tuple(startPoint), tuple(endPoint)))
+		shotDescr = vehicles.g_cache.shotEffects[effectsIndex]
+		if 'airstrikeID' in shotDescr or 'artilleryID' in shotDescr:
+			return
 		
-		if vehicle.isPlayerVehicle:
-			target, targetID = atacker, attackerID
-		else:
-			target, targetID = victim, vehicle.id
+		attackerCompDescID = self.__saveCompactDescr(attackerID, atacker)
+		victimCompDescID = self.__saveCompactDescr(victimID, victim)
+		self.__savePlayerInfo(attackerID, atacker, player.playerVehicleID)
+		self.__savePlayerInfo(victimID, victim, player.playerVehicleID)
+
+		pointsData = []
+		for point in points:
+			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point, vehicle.appearance.collisions)
+			pointsData.append((compIdx, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 		
 		self.__battleData['hits'].append({
 			'damageFactor': damageFactor,
 			'effectsIndex': effectsIndex,
 			'aimParts': vehicle.getAimParams(),
 			'isExplosion': False,
+			'position': None,
 			'points': pointsData,
-			'damage': (attackerID, vehicle.id, ) if damageFactor > 0 else 0,
-			'isPlayer': vehicle.isPlayerVehicle,
-			'attacker': {
-				'id': targetID,
-				'name': target['name'],
-				'accountDBID': target['accountDBID'],
-				'clanAbbrev': target['clanAbbrev'],
-				'clanDBID': target['clanDBID']
-			}
+			'damage': (attackerID, victimID, ) if damageFactor > 0 else 0,
+			'attacker': [attackerID, attackerCompDescID],
+			'victim': [victimID, victimCompDescID]
 		})
 
-		if targetID not in self.__battleData['vehicles']:
-			self.__battleData['vehicles'][targetID] = target['vehicleType'].makeCompactDescr()
-	
 	def processExplosion(self, vehicle, attackerID, center, effectsIndex, damageFactor):
 		
-		if not self.trackBattle or not self.isAlive or not attackerID:
+		if not self.trackBattle or not self.__isAlive or not attackerID:
 			return
 		
-		player = BigWorld.player()
+		player, victimID = BigWorld.player(), vehicle.id
 		atacker = player.arena.vehicles.get(attackerID)
 		victim = player.arena.vehicles.get(vehicle.id)
 		
 		if not atacker['vehicleType'] or not victim['vehicleType']:
 			return
 		
-		if not vehicle.isPlayerVehicle and attackerID != player.playerVehicleID:
+		if victimID != player.playerVehicleID and attackerID != player.playerVehicleID:
+			return
+		
+		shotDescr = vehicles.g_cache.shotEffects[effectsIndex]
+		if 'airstrikeID' in shotDescr or 'artilleryID' in shotDescr:
 			return
 		
 		vehicleMatrix = Math.Matrix(vehicle.model.matrix)
@@ -193,28 +206,44 @@ class BattleProcessor(object):
 		shotMatrixRotated.preMultiply(shotPositionMatrix)
 		position = tuple(shotMatrixRotated.translation)
 		
-		if vehicle.isPlayerVehicle:
-			target, targetID = atacker, attackerID
-		else:
-			target, targetID = victim, vehicle.id
-		
+		attackerCompDescID = self.__saveCompactDescr(attackerID, atacker)
+		victimCompDescID = self.__saveCompactDescr(victimID, victim)
+		self.__savePlayerInfo(attackerID, atacker, player.playerVehicleID)
+		self.__savePlayerInfo(victimID, victim, player.playerVehicleID)
+
 		self.__battleData['hits'].append({
 			'damageFactor': damageFactor,
 			'effectsIndex': effectsIndex,
 			'aimParts': vehicle.getAimParams(),
 			'isExplosion': True,
 			'position': position,
+			'points': None,
 			'damage': (attackerID, vehicle.id, ) if damageFactor > 0 else 0,
-			'isPlayer': vehicle.isPlayerVehicle,
-			'attacker': {
-				'id': targetID,
-				'name': target['name'],
-				'accountDBID': target['accountDBID'],
-				'clanAbbrev': target['clanAbbrev'],
-				'clanDBID': target['clanDBID']
-			}
+			'attacker': [attackerID, attackerCompDescID],
+			'victim': [victimID, victimCompDescID]
 		})
+	
+	def __saveCompactDescr(self, vehicleID, vehicle):
 		
-		if targetID not in self.__battleData['vehicles']:
-			self.__battleData['vehicles'][targetID] = target['vehicleType'].makeCompactDescr()
+		if vehicleID not in self.__battleData['vehicles']:
+			self.__battleData['vehicles'][vehicleID] = []
 		
+		compactDescr = vehicle['vehicleType'].makeCompactDescr()
+		if compactDescr not in self.__battleData['vehicles'][vehicleID]:
+			self.__battleData['vehicles'][vehicleID].append(compactDescr)
+		
+		compactDescrIDx = self.__battleData['vehicles'][vehicleID].index(compactDescr)
+
+		return compactDescrIDx
+	
+	def __savePlayerInfo(self, vehicleID, vehicle, playerVehicleID):
+		
+		if vehicleID not in self.__battleData['players']:
+			
+			self.__battleData['players'][vehicleID] = {
+				'name': vehicle['name'],
+				'accountDBID': vehicle['accountDBID'],
+				'clanAbbrev': vehicle['clanAbbrev'],
+				'clanDBID': vehicle['clanDBID'],
+				'isPlayer': vehicleID == playerVehicleID
+			}

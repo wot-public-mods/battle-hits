@@ -10,7 +10,6 @@
 	import net.wg.gui.components.controls.ScrollingListEx;
 	import net.wg.gui.components.controls.SoundButton;
 	import net.wg.gui.components.controls.TileList;
-	import net.wg.gui.components.controls.SimpleTileList;
 	
 	import scaleform.clik.constants.InvalidationType;
 	import scaleform.clik.events.ButtonEvent;
@@ -33,6 +32,7 @@
 	import com.poliroid.gui.lobby.battleHits.interfaces.IBatHitsHitsPanel;
 	import com.poliroid.gui.lobby.battleHits.controls.CustomScrollingList;
 	import com.poliroid.gui.lobby.battleHits.controls.AutosizeTileList;
+	import com.poliroid.gui.lobby.battleHits.controls.SortButton;
 	
 	public class BatHitsHitsPanel extends UIComponentEx implements IBatHitsHitsPanel
 	{
@@ -45,7 +45,13 @@
 		
 		public var background:MovieClip = null;
 		
-		public var sortButtons:SimpleTileList = null;
+		public var sortNumber:SortButton = null;
+		
+		public var sortVehicle:SortButton = null;
+		
+		public var sortResult:SortButton = null;
+		
+		public var sortDamage:SortButton = null;
 		
 		public var noDataMC:MovieClip = null;
 		
@@ -64,13 +70,6 @@
 			hitsList.widthAutoResize = false;
 			hitsList.addEventListener(ListEvent.ITEM_CLICK, onHitClickHandler);
 			hitsList.rowHeight = RENDER_HEIGHT;
-			
-			sortButtons.itemRenderer = App.utils.classFactory.getClass('BattleHitsSortListItemRendererUI');
-			sortButtons.tileHeight = 35;
-			sortButtons.tileWidth = 105;
-			sortButtons.horizontalGap = 7;
-			sortButtons.autoSize = true;
-			sortButtons.directionMode = DirectionMode.HORIZONTAL;
 		}
 		
 		override protected function onDispose() : void
@@ -101,8 +100,8 @@
 			hitsList.selectedIndex = dp.selectedIndex;
 			hitsList.dataProvider = new DataProvider(dp.hitsList);
 			
-			sortButtons.dataProvider = new DataProvider(dp.sortList);
-			
+			updateSorting(dp.sortList);
+
 			invalidateData();
 		}
 		
@@ -132,7 +131,11 @@
 		{
 			var isVisible:Boolean = Boolean(hitsList.dataProvider.length == 0);
 			
-			sortButtons.visible = !isVisible;
+			sortNumber.visible = !isVisible;
+			sortVehicle.visible = !isVisible;
+			sortResult.visible = !isVisible;
+			sortDamage.visible = !isVisible;
+
 			hitsList.visible = !isVisible;
 			noDataTF.visible = isVisible;
 			noDataMC.visible = isVisible;
@@ -143,9 +146,13 @@
 			dispatchEvent(new BatHitsIndexEvent(BatHitsIndexEvent.HIT_CHANGED, BatHitsHitVO(e.itemData).id, true));
 		}
 		
-		public function get _hitsList() : CustomScrollingList 
+		private function updateSorting(sortListDP:Array) : void
 		{
-			return hitsList;
+			sortNumber.setData(sortListDP[0]);
+			sortVehicle.setData(sortListDP[1]);
+			sortResult.setData(sortListDP[2]);
+			sortDamage.setData(sortListDP[3]);
+			
 		}
 	}
 }

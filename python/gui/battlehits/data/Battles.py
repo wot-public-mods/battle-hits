@@ -6,6 +6,39 @@ from items import vehicles
 
 from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.lang import l10n
+
+
+def getVehicleLabel(battleData):
+
+	playerVehicleID = None
+
+	for vehicleID, userCtx in battleData['players'].iteritems():
+		if userCtx['isPlayer']:
+			playerVehicleID = vehicleID
+			break
+	
+	if not playerVehicleID:
+		return '#unknown'
+	
+	if playerVehicleID not in battleData['vehicles']:
+		return '#unknown'
+	
+	resultStr = ""
+	vehiclesCounter = 0
+	
+	for compactDescr in battleData['vehicles'][playerVehicleID]:
+		vehicle = vehicles.VehicleDescr(compactDescr = compactDescr)
+		if resultStr != "":
+			vehiclesCounter += 1
+		else:
+			resultStr = vehicle.type.shortUserString
+	
+	if vehiclesCounter:
+		resultStr += l10n('ui.battle.multiVehicle') % str(vehiclesCounter)
+	
+	return resultStr
+
 
 class Battles(object):
 	
@@ -36,12 +69,11 @@ class Battles(object):
 		
 		for battleID, battleData in enumerate(battlesHistory.history):
 			
-			arenaTypeID = battleData['arena']['arenaTypeID']
-			playerVehicle = vehicles.VehicleDescr(compactDescr = battleData['playerCompactDescr'])
-			battleStartTime = battleData['arena']['arenaUniqueID'] & 4294967295L
-			
+			arenaTypeID = battleData['common']['arenaTypeID']
+			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
+
 			mapNameLabel = i18n.makeString(ArenaType.g_cache[arenaTypeID].name)
-			vehicleNameLabel = str(playerVehicle.type.shortUserString)
+			vehicleNameLabel = getVehicleLabel(battleData)
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
 			
 			self.__dataVO.append({

@@ -11,19 +11,13 @@ class CurrentBattle(object):
 	battle = property(lambda self : self.__battle)
 	atacker = property(lambda self : self.__atacker)
 	victim = property(lambda self : self.__victim)
+	hit = property(lambda self : self.__hit)
 	
 	def __init__(self):
 		self.__battle = None
 		self.__atacker = None
 		self.__victim = None
-
-		self.__hitsToPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, True)
-		
-		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
-	
-	def __onSettingsChanged(self, key, value):
-		if key == SETTINGS.HITS_TO_PLAYER:
-			self.__hitsToPlayer = value
+		self.__hit = None
 	
 	def battleByID(self, battleID):
 		
@@ -42,44 +36,55 @@ class CurrentBattle(object):
 		
 		hitData = self.__battle['hits'][hitID]
 		
+		attackerID, attackerCompDescID = hitData['attacker']
+		victimID, victimCompDescID = hitData['victim']
+
+		attackerInfo = self.__battle['players'][attackerID]
+		victimInfo = self.__battle['players'][victimID]
+
+		attackerCompDescStr = self.__battle['vehicles'][attackerID][attackerCompDescID]
+		victimCompDescStr = self.__battle['vehicles'][victimID][victimCompDescID]
+		
+		attackerCompDesc = vehicles.VehicleDescr(compactDescr = attackerCompDescStr)
+		victimCompDesc = vehicles.VehicleDescr(compactDescr = victimCompDescStr)
+		
+		shellType, shellSplash = getShellParams(attackerCompDesc, hitData['effectsIndex'])
+		
 		self.__victim = {
-			'name': hitData['attacker']['name'],
-			'accountDBID': hitData['attacker']['accountDBID'],
-			'clanAbbrev': hitData['attacker']['clanAbbrev'],
-			'clanDBID': hitData['attacker']['clanDBID'],
-			'vehicle': {}
+			'name': victimInfo['name'],
+			'accountDBID': victimInfo['accountDBID'],
+			'clanAbbrev': victimInfo['clanAbbrev'],
+			'clanDBID': victimInfo['clanDBID'],
+			'isPlayer': victimInfo['isPlayer'],
+			'compDescrStr': victimCompDescStr,
+			'compDescr': victimCompDesc
 		}
 		
 		self.__atacker = { 
-			'aimParts': hitData['aimParts'] 
+			'name': attackerInfo['name'],
+			'accountDBID': attackerInfo['accountDBID'],
+			'clanAbbrev': attackerInfo['clanAbbrev'],
+			'clanDBID': attackerInfo['clanDBID'],
+			'isPlayer': attackerInfo['isPlayer'],
+			'compDescrStr': attackerCompDescStr,
+			'compDescr': attackerCompDesc
+		}
+		
+		self.__hit = {
+			'isExplosion': hitData['isExplosion'],
+			'damageFactor': hitData['damageFactor'],
+			'aimParts': hitData['aimParts'],
+			'shellType': shellType,
+			'shellSplash': shellSplash,
+			'points': hitData['points'],
+			'position': hitData['position']
 		}
 
-		if hitData['isPlayer']:
-			victimCompactDescrStr = self.__battle['playerCompactDescr']
-		else:
-			victimCompactDescrStr = self.__battle['vehicles'][hitData['attacker']['id']]
-		
-		if self.__hitsToPlayer:
-			atackerCompactDescr = vehicles.VehicleDescr(compactDescr = self.__battle['vehicles'][hitData['attacker']['id']])
-		else:
-			atackerCompactDescr = vehicles.VehicleDescr(compactDescr = self.__battle['playerCompactDescr'])
-		
-		self.__victim['compactDescr'] = vehicles.VehicleDescr(compactDescr = victimCompactDescrStr)
-		self.__victim['compactDescrStr'] = victimCompactDescrStr
-
-		shellType, shellSplash = getShellParams(atackerCompactDescr, hitData['effectsIndex'])	
-		
-		if hitData['isExplosion']:
-			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['position'], \
-									shellSplash, hitData['damageFactor'])
-		else:
-			self.__victim['shot'] = (hitData['isExplosion'], shellType, hitData['points'], \
-									shellSplash, hitData['damageFactor'])
-		
 		g_eventsManager.onChangedHitData()
 	
 	def clean(self):
 		self.__battle = None
 		self.__atacker = None
 		self.__victim = None
+		self.__hit = None
 		

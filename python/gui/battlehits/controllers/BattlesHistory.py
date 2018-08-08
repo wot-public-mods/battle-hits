@@ -27,7 +27,7 @@ class BattlesHistory(object):
 	def getBattleByUniqueID(self, arenaUniqueID):
 		if self.__battles:
 			for idx, battle in enumerate(self.__battles):
-				if battle['arena']['arenaUniqueID'] != arenaUniqueID:
+				if battle['common']['arenaUniqueID'] != arenaUniqueID:
 					continue
 				return (idx, battle)
 		return (None, None)
@@ -45,13 +45,13 @@ class BattlesHistory(object):
 		if BattleReplay.isPlaying() and not g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False):
 			return
 		
-		idx, _ = self.getBattleByUniqueID(data['arena']['arenaUniqueID'])
+		idx, _ = self.getBattleByUniqueID(data['common']['arenaUniqueID'])
 		if idx is not None:
 			self.__battles[idx] = data
-			g_controllers.state.currentBattleID = idx
+			g_controllers.state.changeBattleID(idx)
 		else:
 			self.__battles.append(data)
-			g_controllers.state.currentBattleID = len(self.__battles) - 1
+			g_controllers.state.changeBattleID(len(self.__battles) - 1)
 	
 	def __loadData(self):
 		

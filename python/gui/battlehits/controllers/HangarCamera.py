@@ -4,12 +4,14 @@ import math
 import Math
 
 from AvatarInputHandler import mathUtils
-from gui.shared.utils.HangarSpace import g_hangarSpace
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 
 from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET
 
 class HangarCamera(object):
 	
+	hangarSpace = dependency.descriptor(IHangarSpace)
 	enabled = property(lambda self: self.__enabled)
 	
 	def __init__(self):
@@ -24,15 +26,15 @@ class HangarCamera(object):
 		pass
 	
 	def enable(self):
-		g_hangarSpace.onSpaceCreate -= self.enable
-		if g_hangarSpace.space:
-			self.__originalCameraData = g_hangarSpace.space.getCameraLocation()
+		self.hangarSpace.onSpaceCreate -= self.enable
+		if self.hangarSpace.space:
+			self.__originalCameraData = self.hangarSpace.space.getCameraLocation()
 			self.__enabled = True
 	
 	def disable(self):
 		
-		if g_hangarSpace.space and self.__originalCameraData:
-			manager = g_hangarSpace.space._ClientHangarSpace__cameraManager
+		if self.hangarSpace.space and self.__originalCameraData:
+			manager = self.hangarSpace.space._ClientHangarSpace__cameraManager
 			if manager:
 				del self.__originalCameraData['pivotDist']
 				manager.setCameraLocation(**self.__originalCameraData)
@@ -52,7 +54,7 @@ class HangarCamera(object):
 		
 		self.updateCamera(0.0, 0.0, 0.0)
 		
-		cam = g_hangarSpace.space.camera
+		cam = self.hangarSpace.space.camera
 		if limits[2]:
 			cam.pivotMinDist = limits[2][0]
 		cam.target.setTranslate(Math.Vector3(target))
@@ -72,7 +74,7 @@ class HangarCamera(object):
 		self.__dist -= dz * self.__sens[2]
 		if self.__distLimits: self.__dist = mathUtils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
 		
-		camera = g_hangarSpace.space.camera
+		camera = self.hangarSpace.space.camera
 		yaw, pitch, dist = mathUtils.reduceToPI(self.__yaw - self.__offset), (self.__pitch - self.__offset), self.__dist - self.__offset
 		
 		# We do not want the camera falling under the floor
