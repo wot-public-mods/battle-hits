@@ -1,12 +1,14 @@
 
+import collections
 import compileall
 import datetime
-import os
-import shutil
-import zipfile
-import sys
 import json
-import collections 
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import zipfile
 
 # implementation of shutil.copytree 
 # original sometimes throw error on folders create
@@ -39,7 +41,6 @@ def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
 			zi.compress_type = compression
 			return zi
 	def fileInfo(filePath):
-		st = os.stat(filePath)
 		zi = zipfile.ZipInfo(filePath, now)
 		zi.external_attr = 33206 << 16 # -rw-rw-rw-
 		zi.filename = zi.filename[seek_offset:]
@@ -111,7 +112,7 @@ if BUILD_FLASH:
 			if fileName.endswith('fla'):
 				fh.write('fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'.format(path = flashWorkDir, fileName = fileName))
 		fh.write('fl.quit(false);')
-	os.system('"{animate}" -e build.jsfl -AlwaysRunJSFL'.format(animate = CONFIG.software.animate))
+	subprocess.call(shlex.split('"{animate}" -e build.jsfl -AlwaysRunJSFL'.format(animate = CONFIG.software.animate)))
 
 # build python
 for dirName, _, files in os.walk('python'):
