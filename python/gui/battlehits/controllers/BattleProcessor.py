@@ -17,7 +17,7 @@ class BattleProcessor(object):
 	
 	def __init__(self):
 		self.__battleData = None
-		self.__isAlive = True
+		self.__isAlive = False
 		self.__vehicles = {}
 		
 	def init(self):	
@@ -75,26 +75,22 @@ class BattleProcessor(object):
 		
 	def __onDestroyBattle(self):
 		
-		if not self.trackBattle:
+		if not all([self.trackBattle, self.__battleData]):
 			return
-		
-		self.__vehicles = {}
-
-		self.__isAlive = False
 		
 		# validate all hititems 
 		# in case of battlereplay with x8-x16 speed
 		self.__battleData['hits'] = [hitCtx for hitCtx in self.__battleData['hits'] if isinstance(hitCtx['damage'], int)]
 
-		if g_controllers.battlesHistory and self.__battleData:
+		if g_controllers.battlesHistory:
 			g_controllers.battlesHistory.addBattle(self.__battleData)
+		
+		self.__battleData = None
+		self.__vehicles = {}
 	
 	def processEnterWorld(self, vehicle):
 		
-		if not self.trackBattle:
-			return
-		
-		if not self.__isAlive:
+		if not all([self.trackBattle, self.__battleData, self.__isAlive]):
 			return
 		
 		try:
@@ -104,7 +100,7 @@ class BattleProcessor(object):
 	
 	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):
 		
-		if not self.trackBattle or not self.__isAlive or not attackerID:
+		if not all([self.trackBattle, self.__battleData, self.__isAlive, attackerID]):
 			return
 		
 		damage = 0
@@ -128,18 +124,20 @@ class BattleProcessor(object):
 	
 	def onModelsRefresh(self, vehicle, modelState):
 		
-		if vehicle is None:
-			return
-
-		if not self.trackBattle or not self.__isAlive or not vehicle.isPlayerVehicle:
+		if not all([self.trackBattle, self.__battleData, self.__isAlive]):
 			return
 		
-		if modelState != ModelStates.UNDAMAGED:
+		if vehicle is None or not vehicle.isPlayerVehicle:
+			return
+		
+		if modelState == ModelStates.UNDAMAGED:
 			self.__isAlive = True
-
+		else:
+			self.__isAlive = False
+	
 	def processShot(self, vehicle, attackerID, points, effectsIndex, damageFactor):
 		
-		if not self.trackBattle or not self.__isAlive or not attackerID:
+		if not all([self.trackBattle, self.__battleData, self.__isAlive, attackerID]):
 			return
 		
 		player, victimID = BigWorld.player(), vehicle.id
@@ -180,7 +178,7 @@ class BattleProcessor(object):
 
 	def processExplosion(self, vehicle, attackerID, center, effectsIndex, damageFactor):
 		
-		if not self.trackBattle or not self.__isAlive or not attackerID:
+		if not all([self.trackBattle, self.__battleData, self.__isAlive, attackerID]):
 			return
 		
 		player, victimID = BigWorld.player(), vehicle.id
