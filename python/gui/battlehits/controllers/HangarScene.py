@@ -175,7 +175,7 @@ class HangarScene(object):
 
 		if self.__preCompDescrStr != compactDescrStr:
 			
-			Waiting.show('updateCurrentVehicle')
+			Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
 
 			self.__curBuildInd += 1
 
@@ -214,7 +214,7 @@ class HangarScene(object):
 	def __onModelLoaded(self, buildInd, resourceRefs):
 		
 		if buildInd != self.__curBuildInd:
-			Waiting.hide('updateCurrentVehicle')
+			Waiting.hide('loadHangarSpaceVehicle')
 			return
 		
 		if self.collision:
@@ -265,7 +265,7 @@ class HangarScene(object):
 		self.__updateTurretAndGun()
 		self.__updateHitPoints()
 		
-		Waiting.hide('updateCurrentVehicle')
+		Waiting.hide('loadHangarSpaceVehicle')
 
 	def __updateCamera(self):
 		
