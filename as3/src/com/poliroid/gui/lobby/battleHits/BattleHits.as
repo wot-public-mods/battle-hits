@@ -47,7 +47,7 @@
 		
 		private static const SHOW_SLOTS_ALPHA:Number = 1;
 		
-		private static const HIDE_SLOTS_ALPHA:Number = 0.2;
+		private static const HIDE_SLOTS_ALPHA:Number = 0;
 		
 		public var header:IBatHitsHeader = null;
 		
