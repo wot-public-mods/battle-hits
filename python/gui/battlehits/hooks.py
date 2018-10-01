@@ -114,10 +114,10 @@ def handleKeyEvent(baseMethod, event):
 
 
 # Data Collect
-try:
-	import BigWorld
-	BigWorld.wg_dataCollector.addSoloMod('battle_hit')
-except: pass
+from gui.battlehits import __version__
+from gui.battlehits.data_collector import g_dataCollector
+g_dataCollector.addSoloMod('battle_hit', __version__)
+
 
 
 # modsListApi

@@ -51,7 +51,7 @@ SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 8
-CACHE_VERSION = 14
+CACHE_VERSION = 15
 
 class SHELL_TYPES:
 	# бронебойный
@@ -72,4 +72,4 @@ CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25
 
-del wgAppDataFolder, BigWorld, os
+del wgAppDataFolder, BigWorld, os, Math, math
