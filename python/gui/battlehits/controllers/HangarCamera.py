@@ -30,6 +30,8 @@ class HangarCamera(object):
 		if self.hangarSpace.space:
 			self.__originalCameraData = self.hangarSpace.space.getCameraLocation()
 			self.__enabled = True
+		
+		self.updateCamera(0.0, 0.0, 100.0)
 	
 	def disable(self):
 		

@@ -79,7 +79,7 @@ class State(object):
 			self.__currentBattleID = battleID
 			g_data.currentBattle.battleByID(battleID)
 			if len(g_data.currentBattle.battle['hits']):
-				self.__currentHitID = 0
+				self.__currentHitID = g_data.hits.desiredID
 			else:
 				self.__currentHitID = None
 
@@ -99,15 +99,13 @@ class State(object):
 		
 		self.__savedHangarData = {
 			"_EVENT_HANGAR_PATHS": chs._EVENT_HANGAR_PATHS,
-			"path": "spaces/hangar_v3"
+			"path": chs._getDefaultHangarPath(False)
 		}
 		
 		if chs._EVENT_HANGAR_PATHS:
 			self.__savedHangarData["path"] =  chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium]
-		else:
-			self.__savedHangarData["path"] =  chs._getDefaultHangarPath(self.hangarSpace.isPremium)
 		
-		g_clientHangarSpaceOverride.setPath('battlehits', self.hangarSpace.isPremium)
+		g_clientHangarSpaceOverride.setPath('battlehits')
 		
 		self.hangarSpace.onSpaceCreate += g_controllers.hangarScene.create
 		self.hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
