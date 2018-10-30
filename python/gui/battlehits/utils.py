@@ -4,8 +4,10 @@ import ResMgr
 
 __all__ = ('byteify', 'override', 'getShellParams', 'parseLangFields', 'readFromVFS')
 
-def overrider(target, holder, name):
+def override(holder, name, target = None):
 	"""using for override any staff"""
+	if target is None:
+		return lambda target: override(holder, name, target)
 	original = getattr(holder, name)
 	overrided = lambda *a, **kw: target(original, *a, **kw)
 	if not isinstance(holder, types.ModuleType) and isinstance(original, types.FunctionType):
@@ -14,13 +16,6 @@ def overrider(target, holder, name):
 		setattr(holder, name, property(overrided))
 	else:
 		setattr(holder, name, overrided)
-def decorator(function):
-	def wrapper(*args, **kwargs):
-		def decorate(handler):
-			function(handler, *args, **kwargs)
-		return decorate
-	return wrapper
-override = decorator(overrider)
 
 def byteify(data):
 	"""using for convert unicode key/value to utf-8"""
