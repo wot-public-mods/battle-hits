@@ -51,18 +51,7 @@ SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 8
-CACHE_VERSION = 15
-
-class SHELL_TYPES:
-	# бронебойный
-	ARMOR_PIERCING = 0 
-	# подкалиберынй
-	ARMOR_PIERCING_CALIBER_REDUCED = 1
-	# камулятивный
-	HIGHT_EXPLOSIVE_ANTI_TANK = 2
-	# фугас
-	HIGHT_EXPLOSIVE = 3
-
+CACHE_VERSION = 16
 
 SCENE_OFFSET = Math.Vector3(0.0, 100.0, 0.0)
 
