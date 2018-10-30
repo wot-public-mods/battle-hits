@@ -8,11 +8,10 @@ __maintainer__ = "Andruschyshyn Andrey"
 __email__ = "prn.a_andruschyshyn@wargaming.net"
 __status__ = "Production"
 
-from gui.battlehits.events import *
 from gui.battlehits.controllers import *
+from gui.battlehits.events import *
 from gui.battlehits.data import *
 from gui.battlehits.hooks import *
 from gui.battlehits.views import *
 
-g_controllers.init()
 g_data.init()
