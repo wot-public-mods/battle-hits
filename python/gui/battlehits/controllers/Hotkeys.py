@@ -2,14 +2,14 @@
 from messenger import MessengerEntry
 
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.controllers import IController
 
-__all__ = ('HotkeyController', )
-
-class HotkeyController(object):
+class Hotkeys(IController):
 	
 	forcedHandlers = property(lambda self: self.__handlers)
 	
 	def __init__(self):
+		super(Hotkeys, self).__init__()
 		self.__handlers = []
 	
 	def init(self):

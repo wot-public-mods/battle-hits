@@ -5,7 +5,7 @@ __all__ = ('g_eventsManager', )
 
 class EventsManager(object):
 
-    def __init__(self):
+	def __init__(self):
 		
 		self.onChangedBattleData = Event.Event()
 		self.onChangedHitData = Event.Event()
