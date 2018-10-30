@@ -20,4 +20,40 @@ class IController(object):
 	def fini(self):
 		pass
 	
+def configure():
+	from helpers import dependency
+	from helpers.dependency import _g_manager as manager
+	from gui.battlehits.controllers.BattlesHistory import BattlesHistory
+	from gui.battlehits.controllers.BattleProcessor import BattleProcessor
+	from gui.battlehits.controllers.HangarCamera import HangarCamera
+	from gui.battlehits.controllers.HangarScene import HangarScene
+	from gui.battlehits.controllers.Hotkeys import Hotkeys
+	from gui.battlehits.controllers.State import State
+	from gui.battlehits.controllers.Settings import Settings
+	from gui.battlehits.controllers.Vehicle import Vehicle
+	from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera, \
+										IHangarScene, IHotkeys, IState, ISettings, IVehicle)
+
+	manager.addInstance(IBattlesHistory, BattlesHistory(), finalizer='fini')
+	manager.addInstance(IBattleProcessor, BattleProcessor(), finalizer='fini')
+	manager.addInstance(IHangarCamera, HangarCamera(), finalizer='fini')
+	manager.addInstance(IHangarScene, HangarScene(), finalizer='fini')
+	manager.addInstance(IHotkeys, Hotkeys(), finalizer='fini')
+	manager.addInstance(IState, State(), finalizer='fini')
+	manager.addInstance(ISettings, Settings(), finalizer='fini')
+	manager.addInstance(IVehicle, Vehicle(), finalizer='fini')
+
+	services = [IBattlesHistory, IBattleProcessor, IHangarCamera, IHangarScene, IHotkeys, IState, \
+				ISettings, IVehicle]
+	for service in services:
+		serviceIns = dependency.instance(service)
+		serviceIns.init()
+
+_configured = False
+
+if not _configured:
+
+	_configured = True
+
+	configure()
 	
