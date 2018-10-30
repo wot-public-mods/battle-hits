@@ -130,6 +130,7 @@ g_modsListApi.addModification(
 
 # disable open button in battle queue
 
+from constants import QUEUE_TYPE
 from gui.prb_control.prb_getters import getQueueType
 from gui.prb_control.events_dispatcher import EventDispatcher
 
@@ -146,9 +147,7 @@ def loadBattleQueue(baseMethod, baseObject):
 	return base
 
 def handleAvailability():
-	
-	isInQueue = getQueueType() != 0
-	
+	isInQueue = getQueueType() != QUEUE_TYPE.UNKNOWN
 	g_modsListApi.updateModification(id = "battlehits", enabled = not isInQueue)
 	
 	if isInQueue and g_controllers.state.enabled:
