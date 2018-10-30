@@ -7,10 +7,12 @@ from debug_utils import LOG_ERROR
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits._constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
+from gui.battlehits.controllers import IController
 
-class Settings(object):
+class Settings(IController):
 
 	def __init__(self):
+		super(Settings, self).__init__()
 		self.__settings = DEFAULT_SETTINGS
 	
 	def init(self):

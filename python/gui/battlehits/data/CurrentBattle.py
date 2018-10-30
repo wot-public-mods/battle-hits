@@ -1,9 +1,10 @@
 
+from helpers import dependency
 from items import vehicles
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.skeletons import IBattlesHistory
 from gui.battlehits.utils import getShellParams
 
 class CurrentBattle(object):
@@ -12,7 +13,8 @@ class CurrentBattle(object):
 	atacker = property(lambda self : self.__atacker)
 	victim = property(lambda self : self.__victim)
 	hit = property(lambda self : self.__hit)
-	
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
+
 	def __init__(self):
 		self.__battle = None
 		self.__atacker = None
@@ -23,8 +25,8 @@ class CurrentBattle(object):
 		
 		self.clean()
 		
-		if g_controllers.battlesHistory:
-			_, battleData = g_controllers.battlesHistory.getBattleByID(battleID)
+		if self.battlesHistoryCtrl:
+			_, battleData = self.battlesHistoryCtrl.getBattleByID(battleID)
 		else:
 			return
 		

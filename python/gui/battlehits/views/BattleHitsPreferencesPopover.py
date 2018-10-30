@@ -1,8 +1,9 @@
 
+from helpers import dependency
 from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.controllers import g_controllers
+from gui.battlehits.skeletons import ISettings
 from gui.battlehits.lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
@@ -18,6 +19,8 @@ class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 
 class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 	
+	settingsCtrl = dependency.descriptor(ISettings)
+
 	def _populate(self):
 		
 		super(BattleHitsPreferencesPopover, self)._populate()
@@ -26,30 +29,30 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 
 	def invokeChange(self, processReplays, saveOnlySession):
 		
-		if not g_controllers.settings:
+		if not self.settingsCtrl:
 			return
 			
-		g_controllers.settings.apply({SETTINGS.PROCESS_REPLAYS: processReplays, \
+		self.settingsCtrl.apply({SETTINGS.PROCESS_REPLAYS: processReplays, \
 									SETTINGS.SAVE_ONLY_SESSION: saveOnlySession})
 	
 	def invokeStyle(self):
 		
-		if not g_controllers.settings:
+		if not self.settingsCtrl:
 			return
 			
-		if g_controllers.settings.get(SETTINGS.CURRENT_STYLE) == 'style1':
-			g_controllers.settings.apply({SETTINGS.CURRENT_STYLE: 'style2'})
+		if self.settingsCtrl.get(SETTINGS.CURRENT_STYLE) == 'style1':
+			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style2'})
 		else:
-			g_controllers.settings.apply({SETTINGS.CURRENT_STYLE: 'style1'})
+			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style1'})
 	
 	def __updateStaticData(self):
 		self.as_setPreferencesS({
 			'titleLabel': l10n('popover.titleLabel'), 
 			'closeButtonVisible': True, 
-			'saveOnlySession': g_controllers.settings.get(SETTINGS.SAVE_ONLY_SESSION),
+			'saveOnlySession': self.settingsCtrl.get(SETTINGS.SAVE_ONLY_SESSION),
 			'saveOnlySessionLabel': l10n('popover.saveOnlySessionLabel'),
 			'saveOnlySessionDescription': l10n('popover.saveOnlySessionDescription'),
-			'processReplays': g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS),
+			'processReplays': self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS),
 			'processReplaysLabel': l10n('popover.processReplaysLabel'),
 			'processReplaysDescription': l10n('popover.processReplaysDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel')

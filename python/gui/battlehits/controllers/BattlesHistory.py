@@ -5,25 +5,33 @@ import zlib
 
 import BattleReplay
 from debug_utils import LOG_ERROR
+from helpers import dependency
 
 from gui.battlehits._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
-from gui.battlehits.controllers import g_controllers
+from gui.battlehits.controllers import IController
+from gui.battlehits.skeletons import IState, ISettings
 
-class BattlesHistory(object):
+class BattlesHistory(IController):
 	
-	history = property(lambda self : self.__battles)
+	stateCtrl = dependency.descriptor(IState)
+	settingsCtrl = dependency.descriptor(ISettings)
 	
 	def __init__(self):
+		super(BattlesHistory, self).__init__()
 		self.__battles = list()
 	
 	def init(self):
 		self.__loadData()
 	
 	def fini(self):
-		if g_controllers.settings.get(SETTINGS.SAVE_ONLY_SESSION, True):
+		if self.settingsCtrl.get(SETTINGS.SAVE_ONLY_SESSION, True):
 			self.__battles = list()
 		self.__saveData()
 	
+	@property
+	def	history(self):
+		return self.__battles
+
 	def getBattleByUniqueID(self, arenaUniqueID):
 		if self.__battles:
 			for idx, battle in enumerate(self.__battles):
@@ -42,20 +50,20 @@ class BattlesHistory(object):
 	
 	def addBattle(self, data):
 		
-		if BattleReplay.isPlaying() and not g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False):
+		if BattleReplay.isPlaying() and not self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS, False):
 			return
 		
 		idx, _ = self.getBattleByUniqueID(data['common']['arenaUniqueID'])
 		if idx is not None:
 			self.__battles[idx] = data
-			g_controllers.state.changeBattleID(idx)
+			self.stateCtrl.changeBattleID(idx)
 		else:
 			self.__battles.append(data)
-			g_controllers.state.changeBattleID(len(self.__battles) - 1)
+			self.stateCtrl.changeBattleID(len(self.__battles) - 1)
 	
 	def __loadData(self):
 		
-		if BattleReplay.isPlaying() and not g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False):
+		if BattleReplay.isPlaying() and not self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS, False):
 			return
 		
 		succes = False

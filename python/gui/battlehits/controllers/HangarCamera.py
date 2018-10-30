@@ -8,28 +8,22 @@ from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
 from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET
+from gui.battlehits.controllers import IController
 
-class HangarCamera(object):
+class HangarCamera(IController):
 	
 	hangarSpace = dependency.descriptor(IHangarSpace)
-	enabled = property(lambda self: self.__enabled)
 	
 	def __init__(self):
-		self.__enabled = False
+		super(HangarCamera, self).__init__()
 		self.__originalCameraData = None
 		self.__offset = SCENE_OFFSET[1]
-	
-	def init(self): 
-		pass
-	
-	def fini(self): 
-		pass
 	
 	def enable(self):
 		self.hangarSpace.onSpaceCreate -= self.enable
 		if self.hangarSpace.space:
 			self.__originalCameraData = self.hangarSpace.space.getCameraLocation()
-			self.__enabled = True
+			self.enabled = True
 		
 		self.updateCamera(0.0, 0.0, 100.0)
 	
@@ -41,7 +35,7 @@ class HangarCamera(object):
 				del self.__originalCameraData['pivotDist']
 				manager.setCameraLocation(**self.__originalCameraData)
 
-		self.__enabled = False
+		self.enabled = False
 		self.__originalCameraData = None
 	
 	def setCameraData(self, default, current, limits, sens, target, forceUpdate = False):

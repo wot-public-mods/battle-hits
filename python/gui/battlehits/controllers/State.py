@@ -4,93 +4,96 @@ from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
-from gui.battlehits.controllers import g_controllers
+from gui.battlehits.controllers import IController
+from gui.battlehits.skeletons import IBattlesHistory, IHangarScene, IHangarCamera
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 
-class State(object):
+class State(IController):
 	
 	hangarSpace = dependency.descriptor(IHangarSpace)
-	enabled = property(lambda self : self.__enabled)
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
+	hangarSceneCtrl = dependency.descriptor(IHangarScene)
+	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
 	
-	def __setBattleID(self, battleID):
+	def __init__(self):
+		super(State, self).__init__()
+		self.__battleID = None
+		self.__hitID = None
+		self.__savedHangarData = {}
+	
+	@property
+	def currentBattleID(self):
+		return self.__battleID
+	
+	@currentBattleID.setter
+	def currentBattleID(self, battleID):
 		
-		if self.__currentBattleID == battleID:
+		if self.__battleID == battleID:
 			return
 		
-		for availableBattleID, _ in enumerate(g_controllers.battlesHistory.history):
+		for availableBattleID, _ in enumerate(self.battlesHistoryCtrl.history):
 			if availableBattleID != battleID:
 				continue
-			self.__currentBattleID = battleID
+			self.__battleID = battleID
 			g_data.currentBattle.battleByID(battleID)
-			self.__currentHitID = None
+			self.__hitID = None
 			g_eventsManager.onChangedHitData()
 			self.currentHitID = g_data.hits.desiredID
 			break
 	
-	currentBattleID = property(lambda self : self.__currentBattleID, __setBattleID)
+	@property
+	def currentHitID(self):
+		return self.__hitID
 	
-	def __setHitID(self, hitID):
+	@currentHitID.setter
+	def currentHitID(self, hitID):
 		
-		if self.__currentHitID == hitID:
+		if self.__hitID == hitID:
 			return
 		
 		if hitID == -1:
-			self.__currentHitID = None
-			if self.__enabled:
-				g_controllers.hangarScene.noDataHit()
+			self.__hitID = None
+			if self.enabled:
+				self.hangarSceneCtrl.noDataHit()
 			return
 		
 		for availableHitID, _ in enumerate(g_data.currentBattle.battle['hits']):
 			if availableHitID != hitID:
 				continue
-			self.__currentHitID = hitID
+			self.__hitID = hitID
 			g_data.currentBattle.hitByID(hitID)
 			break
-		
-	currentHitID = property(lambda self : self.__currentHitID, __setHitID)
-	
-	def __init__(self):
-		self.__enabled = False
-		self.__currentBattleID = None
-		self.__currentHitID = None
-		self.__savedHangarData = {}
-	
-	def init(self): 
-		pass
-	
-	def fini(self): 
-		pass
 	
 	def switch(self):
-		if not self.__enabled:
+		if not self.enabled:
 			self.enable()
 		else:
 			self.disable()
 	
 	def changeBattleID(self, battleID):
 		
-		if self.__currentBattleID == battleID:
+		if self.currentBattleID == battleID:
 			return
 		
-		for availableBattleID, _ in enumerate(g_controllers.battlesHistory.history):
+		for availableBattleID, _ in enumerate(self.battlesHistoryCtrl.history):
 			if availableBattleID != battleID:
 				continue
-			self.__currentBattleID = battleID
+			self.currentBattleID = battleID
 			g_data.currentBattle.battleByID(battleID)
 			if len(g_data.currentBattle.battle['hits']):
-				self.__currentHitID = g_data.hits.desiredID
+				self.currentHitID = g_data.hits.desiredID
 			else:
-				self.__currentHitID = None
+				self.currentHitID = None
 
 	def enable(self):
 		
-		if self.__currentBattleID is not None:
+		if self.currentBattleID is not None:
 			
-			g_data.currentBattle.battleByID(self.__currentBattleID)
+			g_data.currentBattle.battleByID(self.currentBattleID)
 			
-			if self.__currentHitID is not None:
-				g_data.currentBattle.hitByID(self.__currentHitID)
+			if self.currentHitID is not None:
+				g_data.currentBattle.hitByID(self.currentHitID)
 			else:
 				self.currentHitID = 0
 		else:
@@ -107,19 +110,22 @@ class State(object):
 		
 		g_clientHangarSpaceOverride.setPath('battlehits')
 		
-		self.hangarSpace.onSpaceCreate += g_controllers.hangarScene.create
-		self.hangarSpace.onSpaceCreate += g_controllers.hangarCamera.enable
+		self.hangarSpace.onSpaceCreate += self.hangarSceneCtrl.create
+		self.hangarSpace.onSpaceCreate += self.hangarCameraCtrl.enable
 		
-		self.__enabled = True
+		self.enabled = True
 		
 	def disable(self):
 		
-		g_controllers.hangarCamera.disable()
-		g_controllers.hangarScene.destroy()
+		self.hangarCameraCtrl.disable()
+		self.hangarSceneCtrl.destroy()
 		
 		g_data.currentBattle.clean()
 		
 		chs._EVENT_HANGAR_PATHS = self.__savedHangarData["_EVENT_HANGAR_PATHS"]
 		g_clientHangarSpaceOverride.setPath(self.__savedHangarData["path"], self.hangarSpace.isPremium)
 		
-		self.__enabled = False
+		self.enabled = False
+
+		g_eventsManager.closeUI()
+		

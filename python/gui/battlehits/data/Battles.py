@@ -1,12 +1,12 @@
 
 import datetime
 import ArenaType
-from helpers import i18n
+from helpers import i18n, dependency
 from items import vehicles
 
-from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
+from gui.battlehits.skeletons import IBattlesHistory, IState
 
 
 def getVehicleLabel(battleData):
@@ -47,6 +47,8 @@ class Battles(object):
 	nextItemID = property(lambda self : self.__getItemID(1))
 	prevItemID = property(lambda self : self.__getItemID(-1))
 	desiredID = property(lambda self : self.__getDesiredID())
+	stateCtrl = dependency.descriptor(IState)
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
 	
 	def __init__(self):
 		
@@ -63,11 +65,10 @@ class Battles(object):
 		self.__dataVO = []
 		self.__selectedIndex = -1
 		
-		battlesHistory = g_controllers.battlesHistory
-		if not battlesHistory or not battlesHistory.history:
+		if not self.battlesHistoryCtrl or not self.battlesHistoryCtrl.history:
 			return
 		
-		for battleID, battleData in enumerate(battlesHistory.history):
+		for battleID, battleData in enumerate(self.battlesHistoryCtrl.history):
 			
 			arenaTypeID = battleData['common']['arenaTypeID']
 			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
@@ -86,7 +87,7 @@ class Battles(object):
 		self.__dataVO = sorted(self.__dataVO, key = lambda x: self.__sortingRule[0](x[self.__sortingRule[1]]), reverse = self.__sortingReversed)
 		
 		for itemID, battleVO in enumerate(self.__dataVO):
-			if battleVO["id"] == g_controllers.state.currentBattleID:
+			if battleVO["id"] == self.stateCtrl.currentBattleID:
 				self.__selectedIndex = itemID
 				break
 		

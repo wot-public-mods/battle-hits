@@ -4,17 +4,13 @@ import Math
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 
 from gui.battlehits._constants import SCENE_OFFSET
+from gui.battlehits.controllers import IController
 
-class Vehicle(object):
+class Vehicle(IController):
 
 	def __init__(self):
+		super(Vehicle, self).__init__()
 		self.__components = {}
-	
-	def init(self):
-		pass
-
-	def fini(self):
-		pass
 	
 	def setVehicleData(self, vehicleDescr, aimParts):
 		

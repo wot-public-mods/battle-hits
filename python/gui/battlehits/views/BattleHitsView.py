@@ -1,6 +1,7 @@
 
 import Keys
 
+from helpers import dependency
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import g_entitiesFactories
@@ -10,10 +11,12 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
+from gui.battlehits.skeletons import IHotkeys, ISettings, IState
+
+
 
 class BattleHitsMeta(LobbySubView, View):
 	
@@ -61,6 +64,10 @@ class BattleHitsView(BattleHitsMeta):
 	__sound_env__ = LobbySubViewEnv
 	__background_alpha__ = 0.0
 	
+	hotkeysCtrl = dependency.descriptor(IHotkeys)
+	settingsCtrl = dependency.descriptor(ISettings)
+	stateCtrl = dependency.descriptor(IState)
+
 	def __init__(self, ctx = None):
 		super(BattleHitsView, self).__init__(ctx)
 		self.__vehicleCD = ctx.get('itemCD')
@@ -72,16 +79,16 @@ class BattleHitsView(BattleHitsMeta):
 		g_eventsManager.invalidateBattlesDP += self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP += self.__onHitsDPUpdated
 		g_eventsManager.closeUI += self.closeView
-		g_controllers.hotkey.addForced(self.handleKeyEvent)
+		self.hotkeysCtrl.addForced(self.handleKeyEvent)
 
 	def _dispose(self):
-		if g_controllers.state and g_controllers.state.enabled:
-			g_controllers.state.switch()
 		g_eventsManager.invalidateBattlesDP -= self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP -= self.__onHitsDPUpdated
 		g_eventsManager.closeUI -= self.closeView
-		if g_controllers.hotkey:
-			g_controllers.hotkey.delForced(self.handleKeyEvent)
+		if self.hotkeysCtrl:
+			self.hotkeysCtrl.delForced(self.handleKeyEvent)
+		if self.stateCtrl.enabled:
+			self.stateCtrl.switch()
 		super(BattleHitsView, self)._dispose()
 	
 	def closeView(self):
@@ -95,18 +102,18 @@ class BattleHitsView(BattleHitsMeta):
 			self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
 	def hitsToPlayerClick(self, toPlayer):
-		if g_controllers.settings:
-			g_controllers.settings.apply({SETTINGS.HITS_TO_PLAYER: toPlayer})
+		if self.settingsCtrl:
+			self.settingsCtrl.apply({SETTINGS.HITS_TO_PLAYER: toPlayer})
 	
 	def selectBattle(self, battleID):
 		battleID = int(battleID)
-		if g_controllers.state.currentBattleID != battleID:
-			g_controllers.state.currentBattleID = battleID
+		if self.stateCtrl.currentBattleID != battleID:
+			self.stateCtrl.currentBattleID = battleID
 	
 	def selectHit(self, hitID):
 		hitID = int(hitID)
-		if g_controllers.state.currentHitID != hitID:
-			g_controllers.state.currentHitID = hitID
+		if self.stateCtrl.currentHitID != hitID:
+			self.stateCtrl.currentHitID = hitID
 	
 	def sortClick(self, sortRow):
 		sortRow = int(sortRow)
@@ -131,7 +138,7 @@ class BattleHitsView(BattleHitsMeta):
 			self.selectHit(g_data.hits.nextItemID)
 			return True
 		elif event.key == Keys.KEY_TAB:
-			toPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, False)
+			toPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
 			self.hitsToPlayerClick(not toPlayer)
 			self.__updateStaticData()
 			return True

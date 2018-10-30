@@ -1,11 +1,12 @@
 
+from helpers import dependency
 from items import vehicles
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
+from gui.battlehits.skeletons import IBattlesHistory, ISettings, IState
 from gui.battlehits.utils import getShellParams
 
 _SORTING_LABELS = {
@@ -42,14 +43,18 @@ class Hits(object):
 	hitsToPlayer = property(lambda self : self.__hitsToPlayer)
 	desiredID = property(lambda self : self.__getDesiredID())
 
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
+	settingsCtrl = dependency.descriptor(ISettings)
+	stateCtrl = dependency.descriptor(IState)
+
 	def __init__(self):
 		self.__data = []
 		self.__dataVO = []
 		self.__sortingVO = []
 		self.__selectedIndex = -1
-		self.__sortingReversed = g_controllers.settings.get(SETTINGS.SORTING_REVERSED)
-		self.__sortingRule = g_controllers.settings.get(SETTINGS.SORTING_RULE)
-		self.__hitsToPlayer = g_controllers.settings.get(SETTINGS.HITS_TO_PLAYER, True)
+		self.__sortingReversed = self.settingsCtrl.get(SETTINGS.SORTING_REVERSED)
+		self.__sortingRule = self.settingsCtrl.get(SETTINGS.SORTING_RULE)
+		self.__hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, True)
 		
 		self.__sortingMap = {
 			1 : (int, "id", True),
@@ -71,7 +76,7 @@ class Hits(object):
 		if key == SETTINGS.HITS_TO_PLAYER:
 			if value != self.__hitsToPlayer:
 				self.__hitsToPlayer = value
-				g_controllers.state.currentHitID = self.desiredID
+				self.stateCtrl.currentHitID = self.desiredID
 				g_eventsManager.invalidateHitsDP()
 	
 	def updateData(self):
@@ -79,13 +84,12 @@ class Hits(object):
 		self.__data = []
 		self.__dataVO = []
 		
-		battlesHistory = g_controllers.battlesHistory
-		if not battlesHistory or not battlesHistory.history:
+		if not self.battlesHistoryCtrl or not self.battlesHistoryCtrl.history:
 			return
 		
-		if battlesHistory.history and g_controllers.state.currentBattleID is not None:
+		if self.battlesHistoryCtrl.history and self.stateCtrl.currentBattleID is not None:
 			
-			currentBattle = battlesHistory.history[g_controllers.state.currentBattleID]
+			currentBattle = self.battlesHistoryCtrl.history[self.stateCtrl.currentBattleID]
 			
 			playerHitID, enemyHitID = 1, 1
 
@@ -176,7 +180,7 @@ class Hits(object):
 			self.__sortingVO = [ genSortItemVO(x, _SORTING_LABELS[x]) for x in xrange(1, 5) ]
 		
 			for itemID, itemData in enumerate(self.__data):
-				if g_controllers.state.currentHitID == itemData["id"]:
+				if self.stateCtrl.currentHitID == itemData["id"]:
 					self.__selectedIndex = itemID
 					break
 	
@@ -213,7 +217,7 @@ class Hits(object):
 		
 		g_eventsManager.invalidateHitsDP()
 
-		g_controllers.settings.apply({SETTINGS.SORTING_REVERSED: self.__sortingReversed, \
+		self.settingsCtrl.apply({SETTINGS.SORTING_REVERSED: self.__sortingReversed, \
 									SETTINGS.SORTING_RULE: self.__sortingRule})
 	
 	def clean(self):

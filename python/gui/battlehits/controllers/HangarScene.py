@@ -12,15 +12,20 @@ from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.controllers import g_controllers
 from gui.battlehits.data import g_data
 from gui.battlehits._constants import MODEL_TYPES, MODEL_PATHS, SETTINGS, SCENE_OFFSET, CAMERA_DEFAULTS
+from gui.battlehits.controllers import IController
+from gui.battlehits.skeletons import ISettings, IHangarCamera, IVehicle
 
-class HangarScene(object):
+class HangarScene(IController):
 
 	hangarSpace = dependency.descriptor(IHangarSpace)
+	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
+	settingsCtrl = dependency.descriptor(ISettings)
+	vehicleCtrl = dependency.descriptor(IVehicle)
 	
 	def __init__(self):
+		super(HangarScene, self).__init__()
 		
 		# data
 		self.__curBuildInd = 1
@@ -44,9 +49,6 @@ class HangarScene(object):
 		self.__shellMotors = []
 		self.__ricochetMotors = []
 	
-	def init(self):
-		pass
-	
 	def fini(self):
 		self.destroy()
 	
@@ -59,7 +61,7 @@ class HangarScene(object):
 		
 		self.assambleModels()
 		
-		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
+		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 		
 		self.__forceCameraUpdate = True
 
@@ -69,7 +71,7 @@ class HangarScene(object):
 	
 	def assambleModels(self):
 		
-		currentStyle = g_controllers.settings.get(SETTINGS.CURRENT_STYLE)
+		currentStyle = self.settingsCtrl.get(SETTINGS.CURRENT_STYLE)
 		currentSpaceID = BigWorld.camera().spaceID
 
 		self.__domeModel = BigWorld.Model(MODEL_PATHS.DOME)
@@ -132,7 +134,7 @@ class HangarScene(object):
 	def noDataHit(self):
 		self.freeModels(freeTankModel=True)
 		self.__preCompDescrStr = None
-		g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
+		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 	
 	def destroy(self):
 		self.freeModels(withResources=True)
@@ -147,7 +149,7 @@ class HangarScene(object):
 		
 		if not g_data.currentBattle.victim:
 			self.freeModels(freeTankModel=True)
-			g_controllers.hangarCamera.setCameraData(*CAMERA_DEFAULTS)
+			self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 			return
 		
 		if self.__preCompDescrStr != g_data.currentBattle.victim['compDescrStr']:
@@ -171,7 +173,7 @@ class HangarScene(object):
 		compactDescrStr = g_data.currentBattle.victim['compDescrStr']
 		aimParts = g_data.currentBattle.hit['aimParts']
 		
-		g_controllers.vehicle.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
+		self.vehicleCtrl.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
 
 		if self.__preCompDescrStr != compactDescrStr:
 			
@@ -279,7 +281,7 @@ class HangarScene(object):
 			targetPoint = fallenPoint + Math.Vector3(0.0, (self.__rootPosition - fallenPoint).length / 2.0, 0.0)
 			
 			# default, current, limits, sens, targetPoint
-			g_controllers.hangarCamera.setCameraData(
+			self.hangarCameraCtrl.setCameraData(
 				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0)),
 				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
 				(None, math.radians(20.0), (5.0, 15.0)),
@@ -291,7 +293,7 @@ class HangarScene(object):
 			
 			componentIDx, _, startPoint, endPoint = hitData['points'][0]
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
+			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentIDx)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(startPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(endPoint)
@@ -299,7 +301,7 @@ class HangarScene(object):
 			worldHitDirection = worldEndPoint - worldStartPoint
 			
 			# default, current, limits, sens, targetPoint
-			g_controllers.hangarCamera.setCameraData(
+			self.hangarCameraCtrl.setCameraData(
 				(worldHitDirection.yaw, -worldHitDirection.pitch),
 				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0),
 				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)),
@@ -320,7 +322,7 @@ class HangarScene(object):
 		
 		if hitData['isExplosion']:
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(TankPartNames.CHASSIS)
+			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(TankPartNames.CHASSIS)
 			
 			worldHitPoint = worldComponentMatrix.applyPoint(hitData['position'])
 
@@ -338,7 +340,7 @@ class HangarScene(object):
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
+			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentIDx)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -379,7 +381,7 @@ class HangarScene(object):
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
 			
-			worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
+			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentIDx)
 			
 			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
@@ -438,14 +440,14 @@ class HangarScene(object):
 				
 				if preHitResult == 0:
 				
-					worldPreComponentMatrix = g_controllers.vehicle.partWorldMatrix(preComponentIDx)
+					worldPreComponentMatrix = self.vehicleCtrl.partWorldMatrix(preComponentIDx)
 					localPreStartPoint = Math.Vector3(preStartPoint)
 					localPreEndPoint = Math.Vector3(preEndPoint)
 					worldPreStartPoint = worldPreComponentMatrix.applyPoint(localPreStartPoint)
 					worldPreEndPoint = worldPreComponentMatrix.applyPoint(localPreEndPoint)
 					worldStartRicochetPoint = (worldPreStartPoint + worldPreEndPoint) / 2
 					
-					worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentIDx)
+					worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentIDx)
 					localStartPoint = Math.Vector3(startPoint)
 					localEndPoint = Math.Vector3(endPoint)
 					worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
@@ -486,13 +488,13 @@ class HangarScene(object):
 				localStartPoint = Math.Vector3(startPoint) 
 				localEndPoint = Math.Vector3(endPoint)
 				
-				worldComponentMatrix = g_controllers.vehicle.partWorldMatrix(componentName)
+				worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentName)
 
 				worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
 				worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
 				worldHitPoint = (worldStartPoint + worldEndPoint) / 2
 				
-				componentsDescr = g_controllers.vehicle.partDescriptor(componentName)
+				componentsDescr = self.vehicleCtrl.partDescriptor(componentName)
 				
 				collisions = None
 				

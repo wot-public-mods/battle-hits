@@ -2,20 +2,23 @@
 import BattleReplay
 import BigWorld
 import Math
+from helpers import dependency
 from items import vehicles
 from vehicle_systems.tankStructure import ModelStates
 from VehicleEffects import DamageFromShotDecoder
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.controllers import g_controllers
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.controllers import IController
+from gui.battlehits.skeletons import IBattlesHistory, ISettings
 
-class BattleProcessor(object):
+class BattleProcessor(IController):
 	
-	trackBattle = property(lambda self: not BattleReplay.isPlaying() or (BattleReplay.isPlaying() and \
-										g_controllers.settings.get(SETTINGS.PROCESS_REPLAYS, False)))
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
+	settingsCtrl = dependency.descriptor(ISettings)
 	
 	def __init__(self):
+		super(BattleProcessor, self).__init__()
 		self.__battleData = None
 		self.__isAlive = False
 		self.__vehicles = {}
@@ -28,17 +31,26 @@ class BattleProcessor(object):
 		g_eventsManager.onShowBattle -= self.__onShowBattle
 		g_eventsManager.onDestroyBattle -= self.__onDestroyBattle
 	
+	@property
+	def trackBattle(self):
+		isReplay = BattleReplay.isPlaying()
+		if not isReplay:
+			return True 
+		if isReplay and self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS, False):
+			return True
+		return False
+	
 	def __onShowBattle(self):
 		
 		if not self.trackBattle:
 			return
 		
 		player = BigWorld.player()
-		
+
 		processedData = None
-		
-		if g_controllers.battlesHistory:
-			_, processedData = g_controllers.battlesHistory.getBattleByUniqueID(player.arenaUniqueID)
+
+		if self.battlesHistoryCtrl:
+			_, processedData = self.battlesHistoryCtrl.getBattleByUniqueID(player.arenaUniqueID)
 		
 		if processedData is not None:
 			self.__battleData = processedData
@@ -82,8 +94,8 @@ class BattleProcessor(object):
 		# in case of battlereplay with x8-x16 speed
 		self.__battleData['hits'] = [hitCtx for hitCtx in self.__battleData['hits'] if isinstance(hitCtx['damage'], int)]
 
-		if g_controllers.battlesHistory:
-			g_controllers.battlesHistory.addBattle(self.__battleData)
+		if self.battlesHistoryCtrl:
+			self.battlesHistoryCtrl.addBattle(self.__battleData)
 		
 		self.__battleData = None
 		self.__vehicles = {}

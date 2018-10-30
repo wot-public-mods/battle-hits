@@ -1,8 +1,12 @@
 
-from gui.battlehits.controllers import g_controllers
+import BigWorld
+
+from helpers import dependency
+
 from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
+from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState
 from gui.battlehits.utils import override
 
 __all__ = ()
@@ -45,20 +49,23 @@ from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 
 @override(HangarCameraManager, "_HangarCameraManager__updateCameraByMouseMove")
 def updateCameraByMouseMove(baseMethod, baseObject, *args):
-	if g_controllers.hangarCamera.enabled:
-		g_controllers.hangarCamera.updateCamera(*args)
+	hangarCamera = dependency.instance(IHangarCamera)
+	if hangarCamera.enabled:
+		hangarCamera.updateCamera(*args)
 	else:
 		baseMethod(baseObject, *args)
 
 @override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
 def onModelsRefresh(baseMethod, baseObject):
-	if not g_controllers.hangarCamera.enabled:
+	hangarCamera = dependency.instance(IHangarCamera)
+	if not hangarCamera.enabled:
 		return baseMethod(baseObject)
 	return 0.0
 
 @override(HangarCameraParallax, "_HangarCameraParallax__update")
 def onModelsRefresh(baseMethod, baseObject):
-	if not g_controllers.hangarCamera.enabled:
+	hangarCamera = dependency.instance(IHangarCamera)
+	if not hangarCamera.enabled:
 		return baseMethod(baseObject)
 	return 0.0
 
@@ -72,27 +79,32 @@ from vehicle_systems.CompoundAppearance import CompoundAppearance
 @override(Vehicle, "showDamageFromShot")
 def showDamageFromShot(baseMethod, baseObject, attackerID, points, effectsIndex, damageFactor):
 	baseMethod(baseObject, attackerID, points, effectsIndex, damageFactor)
-	g_controllers.battleProcessor.processShot(baseObject, attackerID, points, effectsIndex, damageFactor)
+	battleProcessor = dependency.instance(IBattleProcessor)
+	battleProcessor.processShot(baseObject, attackerID, points, effectsIndex, damageFactor)
 
 @override(Vehicle, "showDamageFromExplosion")
 def showDamageFromExplosion(baseMethod, baseObject, attackerID, center, effectsIndex, damageFactor):
 	baseMethod(baseObject, attackerID, center, effectsIndex, damageFactor)
-	g_controllers.battleProcessor.processExplosion(baseObject, attackerID, center, effectsIndex, damageFactor)
+	battleProcessor = dependency.instance(IBattleProcessor)
+	battleProcessor.processExplosion(baseObject, attackerID, center, effectsIndex, damageFactor)
 
 @override(Vehicle, "onHealthChanged")
 def onHealthChanged(baseMethod, baseObject, newHealth, attackerID, attackReasonID):
 	baseMethod(baseObject, newHealth, attackerID, attackReasonID)
-	g_controllers.battleProcessor.processHealthChanged(baseObject, newHealth, attackerID, attackReasonID)
+	battleProcessor = dependency.instance(IBattleProcessor)
+	battleProcessor.processHealthChanged(baseObject, newHealth, attackerID, attackReasonID)
 
 @override(Vehicle, "onEnterWorld")
 def onEnterWorld(baseMethod, baseObject, prereqs):
 	baseMethod(baseObject, prereqs)
-	g_controllers.battleProcessor.processEnterWorld(baseObject)
+	battleProcessor = dependency.instance(IBattleProcessor)
+	battleProcessor.processEnterWorld(baseObject)
 
 @override(CompoundAppearance, "_CompoundAppearance__onModelsRefresh")
 def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 	baseMethod(baseObject, modelState, resourceList)
-	g_controllers.battleProcessor.onModelsRefresh(baseObject._CompoundAppearance__vehicle, modelState)
+	battleProcessor = dependency.instance(IBattleProcessor)
+	battleProcessor.onModelsRefresh(baseObject._CompoundAppearance__vehicle, modelState)
 
 
 # handling keystrokes
@@ -102,7 +114,8 @@ import game
 @override(game, 'handleKeyEvent')
 def handleKeyEvent(baseMethod, event):
 	# handling forced keylistners
-	for keyHandler in g_controllers.hotkey.forcedHandlers:
+	hotkeys = dependency.instance(IHotkeys)
+	for keyHandler in hotkeys.forcedHandlers:
 		if keyHandler(event):
 			return True
 	# handling ingame logic
@@ -122,10 +135,15 @@ g_dataCollector.addSoloMod('battle_hit', __version__)
 
 # modsListApi
 from gui.modsListApi import g_modsListApi
+
+def handleClick():
+	state = dependency.instance(IState)
+	state.switch()
+
 g_modsListApi.addModification(
 	id = 'battlehits', name = l10n('modslist.name'), description = l10n('modslist.description'), \
 	icon = 'gui/maps/battlehits/modsListApi.png', enabled = True, login = False, lobby = True, \
-	callback = lambda: None if g_controllers.state.enabled else g_controllers.state.switch()
+	callback = handleClick
 )
 
 # disable open button in battle queue
@@ -149,8 +167,8 @@ def loadBattleQueue(baseMethod, baseObject):
 def handleAvailability():
 	isInQueue = getQueueType() != QUEUE_TYPE.UNKNOWN
 	g_modsListApi.updateModification(id = "battlehits", enabled = not isInQueue)
-	
-	if isInQueue and g_controllers.state.enabled:
-		g_controllers.state.switch()
+	state = dependency.instance(IState)
+	if isInQueue and state.enabled:
+		state.switch()
 	
 g_eventsManager.onDestroyBattle += handleAvailability
