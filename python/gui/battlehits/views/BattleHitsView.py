@@ -13,7 +13,7 @@ from gui.sounds.ambients import LobbySubViewEnv
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
-from gui.battlehits.skeletons import IHotkeys, ISettings, IState
+from gui.battlehits.skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
 
 
 
@@ -102,9 +102,9 @@ class BattleHitsView(BattleHitsMeta):
 			event = g_entitiesFactories.makeLoadEvent(self.__backAlias)
 			self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
-	def hitsToPlayerClick(self, toPlayer):
+	def hitsToPlayerClick(self, hitsToPlayer):
 		if self.settingsCtrl:
-			self.settingsCtrl.apply({SETTINGS.HITS_TO_PLAYER: toPlayer})
+			self.settingsCtrl.apply({SETTINGS.HITS_TO_PLAYER: hitsToPlayer})
 	
 	def selectBattle(self, battleID):
 		battleID = int(battleID)
@@ -139,8 +139,8 @@ class BattleHitsView(BattleHitsMeta):
 			self.selectHit(self.hits.nextItemID)
 			return True
 		elif event.key == Keys.KEY_TAB:
-			toPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
-			self.hitsToPlayerClick(not toPlayer)
+			hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
+			self.hitsToPlayerClick(not hitsToPlayer)
 			self.__updateStaticData()
 			return True
 		elif event.key == Keys.KEY_ESCAPE:
