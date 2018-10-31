@@ -6,7 +6,6 @@ from skeletons.gui.shared.utils import IHangarSpace
 
 from gui.battlehits.controllers import IController
 from gui.battlehits.skeletons import IBattlesHistory, IHangarScene, IHangarCamera
-from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 
 class State(IController):
@@ -36,10 +35,10 @@ class State(IController):
 			if availableBattleID != battleID:
 				continue
 			self.__battleID = battleID
-			g_data.currentBattle.battleByID(battleID)
+			self.currentBattleData.battleByID(battleID)
 			self.__hitID = None
 			g_eventsManager.onChangedHitData()
-			self.currentHitID = g_data.hits.desiredID
+			self.currentHitID = self.hitsData.desiredID
 			break
 	
 	@property
@@ -58,11 +57,11 @@ class State(IController):
 				self.hangarSceneCtrl.noDataHit()
 			return
 		
-		for availableHitID, _ in enumerate(g_data.currentBattle.battle['hits']):
+		for availableHitID, _ in enumerate(self.currentBattleData.battle['hits']):
 			if availableHitID != hitID:
 				continue
 			self.__hitID = hitID
-			g_data.currentBattle.hitByID(hitID)
+			self.currentBattleData.hitByID(hitID)
 			break
 	
 	def switch(self):
@@ -80,9 +79,9 @@ class State(IController):
 			if availableBattleID != battleID:
 				continue
 			self.currentBattleID = battleID
-			g_data.currentBattle.battleByID(battleID)
-			if len(g_data.currentBattle.battle['hits']):
-				self.currentHitID = g_data.hits.desiredID
+			self.currentBattleData.battleByID(battleID)
+			if len(self.currentBattleData.battle['hits']):
+				self.currentHitID = self.hitsData.desiredID
 			else:
 				self.currentHitID = None
 
@@ -90,14 +89,14 @@ class State(IController):
 		
 		if self.currentBattleID is not None:
 			
-			g_data.currentBattle.battleByID(self.currentBattleID)
+			self.currentBattleData.battleByID(self.currentBattleID)
 			
 			if self.currentHitID is not None:
-				g_data.currentBattle.hitByID(self.currentHitID)
+				self.currentBattleData.hitByID(self.currentHitID)
 			else:
 				self.currentHitID = 0
 		else:
-			self.currentBattleID = g_data.battles.desiredID
+			self.currentBattleID = self.battlesData.desiredID
 		
 		
 		self.__savedHangarData = {
@@ -120,7 +119,7 @@ class State(IController):
 		self.hangarCameraCtrl.disable()
 		self.hangarSceneCtrl.destroy()
 		
-		g_data.currentBattle.clean()
+		self.currentBattleData.clean()
 		
 		chs._EVENT_HANGAR_PATHS = self.__savedHangarData["_EVENT_HANGAR_PATHS"]
 		g_clientHangarSpaceOverride.setPath(self.__savedHangarData["path"], self.hangarSpace.isPremium)

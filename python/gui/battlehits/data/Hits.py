@@ -1,13 +1,12 @@
 
-from helpers import dependency
 from items import vehicles
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
-from gui.battlehits.skeletons import IBattlesHistory, ISettings, IState
 from gui.battlehits.utils import getShellParams
+from gui.battlehits.data import AbstractData
 
 _SORTING_LABELS = {
 	1: '№',
@@ -33,21 +32,17 @@ _RESULT_LABELS = {
 	6: l10n('hits.shotResult.splash'),
 }
 
-class Hits(object):
+class Hits(AbstractData):
 	
 	dataVO = property(lambda self : self.__dataVO)
 	sortingVO = property(lambda self : self.__sortingVO)
 	selectedIndex = property(lambda self : self.__selectedIndex)
 	nextItemID = property(lambda self : self.__getItemID(1))
 	prevItemID = property(lambda self : self.__getItemID(-1))
-	hitsToPlayer = property(lambda self : self.__hitsToPlayer)
 	desiredID = property(lambda self : self.__getDesiredID())
 
-	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
-	settingsCtrl = dependency.descriptor(ISettings)
-	stateCtrl = dependency.descriptor(IState)
-
 	def __init__(self):
+		super(Hits, self).__init__()
 		self.__data = []
 		self.__dataVO = []
 		self.__sortingVO = []

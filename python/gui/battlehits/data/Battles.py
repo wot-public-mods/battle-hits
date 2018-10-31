@@ -6,7 +6,7 @@ from items import vehicles
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
-from gui.battlehits.skeletons import IBattlesHistory, IState
+from gui.battlehits.data import AbstractData
 
 
 def getVehicleLabel(battleData):
@@ -40,25 +40,27 @@ def getVehicleLabel(battleData):
 	return resultStr
 
 
-class Battles(object):
+class Battles(AbstractData):
 	
 	dataVO = property(lambda self : self.__dataVO)
 	selectedIndex = property(lambda self : self.__selectedIndex)
 	nextItemID = property(lambda self : self.__getItemID(1))
 	prevItemID = property(lambda self : self.__getItemID(-1))
 	desiredID = property(lambda self : self.__getDesiredID())
-	stateCtrl = dependency.descriptor(IState)
-	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
 	
 	def __init__(self):
-		
+		super(Battles, self).__init__()
 		self.__dataVO = []
 		self.__sortingReversed = True
 		self.__sortingRule = (int, "id")
 		self.__selectedIndex = -1
 		
 		self.updateData()
-		g_eventsManager.onChangedBattleData += self.updateData
+		g_eventsManager.onChangedBattleData += self.__updateData
+	
+	def __updateData(self, _ = None):
+		self.updateData()
+		g_eventsManager.invalidateBattlesDP()
 	
 	def updateData(self, _ = None):
 		
@@ -90,8 +92,6 @@ class Battles(object):
 			if battleVO["id"] == self.stateCtrl.currentBattleID:
 				self.__selectedIndex = itemID
 				break
-		
-		g_eventsManager.invalidateBattlesDP()
 	
 	def __getDesiredID(self):
 		result = -1
@@ -115,7 +115,7 @@ class Battles(object):
 	
 	def clean(self):
 		
-		g_eventsManager.onChangedBattleData -= self.updateData
+		g_eventsManager.onChangedBattleData -= self.__updateData
 		
 		self.__selectedIndex = -1
 		self.__dataVO = []

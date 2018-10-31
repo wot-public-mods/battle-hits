@@ -1,21 +1,20 @@
 
-from helpers import dependency
 from items import vehicles
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.skeletons import IBattlesHistory
 from gui.battlehits.utils import getShellParams
+from gui.battlehits.data import AbstractData
 
-class CurrentBattle(object):
+class CurrentBattle(AbstractData):
 	
 	battle = property(lambda self : self.__battle)
 	atacker = property(lambda self : self.__atacker)
 	victim = property(lambda self : self.__victim)
 	hit = property(lambda self : self.__hit)
-	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
 
 	def __init__(self):
+		super(CurrentBattle, self).__init__()
 		self.__battle = None
 		self.__atacker = None
 		self.__victim = None

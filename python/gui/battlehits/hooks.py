@@ -3,7 +3,6 @@ import BigWorld
 
 from helpers import dependency
 
-from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState

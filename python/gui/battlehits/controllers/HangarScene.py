@@ -12,7 +12,6 @@ from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.data import g_data
 from gui.battlehits._constants import MODEL_TYPES, MODEL_PATHS, SETTINGS, SCENE_OFFSET, CAMERA_DEFAULTS
 from gui.battlehits.controllers import IController
 from gui.battlehits.skeletons import ISettings, IHangarCamera, IVehicle
@@ -147,12 +146,12 @@ class HangarScene(IController):
 	
 	def __onHitChanged(self):
 		
-		if not g_data.currentBattle.victim:
+		if not self.currentBattleData.victim:
 			self.freeModels(freeTankModel=True)
 			self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 			return
 		
-		if self.__preCompDescrStr != g_data.currentBattle.victim['compDescrStr']:
+		if self.__preCompDescrStr != self.currentBattleData.victim['compDescrStr']:
 			self.freeModels()
 		
 		self.__loadVehicle()
@@ -166,12 +165,12 @@ class HangarScene(IController):
 	
 	def __loadVehicle(self):
 		
-		if not g_data.currentBattle.victim:
+		if not self.currentBattleData.victim:
 			return
 		
-		compactDescr = g_data.currentBattle.victim['compDescr']
-		compactDescrStr = g_data.currentBattle.victim['compDescrStr']
-		aimParts = g_data.currentBattle.hit['aimParts']
+		compactDescr = self.currentBattleData.victim['compDescr']
+		compactDescrStr = self.currentBattleData.victim['compDescrStr']
+		aimParts = self.currentBattleData.hit['aimParts']
 		
 		self.vehicleCtrl.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
 
@@ -204,7 +203,7 @@ class HangarScene(IController):
 			self.__updateHitPoints()
 		
 		
-		if not g_data.currentBattle.hit:
+		if not self.currentBattleData.hit:
 			return
 		
 		self.__updateCamera()
@@ -228,7 +227,7 @@ class HangarScene(IController):
 		if self.compoundModel:
 			BigWorld.delModel(self.compoundModel)
 		
-		compactDescr = g_data.currentBattle.victim['compDescr']
+		compactDescr = self.currentBattleData.victim['compDescr']
 		
 		self.compoundModel = resourceRefs[compactDescr.name]
 		
@@ -271,7 +270,7 @@ class HangarScene(IController):
 
 	def __updateCamera(self):
 		
-		hitData = g_data.currentBattle.hit
+		hitData = self.currentBattleData.hit
 		
 		if hitData['isExplosion']:
 			
@@ -318,7 +317,7 @@ class HangarScene(IController):
 		for model in self.__shellModels:
 			model.visible = False
 		
-		hitData = g_data.currentBattle.hit
+		hitData = self.currentBattleData.hit
 		
 		if hitData['isExplosion']:
 			
@@ -361,7 +360,7 @@ class HangarScene(IController):
 		for model in self.__effectModels:
 			model.visible = False
 		
-		hitData = g_data.currentBattle.hit
+		hitData = self.currentBattleData.hit
 		
 		if not hitData['isExplosion']:
 			
@@ -402,7 +401,7 @@ class HangarScene(IController):
 		for model in self.__splashModels:
 			model.visible = False
 		
-		hitData = g_data.currentBattle.hit
+		hitData = self.currentBattleData.hit
 		
 		if hitData['isExplosion']:
 			if hitData['shellSplash'] <= 4:
@@ -423,7 +422,7 @@ class HangarScene(IController):
 		for model in self.__ricochetModels:
 			model.visible = False
 		
-		hitData = g_data.currentBattle.hit
+		hitData = self.currentBattleData.hit
 	
 		if hitData['isExplosion']:
 			return
@@ -537,7 +536,7 @@ class HangarScene(IController):
 		if not self.compoundModel:
 			return
 		
-		turretYaw, gunPitch = g_data.currentBattle.hit['aimParts']
+		turretYaw, gunPitch = self.currentBattleData.hit['aimParts']
 
 		matrix = Math.Matrix()
 		matrix.setRotateYPR((turretYaw, 0.0, 0.0))

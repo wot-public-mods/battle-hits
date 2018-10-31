@@ -11,7 +11,6 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.data import g_data
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHotkeys, ISettings, IState
@@ -67,6 +66,8 @@ class BattleHitsView(BattleHitsMeta):
 	hotkeysCtrl = dependency.descriptor(IHotkeys)
 	settingsCtrl = dependency.descriptor(ISettings)
 	stateCtrl = dependency.descriptor(IState)
+	hits = dependency.descriptor(IHitsData)
+	battles = dependency.descriptor(IBattlesData)
 
 	def __init__(self, ctx = None):
 		super(BattleHitsView, self).__init__(ctx)
@@ -117,7 +118,7 @@ class BattleHitsView(BattleHitsMeta):
 	
 	def sortClick(self, sortRow):
 		sortRow = int(sortRow)
-		g_data.hits.sort(sortRow)
+		self.hits.sort(sortRow)
 	
 	def preferencesClick(self):
 		g_eventsManager.showPopover()
@@ -126,16 +127,16 @@ class BattleHitsView(BattleHitsMeta):
 		if not event.isKeyDown():
 			return False
 		if event.key == Keys.KEY_UPARROW:
-			self.selectBattle(g_data.battles.prevItemID)
+			self.selectBattle(self.battles.prevItemID)
 			return True
 		elif event.key == Keys.KEY_DOWNARROW:
-			self.selectBattle(g_data.battles.nextItemID)
+			self.selectBattle(self.battles.nextItemID)
 			return True
 		elif event.key == Keys.KEY_LEFTARROW:
-			self.selectHit(g_data.hits.prevItemID)
+			self.selectHit(self.hits.prevItemID)
 			return True
 		elif event.key == Keys.KEY_RIGHTARROW:
-			self.selectHit(g_data.hits.nextItemID)
+			self.selectHit(self.hits.nextItemID)
 			return True
 		elif event.key == Keys.KEY_TAB:
 			toPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
@@ -151,8 +152,8 @@ class BattleHitsView(BattleHitsMeta):
 		self.as_setStaticDataS(self.__getStaticData())
 	
 	def __getStaticData(self):
-		
-		if g_data.hits.hitsToPlayer:
+		hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
+		if hitsToPlayer:
 			hitsNoDataLabel = l10n('ui.hits.noDataMe')
 		else:
 			hitsNoDataLabel = l10n('ui.hits.noDataEnemys')
@@ -164,19 +165,19 @@ class BattleHitsView(BattleHitsMeta):
 				'titleLabel': l10n('ui.title'),
 				'typeBtnMe': l10n('ui.typeMe'),
 				'typeBtnEnemys': l10n('ui.typeEnemys'),
-				'typeBtnMeActive': g_data.hits.hitsToPlayer,
-				'typeBtnEnemysActive': not g_data.hits.hitsToPlayer
+				'typeBtnMeActive': hitsToPlayer,
+				'typeBtnEnemysActive': not hitsToPlayer
 			},
 			'battles': {
 				'noDataLabel': l10n('ui.battle.noData'),
-				'battles': g_data.battles.dataVO,
-				'selectedIndex': g_data.battles.selectedIndex
+				'battles': self.battles.dataVO,
+				'selectedIndex': self.battles.selectedIndex
 			},
 			'hits': {
 				'noDataLabel': hitsNoDataLabel,
-				'hits': g_data.hits.dataVO,
-				'sorting': g_data.hits.sortingVO,
-				'selectedIndex': g_data.hits.selectedIndex
+				'hits': self.hits.dataVO,
+				'sorting': self.hits.sortingVO,
+				'selectedIndex': self.hits.selectedIndex
 			},
 			'detailedHit': {
 				'noDataLabel': l10n('ui.detailedhit.noData')
@@ -186,21 +187,21 @@ class BattleHitsView(BattleHitsMeta):
 	def __onBattlesDPUpdated(self):
 		self.as_updateBattlesDPDataS({
 			'noDataLabel': l10n('ui.battle.noData'),
-			'battles': g_data.battles.dataVO,
-			'selectedIndex': g_data.battles.selectedIndex
+			'battles': self.battles.dataVO,
+			'selectedIndex': self.battles.selectedIndex
 		})
 	
 	def __onHitsDPUpdated(self):
-		
-		if g_data.hits.hitsToPlayer:
+		hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
+		if hitsToPlayer:
 			noDataLabel = l10n('ui.hits.noDataMe')
 		else:
 			noDataLabel = l10n('ui.hits.noDataEnemys')
 		
 		self.as_updateHitsDPDataS({
 			'noDataLabel': noDataLabel,
-			'hits': g_data.hits.dataVO,
-			'sorting': g_data.hits.sortingVO,
-			'selectedIndex': g_data.hits.selectedIndex
+			'hits': self.hits.dataVO,
+			'sorting': self.hits.sortingVO,
+			'selectedIndex': self.hits.selectedIndex
 		})
 	
