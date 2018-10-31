@@ -1,7 +1,24 @@
 
-__all__ = ('IController', )
+__all__ = ('AbstractController', )
+	
+from helpers import dependency
+from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera, \
+									IHangarScene, IHotkeys, IState, ISettings, IVehicle, \
+									IBattlesData, IHitsData, ICurrentBattleData)
 
-class IController(object):
+class AbstractController(object):
+
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
+	battleProcessorCtrl = dependency.descriptor(IBattleProcessor)
+	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
+	hangarSceneCtrl = dependency.descriptor(IHangarScene)
+	hotkeysCtrl = dependency.descriptor(IHotkeys)
+	stateCtrl = dependency.descriptor(IState)
+	settingsCtrl = dependency.descriptor(ISettings)
+	vehicleCtrl = dependency.descriptor(IVehicle)
+	battlesData = dependency.descriptor(IBattlesData)
+	hitsData = dependency.descriptor(IHitsData)
+	currentBattleData = dependency.descriptor(ICurrentBattleData)
 	
 	def __init__(self):
 		self.__enabled = False
@@ -21,7 +38,6 @@ class IController(object):
 		pass
 	
 def configure():
-	from helpers import dependency
 	from helpers.dependency import _g_manager as manager
 	from gui.battlehits.controllers.BattlesHistory import BattlesHistory
 	from gui.battlehits.controllers.BattleProcessor import BattleProcessor
@@ -31,8 +47,6 @@ def configure():
 	from gui.battlehits.controllers.State import State
 	from gui.battlehits.controllers.Settings import Settings
 	from gui.battlehits.controllers.Vehicle import Vehicle
-	from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera, \
-										IHangarScene, IHotkeys, IState, ISettings, IVehicle)
 
 	manager.addInstance(IBattlesHistory, BattlesHistory(), finalizer='fini')
 	manager.addInstance(IBattleProcessor, BattleProcessor(), finalizer='fini')
@@ -50,10 +64,7 @@ def configure():
 		serviceIns.init()
 
 _configured = False
-
 if not _configured:
-
 	_configured = True
-
 	configure()
 	

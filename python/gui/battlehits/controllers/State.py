@@ -4,16 +4,12 @@ from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
-from gui.battlehits.controllers import IController
-from gui.battlehits.skeletons import IBattlesHistory, IHangarScene, IHangarCamera
+from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
 
-class State(IController):
+class State(AbstractController):
 	
 	hangarSpace = dependency.descriptor(IHangarSpace)
-	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
-	hangarSceneCtrl = dependency.descriptor(IHangarScene)
-	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
 	
 	def __init__(self):
 		super(State, self).__init__()

@@ -7,9 +7,9 @@ from debug_utils import LOG_ERROR
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits._constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
-from gui.battlehits.controllers import IController
+from gui.battlehits.controllers import AbstractController
 
-class Settings(IController):
+class Settings(AbstractController):
 
 	def __init__(self):
 		super(Settings, self).__init__()

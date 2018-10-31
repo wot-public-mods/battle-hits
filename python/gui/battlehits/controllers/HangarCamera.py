@@ -8,9 +8,9 @@ from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
 from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET
-from gui.battlehits.controllers import IController
+from gui.battlehits.controllers import AbstractController
 
-class HangarCamera(IController):
+class HangarCamera(AbstractController):
 	
 	hangarSpace = dependency.descriptor(IHangarSpace)
 	

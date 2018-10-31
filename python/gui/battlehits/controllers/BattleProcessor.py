@@ -2,20 +2,15 @@
 import BattleReplay
 import BigWorld
 import Math
-from helpers import dependency
 from items import vehicles
 from vehicle_systems.tankStructure import ModelStates
 from VehicleEffects import DamageFromShotDecoder
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.controllers import IController
-from gui.battlehits.skeletons import IBattlesHistory, ISettings
+from gui.battlehits.controllers import AbstractController
 
-class BattleProcessor(IController):
-	
-	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
-	settingsCtrl = dependency.descriptor(ISettings)
+class BattleProcessor(AbstractController):
 	
 	def __init__(self):
 		super(BattleProcessor, self).__init__()

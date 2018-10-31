@@ -4,9 +4,9 @@ import Math
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 
 from gui.battlehits._constants import SCENE_OFFSET
-from gui.battlehits.controllers import IController
+from gui.battlehits.controllers import AbstractController
 
-class Vehicle(IController):
+class Vehicle(AbstractController):
 
 	def __init__(self):
 		super(Vehicle, self).__init__()

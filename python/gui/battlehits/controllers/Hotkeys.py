@@ -2,9 +2,9 @@
 from messenger import MessengerEntry
 
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.controllers import IController
+from gui.battlehits.controllers import AbstractController
 
-class Hotkeys(IController):
+class Hotkeys(AbstractController):
 	
 	forcedHandlers = property(lambda self: self.__handlers)
 	

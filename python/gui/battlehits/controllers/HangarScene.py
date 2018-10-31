@@ -13,16 +13,12 @@ from vehicle_systems.stricted_loading import makeCallbackWeak
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits._constants import MODEL_TYPES, MODEL_PATHS, SETTINGS, SCENE_OFFSET, CAMERA_DEFAULTS
-from gui.battlehits.controllers import IController
-from gui.battlehits.skeletons import ISettings, IHangarCamera, IVehicle
+from gui.battlehits.controllers import AbstractController
 
-class HangarScene(IController):
+class HangarScene(AbstractController):
 
 	hangarSpace = dependency.descriptor(IHangarSpace)
-	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
-	settingsCtrl = dependency.descriptor(ISettings)
-	vehicleCtrl = dependency.descriptor(IVehicle)
-	
+
 	def __init__(self):
 		super(HangarScene, self).__init__()
 		

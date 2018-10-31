@@ -5,16 +5,11 @@ import zlib
 
 import BattleReplay
 from debug_utils import LOG_ERROR
-from helpers import dependency
 
 from gui.battlehits._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
-from gui.battlehits.controllers import IController
-from gui.battlehits.skeletons import IState, ISettings
+from gui.battlehits.controllers import AbstractController
 
-class BattlesHistory(IController):
-	
-	stateCtrl = dependency.descriptor(IState)
-	settingsCtrl = dependency.descriptor(ISettings)
+class BattlesHistory(AbstractController):
 	
 	def __init__(self):
 		super(BattlesHistory, self).__init__()
