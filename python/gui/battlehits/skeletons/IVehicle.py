@@ -2,7 +2,18 @@
 class IVehicle(object):
 	__slots__ = ()
 	
-	def setVehicleData(self, vehicleDescr, aimParts):
+	@property
+	def compoundModel(self):
+		raise NotImplementedError
+	
+	@property
+	def collision(self):
+		raise NotImplementedError
+	
+	def removeVehicle(self):
+		raise NotImplementedError
+	
+	def loadVehicle(self):
 		raise NotImplementedError
 	
 	def partDescriptor(self, partName):

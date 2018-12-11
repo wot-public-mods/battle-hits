@@ -20,6 +20,9 @@ class AbstractData(object):
 	hitsData = dependency.descriptor(IHitsData)
 	currentBattleData = dependency.descriptor(ICurrentBattleData)
 	
+	def init(self):
+		pass
+	
 	def clean(self):
 		pass
 
@@ -33,6 +36,11 @@ def configure():
 	manager.addInstance(IHitsData, Hits(), finalizer='clean')
 	manager.addInstance(IBattlesData, Battles(), finalizer='clean')
 	
+	services = [IHitsData, IBattlesData]
+	for service in services:
+		serviceIns = dependency.instance(service)
+		serviceIns.init()
+
 _configured = False
 if not _configured:
 	_configured = True

@@ -2,7 +2,7 @@
 import types
 import ResMgr
 
-__all__ = ('byteify', 'override', 'getShellParams', 'parseLangFields', 'readFromVFS')
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS')
 
 def override(holder, name, target = None):
 	"""using for override any staff"""
@@ -28,28 +28,27 @@ def byteify(data):
 	else: 
 		return data
 
-def getShellParams(vehicleDescriptor, effectsIndex):
-	"""form shell params from descr"""
-	from constants import SHELL_TYPES
-	from items import vehicles
-	
-	shellType, shellSplash = 0, 0.0
-	
+def getShell(vehicleDescriptor, effectsIndex):
+	"""get shellDescr by effectsIndex"""
 	for shell in vehicleDescriptor.gun.shots:
-		
 		if effectsIndex == shell.shell.effectsIndex:
-			if shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
-				shellType = 0
-			elif shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:
-				shellType = 1
-			elif shell.shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
-				shellType = 2
-			elif shell.shell.kind in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
-				shellType = 3
-				shellSplash = shell.shell.type.explosionRadius
-			break
-	
+			return shell
+	return None
 
+def getShellParams(vehicleDescriptor, effectsIndex):
+	"""form shell params from shellDescr"""
+	from constants import SHELL_TYPES
+	shellType, shellSplash = 0, 0.0
+	shell = getShell(vehicleDescriptor, effectsIndex)
+	if shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
+		shellType = 0
+	elif shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:
+		shellType = 1
+	elif shell.shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
+		shellType = 2
+	elif shell.shell.kind in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
+		shellType = 3
+		shellSplash = shell.shell.type.explosionRadius
 	return (shellType, shellSplash, )
 
 def parseLangFields(langCode):

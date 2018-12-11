@@ -10,6 +10,8 @@ class EventsManager(object):
 		self.onChangedBattleData = Event.Event()
 		self.onChangedHitData = Event.Event()
 		
+		self.onVehicleBuilded = Event.Event()
+		
 		self.invalidateBattlesDP = Event.Event()
 		self.invalidateHitsDP = Event.Event()
 		

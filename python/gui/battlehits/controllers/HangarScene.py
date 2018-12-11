@@ -2,17 +2,17 @@
 from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
+import Event
 import math
+from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
 from debug_utils import LOG_ERROR
-from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
-from vehicle_systems.tankStructure import ColliderTypes, ModelStates, TankPartNames, TankNodeNames, ModelsSetParams
-from vehicle_systems.model_assembler import prepareCompoundAssembler
-from vehicle_systems.stricted_loading import makeCallbackWeak
+from vehicle_systems.tankStructure import TankPartNames
 
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits._constants import MODEL_TYPES, MODEL_PATHS, SETTINGS, SCENE_OFFSET, CAMERA_DEFAULTS
+from gui.battlehits._constants import ( MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS, \
+									SCENE_OFFSET, CAMERA_DEFAULTS )
 from gui.battlehits.controllers import AbstractController
 
 class HangarScene(AbstractController):
@@ -20,63 +20,71 @@ class HangarScene(AbstractController):
 	hangarSpace = dependency.descriptor(IHangarSpace)
 
 	def __init__(self):
+		
 		super(HangarScene, self).__init__()
-		
-		# data
-		self.__curBuildInd = 1
-		self.__rootPosition = SCENE_OFFSET
-		self.__preCompDescrStr = None
+
 		self.__forceCameraUpdate = False
+
+		self.__models = { MODEL_TYPES.DOME: None,
+			MODEL_TYPES.SHELL: [],
+			MODEL_TYPES.EFFECT: [],
+			MODEL_TYPES.SPLASH: [],
+			MODEL_TYPES.RICOCHET: [] }
 		
-		# resources
-		self.collision = None
-		self.compoundModel = None
-
-		self.__domeModel = None
-
-		self.__shellModels = []
-		self.__effectModels = []
-		self.__splashModels = []
-		self.__ricochetModels = []
-
-		self.__effectMotors = []
-		self.__splashMotors = []
-		self.__shellMotors = []
-		self.__ricochetMotors = []
-	
-	def fini(self):
-		self.destroy()
+		self.__motors = { MODEL_TYPES.SHELL: [],
+			MODEL_TYPES.EFFECT: [],
+			MODEL_TYPES.SPLASH: [],
+			MODEL_TYPES.RICOCHET: [] }
 	
 	def create(self):
-	
+		
 		self.hangarSpace.onSpaceCreate -= self.create
+
 		g_eventsManager.onChangedBattleData += self.__onBattleChanged
 		g_eventsManager.onChangedHitData += self.__onHitChanged
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
+		g_eventsManager.onVehicleBuilded += self.__onVehicleBuilded
+
+		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
+
+		self.__forceCameraUpdate = True
 		
-		self.assambleModels()
+		self._assambleModels()
+
+		self.vehicleCtrl.loadVehicle()
+
+		g_eventsManager.showMainView()
+	
+	def destroy(self):
+		
+		g_eventsManager.onChangedBattleData -= self.__onBattleChanged
+		g_eventsManager.onChangedHitData -= self.__onHitChanged
+		g_eventsManager.onSettingsChanged -= self.__onSettingsChanged
+		g_eventsManager.onVehicleBuilded -= self.__onVehicleBuilded
+	
+		self._deleteModels()
+	
+	def processNoData(self):
 		
 		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 		
-		self.__forceCameraUpdate = True
-
-		g_eventsManager.showUI()
-
-		self.__loadVehicle()
+		self._hideModels()
 	
-	def assambleModels(self):
-		
+	def _assambleModels(self):
+
+		self._deleteModels()
+
 		currentStyle = self.settingsCtrl.get(SETTINGS.CURRENT_STYLE)
 		currentSpaceID = BigWorld.camera().spaceID
 
-		self.__domeModel = BigWorld.Model(MODEL_PATHS.DOME)
-		self.__domeModel.position = self.__rootPosition
-		BigWorld.addModel(self.__domeModel, currentSpaceID)
+		domeModel = self.__models[MODEL_TYPES.DOME] = BigWorld.Model(MODEL_PATHS.DOME)
+		domeModel.position = SCENE_OFFSET
+		BigWorld.addModel(domeModel, currentSpaceID)
 		
-		SHELL_SET = (self.__shellModels, self.__shellMotors, MODEL_TYPES.SHELL, MODEL_PATHS.SHELL)
-		EFFECT_SET = (self.__effectModels, self.__effectMotors, MODEL_TYPES.EFFECT, MODEL_PATHS.EFFECT)
-		SPLASH_SET = (self.__splashModels, self.__splashMotors, MODEL_TYPES.SPLASH, MODEL_PATHS.SPLASH)
-		RICOCHET_SET = (self.__ricochetModels, self.__ricochetMotors, MODEL_TYPES.RICOCHET, MODEL_PATHS.RICOCHET)
+		SHELL_SET = (self.__models[MODEL_TYPES.SHELL], self.__motors[MODEL_TYPES.SHELL], MODEL_NAMES.SHELL, MODEL_PATHS.SHELL)
+		EFFECT_SET = (self.__models[MODEL_TYPES.EFFECT], self.__motors[MODEL_TYPES.EFFECT], MODEL_NAMES.EFFECT, MODEL_PATHS.EFFECT)
+		SPLASH_SET = (self.__models[MODEL_TYPES.SPLASH], self.__motors[MODEL_TYPES.SPLASH], MODEL_NAMES.SPLASH, MODEL_PATHS.SPLASH)
+		RICOCHET_SET = (self.__models[MODEL_TYPES.RICOCHET], self.__motors[MODEL_TYPES.RICOCHET], MODEL_NAMES.RICOCHET, MODEL_PATHS.RICOCHET)
 
 		for (models, motors, modelTypes, modelPath) in (SHELL_SET, EFFECT_SET, SPLASH_SET, RICOCHET_SET):
 			del models[:], motors[:]
@@ -89,191 +97,71 @@ class HangarScene(AbstractController):
 				model.castsShadow = model.visible = False
 				BigWorld.addModel(model, currentSpaceID)
 	
-	def freeModels(self, freeTankModel = True, withResources = False):
+	def _hideModels(self):
 		
-		for model in self.__shellModels + self.__splashModels + self.__ricochetModels + self.__effectModels:
+		for model in self.__models[MODEL_TYPES.SHELL] + self.__models[MODEL_TYPES.SPLASH] +  \
+					self.__models[MODEL_TYPES.RICOCHET] + self.__models[MODEL_TYPES.EFFECT]:
 			model.visible = False
 		
-		if freeTankModel:
-			
-			self.__preCompDescrStr = None
+	def _deleteModels(self):
+		if self.__models[MODEL_TYPES.DOME]:
+			domeModel = self.__models[MODEL_TYPES.DOME]
+			if domeModel in BigWorld.models():
+				BigWorld.delModel(domeModel)
+			self.__models[MODEL_TYPES.DOME] = None
+		
+		SHELL_SET = (self.__models[MODEL_TYPES.SHELL], self.__motors[MODEL_TYPES.SHELL])
+		EFFECT_SET = (self.__models[MODEL_TYPES.EFFECT], self.__motors[MODEL_TYPES.EFFECT])
+		SPLASH_SET = (self.__models[MODEL_TYPES.SPLASH], self.__motors[MODEL_TYPES.SPLASH])
+		RICOCHET_SET = (self.__models[MODEL_TYPES.RICOCHET], self.__motors[MODEL_TYPES.RICOCHET])
+		
+		for (models, motors, ) in (SHELL_SET, EFFECT_SET, SPLASH_SET, RICOCHET_SET):
+			for model in models:
+				if model in BigWorld.models():
+					BigWorld.delModel(model)
+			del models[:], motors[:]
 
-			if self.compoundModel:
-				BigWorld.delModel(self.compoundModel)
-			self.compoundModel = None
-
-			if self.collision:
-				BigWorld.removeCameraCollider(self.collision.getColliderID())
-				self.collision.deactivate()
-				self.collision.destroy()
-			self.collision = None
-
-		if withResources:
-			
-			if self.__domeModel:
-				if self.__domeModel in BigWorld.models():
-					BigWorld.delModel(self.__domeModel)
-				self.__domeModel = None
-			
-			SHELL_SET = (self.__shellModels, self.__shellMotors)
-			EFFECT_SET = (self.__effectModels, self.__effectMotors)
-			SPLASH_SET = (self.__splashModels, self.__splashMotors)
-			RICOCHET_SET = (self.__ricochetModels, self.__ricochetMotors)
-			
-			for (models, motors, ) in (SHELL_SET, EFFECT_SET, SPLASH_SET, RICOCHET_SET):
-				for model in models:
-					if model in BigWorld.models():
-						BigWorld.delModel(model)
-				del models[:], motors[:]
-	
-	def noDataHit(self):
-		self.freeModels(freeTankModel=True)
-		self.__preCompDescrStr = None
-		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
-	
-	def destroy(self):
-		self.freeModels(withResources=True)
-		g_eventsManager.onChangedBattleData -= self.__onBattleChanged
-		g_eventsManager.onChangedHitData -= self.__onHitChanged
-		g_eventsManager.onSettingsChanged -= self.__onSettingsChanged
-	
 	def __onBattleChanged(self):
-		self.freeModels()
+		
+		self._hideModels()
 	
 	def __onHitChanged(self):
 		
+		self._hideModels()
+
 		if not self.currentBattleData.victim:
-			self.freeModels(freeTankModel=True)
 			self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
+			self.vehicleCtrl.removeVehicle()
 			return
 		
-		if self.__preCompDescrStr != self.currentBattleData.victim['compDescrStr']:
-			self.freeModels()
-		
-		self.__loadVehicle()
-	
-	def __onSettingsChanged(self, key, value):
+		self.vehicleCtrl.loadVehicle()
+
+	def __onSettingsChanged(self, key, _):
 		
 		if key == SETTINGS.CURRENT_STYLE:
-			self.freeModels(freeTankModel=False)
-			self.assambleModels()
-			self.__loadVehicle()
+			
+			self._assambleModels()
+			
+			self.vehicleCtrl.loadVehicle()
 	
-	def __loadVehicle(self):
-		
-		if not self.currentBattleData.victim:
-			return
-		
-		compactDescr = self.currentBattleData.victim['compDescr']
-		compactDescrStr = self.currentBattleData.victim['compDescrStr']
-		aimParts = self.currentBattleData.hit['aimParts']
-		
-		self.vehicleCtrl.setVehicleData(vehicleDescr = compactDescr, aimParts = aimParts)
-
-		if self.__preCompDescrStr != compactDescrStr:
-			
-			Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
-
-			self.__curBuildInd += 1
-
-			spaceID = BigWorld.camera().spaceID
-			
-			normalAssembler = prepareCompoundAssembler(compactDescr, ModelsSetParams('', ModelStates.UNDAMAGED), spaceID)
-			
-			capsuleScale = Math.Vector3(2.0, 2.0, 2.0)
-			gunScale = Math.Vector3(1.0, 1.0, 1.0)
-			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), compactDescr.chassis.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.HULL), compactDescr.hull.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.TURRET), compactDescr.turret.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.GUN), compactDescr.gun.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 1, compactDescr.hull.hitTester.bspModelName, capsuleScale),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 2, compactDescr.turret.hitTester.bspModelName, capsuleScale),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 3, compactDescr.gun.hitTester.bspModelName, gunScale))
-			
-			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
-			BigWorld.loadResourceListBG( (normalAssembler, collisionAssembler, ), makeCallbackWeak(self.__onModelLoaded, self.__curBuildInd) )
-
-			self.__preCompDescrStr = compactDescrStr
-		else:
-			self.__updateTurretAndGun()
-			self.__updateHitPoints()
-		
-		
-		if not self.currentBattleData.hit:
-			return
-		
+	def __onVehicleBuilded(self):
 		self.__updateCamera()
 		self.__updateShell()
 		self.__updateEffect()
 		self.__updateSplash()
 		self.__updateRicochet()
-
-	def __onModelLoaded(self, buildInd, resourceRefs):
-		
-		if buildInd != self.__curBuildInd:
-			Waiting.hide('loadHangarSpaceVehicle')
-			return
-		
-		if self.collision:
-			BigWorld.removeCameraCollider(self.collision.getColliderID())
-			self.collision.deactivate()
-			self.collision.destroy()
-		self.collision = resourceRefs['collisionAssembler']
+		self.__updateOutRicochet()
 	
-		if self.compoundModel:
-			BigWorld.delModel(self.compoundModel)
-		
-		compactDescr = self.currentBattleData.victim['compDescr']
-		
-		self.compoundModel = resourceRefs[compactDescr.name]
-		
-		BigWorld.addModel(self.compoundModel)
-		
-		m = Math.Matrix()
-		m.setTranslate(self.__rootPosition)
-		self.compoundModel.matrix = m
-		
-		
-		# connect VEHICLE_COLLIDER
-		chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
-		chassisColisionMatrix.target = self.compoundModel.matrix
-		collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.compoundModel.node(TankPartNames.HULL)),
-			(TankPartNames.getIdx(TankPartNames.TURRET), self.compoundModel.node(TankPartNames.TURRET)),
-			(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix),
-			(TankPartNames.getIdx(TankPartNames.GUN), self.compoundModel.node(TankNodeNames.GUN_INCLINATION)))
-		self.collision.connect(0, ColliderTypes.VEHICLE_COLLIDER, collisionData)
-
-		# connect HANGAR_VEHICLE_COLLIDER
-		gunColBox = self.collision.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
-		center = 0.5 * (gunColBox[1] - gunColBox[0])
-		gunoffset = Math.Matrix()
-		gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
-		gunLink = mathUtils.MatrixProviders.product(gunoffset, self.compoundModel.node(TankPartNames.GUN))
-		collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compoundModel.node(TankPartNames.HULL)), 
-			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)), 
-			(TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
-		self.collision.connect(0, ColliderTypes.HANGAR_VEHICLE_COLLIDER, collisionData)
-		
-		self.collision.activate()
-
-		colliderData = (self.collision.getColliderID(), (TankPartNames.getIdx(TankPartNames.GUN) + 1, TankPartNames.getIdx(TankPartNames.GUN) + 2, TankPartNames.getIdx(TankPartNames.GUN) + 3))
-		BigWorld.appendCameraCollider(colliderData)
-		
-		self.__updateTurretAndGun()
-		self.__updateHitPoints()
-		
-		Waiting.hide('loadHangarSpaceVehicle')
-
 	def __updateCamera(self):
 		
 		hitData = self.currentBattleData.hit
 		
 		if hitData['isExplosion']:
 			
-			fallenPoint = self.__rootPosition + Math.Vector3(hitData['position'])
-			worldHitDirection = self.__rootPosition - fallenPoint
+			fallenPoint = SCENE_OFFSET + Math.Vector3(hitData['position'])
+			worldHitDirection = SCENE_OFFSET - fallenPoint
 			
-			targetPoint = fallenPoint + Math.Vector3(0.0, (self.__rootPosition - fallenPoint).length / 2.0, 0.0)
+			targetPoint = fallenPoint + Math.Vector3(0.0, (SCENE_OFFSET - fallenPoint).length / 2.0, 0.0)
 			
 			# default, current, limits, sens, targetPoint
 			self.hangarCameraCtrl.setCameraData(
@@ -310,7 +198,7 @@ class HangarScene(AbstractController):
 
 	def __updateShell(self):
 		
-		for model in self.__shellModels:
+		for model in self.__models[MODEL_TYPES.SHELL]:
 			model.visible = False
 		
 		hitData = self.currentBattleData.hit
@@ -325,8 +213,8 @@ class HangarScene(AbstractController):
 			worldContactMatrix.setRotateYPR((0.0, math.pi / 2, 0.0))
 			worldContactMatrix.translation = Math.Vector3(worldHitPoint)
 			
-			self.__shellMotors[hitData['shellType']].signal = worldContactMatrix
-			self.__shellModels[hitData['shellType']].visible = True
+			self.__motors[MODEL_TYPES.SHELL][hitData['shellType']].signal = worldContactMatrix
+			self.__models[MODEL_TYPES.SHELL][hitData['shellType']].visible = True
 		
 		else:
 			
@@ -348,12 +236,12 @@ class HangarScene(AbstractController):
 			worldContactMatrix.setRotateYPR((worldHitDirection.yaw, worldHitDirection.pitch, 0.0))
 			worldContactMatrix.translation = worldHitPoint
 			
-			self.__shellMotors[hitData['shellType']].signal = worldContactMatrix
-			self.__shellModels[hitData['shellType']].visible = True
+			self.__motors[MODEL_TYPES.SHELL][hitData['shellType']].signal = worldContactMatrix
+			self.__models[MODEL_TYPES.SHELL][hitData['shellType']].visible = True
 	
 	def __updateEffect(self):
 	
-		for model in self.__effectModels:
+		for model in self.__models[MODEL_TYPES.EFFECT]:
 			model.visible = False
 		
 		hitData = self.currentBattleData.hit
@@ -361,14 +249,14 @@ class HangarScene(AbstractController):
 		if not hitData['isExplosion']:
 			
 			componentIDx, shotResult, startPoint, endPoint = hitData['points'][0]
-			
-			if shotResult in [0, 1]:
+
+			if shotResult in [HIT_EFFECT.INTERMEDIATE_RICOCHET, HIT_EFFECT.FINAL_RICOCHET]:
 				effectType = 0
-			elif shotResult == 2:
+			elif shotResult == HIT_EFFECT.ARMOR_NOT_PIERCED:
 				effectType = 1
-			elif shotResult == 4 or shotResult == 5 and hitData['damageFactor'] > 0:
+			elif shotResult == HIT_EFFECT.ARMOR_PIERCED or shotResult == HIT_EFFECT.CRITICAL_HIT and hitData['damageFactor'] > 0:
 				effectType = 2
-			elif shotResult in [3, 5]:
+			elif shotResult in [HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE, HIT_EFFECT.CRITICAL_HIT]:
 				effectType = 3
 			else:
 				LOG_ERROR('unknown effectType')
@@ -389,12 +277,12 @@ class HangarScene(AbstractController):
 			worldContactMatrix.setRotateYPR((worldHitDirection.yaw, worldHitDirection.pitch, 0.0))
 			worldContactMatrix.translation = worldHitPoint
 			
-			self.__effectMotors[effectType].signal = worldContactMatrix
-			self.__effectModels[effectType].visible = True
+			self.__motors[MODEL_TYPES.EFFECT][effectType].signal = worldContactMatrix
+			self.__models[MODEL_TYPES.EFFECT][effectType].visible = True
 	
 	def __updateSplash(self):
 		
-		for model in self.__splashModels:
+		for model in self.__models[MODEL_TYPES.SPLASH]:
 			model.visible = False
 		
 		hitData = self.currentBattleData.hit
@@ -408,14 +296,14 @@ class HangarScene(AbstractController):
 				splashIndex = 0
 			
 			worldContactMatrix = Math.Matrix()
-			worldContactMatrix.translation = Math.Vector3(self.__rootPosition + Math.Vector3(hitData['position']))
+			worldContactMatrix.translation = Math.Vector3(SCENE_OFFSET + Math.Vector3(hitData['position']))
 
-			self.__splashMotors[splashIndex].signal = worldContactMatrix
-			self.__splashModels[splashIndex].visible = True
+			self.__motors[MODEL_TYPES.SPLASH][splashIndex].signal = worldContactMatrix
+			self.__models[MODEL_TYPES.SPLASH][splashIndex].visible = True
 	
 	def __updateRicochet(self):
 		
-		for model in self.__ricochetModels:
+		for model in self.__models[MODEL_TYPES.RICOCHET]:
 			model.visible = False
 		
 		hitData = self.currentBattleData.hit
@@ -427,13 +315,13 @@ class HangarScene(AbstractController):
 
 		modelsFreeIdx = range(15)
 
-		for (componentIDx, hitResult, startPoint, endPoint, ) in hitData['points']:
+		for (componentIDx, shotResult, startPoint, endPoint, ) in hitData['points']:
 			
 			if previosPointData:
 				
-				preComponentIDx, preHitResult, preStartPoint, preEndPoint = previosPointData
+				preComponentIDx, preShotResult, preStartPoint, preEndPoint = previosPointData
 				
-				if preHitResult == 0:
+				if preShotResult == HIT_EFFECT.INTERMEDIATE_RICOCHET:
 				
 					worldPreComponentMatrix = self.vehicleCtrl.partWorldMatrix(preComponentIDx)
 					localPreStartPoint = Math.Vector3(preStartPoint)
@@ -460,88 +348,66 @@ class HangarScene(AbstractController):
 					targetIdx = min(modelsFreeIdx, key=lambda x:abs(x-perfectIdx))
 					modelsFreeIdx.pop(targetIdx)
 					
-					self.__ricochetModels[targetIdx].visible = True
-					self.__ricochetMotors[targetIdx].signal = worldRicochetMatrix
-
-			previosPointData = (componentIDx, hitResult, startPoint, endPoint)
-		
-		"""
-			TODO
-			fuck this shit
-		"""
-		
-		return
-
-		debug = lambda name, matrix: '{0} x:{1}, y:{2}, z:{3}, yaw:{4}, pitch:{5}, length:{6} '.format(name, matrix.x, matrix.y, matrix.z, matrix.yaw, matrix.pitch, matrix.length)
-		
-		if previosPointData:
-
-			componentName, hitResult, startPoint, endPoint = previosPointData
+					self.__models[MODEL_TYPES.RICOCHET][targetIdx].visible = True
+					self.__motors[MODEL_TYPES.RICOCHET][targetIdx].signal = worldRicochetMatrix
 			
-			if hitResult in [0, 1]:
-				
-				localStartPoint = Math.Vector3(startPoint) 
-				localEndPoint = Math.Vector3(endPoint)
-				
-				worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentName)
+			previosPointData = (componentIDx, shotResult, startPoint, endPoint)
 
-				worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
-				worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
-				worldHitPoint = (worldStartPoint + worldEndPoint) / 2
-				
-				componentsDescr = self.vehicleCtrl.partDescriptor(componentName)
-				
-				collisions = None
-				
-				if self.collision is not None:
-					collisions = self.collision.collideAllWorld(worldStartPoint, worldEndPoint)
-				
-				if collisions:
-					_, hitAngleCos, _, _ = collisions[0]
-					
-					# we need normal, from collider, not this one shit
-					normal = localStartPoint - localEndPoint
-					normal.normalise()
-					print debug('normal local', normal)
-					
-					localNormalDirection = worldComponentMatrix.applyVector(normal)
-					localNormalDirection.normalise()
-					print debug('direction local', localNormalDirection)
-					
-					normal = worldStartPoint - worldEndPoint
-					normal.normalise()
-					print debug('normal world', normal)
-					
-					worldNormalDirection = worldComponentMatrix.applyVector(normal)
-					worldNormalDirection.normalise()
-					print debug('direction world', worldNormalDirection)
-					
+	def __updateOutRicochet(self, attemp = 0):
 
-					doubleCathetus = hitAngleCos * (worldHitPoint - worldStartPoint).length * 2.0
-					
-					worldRicochetDirection = worldHitPoint - (worldEndPoint + worldNormalDirection.scale(-doubleCathetus))
-					worldRicochetMatrix = Math.Matrix()
-					worldRicochetMatrix.setRotateYPR((worldRicochetDirection.yaw, worldRicochetDirection.pitch, 0.0))
-					worldRicochetMatrix.translation = worldHitPoint
-					
-					self.__ricochetModels[15].visible = True
-					self.__ricochetMotors[15].signal = worldRicochetMatrix
+		hitData = self.currentBattleData.hit
 	
-	def __updateTurretAndGun(self):
-		
-		if not self.compoundModel:
+		if hitData['isExplosion']:
 			return
+	
+		componentIDx, shotResult, startPoint, endPoint = hitData['points'][-1]
 		
-		turretYaw, gunPitch = self.currentBattleData.hit['aimParts']
-
-		matrix = Math.Matrix()
-		matrix.setRotateYPR((turretYaw, 0.0, 0.0))
-		self.compoundModel.node(TankPartNames.TURRET, matrix)
-
-		matrix = Math.Matrix()
-		matrix.setRotateYPR((0.0, gunPitch, 0.0))
-		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
+		if shotResult == HIT_EFFECT.INTERMEDIATE_RICOCHET:
+			
+			localStartPoint = Math.Vector3(startPoint) 
+			localEndPoint = Math.Vector3(endPoint)
+			localHitPoint = (localStartPoint + localEndPoint) / 2
+			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(componentIDx)
+			worldStartPoint = worldComponentMatrix.applyPoint(localStartPoint)
+			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
+			worldHitPoint = (worldStartPoint + worldEndPoint) / 2
+			
+			collisionResult = self.vehicleCtrl.collision.collideAllWorld(worldStartPoint, worldEndPoint)
+			if not collisionResult:
+				BigWorld.callback(0.01, lambda : self.__updateOutRicochet(attemp + 1))
+				return
+			
+			collisionPoints = []
+			
+			for offsetVector in ((0.001, 0.0, 0.0), (0.0, 0.001, 0.0), (0.0, 0.0, 0.001)):
+				collisionPoint = self.vehicleCtrl.collision.collideLocalPoint(componentIDx, localHitPoint + offsetVector, 10.0)
+				collisionPoints.append(collisionPoint)
 	
-	def __updateHitPoints(self):
-		pass
-	
+			if len(collisionPoints) < 3:
+				return
+			
+			collisionPoint1, collisionPoint2, collisionPoint3 = collisionPoints
+			planeNormal = (collisionPoint2 - collisionPoint1) * (collisionPoint3 - collisionPoint1)
+			planeDistanceCoeffD = -planeNormal.dot(collisionPoint1)
+			distance = Math.Vector4(planeNormal.x, planeNormal.y, planeNormal.z, planeDistanceCoeffD).dot(Math.Vector4(
+											localStartPoint.x, localStartPoint.y, localStartPoint.z, 1.0))
+			# in normal case we need check for distance lower than 0
+			# but we live in bagworld Kappa
+			if distance > 0:
+				planeNormal = -planeNormal
+			
+			_, hitAngleCos, _, _ = collisionResult[0]
+			
+			worldNormalDirection = worldComponentMatrix.applyVector(planeNormal)
+			worldNormalDirection.normalise()
+			
+			doubleCathetus = hitAngleCos * (worldHitPoint - worldStartPoint).length * 2.0
+			
+			worldRicochetDirection = worldHitPoint - (worldEndPoint + worldNormalDirection.scale(-doubleCathetus))
+			worldRicochetMatrix = Math.Matrix()
+			worldRicochetMatrix.setRotateYPR((worldRicochetDirection.yaw, worldRicochetDirection.pitch, 0.0))
+			worldRicochetMatrix.translation = worldHitPoint
+			
+			self.__models[MODEL_TYPES.RICOCHET][15].visible = True
+			self.__motors[MODEL_TYPES.RICOCHET][15].signal = worldRicochetMatrix
+

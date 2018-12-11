@@ -58,8 +58,8 @@ class Hits(AbstractData):
 			4 : (int, "damage", True)
 		}
 		
+	def init(self):
 		self.updateData()
-
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
 		g_eventsManager.onChangedHitData += self.__updateData
 	

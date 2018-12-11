@@ -51,7 +51,7 @@ def configure():
 	manager.addInstance(IBattlesHistory, BattlesHistory(), finalizer='fini')
 	manager.addInstance(IBattleProcessor, BattleProcessor(), finalizer='fini')
 	manager.addInstance(IHangarCamera, HangarCamera(), finalizer='fini')
-	manager.addInstance(IHangarScene, HangarScene(), finalizer='fini')
+	manager.addInstance(IHangarScene, HangarScene(), finalizer='destroy')
 	manager.addInstance(IHotkeys, Hotkeys(), finalizer='fini')
 	manager.addInstance(IState, State(), finalizer='fini')
 	manager.addInstance(ISettings, Settings(), finalizer='fini')

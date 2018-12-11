@@ -8,5 +8,5 @@ class IHangarScene(object):
 	def destroy(self):
 		raise NotImplementedError
 	
-	def noDataHit(self):
+	def processNoData(self):
 		raise NotImplementedError

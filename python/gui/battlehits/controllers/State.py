@@ -50,7 +50,7 @@ class State(AbstractController):
 		if hitID == -1:
 			self.__hitID = None
 			if self.enabled:
-				self.hangarSceneCtrl.noDataHit()
+				self.hangarSceneCtrl.processNoData()
 			return
 		
 		for availableHitID, _ in enumerate(self.currentBattleData.battle['hits']):
@@ -82,6 +82,8 @@ class State(AbstractController):
 				self.currentHitID = None
 
 	def enable(self):
+		if self.hangarSpace is None or self.hangarSpace.space is None:
+			return
 		
 		if self.currentBattleID is not None:
 			
@@ -94,14 +96,13 @@ class State(AbstractController):
 		else:
 			self.currentBattleID = self.battlesData.desiredID
 		
-		
 		self.__savedHangarData = {
 			"_EVENT_HANGAR_PATHS": chs._EVENT_HANGAR_PATHS,
 			"path": chs._getDefaultHangarPath(False)
 		}
 		
 		if chs._EVENT_HANGAR_PATHS:
-			self.__savedHangarData["path"] =  chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium]
+			self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium]
 		
 		g_clientHangarSpaceOverride.setPath('battlehits')
 		
@@ -112,6 +113,7 @@ class State(AbstractController):
 		
 	def disable(self):
 		
+		self.vehicleCtrl.removeVehicle()
 		self.hangarCameraCtrl.disable()
 		self.hangarSceneCtrl.destroy()
 		

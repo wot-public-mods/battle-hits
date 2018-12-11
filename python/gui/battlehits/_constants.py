@@ -32,10 +32,18 @@ DEFAULT_SETTINGS = {
 }
 
 class MODEL_TYPES:
+	SHELL = 'shell'
+	EFFECT = 'effect'
+	SPLASH = 'splash'
+	RICOCHET = 'ricochet'
+	DOME = 'dome'
+
+class MODEL_NAMES:
 	SHELL = ('ap', 'apcr', 'heat', 'he', )
 	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical', )
 	SPLASH = ('large', 'middle', 'small', )
-	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', 'cross', )
+	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', \
+				'15', 'cross', )
 	
 class MODEL_PATHS:
 	SHELL = 'content/interface/battlehits/%s/shells/%s/shell.model'
@@ -49,8 +57,8 @@ wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
-SETTINGS_VERSION = 8
-CACHE_VERSION = 16
+SETTINGS_VERSION = 10
+CACHE_VERSION = 17
 
 SCENE_OFFSET = Math.Vector3(0.0, 100.0, 0.0)
 

@@ -54,9 +54,10 @@ class Battles(AbstractData):
 		self.__sortingReversed = True
 		self.__sortingRule = (int, "id")
 		self.__selectedIndex = -1
-		
-		self.updateData()
+	
+	def init(self):
 		g_eventsManager.onChangedBattleData += self.__updateData
+		self.updateData()
 	
 	def __updateData(self, _ = None):
 		self.updateData()
