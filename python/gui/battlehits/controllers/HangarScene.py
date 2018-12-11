@@ -68,6 +68,7 @@ class HangarScene(AbstractController):
 		
 		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 		
+		self.vehicleCtrl.removeVehicle()
 		self._hideModels()
 	
 	def _assambleModels(self):
