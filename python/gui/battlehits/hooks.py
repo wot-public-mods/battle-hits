@@ -1,6 +1,7 @@
 
 import BigWorld
 
+from debug_utils import LOG_ERROR
 from helpers import dependency
 
 from gui.battlehits.events import g_eventsManager
@@ -126,18 +127,19 @@ g_dataCollector.addSoloMod('battle_hit', __version__)
 
 
 
+
 # modsListApi
-from gui.modsListApi import g_modsListApi
-
-def handleClick():
-	state = dependency.instance(IState)
-	state.switch()
-
-g_modsListApi.addModification(
-	id = 'battlehits', name = l10n('modslist.name'), description = l10n('modslist.description'), \
-	icon = 'gui/maps/battlehits/modsListApi.png', enabled = True, login = False, lobby = True, \
-	callback = handleClick
-)
+g_modsListApi = None
+try:
+	from gui.modsListApi import g_modsListApi
+except ImportError:
+	LOG_ERROR('modsListApi not installed')
+if g_modsListApi: 
+	g_modsListApi.addModification(
+		id = 'battlehits', name = l10n('modslist.name'), description = l10n('modslist.description'), \
+		icon = 'gui/maps/battlehits/modsListApi.png', enabled = True, login = False, lobby = True, \
+		callback = lambda : dependency.instance(IState).switch()
+	)
 
 # disable open button in battle queue
 
@@ -159,7 +161,8 @@ def loadBattleQueue(baseMethod, baseObject):
 
 def handleAvailability():
 	isInQueue = getQueueType() != QUEUE_TYPE.UNKNOWN
-	g_modsListApi.updateModification(id = "battlehits", enabled = not isInQueue)
+	if g_modsListApi is not None:
+		g_modsListApi.updateModification(id = "battlehits", enabled = not isInQueue)
 	state = dependency.instance(IState)
 	if isInQueue and state.enabled:
 		state.switch()
