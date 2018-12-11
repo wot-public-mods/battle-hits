@@ -13,17 +13,14 @@ class EventsManager(object):
 		self.invalidateBattlesDP = Event.Event()
 		self.invalidateHitsDP = Event.Event()
 		
-		self.showPopover = Event.Event()
-		self.showUI = Event.Event()
-		self.closeUI = Event.Event()
-		
+		self.showPreferencesPopover = Event.Event()
+		self.showMainView = Event.Event()
+		self.closeMainView = Event.Event()
+
 		self.onShowBattle = Event.Event()
 		self.onDestroyBattle = Event.Event()
 		
 		self.onSettingsChanged = Event.Event()
-		
-		self.onAppFinish = Event.Event()
-		
 		self.onKeyEvent = Event.Event()
-		
+	
 g_eventsManager = EventsManager()

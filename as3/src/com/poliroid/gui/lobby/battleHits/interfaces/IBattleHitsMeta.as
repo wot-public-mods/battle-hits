@@ -6,6 +6,8 @@ package com.poliroid.gui.lobby.battleHits.interfaces
 	{
 		
 		function closeViewS() : void;
+
+		function preferencesClickS() : void;
 		
 		function hitsToPlayerClickS(toPlayer:Boolean) : void;
 		

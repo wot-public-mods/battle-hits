@@ -20,11 +20,12 @@
 	
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsHeaderVO;
 	import com.poliroid.gui.lobby.battleHits.controls.HitTypeButton;
+	import com.poliroid.gui.lobby.battleHits.controls.PopoverCallerButton;
 	import com.poliroid.gui.lobby.battleHits.events.BatHitsEvent;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IBatHitsHeader;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IHitTypeButton;
 	
-	public class BatHitsHeader extends UIComponentEx implements IPopOverCaller, IBatHitsHeader
+	public class BatHitsHeader extends UIComponentEx implements IBatHitsHeader
 	{
 		
 		private static const CLOSE_BTN_OFFSET:int = 15;
@@ -37,7 +38,7 @@
 		
 		public var closeBtn:CloseButtonText;
 		
-		public var settingsBtn:CloseButtonText;
+		public var settingsBtn:PopoverCallerButton;
 		
 		public var hitsTypeToPlayer:HitTypeButton;
 		
@@ -96,7 +97,7 @@
 			}
 		}
 		
-		public function get preferenceBtn() : IPopOverCaller
+		public function get preferenceButton() : IPopOverCaller
 		{
 			return settingsBtn as IPopOverCaller;
 		}
@@ -139,18 +140,6 @@
 			dispatchEvent(new BatHitsEvent(BatHitsEvent.FROM_PLAYER_CLICK, true));
 			hitsTypeToPlayer.isActive = false;
 			hitsTypeFromPlayer.isActive = true;
-		}
-		
-		// this needs for correct preferences smart popover work
-		public function getTargetButton() : DisplayObject 
-		{
-			return DisplayObject(settingsBtn);
-		}
-		
-		// this needs for correct preferences smart popover work
-		public function getHitArea() : DisplayObject 
-		{
-			return DisplayObject(settingsBtn);
 		}
 	}
 }

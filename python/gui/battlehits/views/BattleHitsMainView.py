@@ -15,9 +15,7 @@ from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
 
-
-
-class BattleHitsMeta(LobbySubView, View):
+class BattleHitsMainViewMeta(LobbySubView, View):
 	
 	def hitsToPlayerClick(self):
 		self._printOverrideError('hitsToPlayerClick')
@@ -58,7 +56,7 @@ class BattleHitsMeta(LobbySubView, View):
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateDetailedHitData(data)
 
-class BattleHitsView(BattleHitsMeta):
+class BattleHitsMainView(BattleHitsMainViewMeta):
 
 	__sound_env__ = LobbySubViewEnv
 	__background_alpha__ = 0.0
@@ -70,32 +68,32 @@ class BattleHitsView(BattleHitsMeta):
 	battles = dependency.descriptor(IBattlesData)
 
 	def __init__(self, ctx = None):
-		super(BattleHitsView, self).__init__(ctx)
+		super(BattleHitsMainView, self).__init__(ctx)
 		self.__vehicleCD = ctx.get('itemCD')
 		self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
 	
 	def _populate(self):
-		super(BattleHitsView, self)._populate()
+		super(BattleHitsMainView, self)._populate()
 		self.__updateStaticData()
 		g_eventsManager.invalidateBattlesDP += self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP += self.__onHitsDPUpdated
-		g_eventsManager.closeUI += self.closeView
+		g_eventsManager.closeMainView += self.closeView
 		self.hotkeysCtrl.addForced(self.handleKeyEvent)
-
+	
 	def _dispose(self):
 		g_eventsManager.invalidateBattlesDP -= self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP -= self.__onHitsDPUpdated
-		g_eventsManager.closeUI -= self.closeView
+		g_eventsManager.closeMainView -= self.closeView
 		if self.hotkeysCtrl:
 			self.hotkeysCtrl.delForced(self.handleKeyEvent)
-		if self.stateCtrl.enabled:
-			self.stateCtrl.switch()
-		super(BattleHitsView, self)._dispose()
+		super(BattleHitsMainView, self)._dispose()
 	
 	def closeView(self):
 		self.onBackClick()
 
 	def onBackClick(self):
+		if self.stateCtrl.enabled:
+			self.stateCtrl.switch()
 		if self.__backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
 			event_dispatcher.showResearchView(self.__vehicleCD)
 		else:
@@ -121,7 +119,7 @@ class BattleHitsView(BattleHitsMeta):
 		self.hits.sort(sortRow)
 	
 	def preferencesClick(self):
-		g_eventsManager.showPopover()
+		g_eventsManager.showPreferencesPopover()
 	
 	def handleKeyEvent(self, event):
 		if not event.isKeyDown():

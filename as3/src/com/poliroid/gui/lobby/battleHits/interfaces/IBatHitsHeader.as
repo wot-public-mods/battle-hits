@@ -5,7 +5,7 @@ package com.poliroid.gui.lobby.battleHits.interfaces
 
 	public interface IBatHitsHeader extends IUpdatableComponent
 	{
-		function get preferenceBtn() : IPopOverCaller
+		function get preferenceButton() : IPopOverCaller
 		
 		function invalidateSize() : void
 		

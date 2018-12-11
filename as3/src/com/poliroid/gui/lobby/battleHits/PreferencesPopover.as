@@ -16,10 +16,6 @@
 	public class PreferencesPopover extends PreferencesPopoverMeta implements IPreferencesPopover 
 	{
 		
-		private static const RENDERER_HEIGHT:int = 75;
-		
-		private static const BOTTOM_OFFSET:int = 10;
-		
 		public var saveOnlySession:CheckBox = null;
 		
 		public var processReplays:CheckBox = null;

@@ -208,7 +208,7 @@
 		{
 			preferencesClickS();
 			App.popoverMgr.hide();
-			App.popoverMgr.show(header as IPopOverCaller, POPOVER_ALIAS);
+			App.popoverMgr.show(header.preferenceButton, POPOVER_ALIAS);
 		}
 		
 		private function onToPlayerClickHandler(e:BatHitsEvent) : void

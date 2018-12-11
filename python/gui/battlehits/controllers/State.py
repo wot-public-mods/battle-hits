@@ -121,6 +121,6 @@ class State(AbstractController):
 		g_clientHangarSpaceOverride.setPath(self.__savedHangarData["path"], self.hangarSpace.isPremium)
 		
 		self.enabled = False
-
-		g_eventsManager.closeUI()
+		
+		g_eventsManager.closeMainView()
 		

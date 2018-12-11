@@ -11,8 +11,7 @@ LANGUAGE_FILE_PATH = 'mods/poliroid.battlehits/text/%s.yml'
 
 DEFAULT_UI_LANGUAGE = 'ru'
 
-BATTLE_HITS_VIEW_ALIAS = "BattleHitsLobby"
-
+BATTLE_HITS_MAIN_VIEW_ALIAS = "BattleHitsMainView"
 BATTLE_HITS_PREFERENCES_POPOVER_ALIAS = "BattleHitsPreferencesPopover"
 
 class SETTINGS:

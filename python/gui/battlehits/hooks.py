@@ -11,7 +11,7 @@ from gui.battlehits.utils import override
 __all__ = ()
 
 from gui.app_loader.settings import APP_NAME_SPACE, GUI_GLOBAL_SPACE_ID
-from gui.app_loader.loader import _AppLoader, g_appLoader
+from gui.app_loader.loader import g_appLoader
 from gui.shared import g_eventBus, events
 
 # app battle loaded
@@ -27,12 +27,6 @@ def onAppDestroyed(event):
 		return
 	g_eventsManager.onDestroyBattle()
 g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
-
-# app finished
-@override(_AppLoader, 'fini')
-def appFini(baseMethod, baseObject):
-	baseMethod(baseObject)
-	g_eventsManager.onAppFinish()
 
 # fix space change vehicle getVehicleEntity error
 from gui.ClientHangarSpace import ClientHangarSpace

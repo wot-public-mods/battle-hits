@@ -18,7 +18,7 @@ class AbstractData(object):
 	vehicleCtrl = dependency.descriptor(IVehicle)
 	battlesData = dependency.descriptor(IBattlesData)
 	hitsData = dependency.descriptor(IHitsData)
-	currentBattle = dependency.descriptor(ICurrentBattleData)
+	currentBattleData = dependency.descriptor(ICurrentBattleData)
 	
 	def clean(self):
 		pass
