@@ -3,7 +3,7 @@ import BattleReplay
 import BigWorld
 import Math
 from items import vehicles
-from vehicle_systems.tankStructure import ModelStates
+from vehicle_systems.tankStructure import ModelStates, TankPartIndexes
 from VehicleEffects import DamageFromShotDecoder
 
 from gui.battlehits._constants import SETTINGS
@@ -168,7 +168,17 @@ class BattleProcessor(AbstractController):
 
 		pointsData = []
 		for point in points:
-			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point, vehicle.appearance.collisions)
+			maxComponentIdx = TankPartIndexes.ALL[-1]
+			wheelsConfig = vehicle.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
+			if wheelsConfig:
+				maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
+			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point, vehicle.appearance.collisions, maxComponentIdx)
+			
+			# TODO implement vehicle whells
+			# temporary skip hit to whell
+			if compIdx > TankPartIndexes.ALL[-1]:
+				return
+			
 			pointsData.append((compIdx, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 		
 		self.__battleData['hits'].append({
