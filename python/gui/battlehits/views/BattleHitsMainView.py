@@ -86,14 +86,11 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		g_eventsManager.closeMainView -= self.closeView
 		if self.hotkeysCtrl:
 			self.hotkeysCtrl.delForced(self.handleKeyEvent)
+		if self.stateCtrl.enabled:
+			self.stateCtrl.switch()
 		super(BattleHitsMainView, self)._dispose()
 	
 	def closeView(self):
-		self.onBackClick()
-
-	def onBackClick(self):
-		if self.stateCtrl.enabled:
-			self.stateCtrl.switch()
 		if self.__backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
 			event_dispatcher.showResearchView(self.__vehicleCD)
 		else:
