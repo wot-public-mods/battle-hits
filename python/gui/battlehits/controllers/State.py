@@ -102,7 +102,7 @@ class State(AbstractController):
 		}
 		
 		if chs._EVENT_HANGAR_PATHS:
-			self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium]
+			self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium][0]
 		
 		g_clientHangarSpaceOverride.setPath('battlehits')
 		
@@ -120,7 +120,7 @@ class State(AbstractController):
 		self.currentBattleData.clean()
 		
 		chs._EVENT_HANGAR_PATHS = self.__savedHangarData["_EVENT_HANGAR_PATHS"]
-		g_clientHangarSpaceOverride.setPath(self.__savedHangarData["path"], self.hangarSpace.isPremium)
+		g_clientHangarSpaceOverride.setPath(path = self.__savedHangarData["path"], isPremium = self.hangarSpace.isPremium)
 		
 		self.enabled = False
 		
