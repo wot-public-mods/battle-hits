@@ -23,6 +23,16 @@ class Vehicle(AbstractController):
 	def collision(self):
 		return self.__collision
 	
+	@property
+	def compactDescr(self):
+		return self.currentBattleData.victim['compDescr']
+	
+	@property
+	def isWheeledTech(self):
+		if self.compactDescr:
+			return 'wheeledVehicle' in self.compactDescr.type.tags
+		return False
+	
 	def __init__(self):
 		super(Vehicle, self).__init__()
 		self.__currentBuildIndex = 1
@@ -39,25 +49,23 @@ class Vehicle(AbstractController):
 		
 		if self.__currentCompDescrStr != self.currentBattleData.victim['compDescrStr']:
 
-			compactDescr = self.currentBattleData.victim['compDescr']
-
 			Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
 	
 			self.__currentBuildIndex += 1
 			
 			spaceID = BigWorld.camera().spaceID
 			modelsSet = ModelsSetParams('', ModelStates.UNDAMAGED)
-			normalAssembler = prepareCompoundAssembler(compactDescr, modelsSet, spaceID)
+			normalAssembler = prepareCompoundAssembler(self.compactDescr, modelsSet, spaceID)
 			
 			capsuleScale = Math.Vector3(1.5, 1.5, 1.5)
 			gunScale = Math.Vector3(1.0, 1.0, 1.0)
-			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), compactDescr.chassis.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.HULL), compactDescr.hull.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.TURRET), compactDescr.turret.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.GUN), compactDescr.gun.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 1, compactDescr.hull.hitTester.bspModelName, capsuleScale),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 2, compactDescr.turret.hitTester.bspModelName, capsuleScale),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 3, compactDescr.gun.hitTester.bspModelName, gunScale))
+			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), self.compactDescr.chassis.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.HULL), self.compactDescr.hull.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.TURRET), self.compactDescr.turret.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.GUN), self.compactDescr.gun.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compactDescr.hull.hitTester.bspModelName, capsuleScale),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compactDescr.turret.hitTester.bspModelName, capsuleScale),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 3, self.compactDescr.gun.hitTester.bspModelName, gunScale))
 			
 			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
 			loadCallback = makeCallbackWeak(self.__onModelLoaded, self.__currentBuildIndex)
@@ -94,10 +102,8 @@ class Vehicle(AbstractController):
 		
 		self.removeVehicle()
 		
-		compactDescr = self.currentBattleData.victim['compDescr']
-		
 		self.__collision = resourceRefs['collisionAssembler']
-		self.__compoundModel = resourceRefs[compactDescr.name]
+		self.__compoundModel = resourceRefs[self.compactDescr.name]
 		self.__currentCompDescrStr = self.currentBattleData.victim['compDescrStr']
 		
 		BigWorld.addModel(self.compoundModel)
@@ -159,29 +165,28 @@ class Vehicle(AbstractController):
 	
 	def __updateComponents(self):
 
-		vehicleDescr = self.currentBattleData.victim['compDescr']
 		aimParts = self.currentBattleData.hit['aimParts']
 
-		hullOffset = vehicleDescr.chassis.hullPosition
-		turretOffset = vehicleDescr.hull.turretPositions[0]
-		gunOffset = vehicleDescr.turret.gunPosition
+		hullOffset = self.compactDescr.chassis.hullPosition
+		turretOffset = self.compactDescr.hull.turretPositions[0]
+		gunOffset = self.compactDescr.turret.gunPosition
 		
 		turretYaw, gunPitch = aimParts
 
 		chassisMatrix = Math.Matrix()
 		chassisMatrix.setIdentity()
-		self.__components[TankPartNames.CHASSIS] = (vehicleDescr.chassis, chassisMatrix, )
+		self.__components[TankPartNames.CHASSIS] = (self.compactDescr.chassis, chassisMatrix, )
 		
 		hullMatrix = Math.Matrix()
 		hullMatrix.setTranslate(-hullOffset)
-		self.__components[TankPartNames.HULL] = (vehicleDescr.hull, hullMatrix, )
+		self.__components[TankPartNames.HULL] = (self.compactDescr.hull, hullMatrix, )
 
 		turretMatrix = Math.Matrix()
 		turretMatrix.setTranslate(-hullOffset - turretOffset)
 		turretRotate = Math.Matrix()
 		turretRotate.setRotateY(-turretYaw)
 		turretMatrix.postMultiply(turretRotate)
-		self.__components[TankPartNames.TURRET] = (vehicleDescr.turret, turretMatrix)
+		self.__components[TankPartNames.TURRET] = (self.compactDescr.turret, turretMatrix)
 
 		gunMatrix = Math.Matrix()
 		gunMatrix.setTranslate(-gunOffset)
@@ -189,18 +194,18 @@ class Vehicle(AbstractController):
 		gunRotate.setRotateX(-gunPitch)
 		gunMatrix.postMultiply(gunRotate)
 		gunMatrix.preMultiply(turretMatrix)
-		self.__components[TankPartNames.GUN] = (vehicleDescr.gun, gunMatrix)
+		self.__components[TankPartNames.GUN] = (self.compactDescr.gun, gunMatrix)
 		
 		hullMatrix.invert()
 		turretMatrix.invert()
 		gunMatrix.invert()
 
-	def partDescriptor(self, partName):
-		partName = self.getComponentName(partName)
+	def partDescriptor(self, partIndex):
+		partName = self.getComponentName(partIndex)
 		return self.__components[partName][0]
 	
-	def partWorldMatrix(self, partName):
-		partName = self.getComponentName(partName)
+	def partWorldMatrix(self, partIndex):
+		partName = self.getComponentName(partIndex)
 		partLocalMatrix = Math.Matrix(self.__components[partName][1])
 		partWorldMatrix = Math.Matrix()
 		partWorldMatrix.setRotateYPR((partLocalMatrix.yaw, partLocalMatrix.pitch, 0.0))
@@ -208,6 +213,8 @@ class Vehicle(AbstractController):
 		return partWorldMatrix
 	
 	def getComponentName(self, partIndex):
+		if partIndex > TankPartIndexes.ALL[-1]:
+			return TankPartNames.CHASSIS
 		if partIndex in TankPartIndexes.ALL:
 			return TankPartIndexes.getName(partIndex)
 		return partIndex
