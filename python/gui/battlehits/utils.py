@@ -1,8 +1,10 @@
 
 import types
 import ResMgr
+import Math
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS')
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS' \
+			'generateWheelsData', 'unpackMatrix', 'packMatrix')
 
 def override(holder, name, target = None):
 	"""using for override any staff"""
@@ -70,3 +72,29 @@ def readFromVFS(path):
 	if file is not None and ResMgr.isFile(path):
 		return str(file.asBinary)
 	return None
+
+def packMatrix(matrix):
+	accuracy = 7
+	result = []
+	result.append(round(matrix.translation.x, accuracy))
+	result.append(round(matrix.translation.y, accuracy))
+	result.append(round(matrix.translation.z, accuracy))
+	result.append(round(matrix.yaw, accuracy))
+	result.append(round(matrix.pitch, accuracy))
+	result.append(round(matrix.roll, accuracy))
+	return result
+
+def unpackMatrix(data):
+	matrix = Math.Matrix()
+	matrix.setRotateYPR((data[3], data[4], data[5]))
+	matrix.translation = (data[0], data[1], data[2])
+	return matrix
+
+def generateWheelsData(vehicle):
+	wheels = {}
+	wheelsConfig = vehicle.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
+	if wheelsConfig:
+		nodesNames = wheelsConfig.getWheelNodeNames()
+		for nodeName in nodesNames:
+			wheels[nodeName] = packMatrix(vehicle.appearance.compoundModel.node(nodeName).localMatrix)
+	return wheels

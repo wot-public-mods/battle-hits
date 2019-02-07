@@ -9,6 +9,7 @@ from VehicleEffects import DamageFromShotDecoder
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.controllers import AbstractController
+from gui.battlehits.utils import generateWheelsData
 
 class BattleProcessor(AbstractController):
 	
@@ -173,18 +174,13 @@ class BattleProcessor(AbstractController):
 			if wheelsConfig:
 				maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
 			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point, vehicle.appearance.collisions, maxComponentIdx)
-			
-			# TODO implement vehicle whells
-			# temporary skip hit to whell
-			if compIdx > TankPartIndexes.ALL[-1]:
-				return
-			
 			pointsData.append((compIdx, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 		
 		self.__battleData['hits'].append({
 			'damageFactor': damageFactor,
 			'effectsIndex': effectsIndex,
 			'aimParts': vehicle.getAimParams(),
+			'wheels': generateWheelsData(vehicle),
 			'isExplosion': False,
 			'position': None,
 			'points': pointsData,
@@ -230,6 +226,7 @@ class BattleProcessor(AbstractController):
 			'damageFactor': damageFactor,
 			'effectsIndex': effectsIndex,
 			'aimParts': vehicle.getAimParams(),
+			'wheels': generateWheelsData(vehicle),
 			'isExplosion': True,
 			'position': position,
 			'points': None,
