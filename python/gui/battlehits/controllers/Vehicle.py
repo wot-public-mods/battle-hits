@@ -146,7 +146,7 @@ class Vehicle(AbstractController):
 		self.__updateTurretAndGun()
 		self.__updateWheels()
 
-		g_eventsManager.onVehicleBuilded()
+		BigWorld.callback(0, g_eventsManager.onVehicleBuilded)
 	
 		Waiting.hide('loadHangarSpaceVehicle')
 
