@@ -12,6 +12,7 @@ from vehicle_systems.stricted_loading import makeCallbackWeak
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.utils import unpackMatrix
 
 class Vehicle(AbstractController):
 
@@ -73,9 +74,9 @@ class Vehicle(AbstractController):
 			return
 
 		self.__updateComponents()
-
 		self.__updateTurretAndGun()
-
+		self.__updateWheels()
+		
 		g_eventsManager.onVehicleBuilded()
 	
 	def removeVehicle(self):
@@ -143,11 +144,24 @@ class Vehicle(AbstractController):
 		
 		self.__updateComponents()
 		self.__updateTurretAndGun()
+		self.__updateWheels()
 
 		g_eventsManager.onVehicleBuilded()
 	
 		Waiting.hide('loadHangarSpaceVehicle')
 
+	def __updateWheels(self):
+	
+		if not self.compoundModel:
+			return
+	
+		if not self.isWheeledTech:
+			return
+		
+		nodesNames = self.compactDescr.chassis.generalWheelsAnimatorConfig.getWheelNodeNames()
+		for nodeName, matrixData in self.currentBattleData.hit['wheels'].iteritems():
+			self.compoundModel.node(nodeName, unpackMatrix(matrixData))
+	
 	def __updateTurretAndGun(self):
 
 		if not self.compoundModel:
@@ -205,6 +219,27 @@ class Vehicle(AbstractController):
 		return self.__components[partName][0]
 	
 	def partWorldMatrix(self, partIndex):
+		
+		if self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
+			
+			def getNodeNameByPartIndex(partIndex):
+				wheelNodeNames = self.compactDescr.chassis.generalWheelsAnimatorConfig.getWheelNodeNames()
+				wheelNodeLength = len(wheelNodeNames)
+				delta = [2, wheelNodeLength, 4, 6]
+				result1, result2 = [], []
+				for i in xrange (0, wheelNodeLength / 2):
+					result1.append(wheelNodeLength - delta[i])
+					result2.append(wheelNodeLength - delta[i] + 1)
+				result = result1 + result2
+				return wheelNodeNames[result.index(partIndex)]
+			
+			nodeName = getNodeNameByPartIndex(partIndex - len(TankPartIndexes.ALL))
+
+			if self.compoundModel:
+				partWorldMatrix = Math.Matrix()
+				partWorldMatrix.setTranslate(self.compoundModel.node(nodeName).position)
+				return partWorldMatrix
+		
 		partName = self.getComponentName(partIndex)
 		partLocalMatrix = Math.Matrix(self.__components[partName][1])
 		partWorldMatrix = Math.Matrix()
