@@ -1,0 +1,36 @@
+
+hits.sorting.num: №
+hits.sorting.tank: танк
+hits.sorting.result: результат
+hits.sorting.damage: урон
+
+hits.shotResult.intermediateRicochet: рикошет *
+hits.shotResult.finalRicochet: рикошет
+hits.shotResult.armorNotPierces: не пробито
+hits.shotResult.armorPiercesNoDamage: попадание
+hits.shotResult.armorPierces: урон
+hits.shotResult.criticalHit: крит
+hits.shotResult.splash: сплэш
+
+ui.typeMe: ПО МНЕ
+ui.typeEnemys: ПО ВРАГАМ
+ui.closeButton: ЗАКРЫТЬ
+ui.settingsButton: НАСТРОЙКИ
+ui.title: Просмотр попаданий
+
+ui.battle.noData: Не было сыграно ни одного боя
+ui.battle.multiVehicle:  +%s шт.
+ui.hits.noDataMe: В бою не было получено попаданий
+ui.hits.noDataEnemys: В бою не было нанесено попаданий
+ui.detailedhit.noData: '################'
+
+modslist.name: Просмотр попаданий
+modslist.description: Просмотр попаданий, полученных и нанесенных вами в проведённых боях.
+
+
+popover.titleLabel: Настройки
+popover.saveOnlySessionLabel: Только игровая сессия
+popover.saveOnlySessionDescription: {HEADER}Только игровая сессия{/HEADER}{BODY}Модификация будет сохранять информацию только о текущей игровой сессии (в противном случае будет сохраняться информация о всех боях).{/BODY}
+popover.processReplaysLabel: Обрабатывать реплеи
+popover.processReplaysDescription:  {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
+popover.changeStyleLabel: Изменить оформление
