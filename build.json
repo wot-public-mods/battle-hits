@@ -1,17 +1,18 @@
 {
 	"version": 1,
 	"software": {
-		"animate": "C:\\Program Files\\Adobe\\Adobe Animate CC 2019\\Animate.exe"
+		"animate": "C:\\Program Files\\Adobe\\Adobe Animate CC 2019\\Animate.exe",
+		"sonar": "sonar.cmd"
 	},
 	"game": {
-		"folder": "E:\\wot\\cis",
-		"version": "1.4.0.0"
+		"folder": "E:\\wot\\ct",
+		"version": "1.4.1.0 Common Test"
 	},
 	"info": {
 		"id": "battlehits",
 		"author": "poliroid",
 		"name": "Battle Hits",
 		"description": "Explore received and given hits by your vehicle in battle",
-		"version": "1.3.4"
+		"version": "1.3.5"
 	}
 }

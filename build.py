@@ -1,66 +1,74 @@
-
 import collections
 import compileall
 import datetime
 import json
 import os
-import shlex
 import shutil
 import subprocess
 import sys
 import zipfile
 
-# implementation of shutil.copytree 
-# original sometimes throw error on folders create
 def copytree(source, destination, ignore=None):
+	"""implementation of shutil.copytree
+	original sometimes throw error on folders create"""
 	for item in os.listdir(source):
+		# skip git files
 		if '.gitkeep' in item:
 			continue
 		sourcePath = os.path.join(source, item)
 		destinationPath = os.path.join(destination, item)
-		if os.path.isfile(sourcePath):
-			baseDir, fileName = os.path.split(destinationPath)
-			if not os.path.isdir(baseDir):
-				os.makedirs(baseDir)
-			if ignore:
-				ignored_names = ignore(source, os.listdir(source))
-				if fileName in ignored_names:
-					continue
-			shutil.copy2(sourcePath, destinationPath)
-		else:
+		# use copytree for directory
+		if not os.path.isfile(sourcePath):
 			copytree(sourcePath, destinationPath, ignore)
+			continue
+		# make dir by os module
+		dirName, fileName = os.path.split(destinationPath)
+		if not os.path.isdir(dirName):
+			os.makedirs(dirName)
+		# skip files by ignore pattern
+		if ignore:
+			ignored_names = ignore(source, os.listdir(source))
+			if fileName in ignored_names:
+				continue
+		# copy file
+		shutil.copy2(sourcePath, destinationPath)
 
-# ZipFile by default dont create folders info in result zip
 def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
-	def dirInfo(dirPath):
-		zi = zipfile.ZipInfo(dirPath, now)
-		zi.filename = zi.filename[seek_offset:]
-		if zi.filename:
-			if not zi.filename.endswith('/'): 
-				zi.filename += '/'
-			zi.compress_type = compression
-			return zi
-	def fileInfo(filePath):
-		zi = zipfile.ZipInfo(filePath, now)
-		zi.external_attr = 33206 << 16 # -rw-rw-rw-
-		zi.filename = zi.filename[seek_offset:]
-		zi.compress_type = compression
-		return zi
-	with zipfile.ZipFile(destination, mode, compression) as zip:
+	""" ZipFile by default dont create folders info in result zip """
+	def dirInfo(path):
+		"""return fixed ZipInfo for directory"""
+		info = zipfile.ZipInfo(path, now)
+		info.filename = info.filename[seek_offset:]
+		if not info.filename:
+			return None
+		if not info.filename.endswith('/'):
+			info.filename += '/'
+		info.compress_type = compression
+		return info
+	def fileInfo(path):
+		"""return fixed ZipInfo for file"""
+		info = zipfile.ZipInfo(path, now)
+		info.external_attr = 33206 << 16 # -rw-rw-rw-
+		info.filename = info.filename[seek_offset:]
+		info.compress_type = compression
+		return info
+	with zipfile.ZipFile(destination, mode, compression) as zipfh:
 		now = tuple(datetime.datetime.now().timetuple())[:6]
 		seek_offset = len(source) + 1
-		for dirPath, _, files in os.walk(source):
-			info = dirInfo(dirPath)
+		for dirName, _, files in os.walk(source):
+			info = dirInfo(dirName)
 			if info:
-				zip.writestr(info, '')
+				zipfh.writestr(info, '')
 			for fileName in files:
-				filePath = os.path.join(dirPath, fileName)
+				filePath = os.path.join(dirName, fileName)
 				info = fileInfo(filePath)
-				zip.writestr(info, open(filePath, 'rb').read())
+				zipfh.writestr(info, open(filePath, 'rb').read())
 
 # handle args from command line
 BUILD_FLASH = 'flash' in sys.argv
 COPY_INTO_GAME = 'ingame' in sys.argv
+CREATE_DISTRIBUTE = 'distribute' in sys.argv
+RUN_SONAR = 'sonar' in sys.argv
 
 # load config
 assert os.path.isfile('./build.json'), 'Config not found'
@@ -69,38 +77,38 @@ with open('./build.json', 'rb') as fh:
 	CONFIG = json.loads(fh.read(), object_hook=hook)
 
 # cheek ingame folder
-WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot = CONFIG.game.folder, version = CONFIG.game.version)
+WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot=CONFIG.game.folder, version=CONFIG.game.version)
 if COPY_INTO_GAME:
 	assert os.path.isdir(WOT_PACKAGES_DIR), 'Wot mods folder notfound'
 
 # package data
-PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format( author = CONFIG.info.author, \
-				name = CONFIG.info.id, version = CONFIG.info.version )
+PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format(author=CONFIG.info.author, \
+				name=CONFIG.info.id, version=CONFIG.info.version)
+
+# generate package meta file
 META = """<root>
-	
 	<!-- Techical MOD ID -->
 	<id>{id}</id>
-	
 	<!-- Package version -->
 	<version>{version}</version>
-	
 	<!-- Human readable name -->
 	<name>{name}</name>
-	
 	<!-- Human readable description -->
 	<description>{description}</description>
-</root>""".format( id = '%s.%s' % (CONFIG.info.author, CONFIG.info.id), name = CONFIG.info.name, \
-					description = CONFIG.info.description, version = CONFIG.info.version )
+</root>""".format(id='%s.%s' % (CONFIG.info.author, CONFIG.info.id), name=CONFIG.info.name, \
+					description=CONFIG.info.description, version=CONFIG.info.version)
 
 # prepere folders
 if os.path.isdir('./temp'):
 	shutil.rmtree('./temp')
-os.makedirs('./temp') 
+os.makedirs('./temp')
 if os.path.isdir('./build'):
 	shutil.rmtree('./build')
 os.makedirs('./build')
 if not os.path.isdir('./resources'):
 	os.makedirs('./resources')
+	os.makedirs('./resources/in')
+	os.makedirs('./resources/out')
 if not os.path.isdir('./as3/bin'):
 	os.makedirs('./as3/bin')
 
@@ -110,9 +118,10 @@ if BUILD_FLASH:
 	with open('./build.jsfl', 'wb') as fh:
 		for fileName in os.listdir('./as3'):
 			if fileName.endswith('fla'):
-				fh.write('fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'.format(path = flashWorkDir, fileName = fileName))
+				publishDocument = 'fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'
+				fh.write(publishDocument.format(path=flashWorkDir, fileName=fileName))
 		fh.write('fl.quit(false);')
-	subprocess.call(shlex.split('"{animate}" -e build.jsfl -AlwaysRunJSFL'.format(animate = CONFIG.software.animate)))
+	subprocess.call([CONFIG.software.animate, '-e', 'build.jsfl', '-AlwaysRunJSFL'])
 
 # build python
 for dirName, _, files in os.walk('python'):
@@ -124,7 +133,7 @@ for dirName, _, files in os.walk('python'):
 # copy all staff
 copytree('./as3/bin/', './temp/res/gui/flash')
 copytree('./python', './temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
-copytree('./resources', './temp/res')
+copytree('./resources/in', './temp/res')
 with open('temp/meta.xml', 'wb') as fh:
 	fh.write(META)
 
@@ -135,12 +144,27 @@ zipFolder('./temp', './build/%s' % PACKAGE_NAME)
 if COPY_INTO_GAME:
 	shutil.copy2('./build/%s' % PACKAGE_NAME, WOT_PACKAGES_DIR)
 
+# create distribution
+if CREATE_DISTRIBUTE:
+	os.makedirs('./temp/distribute/mods/%s' % CONFIG.game.version)
+	shutil.copy2('./build/%s' % PACKAGE_NAME, './temp/distribute/mods/%s' % CONFIG.game.version)
+	copytree('./resources/out', './temp/distribute')
+	zipFolder('./temp/distribute', './build/{name}_{version}.zip'.format(name=CONFIG.info.id, \
+				version=CONFIG.info.version))
+
 # clean up build files
 shutil.rmtree('temp')
-for dirname, _, files in os.walk('./python'):
-	for filename in files:
-		if filename.endswith('.pyc'):
-			os.remove(os.path.join(dirname, filename))
+
+# clean python build files
+for dirName, _, files in os.walk('./python'):
+	for fileName in files:
+		if fileName.endswith('.pyc'):
+			os.remove(os.path.join(dirName, fileName))
+
+# clean flash build files
 if BUILD_FLASH:
 	os.remove('build.jsfl')
-	
+
+# run sonar
+if RUN_SONAR:
+	subprocess.call([CONFIG.software.sonar])
