@@ -1,4 +1,3 @@
-
 class IHotkeys(object):
 	__slots__ = ()
 

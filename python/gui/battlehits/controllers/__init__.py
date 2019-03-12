@@ -1,10 +1,9 @@
-
-__all__ = ('AbstractController', )
-	
 from helpers import dependency
 from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera, \
 									IHangarScene, IHotkeys, IState, ISettings, IVehicle, \
 									IBattlesData, IHitsData, ICurrentBattleData)
+
+__all__ = ('AbstractController', )
 
 class AbstractController(object):
 
@@ -19,24 +18,24 @@ class AbstractController(object):
 	battlesData = dependency.descriptor(IBattlesData)
 	hitsData = dependency.descriptor(IHitsData)
 	currentBattleData = dependency.descriptor(ICurrentBattleData)
-	
+
 	def __init__(self):
 		self.__enabled = False
 
 	@property
 	def enabled(self):
 		return self.__enabled
-	
+
 	@enabled.setter
 	def enabled(self, value):
 		self.__enabled = value
 
 	def init(self):
 		pass
-	
+
 	def fini(self):
 		pass
-	
+
 def configure():
 	from helpers.dependency import _g_manager as manager
 	from gui.battlehits.controllers.BattlesHistory import BattlesHistory
@@ -67,4 +66,3 @@ _configured = False
 if not _configured:
 	_configured = True
 	configure()
-	

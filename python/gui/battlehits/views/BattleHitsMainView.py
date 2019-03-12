@@ -1,4 +1,3 @@
-
 import Keys
 
 from helpers import dependency
@@ -16,43 +15,39 @@ from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
 
 class BattleHitsMainViewMeta(LobbySubView, View):
-	
-	def hitsToPlayerClick(self):
+
+	def hitsToPlayerClick(self, hitsToPlayer):
 		self._printOverrideError('hitsToPlayerClick')
-	
-	def selectBattle(self):
+
+	def selectBattle(self, battleID):
 		self._printOverrideError('selectBattle')
-	
-	def selectHit(self):
+
+	def selectHit(self, hitID):
 		self._printOverrideError('selectHit')
-	
-	def sortClick(self):
+
+	def sortClick(self, sortRow):
 		self._printOverrideError('sortClick')
-	
+
 	def preferencesClick(self):
 		self._printOverrideError('preferencesClick')
-	
+
 	def as_setStaticDataS(self, data):
-		""" :param data: Represented by BatHitsStaticDataVO (AS)
-		"""
+		""":param data: Represented by BatHitsStaticDataVO (AS)"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_setStaticData(data)
 
 	def as_updateBattlesDPDataS(self, data):
-		""" :param data: Represented by BatHitsBattlesVO (AS)
-		"""
+		""":param data: Represented by BatHitsBattlesVO (AS)"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateBattlesDPData(data)
 
 	def as_updateHitsDPDataS(self, data):
-		""" :param data: Represented by BatHitsHitsVO (AS)
-		"""
+		""":param data: Represented by BatHitsHitsVO (AS)"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateHitsDPData(data)
 
 	def as_updateDetailedHitDataS(self, data):
-		""" :param data: Represented by BatHitsDetailedHitVO (AS)
-		"""
+		""":param data: Represented by BatHitsDetailedHitVO (AS)"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateDetailedHitData(data)
 
@@ -60,18 +55,18 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 
 	__sound_env__ = LobbySubViewEnv
 	__background_alpha__ = 0.0
-	
+
 	hotkeysCtrl = dependency.descriptor(IHotkeys)
 	settingsCtrl = dependency.descriptor(ISettings)
 	stateCtrl = dependency.descriptor(IState)
 	hits = dependency.descriptor(IHitsData)
 	battles = dependency.descriptor(IBattlesData)
 
-	def __init__(self, ctx = None):
+	def __init__(self, ctx=None):
 		super(BattleHitsMainView, self).__init__(ctx)
 		self.__vehicleCD = ctx.get('itemCD')
 		self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
-	
+
 	def _populate(self):
 		super(BattleHitsMainView, self)._populate()
 		self.__updateStaticData()
@@ -79,7 +74,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		g_eventsManager.invalidateHitsDP += self.__onHitsDPUpdated
 		g_eventsManager.closeMainView += self.closeView
 		self.hotkeysCtrl.addForced(self.handleKeyEvent)
-	
+
 	def _dispose(self):
 		g_eventsManager.invalidateBattlesDP -= self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP -= self.__onHitsDPUpdated
@@ -89,7 +84,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		if self.stateCtrl.enabled:
 			self.stateCtrl.switch()
 		super(BattleHitsMainView, self)._dispose()
-	
+
 	def closeView(self):
 		if self.__backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
 			event_dispatcher.showResearchView(self.__vehicleCD)
@@ -100,103 +95,103 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 	def hitsToPlayerClick(self, hitsToPlayer):
 		if self.settingsCtrl:
 			self.settingsCtrl.apply({SETTINGS.HITS_TO_PLAYER: hitsToPlayer})
-	
+
 	def selectBattle(self, battleID):
 		battleID = int(battleID)
 		if self.stateCtrl.currentBattleID != battleID:
 			self.stateCtrl.currentBattleID = battleID
-	
+
 	def selectHit(self, hitID):
 		hitID = int(hitID)
 		if self.stateCtrl.currentHitID != hitID:
 			self.stateCtrl.currentHitID = hitID
-	
+
 	def sortClick(self, sortRow):
 		sortRow = int(sortRow)
 		self.hits.sort(sortRow)
-	
+
 	def preferencesClick(self):
 		g_eventsManager.showPreferencesPopover()
-	
+
 	def handleKeyEvent(self, event):
+		result = False
 		if not event.isKeyDown():
-			return False
-		if event.key == Keys.KEY_UPARROW:
+			result = False
+		elif event.key == Keys.KEY_UPARROW:
 			self.selectBattle(self.battles.prevItemID)
-			return True
+			result = True
 		elif event.key == Keys.KEY_DOWNARROW:
 			self.selectBattle(self.battles.nextItemID)
-			return True
+			result = True
 		elif event.key == Keys.KEY_LEFTARROW:
 			self.selectHit(self.hits.prevItemID)
-			return True
+			result = True
 		elif event.key == Keys.KEY_RIGHTARROW:
 			self.selectHit(self.hits.nextItemID)
-			return True
+			result = True
 		elif event.key == Keys.KEY_TAB:
 			hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
 			self.hitsToPlayerClick(not hitsToPlayer)
 			self.__updateStaticData()
-			return True
+			result = True
 		elif event.key == Keys.KEY_ESCAPE:
 			self.closeView()
-			return True
-		return False
-	
+			result = True
+		return result
+
 	def __updateStaticData(self):
 		self.as_setStaticDataS(self.__getStaticData())
-	
+
 	def __getStaticData(self):
 		hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
 		if hitsToPlayer:
 			hitsNoDataLabel = l10n('ui.hits.noDataMe')
 		else:
 			hitsNoDataLabel = l10n('ui.hits.noDataEnemys')
-		
-		return {
-			'header': {
-				'closeBtnLabel': l10n('ui.closeButton'),
-				'settingsLabel': l10n('ui.settingsButton'),
-				'titleLabel': l10n('ui.title'),
-				'typeBtnMe': l10n('ui.typeMe'),
-				'typeBtnEnemys': l10n('ui.typeEnemys'),
-				'typeBtnMeActive': hitsToPlayer,
-				'typeBtnEnemysActive': not hitsToPlayer
-			},
-			'battles': {
-				'noDataLabel': l10n('ui.battle.noData'),
-				'battles': self.battles.dataVO,
-				'selectedIndex': self.battles.selectedIndex
-			},
-			'hits': {
-				'noDataLabel': hitsNoDataLabel,
-				'hits': self.hits.dataVO,
-				'sorting': self.hits.sortingVO,
-				'selectedIndex': self.hits.selectedIndex
-			},
-			'detailedHit': {
-				'noDataLabel': l10n('ui.detailedhit.noData')
-			}
+
+		return { \
+			'header': { \
+				'closeBtnLabel': l10n('ui.closeButton'), \
+				'settingsLabel': l10n('ui.settingsButton'), \
+				'titleLabel': l10n('ui.title'), \
+				'typeBtnMe': l10n('ui.typeMe'), \
+				'typeBtnEnemys': l10n('ui.typeEnemys'), \
+				'typeBtnMeActive': hitsToPlayer, \
+				'typeBtnEnemysActive': not hitsToPlayer \
+			}, \
+			'battles': { \
+				'noDataLabel': l10n('ui.battle.noData'), \
+				'battles': self.battles.dataVO, \
+				'selectedIndex': self.battles.selectedIndex \
+			}, \
+			'hits': { \
+				'noDataLabel': hitsNoDataLabel, \
+				'hits': self.hits.dataVO, \
+				'sorting': self.hits.sortingVO, \
+				'selectedIndex': self.hits.selectedIndex \
+			}, \
+			'detailedHit': { \
+				'noDataLabel': l10n('ui.detailedhit.noData') \
+			} \
 		}
-	
+
 	def __onBattlesDPUpdated(self):
-		self.as_updateBattlesDPDataS({
-			'noDataLabel': l10n('ui.battle.noData'),
-			'battles': self.battles.dataVO,
-			'selectedIndex': self.battles.selectedIndex
+		self.as_updateBattlesDPDataS({ \
+			'noDataLabel': l10n('ui.battle.noData'), \
+			'battles': self.battles.dataVO, \
+			'selectedIndex': self.battles.selectedIndex \
 		})
-	
+
 	def __onHitsDPUpdated(self):
 		hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
 		if hitsToPlayer:
 			noDataLabel = l10n('ui.hits.noDataMe')
 		else:
 			noDataLabel = l10n('ui.hits.noDataEnemys')
-		
-		self.as_updateHitsDPDataS({
-			'noDataLabel': noDataLabel,
-			'hits': self.hits.dataVO,
-			'sorting': self.hits.sortingVO,
-			'selectedIndex': self.hits.selectedIndex
+
+		self.as_updateHitsDPDataS({ \
+			'noDataLabel': noDataLabel, \
+			'hits': self.hits.dataVO, \
+			'sorting': self.hits.sortingVO, \
+			'selectedIndex': self.hits.selectedIndex \
 		})
-	

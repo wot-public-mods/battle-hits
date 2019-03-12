@@ -3,10 +3,10 @@ import types
 import ResMgr
 import Math
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS' \
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', \
 			'generateWheelsData', 'unpackMatrix', 'packMatrix')
 
-def override(holder, name, target = None):
+def override(holder, name, target=None):
 	"""using for override any staff"""
 	if target is None:
 		return lambda target: override(holder, name, target)
@@ -21,47 +21,47 @@ def override(holder, name, target = None):
 
 def byteify(data):
 	"""using for convert unicode key/value to utf-8"""
-	if isinstance(data, types.DictType): 
-		return { byteify(key): byteify(value) for key, value in data.iteritems() }
-	elif isinstance(data, types.ListType) or isinstance(data, tuple) or isinstance(data, set):
-		return [ byteify(element) for element in data ]
+	result = data
+	if isinstance(data, types.DictType):
+		result = {byteify(key): byteify(value) for key, value in data.iteritems()}
+	elif isinstance(data, (set, tuple, types.ListType)):
+		result = [byteify(element) for element in data]
 	elif isinstance(data, types.UnicodeType):
-		return data.encode('utf-8')
-	else: 
-		return data
+		result = data.encode('utf-8')
+	return result
 
 def getShell(vehicleDescriptor, effectsIndex):
 	"""get shellDescr by effectsIndex"""
-	for shell in vehicleDescriptor.gun.shots:
-		if effectsIndex == shell.shell.effectsIndex:
-			return shell
+	for shellDescr in vehicleDescriptor.gun.shots:
+		if effectsIndex == shellDescr.shell.effectsIndex:
+			return shellDescr
 	return None
 
 def getShellParams(vehicleDescriptor, effectsIndex):
 	"""form shell params from shellDescr"""
 	from constants import SHELL_TYPES
 	shellType, shellSplash = 0, 0.0
-	shell = getShell(vehicleDescriptor, effectsIndex)
-	if shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
+	shellDescr = getShell(vehicleDescriptor, effectsIndex)
+	if shellDescr.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
 		shellType = 0
-	elif shell.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:
+	elif shellDescr.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:
 		shellType = 1
-	elif shell.shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
+	elif shellDescr.shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
 		shellType = 2
-	elif shell.shell.kind in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
+	elif shellDescr.shell.kind in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
 		shellType = 3
-		shellSplash = shell.shell.type.explosionRadius
-	return (shellType, shellSplash, )
+		shellSplash = shellDescr.shell.type.explosionRadius
+	return shellType, shellSplash
 
 def parseLangFields(langCode):
-	"""split items by lines and key value by : 
-	like yaml format"""
+	"""split items by lines and key value by ': ' like yaml format"""
 	from gui.battlehits._constants import LANGUAGE_FILE_PATH
 	result = {}
 	langData = readFromVFS(LANGUAGE_FILE_PATH % langCode)
 	if langData:
 		for item in langData.splitlines():
-			if ': ' not in item: continue
+			if ': ' not in item:
+				continue
 			key, value = item.split(": ", 1)
 			result[key] = value
 	return result

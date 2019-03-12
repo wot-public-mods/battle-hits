@@ -1,4 +1,3 @@
-
 class IBattleProcessor(object):
 	__slots__ = ()
 

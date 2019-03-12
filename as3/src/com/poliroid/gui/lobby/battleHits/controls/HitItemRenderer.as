@@ -70,16 +70,13 @@ package com.poliroid.gui.lobby.battleHits.controls
 		override protected function draw() : void 
 		{
 			super.draw();
-			if(model != null)
+			if ((model != null) && (isInvalid(InvalidationType.DATA)))
 			{
-				if (isInvalid(InvalidationType.DATA)) 
-				{
-					hitIdTF.text = model.numberLabel;
-					vehicleTF.text = model.vehicleLabel;
-					resultTF.text = model.resultLabel;
-					shellTF.text = model.shellLabel;
-					damageTF.text = model.damageLabel;
-				}
+				hitIdTF.text = model.numberLabel;
+				vehicleTF.text = model.vehicleLabel;
+				resultTF.text = model.resultLabel;
+				shellTF.text = model.shellLabel;
+				damageTF.text = model.damageLabel;
 			}
 		}
 		

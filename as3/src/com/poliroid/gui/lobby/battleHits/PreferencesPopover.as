@@ -62,7 +62,7 @@
 			height = 125;
 		}
 		
-		private function handeStyleClick(e:MouseEvent) 
+		private function handeStyleClick() : void 
 		{
 			invokeStyleS();
 		}

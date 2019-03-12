@@ -33,12 +33,6 @@
 	public class BattleHits extends BattleHitsMeta implements IBattleHitsMeta
 	{
 		
-		private static const BOTTOM_MARGIN:int = 100;
-		
-		private static const BOTTOM_OFFSET:Number = 50;
-		
-		private static const GAP:int = 2;
-		
 		private static const POPOVER_ALIAS:String = 'BattleHitsPreferencesPopover';
 		
 		private static const ANIMATION_DURATION:int = 200;

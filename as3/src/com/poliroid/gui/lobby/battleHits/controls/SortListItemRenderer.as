@@ -57,15 +57,12 @@ package com.poliroid.gui.lobby.battleHits.controls
 		override protected function draw() : void 
 		{
 			super.draw();
-			if(model != null)
+			if ((model != null) && (isInvalid(InvalidationType.DATA)))
 			{
-				if (isInvalid(InvalidationType.DATA)) 
-				{
-					labelTF.text = model.label;
-					activeMC.visible = model.active;
-					orderAscMC.visible = model.active && model.reversed;
-					orderDescMC.visible = model.active && !model.reversed;
-				}
+				labelTF.text = model.label;
+				activeMC.visible = model.active;
+				orderAscMC.visible = model.active && model.reversed;
+				orderDescMC.visible = model.active && !model.reversed;
 			}
 		}
 		

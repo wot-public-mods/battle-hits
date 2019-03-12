@@ -1,4 +1,3 @@
-
 class IBattlesHistory(object):
 	__slots__ = ()
 

@@ -1,5 +1,4 @@
-
-__all__ = ('IBattlesHistory', 'IBattleProcessor', 'IHangarCamera', 'IHangarScene', 'IHotkeys' \
+__all__ = ('IBattlesHistory', 'IBattleProcessor', 'IHangarCamera', 'IHangarScene', 'IHotkeys', \
 			'IState', 'ISettings', 'IVehicle', 'IBattlesData', 'IHitsData', 'ICurrentBattleData')
 
 from gui.battlehits.skeletons.IBattlesHistory import IBattlesHistory

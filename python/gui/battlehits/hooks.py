@@ -1,19 +1,26 @@
-
 import BigWorld
+import game
 
+from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from helpers import dependency
-
+from gui.app_loader.settings import APP_NAME_SPACE, GUI_GLOBAL_SPACE_ID
+from gui.app_loader.loader import g_appLoader
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState
 from gui.battlehits.utils import override
+from gui.ClientHangarSpace import ClientHangarSpace
+from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
+from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
+from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
+from gui.prb_control.prb_getters import getQueueType
+from gui.prb_control.events_dispatcher import EventDispatcher
+from gui.shared import g_eventBus, events
+from Vehicle import Vehicle
+from vehicle_systems.CompoundAppearance import CompoundAppearance
 
 __all__ = ()
-
-from gui.app_loader.settings import APP_NAME_SPACE, GUI_GLOBAL_SPACE_ID
-from gui.app_loader.loader import g_appLoader
-from gui.shared import g_eventBus, events
 
 # app battle loaded
 def onGUISpaceEntered(spaceID):
@@ -30,19 +37,13 @@ def onAppDestroyed(event):
 g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
 
 # fix space change vehicle getVehicleEntity error
-from gui.ClientHangarSpace import ClientHangarSpace
 @override(ClientHangarSpace, 'getVehicleEntity')
 def getVehicleEntity(baseMethod, baseObject):
 	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
 
-
 # hangarCamera
-from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
-from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
-from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
-
 @override(HangarCameraManager, "_HangarCameraManager__updateCameraByMouseMove")
-def updateCameraByMouseMove(baseMethod, baseObject, *args):
+def hangarCameraManager_updateCameraByMouseMove(baseMethod, baseObject, *args):
 	hangarCamera = dependency.instance(IHangarCamera)
 	if hangarCamera.enabled:
 		hangarCamera.updateCamera(*args)
@@ -50,26 +51,20 @@ def updateCameraByMouseMove(baseMethod, baseObject, *args):
 		baseMethod(baseObject, *args)
 
 @override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
-def onModelsRefresh(baseMethod, baseObject):
+def hangarCameraIdle_updateIdleMovement(baseMethod, baseObject):
 	hangarCamera = dependency.instance(IHangarCamera)
 	if not hangarCamera.enabled:
 		return baseMethod(baseObject)
 	return 0.0
 
 @override(HangarCameraParallax, "_HangarCameraParallax__update")
-def onModelsRefresh(baseMethod, baseObject):
+def hangarCameraParallax_update(baseMethod, baseObject):
 	hangarCamera = dependency.instance(IHangarCamera)
 	if not hangarCamera.enabled:
 		return baseMethod(baseObject)
 	return 0.0
 
-
-
 # battlesHistory
-
-from Vehicle import Vehicle
-from vehicle_systems.CompoundAppearance import CompoundAppearance
-
 @override(Vehicle, "showDamageFromShot")
 def showDamageFromShot(baseMethod, baseObject, attackerID, points, effectsIndex, damageFactor):
 	baseMethod(baseObject, attackerID, points, effectsIndex, damageFactor)
@@ -100,11 +95,7 @@ def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 	battleProcessor = dependency.instance(IBattleProcessor)
 	battleProcessor.onModelsRefresh(baseObject._CompoundAppearance__vehicle, modelState)
 
-
 # handling keystrokes
-
-import game
-
 @override(game, 'handleKeyEvent')
 def handleKeyEvent(baseMethod, event):
 	# handling forced keylistners
@@ -114,19 +105,19 @@ def handleKeyEvent(baseMethod, event):
 			return True
 	# handling ingame logic
 	result = baseMethod(event)
-	# firing key event 
+	# firing key event
 	g_eventsManager.onKeyEvent(event, result)
 	return result
 
-
-
 # Data Collect
-from gui.battlehits import __version__
-from gui.battlehits.data_collector import g_dataCollector
-g_dataCollector.addSoloMod('battle_hit', __version__)
-
-
-
+g_dataCollector = None
+try:
+	from gui.battlehits import __version__
+	from gui.battlehits.data_collector import g_dataCollector
+except ImportError:
+	LOG_ERROR('datacollector broken')
+if g_dataCollector:
+	g_dataCollector.addSoloMod('battle_hit', __version__)
 
 # modsListApi
 g_modsListApi = None
@@ -134,19 +125,12 @@ try:
 	from gui.modsListApi import g_modsListApi
 except ImportError:
 	LOG_ERROR('modsListApi not installed')
-if g_modsListApi: 
-	g_modsListApi.addModification(
-		id = 'battlehits', name = l10n('modslist.name'), description = l10n('modslist.description'), \
-		icon = 'gui/maps/battlehits/modsListApi.png', enabled = True, login = False, lobby = True, \
-		callback = lambda : dependency.instance(IState).switch()
-	)
+if g_modsListApi:
+	g_modsListApi.addModification(id='battlehits', name=l10n('modslist.name'), enabled=True, \
+		description=l10n('modslist.description'), icon='gui/maps/battlehits/modsListApi.png', \
+		login=False, lobby=True, callback=lambda: dependency.instance(IState).switch())
 
 # disable open button in battle queue
-
-from constants import QUEUE_TYPE
-from gui.prb_control.prb_getters import getQueueType
-from gui.prb_control.events_dispatcher import EventDispatcher
-
 @override(EventDispatcher, 'loadBattleQueue')
 def loadBattleQueue(baseMethod, baseObject):
 	base = baseMethod(baseObject)
@@ -154,7 +138,7 @@ def loadBattleQueue(baseMethod, baseObject):
 	return base
 
 @override(EventDispatcher, 'loadHangar')
-def loadBattleQueue(baseMethod, baseObject):
+def loadHangar(baseMethod, baseObject):
 	base = baseMethod(baseObject)
 	handleAvailability()
 	return base
@@ -162,9 +146,9 @@ def loadBattleQueue(baseMethod, baseObject):
 def handleAvailability():
 	isInQueue = getQueueType() != QUEUE_TYPE.UNKNOWN
 	if g_modsListApi is not None:
-		g_modsListApi.updateModification(id = "battlehits", enabled = not isInQueue)
+		g_modsListApi.updateModification(id="battlehits", enabled=not isInQueue)
 	state = dependency.instance(IState)
 	if isInQueue and state.enabled:
 		state.switch()
-	
+
 g_eventsManager.onDestroyBattle += handleAvailability

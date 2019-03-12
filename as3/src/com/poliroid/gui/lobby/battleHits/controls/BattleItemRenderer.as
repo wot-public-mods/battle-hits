@@ -64,14 +64,11 @@ package com.poliroid.gui.lobby.battleHits.controls
 		override protected function draw() : void 
 		{
 			super.draw();
-			if(model != null)
+			if ((model != null) && (isInvalid(InvalidationType.DATA)))
 			{
-				if (isInvalid(InvalidationType.DATA)) 
-				{
-					mapNameTF.text = model.mapNameLabel;
-					tankNameTF.text = model.vehicleNameLabel;
-					dateTimeTF.text = model.battleStartLabel;
-				}
+				mapNameTF.text = model.mapNameLabel;
+				tankNameTF.text = model.vehicleNameLabel;
+				dateTimeTF.text = model.battleStartLabel;
 			}
 		}
 		

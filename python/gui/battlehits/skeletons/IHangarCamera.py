@@ -1,4 +1,3 @@
-
 class IHangarCamera(object):
 	__slots__ = ()
 
@@ -11,9 +10,9 @@ class IHangarCamera(object):
 
 	def disable(self):
 		raise NotImplementedError
-	
-	def setCameraData(self, default, current, limits, sens, target, forceUpdate = False):
+
+	def setCameraData(self, default, current, lim, sens, target, forceUpdate=False):
 		raise NotImplementedError
-	
+
 	def updateCamera(self, dx, dy, dz):
 		raise NotImplementedError

@@ -1,122 +1,83 @@
-
 import datetime
 import ArenaType
-from helpers import i18n, dependency
+from helpers import i18n
 from items import vehicles
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
-from gui.battlehits.data import AbstractData
-
+from gui.battlehits.data import AbstractDataProvider
 
 def getVehicleLabel(battleData):
-
+	# get playerVehicleID from players ctx list
 	playerVehicleID = None
-
 	for vehicleID, userCtx in battleData['players'].iteritems():
 		if userCtx['isPlayer']:
 			playerVehicleID = vehicleID
 			break
-	
 	if not playerVehicleID:
 		return '#unknown'
-	
 	if playerVehicleID not in battleData['vehicles']:
 		return '#unknown'
-	
 	resultStr = ""
 	vehiclesCounter = 0
-	
+	# in case multivehicles
 	for compactDescr in battleData['vehicles'][playerVehicleID]:
-		vehicle = vehicles.VehicleDescr(compactDescr = compactDescr)
+		vehicle = vehicles.VehicleDescr(compactDescr=compactDescr)
 		if resultStr != "":
 			vehiclesCounter += 1
 		else:
 			resultStr = vehicle.type.shortUserString
-	
 	if vehiclesCounter:
 		resultStr += l10n('ui.battle.multiVehicle') % str(vehiclesCounter)
-	
 	return resultStr
 
 
-class Battles(AbstractData):
-	
-	dataVO = property(lambda self : self.__dataVO)
-	selectedIndex = property(lambda self : self.__selectedIndex)
-	nextItemID = property(lambda self : self.__getItemID(1))
-	prevItemID = property(lambda self : self.__getItemID(-1))
-	desiredID = property(lambda self : self.__getDesiredID())
-	
+class Battles(AbstractDataProvider):
+
 	def __init__(self):
 		super(Battles, self).__init__()
-		self.__dataVO = []
+		self.dataVO = []
+		self.selectedIndex = -1
 		self.__sortingReversed = True
 		self.__sortingRule = (int, "id")
-		self.__selectedIndex = -1
-	
+
 	def init(self):
 		g_eventsManager.onChangedBattleData += self.__updateData
 		self.updateData()
-	
-	def __updateData(self, _ = None):
+
+	def __updateData(self):
 		self.updateData()
 		g_eventsManager.invalidateBattlesDP()
-	
-	def updateData(self, _ = None):
-		
-		self.__dataVO = []
-		self.__selectedIndex = -1
-		
+
+	def updateData(self):
+		self.dataVO = []
+		self.selectedIndex = -1
+
 		if not self.battlesHistoryCtrl or not self.battlesHistoryCtrl.history:
 			return
-		
+
 		for battleID, battleData in enumerate(self.battlesHistoryCtrl.history):
-			
+
 			arenaTypeID = battleData['common']['arenaTypeID']
 			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
-
-			mapNameLabel = i18n.makeString(ArenaType.g_cache[arenaTypeID].name)
-			vehicleNameLabel = getVehicleLabel(battleData)
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
-			
-			self.__dataVO.append({
-				"id": battleID,
-				"mapNameLabel": mapNameLabel,
-				"vehicleNameLabel": vehicleNameLabel,
-				"battleStartLabel": battleStartLabel
+
+			self.dataVO.append({ \
+				"id": battleID, \
+				"mapNameLabel": i18n.makeString(ArenaType.g_cache[arenaTypeID].name), \
+				"vehicleNameLabel": getVehicleLabel(battleData), \
+				"battleStartLabel": battleStartLabel \
 			})
-		
-		self.__dataVO = sorted(self.__dataVO, key = lambda x: self.__sortingRule[0](x[self.__sortingRule[1]]), reverse = self.__sortingReversed)
-		
-		for itemID, battleVO in enumerate(self.__dataVO):
+
+		rule = self.__sortingRule
+		self.dataVO = sorted(self.dataVO, key=lambda x: rule[0](x[rule[1]]), reverse=self.__sortingReversed)
+
+		for itemID, battleVO in enumerate(self.dataVO):
 			if battleVO["id"] == self.stateCtrl.currentBattleID:
-				self.__selectedIndex = itemID
+				self.selectedIndex = itemID
 				break
-	
-	def __getDesiredID(self):
-		result = -1
-		self.updateData()
-		if self.__dataVO:
-			result = self.__dataVO[0]["id"]
-		return result
-	
-	def __getItemID(self, offset):
-		
-		if self.__selectedIndex == -1:
-			return -1
-		
-		destination = self.__selectedIndex + offset
-		
-		if len(self.__dataVO) > destination and destination > -1:
-			return self.__dataVO[destination]['id']
-		else:
-			return self.__dataVO[self.__selectedIndex]['id']
-		return 0
-	
+
 	def clean(self):
-		
 		g_eventsManager.onChangedBattleData -= self.__updateData
-		
-		self.__selectedIndex = -1
-		self.__dataVO = []
+		self.selectedIndex = -1
+		self.dataVO = []

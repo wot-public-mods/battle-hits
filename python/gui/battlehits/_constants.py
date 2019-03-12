@@ -1,6 +1,8 @@
+import math
+import os
 
-import BigWorld, os, math, Math
-
+import BigWorld
+import Math
 
 LANGUAGE_CODES = ('ru', 'uk', 'be', 'en', 'de', 'et', 'bg', 'da', 'fi', 'fil', 'fr', 'el', \
 					'hu', 'id', 'it', 'ja', 'ms', 'nl', 'no', 'pl', 'pt', 'pt_br', 'ro', \
@@ -22,13 +24,13 @@ class SETTINGS:
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
 
-DEFAULT_SETTINGS = {
-	SETTINGS.PROCESS_REPLAYS: False,
-	SETTINGS.SAVE_ONLY_SESSION: True,
-	SETTINGS.CURRENT_STYLE: 'style1',
-	SETTINGS.SORTING_RULE: 1,
-	SETTINGS.SORTING_REVERSED: True,
-	SETTINGS.HITS_TO_PLAYER: True
+DEFAULT_SETTINGS = { \
+	SETTINGS.PROCESS_REPLAYS: False, \
+	SETTINGS.SAVE_ONLY_SESSION: True, \
+	SETTINGS.CURRENT_STYLE: 'style1', \
+	SETTINGS.SORTING_RULE: 1, \
+	SETTINGS.SORTING_REVERSED: True, \
+	SETTINGS.HITS_TO_PLAYER: True \
 }
 
 class MODEL_TYPES:
@@ -44,23 +46,24 @@ class MODEL_NAMES:
 	SPLASH = ('large', 'middle', 'small', )
 	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', \
 				'15', 'cross', )
-	
-class MODEL_PATHS:
-	SHELL = 'content/interface/battlehits/%s/shells/%s/shell.model'
-	EFFECT = 'content/interface/battlehits/%s/effects/%s/effect.model'
-	SPLASH = 'content/interface/battlehits/%s/explosions/%s/explosion.model'
-	RICOCHET = 'content/interface/battlehits/%s/ricochets/%s/ricochet.model'
-	DOME = 'content/interface/battlehits/static/doom.model'
 
-wgAppDataFolder = os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8',
-									 errors='ignore'))
+class MODEL_PATHS:
+	SHELL = 'content/battlehits/%s/shells/%s/shell.model'
+	EFFECT = 'content/battlehits/%s/effects/%s/effect.model'
+	SPLASH = 'content/battlehits/%s/explosions/%s/explosion.model'
+	RICOCHET = 'content/battlehits/%s/ricochets/%s/ricochet.model'
+	DOME = 'content/battlehits/doom/doom.model'
+
+preferencesFilePath = BigWorld.wg_getPreferencesFilePath()
+wgAppDataFolder = os.path.dirname(unicode(preferencesFilePath, 'utf-8', errors='ignore'))
+
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 10
 CACHE_VERSION = 18
 
-SCENE_OFFSET = Math.Vector3(0.0, 100.0, 0.0)
+SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 
 CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160), \
 				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001), \
@@ -68,4 +71,4 @@ CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25
 
-del wgAppDataFolder, BigWorld, os, Math, math
+del wgAppDataFolder, preferencesFilePath, BigWorld, os, Math, math

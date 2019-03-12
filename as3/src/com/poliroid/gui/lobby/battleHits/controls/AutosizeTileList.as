@@ -8,7 +8,7 @@
 	
 	import net.wg.gui.components.controls.SimpleTileList;
 	
-	public dynamic class AutosizeTileList extends SimpleTileList
+	public class AutosizeTileList extends SimpleTileList
 	{
 		private static const INVALIDATE_LAYOUT:String = "invalidate_layout";
 		

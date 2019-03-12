@@ -1,4 +1,3 @@
-
 class IHitsData(object):
 	__slots__ = ()
 
@@ -25,9 +24,9 @@ class IHitsData(object):
 	@property
 	def desiredID(self):
 		raise NotImplementedError
-	
+
 	def updateData(self):
 		raise NotImplementedError
-	
+
 	def sort(self, row):
 		raise NotImplementedError

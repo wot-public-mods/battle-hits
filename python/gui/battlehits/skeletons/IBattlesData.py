@@ -1,4 +1,3 @@
-
 class IBattlesData(object):
 	__slots__ = ()
 
@@ -21,6 +20,6 @@ class IBattlesData(object):
 	@property
 	def desiredID(self):
 		raise NotImplementedError
-	
+
 	def updateData(self):
 		raise NotImplementedError

@@ -27,12 +27,11 @@ package com.poliroid.gui.lobby.battleHits.data
 			
 			if(param1 == BATTLES_FIELD_NAME)
 			{
-				var battle:Object = null;
 				var battles:Array = param2 as Array;
 				
 				battlesList = [];
 				
-				for each(battle in battles)
+				for each(var battle:Object in battles)
 				{
 					battlesList.push(new BatHitsBattleVO(battle));
 				}

@@ -47,14 +47,11 @@
 		override protected function draw() : void 
 		{
 			super.draw();
-			if(model != null)
+			if ((model != null) && (isInvalid(InvalidationType.DATA)))
 			{
-				if (isInvalid(InvalidationType.DATA)) 
-				{
-					labelTF.text = model.label;
-					orderMC.visible = model.active;
-					orderMC.gotoAndStop(model.reversed ? 'desc':'asc');
-				}
+				labelTF.text = model.label;
+				orderMC.visible = model.active;
+				orderMC.gotoAndStop(model.reversed ? 'desc':'asc');
 			}
 		}
 		

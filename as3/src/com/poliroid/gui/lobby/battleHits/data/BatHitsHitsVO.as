@@ -32,12 +32,11 @@ package com.poliroid.gui.lobby.battleHits.data
 			
 			if(param1 == HITS_FIELD_NAME)
 			{
-				var hitItem:Object = null;
 				var hitItems:Array = param2 as Array;
 				
 				hitsList = [];
 				
-				for each(hitItem in hitItems)
+				for each(var hitItem:Object in hitItems)
 				{
 					hitsList.push(new BatHitsHitVO(hitItem));
 				}
@@ -46,12 +45,11 @@ package com.poliroid.gui.lobby.battleHits.data
 			
 			if(param1 == SORTING_FIELD_NAME)
 			{
-				var sortItem:Object = null;
 				var sortItems:Array = param2 as Array;
 				
 				sortList = [];
 				
-				for each(sortItem in sortItems)
+				for each(var sortItem:Object in sortItems)
 				{
 					sortList.push(new BatHitsSortItemVO(sortItem));
 				}
