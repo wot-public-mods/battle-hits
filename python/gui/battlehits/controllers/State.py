@@ -1,4 +1,6 @@
 
+import BigWorld
+from Account import PlayerAccount
 from gui import ClientHangarSpace as chs
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
@@ -116,7 +118,11 @@ class State(AbstractController):
 		self.currentBattleData.clean()
 
 		chs._EVENT_HANGAR_PATHS = self.__savedHangarData["_EVENT_HANGAR_PATHS"]
-		g_clientHangarSpaceOverride.setPath(path=self.__savedHangarData["path"], isPremium=self.hangarSpace.isPremium)
+
+		isHangar = isinstance(BigWorld.player(), PlayerAccount)
+		if isHangar:
+			g_clientHangarSpaceOverride.setPath(path=self.__savedHangarData["path"], \
+												isPremium=self.hangarSpace.isPremium)
 
 		self.enabled = False
 
