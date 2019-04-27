@@ -8,28 +8,28 @@ from gui.battlehits.lang import l10n
 from gui.battlehits.utils import getShellParams
 from gui.battlehits.data import AbstractDataProvider
 
-_SORTING_LABELS = { \
-	1: l10n('hits.sorting.num'), \
-	2: l10n('hits.sorting.tank'), \
-	3: l10n('hits.sorting.result'), \
-	4: l10n('hits.sorting.damage') \
+_SORTING_LABELS = {
+	1: l10n('hits.sorting.num'),
+	2: l10n('hits.sorting.tank'),
+	3: l10n('hits.sorting.result'),
+	4: l10n('hits.sorting.damage')
 }
 
-_SHELL_LABELS = { \
-	0: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING, \
-	1: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR, \
-	2: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE, \
-	3: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE, \
+_SHELL_LABELS = {
+	0: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING,
+	1: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR,
+	2: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
+	3: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 }
 
-_RESULT_LABELS = { \
-	0: l10n('hits.shotResult.intermediateRicochet'), \
-	1: l10n('hits.shotResult.finalRicochet'), \
-	2: l10n('hits.shotResult.armorNotPierces'), \
-	3: l10n('hits.shotResult.armorPiercesNoDamage'), \
-	4: l10n('hits.shotResult.armorPierces'), \
-	5: l10n('hits.shotResult.criticalHit'), \
-	6: l10n('hits.shotResult.splash'), \
+_RESULT_LABELS = {
+	0: l10n('hits.shotResult.intermediateRicochet'),
+	1: l10n('hits.shotResult.finalRicochet'),
+	2: l10n('hits.shotResult.armorNotPierces'),
+	3: l10n('hits.shotResult.armorPiercesNoDamage'),
+	4: l10n('hits.shotResult.armorPierces'),
+	5: l10n('hits.shotResult.criticalHit'),
+	6: l10n('hits.shotResult.splash'),
 }
 
 class Hits(AbstractDataProvider):
@@ -48,11 +48,11 @@ class Hits(AbstractDataProvider):
 		self.__sortingRule = self.settingsCtrl.get(SETTINGS.SORTING_RULE)
 		self.__hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, True)
 
-		self.__sortingMap = { \
-			1 : (int, "id", True), \
-			2 : (str, "vehicle", False), \
-			3 : (sum, "result", True), \
-			4 : (int, "damage", True) \
+		self.__sortingMap = {
+			1 : (int, "id", True),
+			2 : (str, "vehicle", False),
+			3 : (sum, "result", True),
+			4 : (int, "damage", True)
 		}
 
 	def init(self):
@@ -106,13 +106,13 @@ class Hits(AbstractDataProvider):
 			if hitResult != [4] and hitData['damageFactor'] > 0:
 				hitResult += [4]
 
-			self.__data.append({ \
-				"id": hitID, \
-				"number": hitNumber, \
-				"vehicle": vehicleCompDesc.type.shortUserString, \
-				"result": hitResult, \
-				"shell": shellType, \
-				"damage": hitData["damage"] \
+			self.__data.append({
+				"id": hitID,
+				"number": hitNumber,
+				"vehicle": vehicleCompDesc.type.shortUserString,
+				"result": hitResult,
+				"shell": shellType,
+				"damage": hitData["damage"]
 			})
 
 			hitNumber += 1
@@ -130,13 +130,13 @@ class Hits(AbstractDataProvider):
 			resultLabel = " + ".join([_RESULT_LABELS[x] for x in itemData["result"]])
 			shellLabel = _SHELL_LABELS[itemData["shell"]]
 			damageLabel = str(itemData["damage"]) if itemData["damage"] > 0 else "--"
-			self.dataVO.append({ \
-				"id": itemData["id"], \
-				"numberLabel": str(itemData["number"]), \
-				"vehicleLabel": itemData["vehicle"], \
-				"resultLabel": resultLabel, \
-				"shellLabel": shellLabel, \
-				"damageLabel": damageLabel \
+			self.dataVO.append({
+				"id": itemData["id"],
+				"numberLabel": str(itemData["number"]),
+				"vehicleLabel": itemData["vehicle"],
+				"resultLabel": resultLabel,
+				"shellLabel": shellLabel,
+				"damageLabel": damageLabel
 			})
 
 	def __updateSorting(self, appendReverse=False):
@@ -145,12 +145,12 @@ class Hits(AbstractDataProvider):
 		if appendReverse:
 			self.__sortingReversed = rule[2]
 
-		self.__data = sorted(self.__data, key=lambda x: rule[0](x[rule[1]]), \
+		self.__data = sorted(self.__data, key=lambda x: rule[0](x[rule[1]]),
 							reverse=self.__sortingReversed)
 
 		if self.__data:
 			def genSortItemVO(id, label):
-				return {'id': id, 'label': label, 'active': self.__sortingRule == id, \
+				return {'id': id, 'label': label, 'active': self.__sortingRule == id,
 						'reversed': self.__sortingReversed}
 
 			self.__sortingVO = [genSortItemVO(x, _SORTING_LABELS[x]) for x in xrange(1, 5)]
@@ -172,7 +172,7 @@ class Hits(AbstractDataProvider):
 
 		g_eventsManager.invalidateHitsDP()
 
-		self.settingsCtrl.apply({SETTINGS.SORTING_REVERSED: self.__sortingReversed, \
+		self.settingsCtrl.apply({SETTINGS.SORTING_REVERSED: self.__sortingReversed,
 									SETTINGS.SORTING_RULE: self.__sortingRule})
 
 	def clean(self):

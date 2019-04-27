@@ -149,37 +149,37 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		else:
 			hitsNoDataLabel = l10n('ui.hits.noDataEnemys')
 
-		return { \
-			'header': { \
-				'closeBtnLabel': l10n('ui.closeButton'), \
-				'settingsLabel': l10n('ui.settingsButton'), \
-				'titleLabel': l10n('ui.title'), \
-				'typeBtnMe': l10n('ui.typeMe'), \
-				'typeBtnEnemys': l10n('ui.typeEnemys'), \
-				'typeBtnMeActive': hitsToPlayer, \
-				'typeBtnEnemysActive': not hitsToPlayer \
-			}, \
-			'battles': { \
-				'noDataLabel': l10n('ui.battle.noData'), \
-				'battles': self.battles.dataVO, \
-				'selectedIndex': self.battles.selectedIndex \
-			}, \
-			'hits': { \
-				'noDataLabel': hitsNoDataLabel, \
-				'hits': self.hits.dataVO, \
-				'sorting': self.hits.sortingVO, \
-				'selectedIndex': self.hits.selectedIndex \
-			}, \
-			'detailedHit': { \
-				'noDataLabel': l10n('ui.detailedhit.noData') \
-			} \
+		return {
+			'header': {
+				'closeBtnLabel': l10n('ui.closeButton'),
+				'settingsLabel': l10n('ui.settingsButton'),
+				'titleLabel': l10n('ui.title'),
+				'typeBtnMe': l10n('ui.typeMe'),
+				'typeBtnEnemys': l10n('ui.typeEnemys'),
+				'typeBtnMeActive': hitsToPlayer,
+				'typeBtnEnemysActive': not hitsToPlayer
+			},
+			'battles': {
+				'noDataLabel': l10n('ui.battle.noData'),
+				'battles': self.battles.dataVO,
+				'selectedIndex': self.battles.selectedIndex
+			},
+			'hits': {
+				'noDataLabel': hitsNoDataLabel,
+				'hits': self.hits.dataVO,
+				'sorting': self.hits.sortingVO,
+				'selectedIndex': self.hits.selectedIndex
+			},
+			'detailedHit': {
+				'noDataLabel': l10n('ui.detailedhit.noData')
+			}
 		}
 
 	def __onBattlesDPUpdated(self):
-		self.as_updateBattlesDPDataS({ \
-			'noDataLabel': l10n('ui.battle.noData'), \
-			'battles': self.battles.dataVO, \
-			'selectedIndex': self.battles.selectedIndex \
+		self.as_updateBattlesDPDataS({
+			'noDataLabel': l10n('ui.battle.noData'),
+			'battles': self.battles.dataVO,
+			'selectedIndex': self.battles.selectedIndex
 		})
 
 	def __onHitsDPUpdated(self):
@@ -189,9 +189,9 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		else:
 			noDataLabel = l10n('ui.hits.noDataEnemys')
 
-		self.as_updateHitsDPDataS({ \
-			'noDataLabel': noDataLabel, \
-			'hits': self.hits.dataVO, \
-			'sorting': self.hits.sortingVO, \
-			'selectedIndex': self.hits.selectedIndex \
+		self.as_updateHitsDPDataS({
+			'noDataLabel': noDataLabel,
+			'hits': self.hits.dataVO,
+			'sorting': self.hits.sortingVO,
+			'selectedIndex': self.hits.selectedIndex
 		})

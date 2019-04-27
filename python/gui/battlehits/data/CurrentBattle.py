@@ -54,36 +54,36 @@ class CurrentBattle(AbstractData):
 
 		shellType, shellSplash = getShellParams(attackerCompDesc, hitData['effectsIndex'])
 
-		self.__victim = { \
-			'name': victimInfo['name'], \
-			'accountDBID': victimInfo['accountDBID'], \
-			'clanAbbrev': victimInfo['clanAbbrev'], \
-			'clanDBID': victimInfo['clanDBID'], \
-			'isPlayer': victimInfo['isPlayer'], \
-			'compDescrStr': victimCompDescStr, \
-			'compDescr': victimCompDesc \
+		self.__victim = {
+			'name': victimInfo['name'],
+			'accountDBID': victimInfo['accountDBID'],
+			'clanAbbrev': victimInfo['clanAbbrev'],
+			'clanDBID': victimInfo['clanDBID'],
+			'isPlayer': victimInfo['isPlayer'],
+			'compDescrStr': victimCompDescStr,
+			'compDescr': victimCompDesc
 		}
 
-		self.__atacker = { \
-			'name': attackerInfo['name'], \
-			'accountDBID': attackerInfo['accountDBID'], \
-			'clanAbbrev': attackerInfo['clanAbbrev'], \
-			'clanDBID': attackerInfo['clanDBID'], \
-			'isPlayer': attackerInfo['isPlayer'], \
-			'compDescrStr': attackerCompDescStr, \
-			'compDescr': attackerCompDesc \
+		self.__atacker = {
+			'name': attackerInfo['name'],
+			'accountDBID': attackerInfo['accountDBID'],
+			'clanAbbrev': attackerInfo['clanAbbrev'],
+			'clanDBID': attackerInfo['clanDBID'],
+			'isPlayer': attackerInfo['isPlayer'],
+			'compDescrStr': attackerCompDescStr,
+			'compDescr': attackerCompDesc
 		}
 
-		self.__hit = { \
-			'isExplosion': hitData['isExplosion'], \
-			'damageFactor': hitData['damageFactor'], \
-			'aimParts': hitData['aimParts'], \
-			'wheels': hitData['wheels'], \
-			'shellType': shellType, \
-			'shellSplash': shellSplash, \
-			'points': hitData['points'], \
-			'position': hitData['position'], \
-			'descriptor': getShell(attackerCompDesc, hitData['effectsIndex']) \
+		self.__hit = {
+			'isExplosion': hitData['isExplosion'],
+			'damageFactor': hitData['damageFactor'],
+			'aimParts': hitData['aimParts'],
+			'wheels': hitData['wheels'],
+			'shellType': shellType,
+			'shellSplash': shellSplash,
+			'points': hitData['points'],
+			'position': hitData['position'],
+			'descriptor': getShell(attackerCompDesc, hitData['effectsIndex'])
 		}
 
 		g_eventsManager.onChangedHitData()

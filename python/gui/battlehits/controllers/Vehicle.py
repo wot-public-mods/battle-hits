@@ -7,7 +7,7 @@ from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.utils import unpackMatrix
 from gui.Scaleform.Waiting import Waiting
-from vehicle_systems.tankStructure import (ColliderTypes, ModelsSetParams, ModelStates, TankPartNames, \
+from vehicle_systems.tankStructure import (ColliderTypes, ModelsSetParams, ModelStates, TankPartNames,
 										TankPartIndexes, TankNodeNames)
 from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -58,12 +58,12 @@ class Vehicle(AbstractController):
 
 			capsuleScale = Math.Vector3(1.5, 1.5, 1.5)
 			gunScale = Math.Vector3(1.0, 1.0, 1.0)
-			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), self.compactDescr.chassis.hitTester.bspModelName), \
-				(TankPartNames.getIdx(TankPartNames.HULL), self.compactDescr.hull.hitTester.bspModelName), \
-				(TankPartNames.getIdx(TankPartNames.TURRET), self.compactDescr.turret.hitTester.bspModelName), \
-				(TankPartNames.getIdx(TankPartNames.GUN), self.compactDescr.gun.hitTester.bspModelName), \
-				(TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compactDescr.hull.hitTester.bspModelName, capsuleScale), \
-				(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compactDescr.turret.hitTester.bspModelName, capsuleScale), \
+			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), self.compactDescr.chassis.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.HULL), self.compactDescr.hull.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.TURRET), self.compactDescr.turret.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.GUN), self.compactDescr.gun.hitTester.bspModelName),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compactDescr.hull.hitTester.bspModelName, capsuleScale),
+				(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compactDescr.turret.hitTester.bspModelName, capsuleScale),
 				(TankPartNames.getIdx(TankPartNames.GUN) + 3, self.compactDescr.gun.hitTester.bspModelName, gunScale))
 
 			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
@@ -114,9 +114,9 @@ class Vehicle(AbstractController):
 		# connect VEHICLE_COLLIDER
 		chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
 		chassisColisionMatrix.target = self.compoundModel.matrix
-		collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.compoundModel.node(TankPartNames.HULL)), \
-			(TankPartNames.getIdx(TankPartNames.TURRET), self.compoundModel.node(TankPartNames.TURRET)), \
-			(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix), \
+		collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.compoundModel.node(TankPartNames.HULL)),
+			(TankPartNames.getIdx(TankPartNames.TURRET), self.compoundModel.node(TankPartNames.TURRET)),
+			(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix),
 			(TankPartNames.getIdx(TankPartNames.GUN), self.compoundModel.node(TankNodeNames.GUN_INCLINATION)))
 		self.collision.connect(0, ColliderTypes.VEHICLE_COLLIDER, collisionData)
 
@@ -126,17 +126,17 @@ class Vehicle(AbstractController):
 		gunoffset = Math.Matrix()
 		gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
 		gunLink = mathUtils.MatrixProviders.product(gunoffset, self.compoundModel.node(TankPartNames.GUN))
-		collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compoundModel.node(TankPartNames.HULL)), \
-			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)),  \
+		collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compoundModel.node(TankPartNames.HULL)),
+			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)),
 			(TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
 		self.collision.connect(0, ColliderTypes.HANGAR_VEHICLE_COLLIDER, collisionData)
 
 		self.collision.activate()
 
-		BigWorld.appendCameraCollider((self.collision.getColliderID(), ( \
-			TankPartNames.getIdx(TankPartNames.GUN) + 1, \
-			TankPartNames.getIdx(TankPartNames.GUN) + 2, \
-			TankPartNames.getIdx(TankPartNames.GUN) + 3 \
+		BigWorld.appendCameraCollider((self.collision.getColliderID(), (
+			TankPartNames.getIdx(TankPartNames.GUN) + 1,
+			TankPartNames.getIdx(TankPartNames.GUN) + 2,
+			TankPartNames.getIdx(TankPartNames.GUN) + 3
 		)))
 
 		self.__updateComponents()

@@ -96,9 +96,9 @@ class State(AbstractController):
 		else:
 			self.currentBattleID = self.battlesData.desiredID
 
-		self.__savedHangarData = { \
-			"_EVENT_HANGAR_PATHS": chs._EVENT_HANGAR_PATHS, \
-			"path": chs._getDefaultHangarPath(False) \
+		self.__savedHangarData = {
+			"_EVENT_HANGAR_PATHS": chs._EVENT_HANGAR_PATHS,
+			"path": chs._getDefaultHangarPath(False)
 		}
 
 		if chs._EVENT_HANGAR_PATHS:
@@ -121,7 +121,7 @@ class State(AbstractController):
 
 		isHangar = isinstance(BigWorld.player(), PlayerAccount)
 		if isHangar:
-			g_clientHangarSpaceOverride.setPath(path=self.__savedHangarData["path"], \
+			g_clientHangarSpaceOverride.setPath(path=self.__savedHangarData["path"],
 												isPremium=self.hangarSpace.isPremium)
 
 		self.enabled = False

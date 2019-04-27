@@ -3,30 +3,32 @@ import types
 import ResMgr
 import Math
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', \
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS',
 			'generateWheelsData', 'unpackMatrix', 'packMatrix')
 
-def override(holder, name, target=None):
-	"""using for override any staff"""
-	if target is None:
-		return lambda target: override(holder, name, target)
-	original = getattr(holder, name)
-	overrided = lambda *a, **kw: target(original, *a, **kw)
-	if not isinstance(holder, types.ModuleType) and isinstance(original, types.FunctionType):
-		setattr(holder, name, staticmethod(overrided))
+def override(target, name, hook=None):
+	"""Override methods, properties, functions
+	:param target: """
+	if hook is None:
+		return lambda hook: override(target, name, hook)
+	original = getattr(target, name)
+	overrided = lambda *a, **kw: hook(original, *a, **kw)
+	if not isinstance(target, types.ModuleType) and isinstance(original, types.FunctionType):
+		setattr(target, name, staticmethod(overrided))
 	elif isinstance(original, property):
-		setattr(holder, name, property(overrided))
+		setattr(target, name, property(overrided))
 	else:
-		setattr(holder, name, overrided)
+		setattr(target, name, overrided)
 
 def byteify(data):
-	"""using for convert unicode key/value to utf-8"""
+	"""Encodes data with UTF-8
+	:param data: Data to encode"""
 	result = data
-	if isinstance(data, types.DictType):
+	if isinstance(data, dict):
 		result = {byteify(key): byteify(value) for key, value in data.iteritems()}
-	elif isinstance(data, (set, tuple, types.ListType)):
+	elif isinstance(data, (list, tuple, set)):
 		result = [byteify(element) for element in data]
-	elif isinstance(data, types.UnicodeType):
+	elif isinstance(data, unicode):
 		result = data.encode('utf-8')
 	return result
 

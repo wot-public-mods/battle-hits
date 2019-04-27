@@ -4,9 +4,9 @@ import os
 import BigWorld
 import Math
 
-LANGUAGE_CODES = ('ru', 'uk', 'be', 'en', 'de', 'et', 'bg', 'da', 'fi', 'fil', 'fr', 'el', \
-					'hu', 'id', 'it', 'ja', 'ms', 'nl', 'no', 'pl', 'pt', 'pt_br', 'ro', \
-					'sr', 'vi', 'zh_sg', 'zh_tw', 'hr', 'th', 'lv', 'lt', 'cs', 'es_ar', \
+LANGUAGE_CODES = ('ru', 'uk', 'be', 'en', 'de', 'et', 'bg', 'da', 'fi', 'fil', 'fr', 'el',
+					'hu', 'id', 'it', 'ja', 'ms', 'nl', 'no', 'pl', 'pt', 'pt_br', 'ro',
+					'sr', 'vi', 'zh_sg', 'zh_tw', 'hr', 'th', 'lv', 'lt', 'cs', 'es_ar',
 					'tr', 'zh_cn', 'es', 'kk', 'sv', )
 
 LANGUAGE_FILE_PATH = 'mods/poliroid.battlehits/text/%s.yml'
@@ -24,13 +24,13 @@ class SETTINGS:
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
 
-DEFAULT_SETTINGS = { \
-	SETTINGS.PROCESS_REPLAYS: False, \
-	SETTINGS.SAVE_ONLY_SESSION: True, \
-	SETTINGS.CURRENT_STYLE: 'style1', \
-	SETTINGS.SORTING_RULE: 1, \
-	SETTINGS.SORTING_REVERSED: True, \
-	SETTINGS.HITS_TO_PLAYER: True \
+DEFAULT_SETTINGS = {
+	SETTINGS.PROCESS_REPLAYS: False,
+	SETTINGS.SAVE_ONLY_SESSION: True,
+	SETTINGS.CURRENT_STYLE: 'style1',
+	SETTINGS.SORTING_RULE: 1,
+	SETTINGS.SORTING_REVERSED: True,
+	SETTINGS.HITS_TO_PLAYER: True
 }
 
 class MODEL_TYPES:
@@ -44,7 +44,7 @@ class MODEL_NAMES:
 	SHELL = ('ap', 'apcr', 'heat', 'he', )
 	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical', )
 	SPLASH = ('large', 'middle', 'small', )
-	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', \
+	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
 				'15', 'cross', )
 
 class MODEL_PATHS:
@@ -65,8 +65,8 @@ CACHE_VERSION = 18
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 
-CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160), \
-				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001), \
+CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
+				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001),
 				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET, True)
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25

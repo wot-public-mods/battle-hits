@@ -26,7 +26,7 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 	def invokeChange(self, processReplays, saveOnlySession):
 		if not self.settingsCtrl:
 			return
-		self.settingsCtrl.apply({SETTINGS.PROCESS_REPLAYS: processReplays, \
+		self.settingsCtrl.apply({SETTINGS.PROCESS_REPLAYS: processReplays,
 								SETTINGS.SAVE_ONLY_SESSION: saveOnlySession})
 
 	def invokeStyle(self):
@@ -38,12 +38,12 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style1'})
 
 	def __updateStaticData(self):
-		self.as_setPreferencesS({'titleLabel': l10n('popover.titleLabel'), \
-			'closeButtonVisible': True, \
-			'saveOnlySession': self.settingsCtrl.get(SETTINGS.SAVE_ONLY_SESSION), \
-			'saveOnlySessionLabel': l10n('popover.saveOnlySessionLabel'), \
-			'saveOnlySessionDescription': l10n('popover.saveOnlySessionDescription'), \
-			'processReplays': self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS), \
-			'processReplaysLabel': l10n('popover.processReplaysLabel'), \
-			'processReplaysDescription': l10n('popover.processReplaysDescription'), \
+		self.as_setPreferencesS({'titleLabel': l10n('popover.titleLabel'),
+			'closeButtonVisible': True,
+			'saveOnlySession': self.settingsCtrl.get(SETTINGS.SAVE_ONLY_SESSION),
+			'saveOnlySessionLabel': l10n('popover.saveOnlySessionLabel'),
+			'saveOnlySessionDescription': l10n('popover.saveOnlySessionDescription'),
+			'processReplays': self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS),
+			'processReplaysLabel': l10n('popover.processReplaysLabel'),
+			'processReplaysDescription': l10n('popover.processReplaysDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel')})

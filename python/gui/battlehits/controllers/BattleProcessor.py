@@ -50,17 +50,17 @@ class BattleProcessor(AbstractController):
 		if processedData is not None:
 			self.__battleData = processedData
 		else:
-			self.__battleData = { \
-				'common': { \
-					'arenaUniqueID': player.arenaUniqueID, \
-					'arenaTypeID': player.arenaTypeID, \
-					'arenaBonusType': player.arenaBonusType, \
-					'arenaGuiType': player.arenaGuiType, \
-					'playerVehicleID': player.playerVehicleID \
-				}, \
-				'hits': [], \
-				'players': {}, \
-				'vehicles': {} \
+			self.__battleData = {
+				'common': {
+					'arenaUniqueID': player.arenaUniqueID,
+					'arenaTypeID': player.arenaTypeID,
+					'arenaBonusType': player.arenaBonusType,
+					'arenaGuiType': player.arenaGuiType,
+					'playerVehicleID': player.playerVehicleID
+				},
+				'hits': [],
+				'players': {},
+				'vehicles': {}
 			}
 
 			_vehicleID = player.playerVehicleID
@@ -153,21 +153,21 @@ class BattleProcessor(AbstractController):
 			wheelsConfig = vehicle.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
 			if wheelsConfig:
 				maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
-			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point, \
+			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point,
 															vehicle.appearance.collisions, maxComponentIdx)
 			pointsData.append((compIdx, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 
-		self.__battleData['hits'].append({ \
-			'damageFactor': damageFactor, \
-			'effectsIndex': effectsIndex, \
-			'aimParts': vehicle.getAimParams(), \
-			'wheels': generateWheelsData(vehicle), \
-			'isExplosion': False, \
-			'position': None, \
-			'points': pointsData, \
-			'damage': (attackerID, victimID, ) if damageFactor > 0 else 0, \
-			'attacker': [attackerID, attackerCompDescID], \
-			'victim': [victimID, victimCompDescID] \
+		self.__battleData['hits'].append({
+			'damageFactor': damageFactor,
+			'effectsIndex': effectsIndex,
+			'aimParts': vehicle.getAimParams(),
+			'wheels': generateWheelsData(vehicle),
+			'isExplosion': False,
+			'position': None,
+			'points': pointsData,
+			'damage': (attackerID, victimID, ) if damageFactor > 0 else 0,
+			'attacker': [attackerID, attackerCompDescID],
+			'victim': [victimID, victimCompDescID]
 		})
 
 	def processExplosion(self, vehicle, attackerID, center, effectsIndex, damageFactor):
@@ -187,17 +187,17 @@ class BattleProcessor(AbstractController):
 		shotMatrixRotated.preMultiply(shotPositionMatrix)
 		position = tuple(shotMatrixRotated.translation)
 
-		self.__battleData['hits'].append({ \
-			'damageFactor': damageFactor, \
-			'effectsIndex': effectsIndex, \
-			'aimParts': vehicle.getAimParams(), \
-			'wheels': generateWheelsData(vehicle), \
-			'isExplosion': True, \
-			'position': position, \
-			'points': None, \
-			'damage': (attackerID, vehicle.id, ) if damageFactor > 0 else 0, \
-			'attacker': [attackerID, attackerCompDescID], \
-			'victim': [victimID, victimCompDescID] \
+		self.__battleData['hits'].append({
+			'damageFactor': damageFactor,
+			'effectsIndex': effectsIndex,
+			'aimParts': vehicle.getAimParams(),
+			'wheels': generateWheelsData(vehicle),
+			'isExplosion': True,
+			'position': position,
+			'points': None,
+			'damage': (attackerID, vehicle.id, ) if damageFactor > 0 else 0,
+			'attacker': [attackerID, attackerCompDescID],
+			'victim': [victimID, victimCompDescID]
 		})
 
 	def __hitPreparation(self, attackerID, victimID, effectsIndex):
@@ -246,10 +246,10 @@ class BattleProcessor(AbstractController):
 
 		if vehicleID not in self.__battleData['players']:
 
-			self.__battleData['players'][vehicleID] = { \
-				'name': vehicle['name'], \
-				'accountDBID': vehicle['accountDBID'], \
-				'clanAbbrev': vehicle['clanAbbrev'], \
-				'clanDBID': vehicle['clanDBID'], \
-				'isPlayer': vehicleID == playerVehicleID \
+			self.__battleData['players'][vehicleID] = {
+				'name': vehicle['name'],
+				'accountDBID': vehicle['accountDBID'],
+				'clanAbbrev': vehicle['clanAbbrev'],
+				'clanDBID': vehicle['clanDBID'],
+				'isPlayer': vehicleID == playerVehicleID
 			}

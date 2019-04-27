@@ -1,6 +1,6 @@
 from helpers import dependency
-from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera, \
-									IHangarScene, IHotkeys, IState, ISettings, IVehicle, \
+from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera,
+									IHangarScene, IHotkeys, IState, ISettings, IVehicle,
 									IBattlesData, IHitsData, ICurrentBattleData)
 
 __all__ = ('AbstractController', )
@@ -56,7 +56,7 @@ def configure():
 	manager.addInstance(ISettings, Settings(), finalizer='fini')
 	manager.addInstance(IVehicle, Vehicle(), finalizer='fini')
 
-	services = [IBattlesHistory, IBattleProcessor, IHangarCamera, IHangarScene, IHotkeys, IState, \
+	services = [IBattlesHistory, IBattleProcessor, IHangarCamera, IHangarScene, IHotkeys, IState,
 				ISettings, IVehicle]
 	for service in services:
 		serviceIns = dependency.instance(service)

@@ -4,7 +4,7 @@ from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
-from gui.battlehits._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS, \
+from gui.battlehits._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
 									SCENE_OFFSET, CAMERA_DEFAULTS)
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
@@ -22,19 +22,19 @@ class HangarScene(AbstractController):
 
 		self.__forceCameraUpdate = False
 
-		self.__models = { \
-			MODEL_TYPES.DOME: None, \
-			MODEL_TYPES.SHELL: [], \
-			MODEL_TYPES.EFFECT: [], \
-			MODEL_TYPES.SPLASH: [], \
-			MODEL_TYPES.RICOCHET: [] \
+		self.__models = {
+			MODEL_TYPES.DOME: None,
+			MODEL_TYPES.SHELL: [],
+			MODEL_TYPES.EFFECT: [],
+			MODEL_TYPES.SPLASH: [],
+			MODEL_TYPES.RICOCHET: []
 		}
 
-		self.__motors = { \
-			MODEL_TYPES.SHELL: [], \
-			MODEL_TYPES.EFFECT: [], \
-			MODEL_TYPES.SPLASH: [], \
-			MODEL_TYPES.RICOCHET: [] \
+		self.__motors = {
+			MODEL_TYPES.SHELL: [],
+			MODEL_TYPES.EFFECT: [],
+			MODEL_TYPES.SPLASH: [],
+			MODEL_TYPES.RICOCHET: []
 		}
 
 	def create(self):
@@ -83,13 +83,13 @@ class HangarScene(AbstractController):
 		domeModel.position = SCENE_OFFSET
 		BigWorld.addModel(domeModel, currentSpaceID)
 
-		SHELL_SET = (self.__models[MODEL_TYPES.SHELL], self.__motors[MODEL_TYPES.SHELL], \
+		SHELL_SET = (self.__models[MODEL_TYPES.SHELL], self.__motors[MODEL_TYPES.SHELL],
 					MODEL_NAMES.SHELL, MODEL_PATHS.SHELL)
-		EFFECT_SET = (self.__models[MODEL_TYPES.EFFECT], self.__motors[MODEL_TYPES.EFFECT], \
+		EFFECT_SET = (self.__models[MODEL_TYPES.EFFECT], self.__motors[MODEL_TYPES.EFFECT],
 					MODEL_NAMES.EFFECT, MODEL_PATHS.EFFECT)
-		SPLASH_SET = (self.__models[MODEL_TYPES.SPLASH], self.__motors[MODEL_TYPES.SPLASH], \
+		SPLASH_SET = (self.__models[MODEL_TYPES.SPLASH], self.__motors[MODEL_TYPES.SPLASH],
 					MODEL_NAMES.SPLASH, MODEL_PATHS.SPLASH)
-		RICOCHET_SET = (self.__models[MODEL_TYPES.RICOCHET], self.__motors[MODEL_TYPES.RICOCHET], \
+		RICOCHET_SET = (self.__models[MODEL_TYPES.RICOCHET], self.__motors[MODEL_TYPES.RICOCHET],
 						MODEL_NAMES.RICOCHET, MODEL_PATHS.RICOCHET)
 
 		for models, motors, modelTypes, modelPath in SHELL_SET, EFFECT_SET, SPLASH_SET, RICOCHET_SET:
@@ -105,7 +105,7 @@ class HangarScene(AbstractController):
 
 	def _hideModels(self):
 
-		for model in self.__models[MODEL_TYPES.SHELL] + self.__models[MODEL_TYPES.SPLASH] +  \
+		for model in self.__models[MODEL_TYPES.SHELL] + self.__models[MODEL_TYPES.SPLASH] + \
 					self.__models[MODEL_TYPES.RICOCHET] + self.__models[MODEL_TYPES.EFFECT]:
 			model.visible = False
 
@@ -165,13 +165,13 @@ class HangarScene(AbstractController):
 			targetPoint = fallenPoint + Math.Vector3(0.0, (SCENE_OFFSET - fallenPoint).length / 2.0, 0.0)
 
 			# default, current, limits, sens, targetPoint
-			self.hangarCameraCtrl.setCameraData( \
-				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0)), \
-				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0), \
-				(None, math.radians(20.0), (5.0, 15.0)), \
-				(0.005, 0.005, 0.001), \
-				targetPoint, \
-				self.__forceCameraUpdate \
+			self.hangarCameraCtrl.setCameraData(
+				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0)),
+				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
+				(None, math.radians(20.0), (5.0, 15.0)),
+				(0.005, 0.005, 0.001),
+				targetPoint,
+				self.__forceCameraUpdate
 			)
 		else:
 
@@ -185,13 +185,13 @@ class HangarScene(AbstractController):
 			worldHitDirection = worldEndPoint - worldStartPoint
 
 			# default, current, limits, sens, targetPoint
-			self.hangarCameraCtrl.setCameraData( \
-				(worldHitDirection.yaw, -worldHitDirection.pitch), \
-				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0), \
-				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)), \
-				(0.005, 0.005, 0.001), \
-				worldStartPoint, \
-				self.__forceCameraUpdate \
+			self.hangarCameraCtrl.setCameraData(
+				(worldHitDirection.yaw, -worldHitDirection.pitch),
+				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0),
+				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)),
+				(0.005, 0.005, 0.001),
+				worldStartPoint,
+				self.__forceCameraUpdate
 			)
 
 		if self.__forceCameraUpdate:
@@ -387,7 +387,7 @@ class HangarScene(AbstractController):
 
 			planeNormal = (collisionPoints[1] - collisionPoints[0]) * (collisionPoints[2] - collisionPoints[0])
 			planeDistanceCoeffD = -planeNormal.dot(collisionPoints[0])
-			distance = Math.Vector4(planeNormal.x, planeNormal.y, planeNormal.z, planeDistanceCoeffD).dot(Math.Vector4( \
+			distance = Math.Vector4(planeNormal.x, planeNormal.y, planeNormal.z, planeDistanceCoeffD).dot(Math.Vector4(
 											localStartPoint.x, localStartPoint.y, localStartPoint.z, 1.0))
 			# in normal case we need check for distance lower than 0
 			# but we live in bagworld Kappa

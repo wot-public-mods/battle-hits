@@ -62,11 +62,11 @@ class Battles(AbstractDataProvider):
 			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
 
-			self.dataVO.append({ \
-				"id": battleID, \
-				"mapNameLabel": i18n.makeString(ArenaType.g_cache[arenaTypeID].name), \
-				"vehicleNameLabel": getVehicleLabel(battleData), \
-				"battleStartLabel": battleStartLabel \
+			self.dataVO.append({
+				"id": battleID,
+				"mapNameLabel": i18n.makeString(ArenaType.g_cache[arenaTypeID].name),
+				"vehicleNameLabel": getVehicleLabel(battleData),
+				"battleStartLabel": battleStartLabel
 			})
 
 		rule = self.__sortingRule

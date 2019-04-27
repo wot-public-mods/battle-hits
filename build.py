@@ -82,7 +82,7 @@ if COPY_INTO_GAME:
 	assert os.path.isdir(WOT_PACKAGES_DIR), 'Wot mods folder notfound'
 
 # package data
-PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format(author=CONFIG.info.author, \
+PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format(author=CONFIG.info.author,
 				name=CONFIG.info.id, version=CONFIG.info.version)
 
 # generate package meta file
@@ -95,7 +95,7 @@ META = """<root>
 	<name>{name}</name>
 	<!-- Human readable description -->
 	<description>{description}</description>
-</root>""".format(id='%s.%s' % (CONFIG.info.author, CONFIG.info.id), name=CONFIG.info.name, \
+</root>""".format(id='%s.%s' % (CONFIG.info.author, CONFIG.info.id), name=CONFIG.info.name,
 					description=CONFIG.info.description, version=CONFIG.info.version)
 
 # prepere folders
@@ -149,7 +149,7 @@ if CREATE_DISTRIBUTE:
 	os.makedirs('./temp/distribute/mods/%s' % CONFIG.game.version)
 	shutil.copy2('./build/%s' % PACKAGE_NAME, './temp/distribute/mods/%s' % CONFIG.game.version)
 	copytree('./resources/out', './temp/distribute')
-	zipFolder('./temp/distribute', './build/{name}_{version}.zip'.format(name=CONFIG.info.id, \
+	zipFolder('./temp/distribute', './build/{name}_{version}.zip'.format(name=CONFIG.info.id,
 				version=CONFIG.info.version))
 
 # clean up build files

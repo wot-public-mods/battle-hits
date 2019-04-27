@@ -126,8 +126,8 @@ try:
 except ImportError:
 	LOG_ERROR('modsListApi not installed')
 if g_modsListApi:
-	g_modsListApi.addModification(id='battlehits', name=l10n('modslist.name'), enabled=True, \
-		description=l10n('modslist.description'), icon='gui/maps/battlehits/modsListApi.png', \
+	g_modsListApi.addModification(id='battlehits', name=l10n('modslist.name'), enabled=True,
+		description=l10n('modslist.description'), icon='gui/maps/battlehits/modsListApi.png',
 		login=False, lobby=True, callback=lambda: dependency.instance(IState).switch())
 
 # disable open button in battle queue
