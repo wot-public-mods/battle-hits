@@ -1,9 +1,9 @@
 
-from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.framework import (g_entitiesFactories, GroupedViewSettings, ScopeTemplates,
 									 ViewSettings, ViewTypes)
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.shared.personality import ServicesLocator
 
 from gui.battlehits._constants import BATTLE_HITS_MAIN_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
 from gui.battlehits.events import g_eventsManager
@@ -24,14 +24,14 @@ for item in getViewSettings():
 
 
 def showMainView():
-	app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+	app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
 	if not app:
 		return
 	app.loadView(SFViewLoadParams(BATTLE_HITS_MAIN_VIEW_ALIAS), {})
 g_eventsManager.showMainView += showMainView
 
 def showPreferencesPopover():
-	app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+	app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
 	if not app:
 		return
 	app.loadView(SFViewLoadParams(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS), {})

@@ -4,8 +4,7 @@ import game
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from helpers import dependency
-from gui.app_loader.settings import APP_NAME_SPACE, GUI_GLOBAL_SPACE_ID
-from gui.app_loader.loader import g_appLoader
+from gui.app_loader.settings import APP_NAME_SPACE
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState
@@ -17,17 +16,20 @@ from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 from gui.prb_control.prb_getters import getQueueType
 from gui.prb_control.events_dispatcher import EventDispatcher
 from gui.shared import g_eventBus, events
+from gui.shared.personality import ServicesLocator
 from Vehicle import Vehicle
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 
 __all__ = ()
 
+GUI_SPACE_BATTLE = 6
+
 # app battle loaded
 def onGUISpaceEntered(spaceID):
-	if spaceID != GUI_GLOBAL_SPACE_ID.BATTLE:
+	if spaceID != GUI_SPACE_BATTLE:
 		return
 	g_eventsManager.onShowBattle()
-g_appLoader.onGUISpaceEntered += onGUISpaceEntered
+ServicesLocator.appLoader.onGUISpaceEntered += onGUISpaceEntered
 
 # app battle destroyed
 def onAppDestroyed(event):
