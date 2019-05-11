@@ -76,8 +76,11 @@ with open('./build.json', 'rb') as fh:
 	hook = lambda x: collections.namedtuple('object', x.keys())(*x.values())
 	CONFIG = json.loads(fh.read(), object_hook=hook)
 
+GAME_FOLDER = os.environ.get('WOT_FOLDER', CONFIG.game.folder)
+GAME_VERSION = os.environ.get('WOT_VERSION', CONFIG.game.version)
+
 # cheek ingame folder
-WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot=CONFIG.game.folder, version=CONFIG.game.version)
+WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot=GAME_FOLDER, version=GAME_VERSION)
 if COPY_INTO_GAME:
 	assert os.path.isdir(WOT_PACKAGES_DIR), 'Wot mods folder notfound'
 
@@ -146,8 +149,8 @@ if COPY_INTO_GAME:
 
 # create distribution
 if CREATE_DISTRIBUTE:
-	os.makedirs('./temp/distribute/mods/%s' % CONFIG.game.version)
-	shutil.copy2('./build/%s' % PACKAGE_NAME, './temp/distribute/mods/%s' % CONFIG.game.version)
+	os.makedirs('./temp/distribute/mods/%s' % GAME_VERSION)
+	shutil.copy2('./build/%s' % PACKAGE_NAME, './temp/distribute/mods/%s' % GAME_VERSION)
 	copytree('./resources/out', './temp/distribute')
 	zipFolder('./temp/distribute', './build/{name}_{version}.zip'.format(name=CONFIG.info.id,
 				version=CONFIG.info.version))
