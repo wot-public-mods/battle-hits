@@ -1,2 +1,2 @@
 
-import gui.battlehits
+from gui.battlehits import *

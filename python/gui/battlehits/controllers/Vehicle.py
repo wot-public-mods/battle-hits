@@ -53,7 +53,7 @@ class Vehicle(AbstractController):
 			self.__currentBuildIndex += 1
 
 			spaceID = BigWorld.camera().spaceID
-			modelsSet = ModelsSetParams('', ModelStates.UNDAMAGED)
+			modelsSet = ModelsSetParams('', ModelStates.UNDAMAGED, [])
 			normalAssembler = prepareCompoundAssembler(self.compactDescr, modelsSet, spaceID)
 
 			capsuleScale = Math.Vector3(1.5, 1.5, 1.5)
