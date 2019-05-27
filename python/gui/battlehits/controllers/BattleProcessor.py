@@ -209,6 +209,10 @@ class BattleProcessor(AbstractController):
 		atacker = player.arena.vehicles.get(attackerID)
 		victim = player.arena.vehicles.get(victimID)
 
+		# skip if attacker or victim not presented (fog ow war)
+		if not atacker or not victim:
+			return None
+
 		# skip if attacker or victim vehicleType not initizlized
 		if not atacker['vehicleType'] or not victim['vehicleType']:
 			return None
