@@ -42,6 +42,11 @@ class BattleProcessor(AbstractController):
 
 		player = BigWorld.player()
 
+		# if the user chooses the observer mode in the training room
+		# we skip the battle.
+		if player.isObserver():
+			return
+
 		processedData = None
 
 		if self.battlesHistoryCtrl:
