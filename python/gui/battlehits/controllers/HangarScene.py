@@ -1,6 +1,6 @@
 import math
 
-from AvatarInputHandler import mathUtils
+import math_utils
 import BigWorld
 import Math
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
@@ -166,8 +166,8 @@ class HangarScene(AbstractController):
 
 			# default, current, limits, sens, targetPoint
 			self.hangarCameraCtrl.setCameraData(
-				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0)),
-				(mathUtils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
+				(math_utils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0)),
+				(math_utils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
 				(None, math.radians(20.0), (5.0, 15.0)),
 				(0.005, 0.005, 0.001),
 				targetPoint,
