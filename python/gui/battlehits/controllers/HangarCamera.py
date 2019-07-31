@@ -3,7 +3,7 @@ import math
 import BigWorld
 import Math
 
-from AvatarInputHandler import mathUtils
+import math_utils
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
@@ -80,18 +80,18 @@ class HangarCamera(AbstractController):
 	def updateCamera(self, dx, dy, dz):
 		self.__yaw += dx * self.__sens[0]
 		if self.__yawLimits:
-			self.__yaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], self.__yaw)
+			self.__yaw = math_utils.clamp(self.__yawLimits[0], self.__yawLimits[1], self.__yaw)
 
 		self.__pitch -= dy * self.__sens[1]
 		if self.__pitchLimits:
-			self.__pitch = mathUtils.clamp(self.__pitchLimits[0], self.__pitchLimits[1], self.__pitch)
+			self.__pitch = math_utils.clamp(self.__pitchLimits[0], self.__pitchLimits[1], self.__pitch)
 
 		self.__dist -= dz * self.__sens[2]
 		if self.__distLimits:
-			self.__dist = mathUtils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
+			self.__dist = math_utils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
 
 		camera = self.hangarSpace.space.camera
-		yaw = mathUtils.reduceToPI(self.__yaw - self.__offset)
+		yaw = math_utils.reduceToPI(self.__yaw - self.__offset)
 		pitch = (self.__pitch - self.__offset)
 		dist = self.__dist - self.__offset
 
@@ -110,7 +110,7 @@ class HangarCamera(AbstractController):
 				pitch = (math.pi / 2) - math.acos((targetHeight - CAMERA_UNDER_FLOOR_OFFSET) / currentDist)
 
 		# filter pitch
-		pitch = mathUtils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitch)
+		pitch = math_utils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitch)
 
 		cameraMatrix = Math.Matrix()
 		cameraMatrix.setRotateYPR((yaw, pitch, 0.0))

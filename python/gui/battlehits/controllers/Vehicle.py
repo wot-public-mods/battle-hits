@@ -1,7 +1,7 @@
 import Math
 import BigWorld
 
-from AvatarInputHandler import mathUtils
+import math_utils
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
@@ -125,7 +125,7 @@ class Vehicle(AbstractController):
 		center = 0.5 * (gunColBox[1] - gunColBox[0])
 		gunoffset = Math.Matrix()
 		gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
-		gunLink = mathUtils.MatrixProviders.product(gunoffset, self.compoundModel.node(TankPartNames.GUN))
+		gunLink = math_utils.MatrixProviders.product(gunoffset, self.compoundModel.node(TankPartNames.GUN))
 		collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compoundModel.node(TankPartNames.HULL)),
 			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)),
 			(TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
