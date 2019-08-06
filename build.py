@@ -134,9 +134,9 @@ for dirName, _, files in os.walk('python'):
 			compileall.compile_file(filePath)
 
 # copy all staff
+copytree('./resources/in', './temp/res')
 copytree('./as3/bin/', './temp/res/gui/flash')
 copytree('./python', './temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
-copytree('./resources/in', './temp/res')
 with open('temp/meta.xml', 'wb') as fh:
 	fh.write(META)
 
