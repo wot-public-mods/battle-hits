@@ -59,6 +59,10 @@ class Battles(AbstractDataProvider):
 		for battleID, battleData in enumerate(self.battlesHistoryCtrl.history):
 
 			arenaTypeID = battleData['common']['arenaTypeID']
+
+			if arenaTypeID not in ArenaType.g_cache:
+				continue
+
 			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
 
