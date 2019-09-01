@@ -5,14 +5,14 @@
 		"sonar": "sonar.cmd"
 	},
 	"game": {
-		"folder": "E:\\wot\\ct",
-		"version": "1.6.0.0"
+		"folder": "E:\\wot\\cis",
+		"version": "1.6.0.4"
 	},
 	"info": {
 		"id": "battlehits",
 		"author": "poliroid",
 		"name": "Battle Hits",
 		"description": "Explore received and given hits by your vehicle in battle",
-		"version": "1.4.0"
+		"version": "1.4.1"
 	}
 }
