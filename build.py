@@ -1,5 +1,4 @@
 import collections
-import compileall
 import datetime
 import json
 import os
@@ -72,7 +71,7 @@ RUN_SONAR = 'sonar' in sys.argv
 
 # load config
 assert os.path.isfile('./build.json'), 'Config not found'
-with open('./build.json', 'rb') as fh:
+with open('./build.json', 'r') as fh:
 	hook = lambda x: collections.namedtuple('object', x.keys())(*x.values())
 	CONFIG = json.loads(fh.read(), object_hook=hook)
 
@@ -118,7 +117,7 @@ if not os.path.isdir('./as3/bin'):
 # build flash
 if BUILD_FLASH:
 	flashWorkDir = os.getcwd().replace('\\', '/').replace(':', '|')
-	with open('./build.jsfl', 'wb') as fh:
+	with open('./build.jsfl', 'w') as fh:
 		for fileName in os.listdir('./as3'):
 			if fileName.endswith('fla'):
 				publishDocument = 'fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'
@@ -127,17 +126,13 @@ if BUILD_FLASH:
 	subprocess.call([CONFIG.software.animate, '-e', 'build.jsfl', '-AlwaysRunJSFL'])
 
 # build python
-for dirName, _, files in os.walk('python'):
-	for fileName in files:
-		if fileName.endswith(".py"):
-			filePath = os.path.join(dirName, fileName)
-			compileall.compile_file(filePath)
+subprocess.call([CONFIG.software.python, '-m', 'compileall', '-f', 'python'])
 
 # copy all staff
 copytree('./resources/in', './temp/res')
 copytree('./as3/bin/', './temp/res/gui/flash')
 copytree('./python', './temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
-with open('temp/meta.xml', 'wb') as fh:
+with open('temp/meta.xml', 'w') as fh:
 	fh.write(META)
 
 # create package

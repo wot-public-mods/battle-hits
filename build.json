@@ -1,7 +1,8 @@
 {
-	"version": 2,
+	"version": 3,
 	"software": {
 		"animate": "C:\\Program Files\\Adobe\\Adobe Animate CC 2019\\Animate.exe",
+		"python": "C:\\Program Files\\Python27\\python.exe",
 		"sonar": "sonar.cmd"
 	},
 	"game": {
