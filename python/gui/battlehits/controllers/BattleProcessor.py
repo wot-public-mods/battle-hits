@@ -74,7 +74,7 @@ class BattleProcessor(AbstractController):
 			self.__saveCompactDescr(_vehicleID, _vehicle)
 			self.__savePlayerInfo(_vehicleID, _vehicle, _vehicleID)
 
-		self.__isAlive = player.vehicle.isAlive()
+		self.__isAlive = player.isVehicleAlive
 
 		self.__vehicles = {}
 
