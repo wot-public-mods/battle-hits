@@ -106,13 +106,19 @@ class Hits(AbstractDataProvider):
 			if hitResult != [4] and hitData['damageFactor'] > 0:
 				hitResult += [4]
 
+			if attackerInfo['isPlayer']:
+				anonymized = victimInfo['accountDBID'] == 0
+			else:
+				anonymized = attackerInfo['accountDBID'] == 0
+
 			self.__data.append({
 				"id": hitID,
 				"number": hitNumber,
 				"vehicle": vehicleCompDesc.type.shortUserString,
 				"result": hitResult,
 				"shell": shellType,
-				"damage": hitData["damage"]
+				"damage": hitData["damage"],
+				'anonymized': anonymized
 			})
 
 			hitNumber += 1
@@ -136,7 +142,8 @@ class Hits(AbstractDataProvider):
 				"vehicleLabel": itemData["vehicle"],
 				"resultLabel": resultLabel,
 				"shellLabel": shellLabel,
-				"damageLabel": damageLabel
+				"damageLabel": damageLabel,
+				'anonymized': itemData['anonymized']
 			})
 
 	def __updateSorting(self, appendReverse=False):
