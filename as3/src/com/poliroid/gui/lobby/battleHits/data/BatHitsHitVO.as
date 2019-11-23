@@ -16,6 +16,8 @@ package com.poliroid.gui.lobby.battleHits.data
 		public var shellLabel:String = "";
 		
 		public var damageLabel:String = "";
+
+		public var anonymized:Boolean = false;
 		
 		public function BatHitsHitVO(data:Object)
 		{

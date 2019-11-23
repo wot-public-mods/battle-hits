@@ -61,7 +61,7 @@ SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 10
-CACHE_VERSION = 22
+CACHE_VERSION = 23
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 

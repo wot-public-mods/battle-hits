@@ -27,6 +27,8 @@ package com.poliroid.gui.lobby.battleHits.controls
 		
 		public var hitAreaA:MovieClip = null;
 		
+		public var anonymizedMC:MovieClip = null;
+		
 		private var model:BatHitsHitVO = null;
 		
 		public function HitItemRenderer() 
@@ -63,6 +65,7 @@ package com.poliroid.gui.lobby.battleHits.controls
 			shellTF = null;
 			damageTF = null;
 			hitAreaA = null;
+			anonymizedMC = null;
 			
 			super.onDispose();
 		}
@@ -77,6 +80,8 @@ package com.poliroid.gui.lobby.battleHits.controls
 				resultTF.text = model.resultLabel;
 				shellTF.text = model.shellLabel;
 				damageTF.text = model.damageLabel;
+				anonymizedMC.visible =  model.anonymized;
+				anonymizedMC.x = Number((vehicleTF.x + vehicleTF.width / 2) + (vehicleTF.textWidth / 2));
 			}
 		}
 		
