@@ -1,0 +1,36 @@
+
+hits.sorting.num: №
+hits.sorting.tank: Vehiculo
+hits.sorting.result: Resultado
+hits.sorting.damage: Daño
+
+hits.shotResult.intermediateRicochet: Rebote *
+hits.shotResult.finalRicochet: Rebote
+hits.shotResult.armorNotPierces: No perforado
+hits.shotResult.armorPiercesNoDamage: Impacto
+hits.shotResult.armorPierces: Daño
+hits.shotResult.criticalHit: Crítico
+hits.shotResult.splash: Area
+
+ui.typeMe: YO
+ui.typeEnemys: ENEMIGOS
+ui.closeButton: CERRAR
+ui.settingsButton: AJUSTES
+ui.title: Impactos de Batalla
+
+ui.battle.noData: Batallas no encontradas
+ui.battle.multiVehicle:  +%s unid.
+ui.hits.noDataMe: Ningún impacto recibido
+ui.hits.noDataEnemys:Ningún impacto infligido
+ui.detailedhit.noData: '################'
+
+modslist.name: Impactos de Batalla
+modslist.description: Explora los impactos recibidos en tu vehículo en una batalla
+
+
+popover.titleLabel: Ajustes
+popover.saveOnlySessionLabel: Sólo en la sesión actual
+popover.saveOnlySessionDescription: {HEADER}Sólo la sesión actual{/HEADER}{BODY}La modificación sólo guardará información de la sesión actual (de otra manera, la información acerca de todas las batallas serán guardadas).{/BODY}
+popover.processReplaysLabel: Procesando repeticiones
+popover.processReplaysDescription:  {HEADER}Procesar repeticiones{/HEADER}{BODY}La modificación también guardará información de las repeticiones vistas.{/BODY}
+popover.changeStyleLabel: Interambiar estilos
