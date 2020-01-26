@@ -64,6 +64,7 @@
 		
 		override protected function configUI() : void
 		{
+			super.configUI();
 			hitsList.scrollBar = Linkages.SCROLL_BAR;
 			hitsList.smartScrollBar = true;
 			hitsList.sbPadding = new Padding(12, 0, 0, -30);

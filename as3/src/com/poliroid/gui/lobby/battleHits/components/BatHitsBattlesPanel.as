@@ -50,6 +50,7 @@
 		
 		override protected function configUI() : void
 		{
+			super.configUI();
 			battlesList.scrollBar = Linkages.SCROLL_BAR;
 			battlesList.sbPadding = new Padding(8, 0, 0, -30);
 			battlesList.widthAutoResize = false;

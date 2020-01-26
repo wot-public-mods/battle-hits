@@ -121,6 +121,8 @@
 			removeEventListener(BatHitsIndexEvent.BATTLE_CHANGED, onBattleSelectHandler);
 			removeEventListener(BatHitsIndexEvent.HIT_CHANGED, onHitSelectHandler);
 			removeEventListener(BatHitsIndexEvent.SORT_CLICKED, onSortClickHandler);
+			
+			super.onBeforeDispose();
 		}
 
 		override protected function onDispose() : void
