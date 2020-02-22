@@ -11,7 +11,7 @@ from gui.battlehits.events import g_eventsManager
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
-from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.tankStructure import TankPartIndexes
 
 class HangarScene(AbstractController):
 
@@ -206,7 +206,7 @@ class HangarScene(AbstractController):
 
 		if hitData['isExplosion']:
 
-			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(TankPartNames.CHASSIS)
+			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(TankPartIndexes.CHASSIS)
 
 			worldHitPoint = worldComponentMatrix.applyPoint(hitData['position'])
 
