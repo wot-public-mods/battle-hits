@@ -5,7 +5,7 @@
 
 Code license: CC BY-NC-SA 4.0
 
-P0LIR0ID 2015-2019
+P0LIR0ID 2015-2020
 
 ### An example of what a mod looks
 ![An example of what a mod looks](https://static.poliroid.ru/battleHits.jpg)
