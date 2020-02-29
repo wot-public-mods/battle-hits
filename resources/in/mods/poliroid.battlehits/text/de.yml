@@ -1,36 +1,36 @@
 
 hits.sorting.num: №
 hits.sorting.tank: Panzer
-hits.sorting.result: Ergebnis
+hits.sorting.result: Resultat
 hits.sorting.damage: Schaden
 
-hits.shotResult.intermediateRicochet: ricochet *
-hits.shotResult.finalRicochet: ricochet
+hits.shotResult.intermediateRicochet: Abpraller *
+hits.shotResult.finalRicochet: Abpraller
 hits.shotResult.armorNotPierces: nicht durchschlagen
-hits.shotResult.armorPiercesNoDamage: treffer
-hits.shotResult.armorPierces: schaden
+hits.shotResult.armorPiercesNoDamage: Treffer
+hits.shotResult.armorPierces: Dmg
 hits.shotResult.criticalHit: kritisch
-hits.shotResult.splash: splash
+hits.shotResult.splash: Splash
 
 ui.typeMe: ICH
 ui.typeEnemys: GEGNER
 ui.closeButton: Schliessen
 ui.settingsButton: Einstellungen
-ui.title: Gefechts Treffer
+ui.title: Treffer im Gefecht
 
-ui.battle.noData: Kein Gefecht gefunden
-ui.battle.multiVehicle:  +%s stück
+ui.battle.noData: Keine Gefechte gefunden
+ui.battle.multiVehicle:  +%s Stück
 ui.hits.noDataMe: Keine Treffer erhalten
-ui.hits.noDataEnemys: Keine Treffer hinzugefügt
+ui.hits.noDataEnemys: Keine Treffer erzielt
 ui.detailedhit.noData: '################'
 
-modslist.name: Gefechts Treffer
-modslist.description: Erhaltene Treffer aus Gefecht anschauen
+modslist.name: Battle Hits
+modslist.description: Im Gefecht erhaltene Treffer betrachten
 
 
 popover.titleLabel: Einstellungen
-popover.saveOnlySessionLabel: Nur Sitzung
-popover.saveOnlySessionDescription: {HEADER}Nur Sitzung{/HEADER}{BODY}Der Mod speichert nur Informationen ueber die momentane Sitzung (andernfalls wird alles gespeichert){/BODY}
+popover.saveOnlySessionLabel: Nur aktuelle Sitzung
+popover.saveOnlySessionDescription: {HEADER}Nur aktuelle Sitzung{/HEADER}{BODY}Der Mod speichert nur Informationen über die aktuelle Spielsitzung (anderenfalls werden Informationen über alle Gefechte gespeichert).{/BODY}
 popover.processReplaysLabel: Replays verarbeiten
-popover.processReplaysDescription:  {HEADER}Replays verarbeiten{/HEADER}{BODY}Der Mod speichert auch Informationen aus Replays{/BODY}
-popover.changeStyleLabel: Style aendern
+popover.processReplaysDescription:  {HEADER}Replays verarbeiten{/HEADER}{BODY}Der Mod speichert auch Informationen aus angesehenen Replays.{/BODY}
+popover.changeStyleLabel: Stil ändern
