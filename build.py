@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 import zipfile
+import time
 
 def copytree(source, destination, ignore=None):
 	"""implementation of shutil.copytree
@@ -63,6 +64,26 @@ def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
 				info = fileInfo(filePath)
 				zipfh.writestr(info, open(filePath, 'rb').read())
 
+def processRunning(path):
+	"""Cheek is process runing, no"""
+	processName = os.path.basename(path).lower()
+	try:
+		import psutil
+		for proc in psutil.process_iter():
+			if proc.name().lower() == processName:
+				return True
+		return False
+	except ImportError:
+		if os.name == 'nt':
+			for task in (x.split() for x in subprocess.check_output('tasklist').splitlines()):
+				if task and task[0].lower() == processName:
+					return True
+			return False
+		else:
+			print('cant list process on your system')
+			print('run -> pip install psutil')
+			raise NotImplementedError
+
 # handle args from command line
 BUILD_FLASH = 'flash' in sys.argv
 COPY_INTO_GAME = 'ingame' in sys.argv
@@ -70,8 +91,8 @@ CREATE_DISTRIBUTE = 'distribute' in sys.argv
 RUN_SONAR = 'sonar' in sys.argv
 
 # load config
-assert os.path.isfile('./build.json'), 'Config not found'
-with open('./build.json', 'r') as fh:
+assert os.path.isfile('build.json'), 'Config not found'
+with open('build.json', 'r') as fh:
 	hook = lambda x: collections.namedtuple('object', x.keys())(*x.values())
 	CONFIG = json.loads(fh.read(), object_hook=hook)
 
@@ -101,68 +122,101 @@ META = """<root>
 					description=CONFIG.info.description, version=CONFIG.info.version)
 
 # prepere folders
-if os.path.isdir('./temp'):
-	shutil.rmtree('./temp')
-os.makedirs('./temp')
-if os.path.isdir('./build'):
-	shutil.rmtree('./build')
-os.makedirs('./build')
-if not os.path.isdir('./resources'):
-	os.makedirs('./resources')
-	os.makedirs('./resources/in')
-	os.makedirs('./resources/out')
-if not os.path.isdir('./as3/bin'):
-	os.makedirs('./as3/bin')
+if os.path.isdir('temp'):
+	shutil.rmtree('temp')
+os.makedirs('temp')
+if os.path.isdir('build'):
+	shutil.rmtree('build')
+os.makedirs('build')
 
 # build flash
 if BUILD_FLASH:
-	flashWorkDir = os.getcwd().replace('\\', '/').replace(':', '|')
-	with open('./build.jsfl', 'w') as fh:
-		for fileName in os.listdir('./as3'):
-			if fileName.endswith('fla'):
-				publishDocument = 'fl.publishDocument("file:///{path}/as3/{fileName}", "Default");\r\n'
-				fh.write(publishDocument.format(path=flashWorkDir, fileName=fileName))
-		fh.write('fl.quit(false);')
-	subprocess.call([CONFIG.software.animate, '-e', 'build.jsfl', '-AlwaysRunJSFL'])
+	# JSFL file with commands for Animate
+	jsflContent = ''
+	flashWD = os.getcwd().replace('\\', '/').replace(':', '|')
+	jsflFile = 'build.jsfl'
+	logFile = 'as-build.log'
+	logFileURI = 'file:///%s/%s' % (flashWD, logFile)
+	# add publishDocument command for all *.fla and *.xfl files
+	for dirPath, _, fileNames in os.walk('as3'):
+		for fileName in fileNames:
+			if fileName.endswith('.fla') or fileName.endswith('.xfl'):
+				filePath = '%s/%s' % (dirPath.replace('\\', '/'), fileName)
+				jsflContent += 'FLfile.write("%s", "Publishing: %s\\n", "append");\n' % (logFileURI, filePath)
+				jsflContent += 'fl.publishDocument("file:///%s/%s", "Default");\n' % (flashWD, filePath)
+				jsflContent += 'fl.compilerErrors.save("%s", "append");\n' % (logFileURI)
+	# add close command only if Animate not opened
+	if not processRunning(CONFIG.software.animate):
+		jsflContent += 'fl.quit(false);'
+	with open(jsflFile, 'w') as fh:
+		fh.write(jsflContent)
+	# run Animate
+	try:
+		subprocess.call([CONFIG.software.animate, '-e', jsflFile, '-AlwaysRunJSFL'], stderr=subprocess.STDOUT)
+	except subprocess.CalledProcessError as e:
+		print e
+	# publishing can be asynchronous when Animate is already opened
+	# so waiting script file unlock to remove, which means publishing is done
+	while os.path.exists(jsflFile):
+		try:
+			os.remove(jsflFile)
+			if os.path.isfile(logFile):
+				print (open(logFile, 'r').read())
+		except: #NOSONAR
+			time.sleep(.1)
 
 # build python
 subprocess.call([CONFIG.software.python, '-m', 'compileall', '-f', 'python'])
 
 # copy all staff
-copytree('./resources/in', './temp/res')
-copytree('./as3/bin/', './temp/res/gui/flash')
-copytree('./python', './temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
+if os.path.isdir('resources/in'):
+	copytree('resources/in', 'temp/res')
+if os.path.isdir('as3/bin'):
+	copytree('as3/bin', 'temp/res/gui/flash')
+copytree('python', 'temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
 with open('temp/meta.xml', 'w') as fh:
 	fh.write(META)
 
 # create package
-zipFolder('./temp', './build/%s' % PACKAGE_NAME)
+zipFolder('temp', 'build/%s' % PACKAGE_NAME)
 
 # copy package into game
 if COPY_INTO_GAME:
-	shutil.copy2('./build/%s' % PACKAGE_NAME, WOT_PACKAGES_DIR)
+	shutil.copy2('build/%s' % PACKAGE_NAME, WOT_PACKAGES_DIR)
 
 # create distribution
 if CREATE_DISTRIBUTE:
-	os.makedirs('./temp/distribute/mods/%s' % GAME_VERSION)
-	shutil.copy2('./build/%s' % PACKAGE_NAME, './temp/distribute/mods/%s' % GAME_VERSION)
-	copytree('./resources/out', './temp/distribute')
-	zipFolder('./temp/distribute', './build/{name}_{version}.zip'.format(name=CONFIG.info.id,
+	os.makedirs('temp/distribute/mods/%s' % GAME_VERSION)
+	shutil.copy2('build/%s' % PACKAGE_NAME, 'temp/distribute/mods/%s' % GAME_VERSION)
+	if os.path.isdir('resources/out'):
+		copytree('resources/out', 'temp/distribute')
+	zipFolder('temp/distribute', 'build/{name}_{version}.zip'.format(name=CONFIG.info.id,
 				version=CONFIG.info.version))
 
-# clean up build files
-shutil.rmtree('temp')
+# list for cleaning
+cleanup_list = set([])
 
-# clean python build files
-for dirName, _, files in os.walk('./python'):
+# builder temporary
+cleanup_list.add('temp')
+
+# Animate unnecessary
+cleanup_list.add('EvalScript error.tmp')
+cleanup_list.add('as3/DataStore')
+cleanup_list.add('as-build.log')
+
+# python bytecode
+for dirName, _, files in os.walk('python'):
 	for fileName in files:
 		if fileName.endswith('.pyc'):
-			os.remove(os.path.join(dirName, fileName))
+			cleanup_list.add(os.path.join(dirName, fileName))
 
-# clean flash build files
-if BUILD_FLASH:
-	os.remove('build.jsfl')
+# delete files
+for path in cleanup_list:
+	if os.path.isdir(path):
+		shutil.rmtree(path)
+	elif os.path.isfile(path):
+		os.remove(path)
 
 # run sonar
-if RUN_SONAR:
-	subprocess.call([CONFIG.software.sonar])
+if RUN_SONAR and os.path.isfile(CONFIG.software.sonar):
+		subprocess.call([CONFIG.software.sonar])
