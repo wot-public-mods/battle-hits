@@ -1,0 +1,37 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="BattleHitsUI" itemID="58811bdd-00000126" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.BattleHits" linkageClassName="BattleHitsUI" lastModified="1544552954" lastUniqueIdentifier="3">
+  <timeline>
+    <DOMTimeline name="BattleHitsUI">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/header/BattleHitsHeaderUI" name="header" centerPoint3DX="950" centerPoint3DY="68">
+                  <transformationPoint>
+                    <Point x="66" y="10"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+                <DOMSymbolInstance libraryItemName="_local/hitsPanel/BattleHitsHitsPanelUI" name="hitsPanel" centerPoint3DX="2.5" centerPoint3DY="103.5">
+                  <matrix>
+                    <Matrix ty="101"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="2.5" y="2.5"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+                <DOMSymbolInstance libraryItemName="_local/battlesPanel/BattleHitsBattlesPanelUI" name="battlesPanel">
+                  <matrix>
+                    <Matrix tx="609" ty="101"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="160" y="50"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

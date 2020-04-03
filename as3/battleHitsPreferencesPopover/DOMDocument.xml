@@ -1,0 +1,63 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" currentTimeline="1" xflVersion="2.971" creatorInfo="Adobe Animate" platform="Windows" versionInfo="Saved by Animate Windows 20.0 build 19255" majorVersion="20" buildNumber="19255" viewAngle3D="31.2421376975057" vanishingPoint3DX="512" vanishingPoint3DY="384" nextSceneIdentifier="3" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F" fileGUID="FB9753F3D838114AAECCF29948DC9F5B">
+     <fonts>
+          <DOMFontItem name="$TitleFont" itemID="4aeab54f-0000030c" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageClassName="$TitleFont" linkageURL="gfxfontlib.swf" font="ZurichCondBold" size="0" id="1" sourceLastImported="1484257096"/>
+     </fonts>
+     <symbols>
+          <Include href="BatHitsPreferencesPopoverUI.xml" itemID="5900c3e8-00000197" lastModified="1541691408"/>
+          <Include href="ButtonNormal.xml" itemID="58909760-00000155" lastModified="1485930323"/>
+          <Include href="CheckBox.xml" itemID="58bcea0f-00000720" lastModified="1493234495"/>
+     </symbols>
+     <timelines>
+          <DOMTimeline name="Scene 1">
+               <layers>
+                    <DOMLayer name="Layer 1" color="#9933CC" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements>
+                                        <DOMComponentInstance libraryItemName="BatHitsPreferencesPopoverUI" name="main" uniqueID="1">
+                                             <transformationPoint>
+                                                  <Point x="140" y="35"/>
+                                             </transformationPoint>
+                                             <parametersAsXML><![CDATA[   <property id="visible">
+      <Inspectable name="visible" unlocalizedName="visible" variable="visible" category="" verbose="0" defaultValue="true" type="Boolean"/>
+   </property>
+   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="280" type="Number"/>
+   </property>
+]]></parametersAsXML>
+                                        </DOMComponentInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <scripts/>
+     <persistentData>
+          <PD n="com.air.sdk.path"/>
+     </persistentData>
+     <PrinterSettings/>
+     <publishHistory>
+          <PublishItem publishSize="2735" publishTime="1585939865"/>
+          <PublishItem publishSize="2735" publishTime="1558171050"/>
+          <PublishItem publishSize="2735" publishTime="1558171050"/>
+          <PublishItem publishSize="2735" publishTime="1558171049"/>
+          <PublishItem publishSize="3400" publishTime="1558171046" publishDebug="true"/>
+          <PublishItem publishSize="3403" publishTime="1541692783" publishDebug="true"/>
+          <PublishItem publishSize="2742" publishTime="1541691342"/>
+          <PublishItem publishSize="2742" publishTime="1541691307"/>
+          <PublishItem publishSize="2742" publishTime="1541689907"/>
+          <PublishItem publishSize="2742" publishTime="1541689906"/>
+          <PublishItem publishSize="2742" publishTime="1541689906"/>
+          <PublishItem publishSize="2742" publishTime="1541689904"/>
+          <PublishItem publishSize="2904" publishTime="1493250333"/>
+          <PublishItem publishSize="2904" publishTime="1493250045"/>
+          <PublishItem publishSize="2904" publishTime="1493247946"/>
+          <PublishItem publishSize="2904" publishTime="1493246895"/>
+          <PublishItem publishSize="2904" publishTime="1493243602"/>
+          <PublishItem publishSize="2904" publishTime="1493240341"/>
+          <PublishItem publishSize="2904" publishTime="1493234938"/>
+          <PublishItem publishSize="2807" publishTime="1493234855"/>
+     </publishHistory>
+</DOMDocument>

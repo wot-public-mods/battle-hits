@@ -1,0 +1,73 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/battlesPanel/BattleHitsBattlesPanelUI" itemID="588e730e-0000019e" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.components.BatHitsBattlesPanel" linkageClassName="BattleHitsBattlesPanelUI" lastModified="1525165990" lastUniqueIdentifier="1">
+  <timeline>
+    <DOMTimeline name="BattleHitsBattlesPanelUI">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMComponentInstance libraryItemName="_local/controls/ExtendedScrollingList/BattleHitsCustomScrollingListUI" name="battlesList" centerPoint3DX="140" centerPoint3DY="28" uniqueID="1">
+                  <matrix>
+                    <Matrix a="31.9998779296875" d="10" tx="60" ty="3"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <parametersAsXML><![CDATA[   <property id="itemRendererName">
+      <Inspectable name="itemRendererName" unlocalizedName="itemRendererName" variable="itemRendererName" category="" verbose="0" defaultValue="BattleHitsBattleItemRendererUI" type="Default"/>
+   </property>
+]]></parametersAsXML>
+                </DOMComponentInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Layer 3" color="#FF800A">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMDynamicText name="noDataTF" left="-152" width="245.95" height="21" isSelectable="false">
+                  <matrix>
+                    <Matrix tx="309" ty="20"/>
+                  </matrix>
+                  <textRuns>
+                    <DOMTextRun>
+                      <characters></characters>
+                      <textAttrs>
+                        <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="17.6" size="14" bitmapSize="280" face="$TitleFont*" fillColor="#CCCCCC"/>
+                      </textAttrs>
+                    </DOMTextRun>
+                  </textRuns>
+                </DOMDynamicText>
+                <DOMSymbolInstance libraryItemName="_local/hitsPanel/infoMC" name="noDataMC">
+                  <matrix>
+                    <Matrix tx="115" ty="9.95"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="20" y="20"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Layer 2" color="#9933CC">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/battlesPanel/background" name="background">
+                  <matrix>
+                    <Matrix a="0.999984741210938" d="0.999984741210938"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

@@ -1,0 +1,30 @@
+<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/controls/ExtendedScrollingList/BattleHitsCustomScrollingListUI" itemID="5891fefc-000001d0" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.CustomScrollingList" linkageClassName="BattleHitsCustomScrollingListUI" lastModified="1527050635" displayAsComponent="false" customIconID="0" actionscriptClass="BattleHitsCustomScrollingListUI" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
+  <timeline>
+    <DOMTimeline name="BattleHitsCustomScrollingListUI">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMShape>
+                  <fills>
+                    <FillStyle index="1">
+                      <SolidColor color="#FF0000" alpha="0"/>
+                    </FillStyle>
+                  </fills>
+                  <edges>
+                    <Edge fillStyle1="1" edges="!0 0S2|200 0!200 0|200 200!200 200|0 200!0 200|0 0"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+  <parametersAsXML><![CDATA[   <property id="itemRendererName">
+      <Inspectable name="itemRendererName" unlocalizedName="itemRendererName" variable="itemRendererName" category="" verbose="0" defaultValue="defaultValue" type="Default"/>
+   </property>
+]]></parametersAsXML>
+</DOMComponentItem>

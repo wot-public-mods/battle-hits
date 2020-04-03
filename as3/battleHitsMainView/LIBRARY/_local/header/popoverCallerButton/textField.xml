@@ -1,0 +1,32 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/popoverCallerButton/textField" itemID="59011ee3-00000cfd" lastModified="1544552115">
+  <timeline>
+    <DOMTimeline name="textField">
+      <layers>
+        <DOMLayer name="Layer 1" color="#7BFE83" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMDynamicText name="textField" fontRenderingMode="standard" width="71" height="15.6" isSelectable="false">
+                  <matrix>
+                    <Matrix tx="2" ty="2"/>
+                  </matrix>
+                  <textRuns>
+                    <DOMTextRun>
+                      <characters>POP_CALLER</characters>
+                      <textAttrs>
+                        <DOMTextAttrs alignment="right" aliasText="false" rotation="true" lineHeight="14.5" bitmapSize="240" face="$FieldFont*" fillColor="#FFDD99"/>
+                      </textAttrs>
+                    </DOMTextRun>
+                  </textRuns>
+                  <filters>
+                    <DropShadowFilter angle="0" blurX="10" blurY="10" color="#FF0000" distance="0" quality="2" strength="1.5"/>
+                  </filters>
+                </DOMDynamicText>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

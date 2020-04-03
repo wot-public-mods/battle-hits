@@ -1,0 +1,35 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/controls/BattleHitsAutosizeTileListUI" itemID="5891f47d-0000016b" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.AutosizeTileList" linkageClassName="BattleHitsAutosizeTileListUI" lastModified="1485960333">
+  <timeline>
+    <DOMTimeline name="BattleHitsAutosizeTileListUI">
+      <layers>
+        <DOMLayer color="#4F4FFF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer color="#4F4FFF">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMRectangleObject objectWidth="80" objectHeight="40" x="0" y="0" lockFlag="true">
+                  <fill>
+                    <SolidColor color="#666666"/>
+                  </fill>
+                  <stroke>
+                    <SolidStroke>
+                      <fill>
+                        <SolidColor/>
+                      </fill>
+                    </SolidStroke>
+                  </stroke>
+                </DOMRectangleObject>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

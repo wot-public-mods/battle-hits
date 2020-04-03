@@ -1,0 +1,178 @@
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" backgroundColor="#CCCCCC" guidesColor="#000000" width="1024" height="768" currentTimeline="1" xflVersion="2.971" creatorInfo="Adobe Animate" platform="Windows" versionInfo="Saved by Animate Windows 20.0 build 19255" majorVersion="20" buildNumber="19255" guidesSnapAccuracy="Must be close" rulerVisible="true" timelineLabelWidth="268" vanishingPoint3DX="512" vanishingPoint3DY="384" nextSceneIdentifier="2" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F" fileGUID="2F51E32F413C2046966036A42671198B">
+     <folders>
+          <DOMFolderItem name="_imports" itemID="5884f175-00000154"/>
+          <DOMFolderItem name="_local" itemID="588227f6-000001a1" isExpanded="true"/>
+          <DOMFolderItem name="_local/battlesPanel" itemID="5891989a-0000024f"/>
+          <DOMFolderItem name="_local/battlesPanel/BattleItemRenderer" itemID="58919698-00000244" isExpanded="true"/>
+          <DOMFolderItem name="_local/controls" itemID="58919627-00000231"/>
+          <DOMFolderItem name="_local/controls/ExtendedScrollingList" itemID="58919656-0000023a" isExpanded="true"/>
+          <DOMFolderItem name="_local/header" itemID="5884a349-00000189"/>
+          <DOMFolderItem name="_local/header/hitTypeButton" itemID="593ac4c6-0000018e"/>
+          <DOMFolderItem name="_local/header/hitTypeButton/images" itemID="589e4d48-00000a98"/>
+          <DOMFolderItem name="_local/header/hitTypeButton/symbols" itemID="589e4d4a-00000a9c"/>
+          <DOMFolderItem name="_local/header/popoverCallerButton" itemID="5be47833-00000087"/>
+          <DOMFolderItem name="_local/hitsPanel" itemID="5891989f-00000250" isExpanded="true"/>
+          <DOMFolderItem name="_local/hitsPanel/HitItemRenderer" itemID="58919667-0000023f"/>
+          <DOMFolderItem name="_local/hitsPanel/SortButton" itemID="5af3e28e-00000190" isExpanded="true"/>
+          <DOMFolderItem name="_local/hitsPanel/SortButton/_resources" itemID="5af3e309-000001d7" isExpanded="true"/>
+          <DOMFolderItem name="_local/hitsPanel/SortButton/_symbols" itemID="5af3e38f-00000210" isExpanded="true"/>
+          <DOMFolderItem name="_local/hitsPanel/SortListItemRenderer" itemID="5af3e284-0000018a" isExpanded="true"/>
+          <DOMFolderItem name="_local/hitsPanel/SortListItemRenderer/_resources" itemID="5891a8ce-00000307"/>
+          <DOMFolderItem name="_local/hitsPanel/SortListItemRenderer/_symbols" itemID="5891a8c7-00000306"/>
+     </folders>
+     <fonts>
+          <DOMFontItem name="_imports/$FieldFont" itemID="5881fc6e-0000068b" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$FieldFont" linkageURL="gfxfontlib.swf" font="ZurichCond" size="0" id="7" sourceLastImported="1364979294"/>
+          <DOMFontItem name="_imports/$TitleFont" itemID="5881fc6e-0000068d" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$TitleFont" linkageURL="gfxfontlib.swf" font="ZurichCondBold" size="0" id="6" sourceLastImported="1361352889"/>
+          <DOMFontItem name="_imports/$TextFont" itemID="5881fc6e-0000068f" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$TextFont" linkageURL="gfxfontlib.swf" font="Tahoma" size="0" id="5" sourceLastImported="1364978785"/>
+          <DOMFontItem name="_imports/$UniversCondC" itemID="5881fc6e-00000691" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$UniversCondC" linkageURL="gfxfontlib.swf" font="UniversCondC" size="0" id="4" sourceLastImported="1443514328"/>
+          <DOMFontItem name="_imports/$PartnerLightCondensed" itemID="5881fc6e-00000693" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$PartnerLightCondensed" linkageURL="gfxfontlib.swf" font="PartnerLightCondensed" size="0" id="3" sourceLastImported="1362668622"/>
+          <DOMFontItem name="_imports/$PartnerCondensed" itemID="5881fc6e-00000695" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$PartnerCondensed" linkageURL="gfxfontlib.swf" font="PartnerCondensedMono" size="0" id="2" sourceLastImported="1443514349"/>
+     </fonts>
+     <media>
+          <DOMBitmapItem name="_local/hitsPanel/SortListItemRenderer/_resources/active_bg.png" itemID="5e878cbc-0000008a" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortListItemRenderer/_resources/active_bg.png" sourceLastImported="1534494204" externalFileSize="1074" allowSmoothing="true" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortListItemRenderer/_resources/active_bg.png" bitmapDataHRef="M 23 1585941681.dat" frameRight="2100" frameBottom="700"/>
+          <DOMBitmapItem name="_local/battlesPanel/BattleItemRenderer/button_hovered_bg.png" itemID="5890fb08-00000156" sourceExternalFilepath="./LIBRARY/_local/battlesPanel/BattleItemRenderer/button_hovered_bg.png" sourceLastImported="1585941641" externalFileCRC32="1795288165" externalFileSize="6114" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/battlesPanel/BattleItemRenderer/button_hovered_bg.png" bitmapDataHRef="M 5 1485694106.dat" frameRight="6720" frameBottom="1020"/>
+          <DOMBitmapItem name="_local/hitsPanel/HitItemRenderer/button_hovered_bg.png" itemID="588e5140-00000180" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/HitItemRenderer/button_hovered_bg.png" sourceLastImported="1585940525" externalFileCRC32="636577744" externalFileSize="6114" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/HitItemRenderer/button_hovered_bg.png" bitmapDataHRef="M 4 1485645716.dat" frameRight="6720" frameBottom="1020"/>
+          <DOMBitmapItem name="_local/battlesPanel/BattleItemRenderer/button_normal_bg.png" itemID="5890fb02-00000155" sourceExternalFilepath="./LIBRARY/_local/battlesPanel/BattleItemRenderer/button_normal_bg.png" sourceLastImported="1585940525" externalFileCRC32="3752584379" externalFileSize="6088" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/battlesPanel/BattleItemRenderer/button_normal_bg.png" bitmapDataHRef="M 6 1485694106.dat" frameRight="6720" frameBottom="1020"/>
+          <DOMBitmapItem name="_local/hitsPanel/HitItemRenderer/button_normal_bg.png" itemID="588e5140-0000017f" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/HitItemRenderer/button_normal_bg.png" sourceLastImported="1585940525" externalFileCRC32="985727958" externalFileSize="6088" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/HitItemRenderer/button_normal_bg.png" bitmapDataHRef="M 5 1485645716.dat" frameRight="6720" frameBottom="1020"/>
+          <DOMBitmapItem name="_local/battlesPanel/BattleItemRenderer/button_selected_bg.png" itemID="5890fafb-00000154" sourceExternalFilepath="./LIBRARY/_local/battlesPanel/BattleItemRenderer/button_selected_bg.png" sourceLastImported="1585940525" externalFileCRC32="925428533" externalFileSize="28315" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/battlesPanel/BattleItemRenderer/button_selected_bg.png" bitmapDataHRef="M 7 1485694106.dat" frameRight="6720" frameBottom="1020"/>
+          <DOMBitmapItem name="_local/hitsPanel/HitItemRenderer/button_selected_bg.png" itemID="588e5140-0000017e" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/HitItemRenderer/button_selected_bg.png" sourceLastImported="1585940525" externalFileCRC32="3385032850" externalFileSize="28315" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/HitItemRenderer/button_selected_bg.png" bitmapDataHRef="M 6 1485645716.dat" frameRight="6720" frameBottom="1020"/>
+          <DOMBitmapItem name="_local/header/popoverCallerButton/glow.png" itemID="59011ef7-00000d00" sourceExternalFilepath="./LIBRARY/_local/header/popoverCallerButton/glow.png" sourceLastImported="1585940525" externalFileSize="1644" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/popoverCallerButton/glow.png" bitmapDataHRef="M 15 1493244567.dat" frameRight="1800" frameBottom="800"/>
+          <DOMBitmapItem name="_local/header/header_bg.png" itemID="5e87894e-00000108" sourceExternalFilepath="./LIBRARY/_local/header/header_bg.png" sourceLastImported="1585940768" externalFileCRC32="1633398852" externalFileSize="32024" allowSmoothing="true" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/header_bg.png" bitmapDataHRef="M 27 1499653684.dat" frameRight="38000" frameBottom="2340"/>
+          <DOMBitmapItem name="_local/hitsPanel/SortListItemRenderer/_resources/hovered_bg.png" itemID="5e878cbc-0000008b" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortListItemRenderer/_resources/hovered_bg.png" sourceLastImported="1534494204" externalFileSize="713" allowSmoothing="true" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortListItemRenderer/_resources/hovered_bg.png" bitmapDataHRef="M 24 1585941681.dat" frameRight="2100" frameBottom="700"/>
+          <DOMBitmapItem name="_local/header/popoverCallerButton/icon.png" itemID="59011efb-00000d01" sourceExternalFilepath="./LIBRARY/_local/header/popoverCallerButton/icon.png" sourceLastImported="1585940525" externalFileCRC32="2555009355" externalFileSize="889" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/popoverCallerButton/icon.png" bitmapDataHRef="M 14 1493244567.dat" frameRight="640" frameBottom="640"/>
+          <DOMBitmapItem name="_local/hitsPanel/HitItemRenderer/icon_eye copy 2.png" itemID="5dd9be15-00000076" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/HitItemRenderer/icon_eye copy 2.png" sourceLastImported="1585940525" externalFileCRC32="1458403064" externalFileSize="675" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/HitItemRenderer/icon_eye copy 2.png" bitmapDataHRef="M 25 1574551061.dat" frameRight="320" frameBottom="260"/>
+          <DOMBitmapItem name="_local/battlesPanel/info.png" itemID="58ffbf0a-0000016e" sourceExternalFilepath="./LIBRARY/_local/battlesPanel/info.png" sourceLastImported="1585940525" externalFileCRC32="2442108738" externalFileSize="1571" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/battlesPanel/info.png" bitmapDataHRef="M 13 1493161036.dat" frameRight="800" frameBottom="800"/>
+          <DOMBitmapItem name="_local/hitsPanel/info.png" itemID="5e878c18-00000167" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/info.png" sourceLastImported="1585941526" externalFileCRC32="3166088785" externalFileSize="1492" allowSmoothing="true" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/info.png" bitmapDataHRef="M 12 1493155594.dat" frameRight="800" frameBottom="800"/>
+          <DOMBitmapItem name="_local/hitsPanel/SortListItemRenderer/_resources/normal_bg.png" itemID="5e878cbc-0000008c" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortListItemRenderer/_resources/normal_bg.png" sourceLastImported="1534494204" externalFileSize="506" allowSmoothing="true" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortListItemRenderer/_resources/normal_bg.png" bitmapDataHRef="M 25 1585941681.dat" frameRight="2100" frameBottom="700"/>
+          <DOMBitmapItem name="_local/hitsPanel/SortListItemRenderer/_resources/order_asc.png" itemID="5e87938c-0000014a" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortListItemRenderer/_resources/order_asc.png" sourceLastImported="1585941816" externalFileSize="493" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortListItemRenderer/_resources/order_asc.png" bitmapDataHRef="M 13 1485940122.dat" frameRight="400" frameBottom="700"/>
+          <DOMBitmapItem name="_local/hitsPanel/SortButton/_resources/order_asc.png" itemID="5e87938c-0000014b" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortButton/_resources/order_asc.png" sourceLastImported="1585943413" externalFileCRC32="1379045967" externalFileSize="375" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortButton/_resources/order_asc.png" bitmapDataHRef="M 29 1525932809.dat" frameRight="280" frameBottom="500"/>
+          <DOMBitmapItem name="_local/hitsPanel/SortListItemRenderer/_resources/order_desc.png" itemID="5e878d35-0000010a" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortListItemRenderer/_resources/order_asc.png" sourceLastImported="1585943502" externalFileSize="493" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortListItemRenderer/_resources/order_desc.png" bitmapDataHRef="M 12 1485940122.dat" frameRight="400" frameBottom="700"/>
+          <DOMBitmapItem name="_local/hitsPanel/SortButton/_resources/order_desc.png" itemID="5e87938c-0000014c" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortButton/_resources/order_desc.png" sourceLastImported="1585943426" externalFileCRC32="1283894087" externalFileSize="396" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortButton/_resources/order_desc.png" bitmapDataHRef="M 30 1525932809.dat" frameRight="280" frameBottom="500"/>
+          <DOMBitmapItem name="_local/header/hitTypeButton/images/play_hovered.png" itemID="5e8789ad-00000118" sourceExternalFilepath="./LIBRARY/_local/header/hitTypeButton/images/play_hovered.png" sourceLastImported="1585940898" externalFileSize="4772" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/hitTypeButton/images/play_hovered.png" bitmapDataHRef="M 22 1585940802.dat" frameRight="2600" frameBottom="800"/>
+          <DOMBitmapItem name="_local/header/hitTypeButton/images/play_normal.png" itemID="5e878a24-00000135" sourceExternalFilepath="./LIBRARY/_local/header/hitTypeButton/images/play_normal.png" sourceLastImported="1585940924" externalFileCRC32="766113271" externalFileSize="5211" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/hitTypeButton/images/play_normal.png" bitmapDataHRef="M 21 1497024027.dat" frameRight="2600" frameBottom="800"/>
+          <DOMBitmapItem name="_local/header/hitTypeButton/images/play_pressed.png" itemID="5e878ac9-00000145" sourceExternalFilepath="./LIBRARY/_local/header/hitTypeButton/images/play_pressed.png" sourceLastImported="1585941012" externalFileCRC32="1946185197" externalFileSize="5686" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/hitTypeButton/images/play_pressed.png" bitmapDataHRef="M 17 1497024027.dat" frameRight="2600" frameBottom="800"/>
+          <DOMBitmapItem name="_local/header/hitTypeButton/images/stop_hovered.png" itemID="5e878b5b-00000155" sourceExternalFilepath="./LIBRARY/_local/header/hitTypeButton/images/stop_hovered.png" sourceLastImported="1585941178" externalFileSize="4949" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/hitTypeButton/images/stop_hovered.png" bitmapDataHRef="M 21 1585940802.dat" frameRight="2600" frameBottom="800"/>
+          <DOMBitmapItem name="_local/header/hitTypeButton/images/stop_normal.png" itemID="5e878b5b-00000156" sourceExternalFilepath="./LIBRARY/_local/header/hitTypeButton/images/stop_normal.png" sourceLastImported="1585941326" externalFileCRC32="546841768" externalFileSize="5090" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/hitTypeButton/images/stop_normal.png" bitmapDataHRef="M 22 1497024027.dat" frameRight="2600" frameBottom="800"/>
+          <DOMBitmapItem name="_local/header/hitTypeButton/images/stop_pressed.png" itemID="5e878b75-00000164" sourceExternalFilepath="./LIBRARY/_local/header/hitTypeButton/images/stop_pressed.png" sourceLastImported="1585941350" externalFileCRC32="79629598" externalFileSize="3832" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/header/hitTypeButton/images/stop_pressed.png" bitmapDataHRef="M 18 1497024027.dat" frameRight="2600" frameBottom="800"/>
+     </media>
+     <symbols>
+          <Include href="_imports/BackButtonUI.xml" itemID="5881fc6e-000006c2"/>
+          <Include href="_imports/ButtonBarEx.xml" itemID="5881fc6e-000006c6"/>
+          <Include href="_imports/ButtonNormal.xml" itemID="58909760-00000155" lastModified="1485930323"/>
+          <Include href="_imports/CloseButtonOrangeUI.xml" itemID="5881fc6e-000006c1"/>
+          <Include href="_imports/GradientHorzLineBgPatternPng.xml" itemID="58072138-000001fb"/>
+          <Include href="_imports/GradientVertLineBgPatternPng.xml" itemID="5881fc6e-000006a0"/>
+          <Include href="_imports/SimpleTileListUI.xml" itemID="5832c456-0000391a"/>
+          <Include href="_local/battlesPanel/background.xml" loadImmediate="false" itemID="5891f868-000001ce" lastModified="1485971118"/>
+          <Include href="_local/battlesPanel/BattleHitsBattlesPanelUI.xml" itemID="588e730e-0000019e" lastModified="1525165990"/>
+          <Include href="_local/battlesPanel/BattleItemRenderer/BattleHitsBattleItemRendererUI.xml" itemID="588e72c1-0000019d" lastModified="1585940903"/>
+          <Include href="_local/battlesPanel/BattleItemRenderer/BattleItemRendererHovered.xml" loadImmediate="false" itemID="588de557-0000018d" lastModified="1585940704"/>
+          <Include href="_local/battlesPanel/BattleItemRenderer/BattleItemRendererNormal.xml" loadImmediate="false" itemID="588de55c-0000018e" lastModified="1585940713"/>
+          <Include href="_local/battlesPanel/BattleItemRenderer/BattleItemRendererSelected.xml" loadImmediate="false" itemID="588de550-0000018c" lastModified="1585940723"/>
+          <Include href="_local/battlesPanel/BattleItemRenderer/focusIndicator.xml" loadImmediate="false" itemID="588de4d9-00000188" lastModified="1485694233"/>
+          <Include href="_local/battlesPanel/BattleItemRenderer/HitAreaA.xml" loadImmediate="false" itemID="588de49a-0000017c" lastModified="1485694302"/>
+          <Include href="_local/battlesPanel/infoMC.xml" loadImmediate="false" itemID="58ffd44c-00000176" lastModified="1493155650"/>
+          <Include href="_local/controls/BattleHitsAutosizeTileListUI.xml" itemID="5891f47d-0000016b" lastModified="1485960333"/>
+          <Include href="_local/controls/ExtendedScrollingList/BattleHitsCustomScrollingListUI.xml" itemID="5891fefc-000001d0" lastModified="1527050635"/>
+          <Include href="_local/header/BattleHitsHeaderBackgroundBitmaps.xml" loadImmediate="false" itemID="58841f21-0000017a" lastModified="1499653691"/>
+          <Include href="_local/header/BattleHitsHeaderBackgroundUI.xml" itemID="58841f02-00000178" lastModified="1499709183"/>
+          <Include href="_local/header/BattleHitsHeaderUI.xml" itemID="5884f168-0000014f" lastModified="1544551925"/>
+          <Include href="_local/header/hitTypeButton/BattleHitsHitTypeButtonUI.xml" itemID="593ac685-0000025b" lastModified="1525165193"/>
+          <Include href="_local/header/hitTypeButton/symbols/play_hovered.xml" loadImmediate="false" itemID="589e5218-00000b06" lastModified="1585941018"/>
+          <Include href="_local/header/hitTypeButton/symbols/play_normal.xml" loadImmediate="false" itemID="589e521b-00000b07" lastModified="1585940957"/>
+          <Include href="_local/header/hitTypeButton/symbols/play_pressed.xml" loadImmediate="false" itemID="589e521e-00000b08" lastModified="1585941168"/>
+          <Include href="_local/header/hitTypeButton/symbols/stop_hovered.xml" loadImmediate="false" itemID="589e5222-00000b09" lastModified="1585941331"/>
+          <Include href="_local/header/hitTypeButton/symbols/stop_normal.xml" loadImmediate="false" itemID="589e5225-00000b0a" lastModified="1585941356"/>
+          <Include href="_local/header/hitTypeButton/symbols/stop_pressed.xml" loadImmediate="false" itemID="589e5227-00000b0b" lastModified="1585941364"/>
+          <Include href="_local/header/popoverCallerButton/BattleHitsPopoverCallerButtonUI.xml" itemID="5be477ed-00000084" lastModified="1544552105"/>
+          <Include href="_local/header/popoverCallerButton/glow.xml" loadImmediate="false" itemID="59011eee-00000cfe" lastModified="1493249210"/>
+          <Include href="_local/header/popoverCallerButton/icon.xml" loadImmediate="false" itemID="59011ef2-00000cff" lastModified="1493249212"/>
+          <Include href="_local/header/popoverCallerButton/iconAnim.xml" loadImmediate="false" itemID="59011b33-00000cf8" lastModified="1493249220"/>
+          <Include href="_local/header/popoverCallerButton/mask.xml" loadImmediate="false" itemID="59011ec2-00000cfc" lastModified="1493249010"/>
+          <Include href="_local/header/popoverCallerButton/textField.xml" loadImmediate="false" itemID="59011ee3-00000cfd" lastModified="1544552115"/>
+          <Include href="_local/hitsPanel/background.xml" loadImmediate="false" itemID="58921e45-00000227" lastModified="1485971165"/>
+          <Include href="_local/hitsPanel/BattleHitsHitsPanelUI.xml" itemID="588cc07a-000001e2" lastModified="1585943067"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/focus_indicator.xml" loadImmediate="false" itemID="5891a585-00000289" lastModified="1485940101"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/hit_area.xml" loadImmediate="false" itemID="5891a580-00000288" lastModified="1485940096"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/HitItemRendererUI.xml" itemID="5891a58f-0000028a" lastModified="1574552147"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/hovered_bg.xml" loadImmediate="false" itemID="5891a573-00000285" lastModified="1485940083"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/icon_eye.xml" loadImmediate="false" itemID="5dd9be24-0000007a" lastModified="1574552134"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/normal_bg.xml" loadImmediate="false" itemID="5891a57c-00000287" lastModified="1485940092"/>
+          <Include href="_local/hitsPanel/HitItemRenderer/selected_bg.xml" loadImmediate="false" itemID="5891a577-00000286" lastModified="1485940087"/>
+          <Include href="_local/hitsPanel/infoMC.xml" loadImmediate="false" itemID="58ffbf23-00000178" lastModified="1493155650"/>
+          <Include href="_local/hitsPanel/SortButton/_symbols/order.xml" loadImmediate="false" itemID="5af3e3c7-00000241" lastModified="1525934836"/>
+          <Include href="_local/hitsPanel/SortButton/SortButtonUI.xml" itemID="5af3e2f5-000001d1" lastModified="1539077948"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/_symbols/active_bg.xml" loadImmediate="false" itemID="5891a5ba-000002ad" lastModified="1585941694"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/_symbols/hit_area.xml" loadImmediate="false" itemID="5891bc2d-0000043f" lastModified="1485989225"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/_symbols/hovered_bg.xml" loadImmediate="false" itemID="5891a5b4-000002ac" lastModified="1585941703"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/_symbols/normal_bg.xml" loadImmediate="false" itemID="5891a5af-000002ab" lastModified="1585941710"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/_symbols/order_asc.xml" loadImmediate="false" itemID="5891a63e-000002bc" lastModified="1585941856"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/_symbols/order_desc.xml" loadImmediate="false" itemID="5891a645-000002bd" lastModified="1585941825"/>
+          <Include href="_local/hitsPanel/SortListItemRenderer/SortListItemRendererUI.xml" itemID="5891ab00-0000042f" lastModified="1525933149"/>
+          <Include href="BattleHitsUI.xml" itemID="58811bdd-00000126" lastModified="1544552954"/>
+     </symbols>
+     <timelines>
+          <DOMTimeline name="Scene 1" guides='&lt;guidelines&gt;&lt;guideline direction="h"&gt;954&lt;/guideline&gt;&lt;/guidelines&gt;'>
+               <layers>
+                    <DOMLayer name="as" color="#808080" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <Actionscript>
+                                        <script><![CDATA[
+]]></script>
+                                   </Actionscript>
+                                   <elements>
+                                        <DOMSymbolInstance libraryItemName="BattleHitsUI" name="main">
+                                             <transformationPoint>
+                                                  <Point/>
+                                             </transformationPoint>
+                                        </DOMSymbolInstance>
+                                   </elements>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="dropsowns" color="#FF4FFF" autoNamed="false" heightLiteral="24">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+                    <DOMLayer name="buttons" color="#FF800A" autoNamed="false" heightLiteral="24">
+                         <frames>
+                              <DOMFrame index="0" keyMode="9728">
+                                   <elements/>
+                              </DOMFrame>
+                         </frames>
+                    </DOMLayer>
+               </layers>
+          </DOMTimeline>
+     </timelines>
+     <scripts/>
+     <persistentData>
+          <PD n="com.air.sdk.path"/>
+     </persistentData>
+     <PrinterSettings/>
+     <publishHistory>
+          <PublishItem publishSize="104226" publishTime="1585943511"/>
+          <PublishItem publishSize="104226" publishTime="1585943509"/>
+          <PublishItem publishSize="104226" publishTime="1585943508"/>
+          <PublishItem publishSize="102572" publishTime="1585941368"/>
+          <PublishItem publishSize="104413" publishTime="1574552098"/>
+          <PublishItem publishSize="104401" publishTime="1574551266"/>
+          <PublishItem publishSize="104399" publishTime="1574551263"/>
+          <PublishItem publishSize="103740" publishTime="1574550070"/>
+          <PublishItem publishSize="103793" publishTime="1544551929"/>
+          <PublishItem publishSize="108870" publishTime="1544551820" publishDebug="true"/>
+          <PublishItem publishSize="110135" publishTime="1541762363" publishDebug="true"/>
+          <PublishItem publishSize="110168" publishTime="1541762175" publishDebug="true"/>
+          <PublishItem publishSize="110170" publishTime="1541762172" publishDebug="true"/>
+          <PublishItem publishSize="92019" publishTime="1541762145" publishDebug="true"/>
+          <PublishItem publishSize="92019" publishTime="1541762139" publishDebug="true"/>
+          <PublishItem publishSize="92019" publishTime="1541762019" publishDebug="true"/>
+          <PublishItem publishSize="110058" publishTime="1541761493" publishDebug="true"/>
+          <PublishItem publishSize="110059" publishTime="1541760679" publishDebug="true"/>
+          <PublishItem publishSize="110050" publishTime="1541760333" publishDebug="true"/>
+          <PublishItem publishSize="110059" publishTime="1541760331" publishDebug="true"/>
+     </publishHistory>
+</DOMDocument>

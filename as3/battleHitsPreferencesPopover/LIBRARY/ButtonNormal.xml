@@ -1,0 +1,25 @@
+<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="ButtonNormal" itemID="58909760-00000155" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageClassName="ButtonNormal" linkageURL="guiControlsLoginBattle.swf" lastModified="1485930323" displayAsComponent="false" customIconID="0" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
+  <timeline>
+    <DOMTimeline name="ButtonNormal">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+  <parametersAsXML><![CDATA[   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="80" type="Number"/>
+   </property>
+   <property id="height">
+      <Inspectable name="height" unlocalizedName="height" variable="height" category="" verbose="0" defaultValue="20" type="Number"/>
+   </property>
+   <property id="label">
+      <Inspectable name="label" unlocalizedName="label" variable="label" category="" verbose="0" defaultValue="defaultValue" type="String"/>
+   </property>
+]]></parametersAsXML>
+</DOMComponentItem>
