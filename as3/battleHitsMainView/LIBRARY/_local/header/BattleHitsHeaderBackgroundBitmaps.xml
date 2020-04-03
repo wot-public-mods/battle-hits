@@ -1,0 +1,17 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/BattleHitsHeaderBackgroundBitmaps" itemID="58841f21-0000017a" lastModified="1499653691">
+  <timeline>
+    <DOMTimeline name="BattleHitsHeaderBackgroundBitmaps">
+      <layers>
+        <DOMLayer name="GradientVertLineBgPatternPng" color="#4F4FFF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMBitmapInstance selected="true" libraryItemName="_local/header/header_bg.png"/>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

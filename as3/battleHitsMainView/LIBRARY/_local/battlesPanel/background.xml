@@ -1,0 +1,21 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/battlesPanel/background" itemID="5891f868-000001ce" lastModified="1485971118">
+  <timeline>
+    <DOMTimeline name="background">
+      <layers>
+        <DOMLayer name="GradientHorzLineBgPatternPng" color="#4F4FFF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_imports/GradientHorzLineBgPatternPng" selected="true">
+                  <transformationPoint>
+                    <Point x="207.5" y="1"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

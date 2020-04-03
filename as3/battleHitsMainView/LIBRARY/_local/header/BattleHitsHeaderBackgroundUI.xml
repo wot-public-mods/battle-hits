@@ -1,0 +1,28 @@
+<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/BattleHitsHeaderBackgroundUI" itemID="58841f02-00000178" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.HeaderBackground" linkageClassName="BattleHitsHeaderBackgroundUI" lastModified="1499709183" displayAsComponent="false" customIconID="0" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
+  <timeline>
+    <DOMTimeline name="BattleHitsHeaderBackgroundUI">
+      <layers>
+        <DOMLayer name="bitmaps" color="#4F4FFF" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/header/BattleHitsHeaderBackgroundBitmaps" name="bitmaps" selected="true">
+                  <transformationPoint>
+                    <Point x="512" y="50"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+  <parametersAsXML><![CDATA[   <property id="mouseEnabled">
+      <Inspectable name="mouseEnabled" unlocalizedName="mouseEnabled" variable="mouseEnabled" category="" verbose="0" defaultValue="true" type="Boolean"/>
+   </property>
+   <property id="mouseChildren">
+      <Inspectable name="mouseChildren" unlocalizedName="mouseChildren" variable="mouseChildren" category="" verbose="0" defaultValue="true" type="Boolean"/>
+   </property>
+]]></parametersAsXML>
+</DOMComponentItem>

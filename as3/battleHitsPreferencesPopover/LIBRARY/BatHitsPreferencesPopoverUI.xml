@@ -1,0 +1,71 @@
+<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="BatHitsPreferencesPopoverUI" itemID="5900c3e8-00000197" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.PreferencesPopover" linkageClassName="BatHitsPreferencesPopoverUI" lastModified="1541691408" lastUniqueIdentifier="6" displayAsComponent="false" customIconID="0" actionscriptClass="BatHitsPreferencesPopoverUI" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
+  <timeline>
+    <DOMTimeline name="BatHitsPreferencesPopoverUI">
+      <layers>
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMComponentInstance libraryItemName="CheckBox" name="processReplays" uniqueID="4">
+                  <matrix>
+                    <Matrix tx="20" ty="80"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="10.75" y="10.75"/>
+                  </transformationPoint>
+                  <parametersAsXML><![CDATA[   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="250" type="Number"/>
+   </property>
+   <property id="infoIcoType">
+      <Inspectable name="infoIcoType" unlocalizedName="infoIcoType" variable="infoIcoType" category="" verbose="0" defaultValue="info" type="String"/>
+   </property>
+]]></parametersAsXML>
+                </DOMComponentInstance>
+                <DOMComponentInstance libraryItemName="CheckBox" name="saveOnlySession" uniqueID="5">
+                  <matrix>
+                    <Matrix tx="20" ty="50"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="10.75" y="10.75"/>
+                  </transformationPoint>
+                  <parametersAsXML><![CDATA[   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="250" type="Number"/>
+   </property>
+   <property id="infoIcoType">
+      <Inspectable name="infoIcoType" unlocalizedName="infoIcoType" variable="infoIcoType" category="" verbose="0" defaultValue="info" type="String"/>
+   </property>
+]]></parametersAsXML>
+                </DOMComponentInstance>
+                <DOMComponentInstance libraryItemName="ButtonNormal" name="changeStyle" uniqueID="6">
+                  <matrix>
+                    <Matrix tx="24" ty="10"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <parametersAsXML><![CDATA[   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="150" type="Number"/>
+   </property>
+   <property id="height">
+      <Inspectable name="height" unlocalizedName="height" variable="height" category="" verbose="0" defaultValue="24" type="Number"/>
+   </property>
+   <property id="label">
+      <Inspectable name="label" unlocalizedName="label" variable="label" category="" verbose="0" defaultValue="changeStyle" type="String"/>
+   </property>
+]]></parametersAsXML>
+                </DOMComponentInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+  <parametersAsXML><![CDATA[   <property id="visible">
+      <Inspectable name="visible" unlocalizedName="visible" variable="visible" category="" verbose="0" defaultValue="true" type="Boolean"/>
+   </property>
+   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="100" type="Number"/>
+   </property>
+]]></parametersAsXML>
+</DOMComponentItem>

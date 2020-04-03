@@ -1,0 +1,30 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/popoverCallerButton/glow" itemID="59011eee-00000cfe" lastModified="1493249210">
+  <timeline>
+    <DOMTimeline name="glow">
+      <layers>
+        <DOMLayer name="Layer 1" color="#88E2C5" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMShape isFloating="true">
+                  <fills>
+                    <FillStyle index="1">
+                      <BitmapFill bitmapPath="_local/header/popoverCallerButton/glow.png" bitmapIsClipped="true">
+                        <matrix>
+                          <Matrix a="-20" d="20" tx="90"/>
+                        </matrix>
+                      </BitmapFill>
+                    </FillStyle>
+                  </fills>
+                  <edges>
+                    <Edge fillStyle0="1" edges="!1800 0|0 0!0 0|0 800!0 800|1800 800!1800 800|1800 0"/>
+                  </edges>
+                </DOMShape>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>
