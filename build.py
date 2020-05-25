@@ -84,6 +84,88 @@ def processRunning(path):
 			print('run -> pip install psutil')
 			raise NotImplementedError
 
+def buildFlash():
+	if not BUILD_FLASH:
+		return
+
+	# working directory URI for Animate
+	flashWD = os.getcwd().replace('\\', '/').replace(':', '|')
+
+	# JSFL file with commands for Animate
+	jsflFile = 'build.jsfl'
+	jsflContent = ''
+
+	files = set()
+
+	# add publishDocument command for all *.fla and *.xfl files
+	for dirPath, _, fileNames in os.walk('as3'):
+		for fileName in fileNames:
+			if fileName.endswith('.fla') or fileName.endswith('.xfl'):
+				dirPath = dirPath.replace('\\', '/')
+				logName = fileName.replace('.fla', '.log').replace('.xfl', '.log')
+				files.add((dirPath, fileName, logName))
+
+	if not files:
+		return
+
+	for dirPath, fileName, logName in files:
+		documentURI = 'file:///{}/{}/{}'.format(flashWD, dirPath, fileName)
+		logFileURI = 'file:///{}/{}'.format(flashWD, logName)
+		jsflContent += 'fl.publishDocument("{}", "Default");\n'.format(documentURI)
+		jsflContent += 'fl.compilerErrors.save("{}", false, true);\n'.format(logFileURI)
+		jsflContent += '\n'
+
+	# add close command only if Animate not opened
+	if not processRunning(CONFIG.software.animate):
+		jsflContent += 'fl.quit(false);'
+
+	# save commands for Animate
+	with open(jsflFile, 'w') as fh:
+		fh.write(jsflContent)
+
+	# run Animate
+	try:
+		subprocess.call([CONFIG.software.animate, '-e', jsflFile, '-AlwaysRunJSFL'], stderr=subprocess.STDOUT)
+	except subprocess.CalledProcessError as e:
+		print (e)
+
+	# publishing can be asynchronous when Animate is already opened
+	# so waiting script file unlock to remove, which means publishing is done
+	while os.path.exists(jsflFile):
+		try:
+			os.remove(jsflFile)
+		except: #NOSONAR
+			time.sleep(.1)
+
+	for dirPath, fileName, logName in files:
+		log_data = ''
+		if os.path.isfile(logName):
+			data = open(logName, 'r').read().splitlines()
+			if len(data) > 1:
+				log_data = '\n'.join(data[:-2])
+			os.remove(logName)
+
+		if log_data:
+			print ('Failed publish: {}/{}'.format(dirPath, fileName))
+			print (log_data)
+		else:
+			print ('Published: {}/{}'.format(dirPath, fileName))
+
+def buildPython():
+	for dirPath, _, fileNames in os.walk('python'):
+		for fileName in fileNames:
+			if not fileName.endswith('.py'):
+				continue
+			filePath = "{}/{}".format(dirPath, fileName).replace('\\', '/')
+			try:
+				subprocess.check_output([CONFIG.software.python, '-m', 'py_compile', filePath],
+												stderr=subprocess.STDOUT).decode()
+				print ('Compiled: {}'.format(filePath))
+			except subprocess.CalledProcessError as e:
+				print ('\nFailed compile: {}'.format(filePath))
+				output = e.output.decode()
+				print (output)
+
 # handle args from command line
 BUILD_FLASH = 'flash' in sys.argv
 COPY_INTO_GAME = 'ingame' in sys.argv
@@ -111,14 +193,14 @@ PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format(author=CONFIG.info.auth
 # generate package meta file
 META = """<root>
 	<!-- Techical MOD ID -->
-	<id>{id}</id>
+	<id>{author}.{id}</id>
 	<!-- Package version -->
 	<version>{version}</version>
 	<!-- Human readable name -->
 	<name>{name}</name>
 	<!-- Human readable description -->
 	<description>{description}</description>
-</root>""".format(id='%s.%s' % (CONFIG.info.author, CONFIG.info.id), name=CONFIG.info.name,
+</root>""".format(author=CONFIG.info.author, id=CONFIG.info.id, name=CONFIG.info.name,
 					description=CONFIG.info.description, version=CONFIG.info.version)
 
 # prepere folders
@@ -130,43 +212,10 @@ if os.path.isdir('build'):
 os.makedirs('build')
 
 # build flash
-if BUILD_FLASH:
-	# JSFL file with commands for Animate
-	jsflContent = ''
-	flashWD = os.getcwd().replace('\\', '/').replace(':', '|')
-	jsflFile = 'build.jsfl'
-	logFile = 'as-build.log'
-	logFileURI = 'file:///%s/%s' % (flashWD, logFile)
-	# add publishDocument command for all *.fla and *.xfl files
-	for dirPath, _, fileNames in os.walk('as3'):
-		for fileName in fileNames:
-			if fileName.endswith('.fla') or fileName.endswith('.xfl'):
-				filePath = '%s/%s' % (dirPath.replace('\\', '/'), fileName)
-				jsflContent += 'FLfile.write("%s", "Publishing: %s\\n", "append");\n' % (logFileURI, filePath)
-				jsflContent += 'fl.publishDocument("file:///%s/%s", "Default");\n' % (flashWD, filePath)
-				jsflContent += 'fl.compilerErrors.save("%s", "append");\n' % (logFileURI)
-	# add close command only if Animate not opened
-	if not processRunning(CONFIG.software.animate):
-		jsflContent += 'fl.quit(false);'
-	with open(jsflFile, 'w') as fh:
-		fh.write(jsflContent)
-	# run Animate
-	try:
-		subprocess.call([CONFIG.software.animate, '-e', jsflFile, '-AlwaysRunJSFL'], stderr=subprocess.STDOUT)
-	except subprocess.CalledProcessError as e:
-		print e
-	# publishing can be asynchronous when Animate is already opened
-	# so waiting script file unlock to remove, which means publishing is done
-	while os.path.exists(jsflFile):
-		try:
-			os.remove(jsflFile)
-			if os.path.isfile(logFile):
-				print (open(logFile, 'r').read())
-		except: #NOSONAR
-			time.sleep(.1)
+buildFlash()
 
 # build python
-subprocess.call([CONFIG.software.python, '-m', 'compileall', '-f', 'python'])
+buildPython()
 
 # copy all staff
 if os.path.isdir('resources/in'):
@@ -178,16 +227,16 @@ with open('temp/meta.xml', 'w') as fh:
 	fh.write(META)
 
 # create package
-zipFolder('temp', 'build/%s' % PACKAGE_NAME)
+zipFolder('temp', 'build/{}'.format(PACKAGE_NAME))
 
 # copy package into game
 if COPY_INTO_GAME:
-	shutil.copy2('build/%s' % PACKAGE_NAME, WOT_PACKAGES_DIR)
+	shutil.copy2('build/{}'.format(PACKAGE_NAME), WOT_PACKAGES_DIR)
 
 # create distribution
 if CREATE_DISTRIBUTE:
-	os.makedirs('temp/distribute/mods/%s' % GAME_VERSION)
-	shutil.copy2('build/%s' % PACKAGE_NAME, 'temp/distribute/mods/%s' % GAME_VERSION)
+	os.makedirs('temp/distribute/mods/{}'.format(GAME_VERSION))
+	shutil.copy2('build/{}'.format(PACKAGE_NAME), 'temp/distribute/mods/{}'.format(GAME_VERSION))
 	if os.path.isdir('resources/out'):
 		copytree('resources/out', 'temp/distribute')
 	zipFolder('temp/distribute', 'build/{name}_{version}.zip'.format(name=CONFIG.info.id,
@@ -202,7 +251,6 @@ cleanup_list.add('temp')
 # Animate unnecessary
 cleanup_list.add('EvalScript error.tmp')
 cleanup_list.add('as3/DataStore')
-cleanup_list.add('as-build.log')
 
 # python bytecode
 for dirName, _, files in os.walk('python'):
