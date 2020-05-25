@@ -257,6 +257,8 @@ class HangarScene(AbstractController):
 				effectType = 1
 			elif shotResult == HIT_EFFECT.ARMOR_PIERCED:
 				effectType = 2
+			elif shotResult == HIT_EFFECT.ARMOR_PIERCED_DEVICE_DAMAGED:
+				effectType = 2
 			elif shotResult == HIT_EFFECT.CRITICAL_HIT and hitData['damageFactor'] > 0:
 				effectType = 2
 			elif shotResult in [HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE, HIT_EFFECT.CRITICAL_HIT]:
