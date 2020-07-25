@@ -94,8 +94,10 @@ def onEnterWorld(baseMethod, baseObject, prereqs):
 @override(CompoundAppearance, "_CompoundAppearance__onModelsRefresh")
 def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 	baseMethod(baseObject, modelState, resourceList)
-	battleProcessor = dependency.instance(IBattleProcessor)
-	battleProcessor.onModelsRefresh(baseObject._CompoundAppearance__vehicle, modelState)
+	vehicle = baseObject.getVehicle()
+	if vehicle:
+		battleProcessor = dependency.instance(IBattleProcessor)
+		battleProcessor.onModelsRefresh(baseObject.getVehicle(), modelState)
 
 # handling keystrokes
 @override(game, 'handleKeyEvent')
