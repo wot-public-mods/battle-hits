@@ -15,14 +15,17 @@ def getVehicleLabel(battleData):
 			playerVehicleID = vehicleID
 			break
 	if not playerVehicleID:
-		return '#unknown'
+		return ""
 	if playerVehicleID not in battleData['vehicles']:
-		return '#unknown'
+		return ""
 	resultStr = ""
 	vehiclesCounter = 0
 	# in case multivehicles
 	for compactDescr in battleData['vehicles'][playerVehicleID]:
-		vehicle = vehicles.VehicleDescr(compactDescr=compactDescr)
+		try:
+			vehicle = vehicles.VehicleDescr(compactDescr=compactDescr)
+		except KeyError:  # compact descr not valid for this wot version
+			continue
 		if resultStr != "":
 			vehiclesCounter += 1
 		else:
@@ -66,10 +69,14 @@ class Battles(AbstractDataProvider):
 			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
 
+			vehicleNameLabel = getVehicleLabel(battleData)
+			if not vehicleNameLabel:
+				continue
+
 			self.dataVO.append({
 				"id": battleID,
 				"mapNameLabel": i18n.makeString(ArenaType.g_cache[arenaTypeID].name),
-				"vehicleNameLabel": getVehicleLabel(battleData),
+				"vehicleNameLabel": vehicleNameLabel,
 				"battleStartLabel": battleStartLabel
 			})
 
