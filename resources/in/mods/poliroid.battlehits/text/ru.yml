@@ -34,3 +34,4 @@ popover.saveOnlySessionDescription: {HEADER}Только игровая сесс
 popover.processReplaysLabel: Обрабатывать реплеи
 popover.processReplaysDescription:  {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
 popover.changeStyleLabel: Изменить оформление
+popover.clearDataLabel: Очистить данные

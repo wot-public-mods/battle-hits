@@ -34,3 +34,4 @@ popover.saveOnlySessionDescription: {HEADER}Current session only{/HEADER}{BODY}M
 popover.processReplaysLabel: Process replays
 popover.processReplaysDescription:  {HEADER}Process replays{/HEADER}{BODY}Modification will also save information from viewed replays.{/BODY}
 popover.changeStyleLabel: Switch styles
+popover.clearDataLabel: Clear data

@@ -34,3 +34,4 @@ popover.saveOnlySessionDescription: {HEADER}Sólo la sesión actual{/HEADER}{BOD
 popover.processReplaysLabel: Procesando repeticiones
 popover.processReplaysDescription:  {HEADER}Procesar repeticiones{/HEADER}{BODY}La modificación también guardará información de las repeticiones vistas.{/BODY}
 popover.changeStyleLabel: Interambiar estilos
+popover.clearDataLabel: Borrar datos

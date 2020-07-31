@@ -1,6 +1,5 @@
 ﻿package com.poliroid.gui.lobby.battleHits
 {
-	import flash.events.MouseEvent;
 	import net.wg.gui.components.controls.CheckBox;
 	import net.wg.gui.components.controls.SoundButton;
 	import net.wg.infrastructure.interfaces.IWrapper;
@@ -22,6 +21,8 @@
 		
 		public var changeStyle:SoundButton = null; 
 		
+		public var clearData:SoundButton = null;
+		
 		public function PreferencesPopover() 
 		{
 			super();
@@ -30,13 +31,15 @@
 		override protected function onDispose() : void 
 		{
 			invokeChangeS(processReplays.selected, saveOnlySession.selected);
-			changeStyle.removeEventListener(MouseEvent.CLICK, handeStyleClick);
+			changeStyle.removeEventListener(ButtonEvent.PRESS, handeButtonClick);
+			clearData.removeEventListener(ButtonEvent.PRESS, handeButtonClick);
 			super.onDispose();
 		}
 		
 		override protected function configUI() : void 
 		{
-			changeStyle.addEventListener(MouseEvent.CLICK, handeStyleClick);
+			clearData.addEventListener(ButtonEvent.PRESS, handeButtonClick);
+			changeStyle.addEventListener(ButtonEvent.PRESS, handeButtonClick);
 			super.configUI();
 		}
 		
@@ -59,12 +62,22 @@
 			
 			changeStyle.label = data.changeStyleLabel;
 			
-			height = 125;
+			clearData.label = data.clearDataLabel;
+			
+			height = 165;
 		}
 		
-		private function handeStyleClick() : void 
+		private function handeButtonClick(e:ButtonEvent) : void 
 		{
-			invokeStyleS();
+			switch (e.target)
+			{
+				case changeStyle:
+					invokeStyleS();
+					break;
+				case clearData:
+					invokeDataS();
+					break;
+			}
 		}
 	}
 }

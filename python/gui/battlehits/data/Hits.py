@@ -29,7 +29,8 @@ _RESULT_LABELS = {
 	3: l10n('hits.shotResult.armorPiercesNoDamage'),
 	4: l10n('hits.shotResult.armorPierces'),
 	5: l10n('hits.shotResult.criticalHit'),
-	6: l10n('hits.shotResult.splash'),
+	6: l10n('hits.shotResult.criticalHit'),
+	7: l10n('hits.shotResult.splash'),
 }
 
 class Hits(AbstractDataProvider):
@@ -102,7 +103,7 @@ class Hits(AbstractDataProvider):
 			else:
 				continue
 
-			hitResult = [6] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
+			hitResult = [max(_RESULT_LABELS)] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
 			if hitResult != [4] and hitData['damageFactor'] > 0:
 				hitResult += [4]
 

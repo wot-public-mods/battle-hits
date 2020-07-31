@@ -26,6 +26,10 @@ class State(AbstractController):
 	@currentBattleID.setter
 	def currentBattleID(self, battleID):
 
+		if battleID is None:
+			self.__battleID = None
+			return
+
 		if self.__battleID == battleID:
 			return
 
@@ -45,6 +49,10 @@ class State(AbstractController):
 
 	@currentHitID.setter
 	def currentHitID(self, hitID):
+
+		if hitID is None:
+			self.__hitID = None
+			return
 
 		if self.__hitID == hitID:
 			return

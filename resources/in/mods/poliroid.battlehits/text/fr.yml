@@ -1,0 +1,37 @@
+
+hits.sorting.num: №
+hits.sorting.tank: vehicule
+hits.sorting.result: résultat
+hits.sorting.damage: dégât
+
+hits.shotResult.intermediateRicochet: ricochet *
+hits.shotResult.finalRicochet: ricochet
+hits.shotResult.armorNotPierces: pas percé
+hits.shotResult.armorPiercesNoDamage: tir
+hits.shotResult.armorPierces: dmg
+hits.shotResult.criticalHit: critique
+hits.shotResult.splash: splash
+
+ui.typeMe: MOI
+ui.typeEnemys: ENNEMIES
+ui.closeButton: FERMER
+ui.settingsButton: PARAMETRES
+ui.title: Battle Hits
+
+ui.battle.noData: Aucune batailles trouvées
+ui.battle.multiVehicle:  +%s pcs.
+ui.hits.noDataMe: Pas de tirs reçu
+ui.hits.noDataEnemys: Pas de tirs infligés
+ui.detailedhit.noData: '################'
+
+modslist.name: Battle Hits
+modslist.description: Explorez les tirs reçu par votre véhicule dans la bataille
+
+
+popover.titleLabel: Paramètres
+popover.saveOnlySessionLabel: Session en cours uniquement
+popover.saveOnlySessionDescription: {HEADER}Session en cours uniquement{/HEADER}{BODY}La modification ne stockera que des informations sur la session de jeu en cours (autrement, les informations pour toutes les batailles seront enregistrées).{/BODY}
+popover.processReplaysLabel: Processus de replays
+popover.processReplaysDescription:  {HEADER}Processus de replays{/HEADER}{BODY}Le modification enregistera également les informations des replays consultés.{/BODY}
+popover.changeStyleLabel: Changer de style
+popover.clearDataLabel: Effacer les données

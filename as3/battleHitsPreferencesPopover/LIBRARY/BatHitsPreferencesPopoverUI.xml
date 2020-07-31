@@ -1,8 +1,8 @@
-<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="BatHitsPreferencesPopoverUI" itemID="5900c3e8-00000197" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.PreferencesPopover" linkageClassName="BatHitsPreferencesPopoverUI" lastModified="1541691408" lastUniqueIdentifier="6" displayAsComponent="false" customIconID="0" actionscriptClass="BatHitsPreferencesPopoverUI" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
+<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="BatHitsPreferencesPopoverUI" itemID="5900c3e8-00000197" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.PreferencesPopover" linkageClassName="BatHitsPreferencesPopoverUI" lastModified="1596219149" lastUniqueIdentifier="7" displayAsComponent="false" customIconID="0" actionscriptClass="BatHitsPreferencesPopoverUI" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
   <timeline>
     <DOMTimeline name="BatHitsPreferencesPopoverUI">
       <layers>
-        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true" autoNamed="false">
+        <DOMLayer name="Layer 1" color="#4F80FF" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
@@ -51,6 +51,24 @@
    </property>
    <property id="label">
       <Inspectable name="label" unlocalizedName="label" variable="label" category="" verbose="0" defaultValue="changeStyle" type="String"/>
+   </property>
+]]></parametersAsXML>
+                </DOMComponentInstance>
+                <DOMComponentInstance libraryItemName="ButtonNormal" name="clearData" uniqueID="7">
+                  <matrix>
+                    <Matrix tx="24" ty="120"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <parametersAsXML><![CDATA[   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="150" type="Number"/>
+   </property>
+   <property id="height">
+      <Inspectable name="height" unlocalizedName="height" variable="height" category="" verbose="0" defaultValue="24" type="Number"/>
+   </property>
+   <property id="label">
+      <Inspectable name="label" unlocalizedName="label" variable="label" category="" verbose="0" defaultValue="clearData" type="String"/>
    </property>
 ]]></parametersAsXML>
                 </DOMComponentInstance>

@@ -2,7 +2,7 @@ from helpers import dependency
 from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
 from gui.battlehits._constants import SETTINGS
-from gui.battlehits.skeletons import ISettings
+from gui.battlehits.skeletons import IBattlesHistory, ISettings
 from gui.battlehits.lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
@@ -18,6 +18,7 @@ class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 
 	settingsCtrl = dependency.descriptor(ISettings)
+	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
 
 	def _populate(self):
 		super(BattleHitsPreferencesPopover, self)._populate()
@@ -37,6 +38,9 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 		else:
 			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style1'})
 
+	def invokeData(self):
+		self.battlesHistoryCtrl.clearData()
+
 	def __updateStaticData(self):
 		self.as_setPreferencesS({'titleLabel': l10n('popover.titleLabel'),
 			'closeButtonVisible': True,
@@ -46,4 +50,5 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			'processReplays': self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS),
 			'processReplaysLabel': l10n('popover.processReplaysLabel'),
 			'processReplaysDescription': l10n('popover.processReplaysDescription'),
-			'changeStyleLabel': l10n('popover.changeStyleLabel')})
+			'changeStyleLabel': l10n('popover.changeStyleLabel'),
+			'clearDataLabel': l10n('popover.clearDataLabel')})
