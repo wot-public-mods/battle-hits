@@ -14,5 +14,5 @@ class IBattlesHistory(object):
 	def addBattle(self, data):
 		raise NotImplementedError
 
-	def clearData(self):
+	def deleteHistory(self):
 		raise NotImplementedError

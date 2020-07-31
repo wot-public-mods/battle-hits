@@ -23,7 +23,7 @@ package com.poliroid.gui.lobby.battleHits.data
 		
 		public var changeStyleLabel:String = "changeStyleLabel";
 
-		public var clearDataLabel:String = "clearDataLabel";
+		public var deleteHistoryLabel:String = "deleteHistoryLabel";
 		
 		
 		public function BattleHitsPreferencesDataVO(data:Object)

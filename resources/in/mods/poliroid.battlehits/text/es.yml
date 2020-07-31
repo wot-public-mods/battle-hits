@@ -32,6 +32,6 @@ popover.titleLabel: Ajustes
 popover.saveOnlySessionLabel: Sólo en la sesión actual
 popover.saveOnlySessionDescription: {HEADER}Sólo la sesión actual{/HEADER}{BODY}La modificación sólo guardará información de la sesión actual (de otra manera, la información acerca de todas las batallas serán guardadas).{/BODY}
 popover.processReplaysLabel: Procesando repeticiones
-popover.processReplaysDescription:  {HEADER}Procesar repeticiones{/HEADER}{BODY}La modificación también guardará información de las repeticiones vistas.{/BODY}
+popover.processReplaysDescription: {HEADER}Procesar repeticiones{/HEADER}{BODY}La modificación también guardará información de las repeticiones vistas.{/BODY}
 popover.changeStyleLabel: Interambiar estilos
-popover.clearDataLabel: Borrar datos
+popover.deleteHistoryLabel: Borrar historial

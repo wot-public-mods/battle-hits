@@ -56,7 +56,7 @@ class BattlesHistory(AbstractController):
 			self.__battles.append(data)
 			self.stateCtrl.changeBattleID(len(self.__battles) - 1)
 
-	def clearData(self):
+	def deleteHistory(self):
 		self.__battles = list()
 		self.currentBattleData.clean()
 		g_eventsManager.onChangedBattleData()
