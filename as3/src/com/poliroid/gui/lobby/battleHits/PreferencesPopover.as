@@ -21,7 +21,7 @@
 		
 		public var changeStyle:SoundButton = null; 
 		
-		public var clearData:SoundButton = null;
+		public var deleteHistory:SoundButton = null;
 		
 		public function PreferencesPopover() 
 		{
@@ -32,13 +32,13 @@
 		{
 			invokeChangeS(processReplays.selected, saveOnlySession.selected);
 			changeStyle.removeEventListener(ButtonEvent.PRESS, handeButtonClick);
-			clearData.removeEventListener(ButtonEvent.PRESS, handeButtonClick);
+			deleteHistory.removeEventListener(ButtonEvent.PRESS, handeButtonClick);
 			super.onDispose();
 		}
 		
 		override protected function configUI() : void 
 		{
-			clearData.addEventListener(ButtonEvent.PRESS, handeButtonClick);
+			deleteHistory.addEventListener(ButtonEvent.PRESS, handeButtonClick);
 			changeStyle.addEventListener(ButtonEvent.PRESS, handeButtonClick);
 			super.configUI();
 		}
@@ -62,7 +62,7 @@
 			
 			changeStyle.label = data.changeStyleLabel;
 			
-			clearData.label = data.clearDataLabel;
+			deleteHistory.label = data.deleteHistoryLabel;
 			
 			height = 165;
 		}
@@ -74,7 +74,7 @@
 				case changeStyle:
 					invokeStyleS();
 					break;
-				case clearData:
+				case deleteHistory:
 					invokeDataS();
 					break;
 			}

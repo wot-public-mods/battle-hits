@@ -54,7 +54,7 @@
    </property>
 ]]></parametersAsXML>
                 </DOMComponentInstance>
-                <DOMComponentInstance libraryItemName="ButtonNormal" name="clearData" uniqueID="7">
+                <DOMComponentInstance libraryItemName="ButtonNormal" name="deleteHistory" uniqueID="7">
                   <matrix>
                     <Matrix tx="24" ty="120"/>
                   </matrix>
@@ -68,7 +68,7 @@
       <Inspectable name="height" unlocalizedName="height" variable="height" category="" verbose="0" defaultValue="24" type="Number"/>
    </property>
    <property id="label">
-      <Inspectable name="label" unlocalizedName="label" variable="label" category="" verbose="0" defaultValue="clearData" type="String"/>
+      <Inspectable name="label" unlocalizedName="label" variable="label" category="" verbose="0" defaultValue="deleteHistory" type="String"/>
    </property>
 ]]></parametersAsXML>
                 </DOMComponentInstance>

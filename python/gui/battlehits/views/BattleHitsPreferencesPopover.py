@@ -39,7 +39,7 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style1'})
 
 	def invokeData(self):
-		self.battlesHistoryCtrl.clearData()
+		self.battlesHistoryCtrl.deleteHistory()
 
 	def __updateStaticData(self):
 		self.as_setPreferencesS({'titleLabel': l10n('popover.titleLabel'),
@@ -51,4 +51,4 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			'processReplaysLabel': l10n('popover.processReplaysLabel'),
 			'processReplaysDescription': l10n('popover.processReplaysDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel'),
-			'clearDataLabel': l10n('popover.clearDataLabel')})
+			'deleteHistoryLabel': l10n('popover.deleteHistoryLabel')})

@@ -32,6 +32,6 @@ popover.titleLabel: Paramètres
 popover.saveOnlySessionLabel: Session en cours uniquement
 popover.saveOnlySessionDescription: {HEADER}Session en cours uniquement{/HEADER}{BODY}La modification ne stockera que des informations sur la session de jeu en cours (autrement, les informations pour toutes les batailles seront enregistrées).{/BODY}
 popover.processReplaysLabel: Processus de replays
-popover.processReplaysDescription:  {HEADER}Processus de replays{/HEADER}{BODY}Le modification enregistera également les informations des replays consultés.{/BODY}
+popover.processReplaysDescription: {HEADER}Processus de replays{/HEADER}{BODY}Le modification enregistera également les informations des replays consultés.{/BODY}
 popover.changeStyleLabel: Changer de style
-popover.clearDataLabel: Effacer les données
+popover.deleteHistoryLabel: Effacer l'historique

@@ -32,6 +32,6 @@ popover.titleLabel: Настройки
 popover.saveOnlySessionLabel: Только игровая сессия
 popover.saveOnlySessionDescription: {HEADER}Только игровая сессия{/HEADER}{BODY}Модификация будет сохранять информацию только о текущей игровой сессии (в противном случае будет сохраняться информация о всех боях).{/BODY}
 popover.processReplaysLabel: Обрабатывать реплеи
-popover.processReplaysDescription:  {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
+popover.processReplaysDescription: {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
 popover.changeStyleLabel: Изменить оформление
-popover.clearDataLabel: Очистить данные
+popover.deleteHistoryLabel: Удалить историю
