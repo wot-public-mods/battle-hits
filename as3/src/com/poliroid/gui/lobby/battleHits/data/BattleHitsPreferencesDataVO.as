@@ -22,6 +22,8 @@ package com.poliroid.gui.lobby.battleHits.data
 		public var processReplaysDescription:String = "processReplaysDescription";
 		
 		public var changeStyleLabel:String = "changeStyleLabel";
+
+		public var clearDataLabel:String = "clearDataLabel";
 		
 		
 		public function BattleHitsPreferencesDataVO(data:Object)

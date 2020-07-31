@@ -14,6 +14,7 @@ package com.poliroid.gui.lobby.battleHits.interfaces.impl
 		
 		public var invokeChange:Function;
 		public var invokeStyle:Function;
+		public var invokeData:Function;
 		
 		public function PreferencesPopoverMeta() 
 		{	
@@ -36,6 +37,13 @@ package com.poliroid.gui.lobby.battleHits.interfaces.impl
 		{
 			App.utils.asserter.assertNotNull(invokeStyle, "invokeStyle" + Errors.CANT_NULL);
 			invokeStyle();
+		}
+		
+		
+		public function invokeDataS() : void
+		{
+			App.utils.asserter.assertNotNull(invokeData, "invokeData" + Errors.CANT_NULL);
+			invokeData();
 		}
 		
 		public final function as_setPreferences(data:Object) : void

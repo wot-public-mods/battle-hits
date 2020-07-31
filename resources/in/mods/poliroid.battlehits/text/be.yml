@@ -34,3 +34,4 @@ popover.saveOnlySessionDescription: {HEADER}Толькі гульнявая сэ
 popover.processReplaysLabel: Апрацоўваць запісы бою
 popover.processReplaysDescription:  {HEADER}Апрацоўваць запісы бою{/HEADER}{BODY}Мадыфікацыя будзе захоўваць інфармацыю не толькі пра адваяваныя баі, але і пра прагледжаныя запісы баёў.{/BODY}
 popover.changeStyleLabel: Змяніць афармленне
+popover.clearDataLabel: Ачысціць дадзеныя

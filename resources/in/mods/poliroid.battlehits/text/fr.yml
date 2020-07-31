@@ -34,3 +34,4 @@ popover.saveOnlySessionDescription: {HEADER}Session en cours uniquement{/HEADER}
 popover.processReplaysLabel: Processus de replays
 popover.processReplaysDescription:  {HEADER}Processus de replays{/HEADER}{BODY}Le modification enregistera également les informations des replays consultés.{/BODY}
 popover.changeStyleLabel: Changer de style
+popover.clearDataLabel: Effacer les données

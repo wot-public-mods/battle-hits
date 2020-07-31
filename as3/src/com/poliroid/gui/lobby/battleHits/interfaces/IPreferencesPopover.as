@@ -7,5 +7,6 @@
 	{
 		function invokeChangeS(processReplays:Boolean, saveOnlySession:Boolean) : void;
 		function invokeStyleS() : void;
+		function invokeDataS() : void;
 	}
 }

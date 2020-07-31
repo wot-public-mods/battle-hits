@@ -7,6 +7,7 @@ from debug_utils import LOG_ERROR
 
 from gui.battlehits._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
 from gui.battlehits.controllers import AbstractController
+from gui.battlehits.events import g_eventsManager
 
 class BattlesHistory(AbstractController):
 
@@ -54,6 +55,14 @@ class BattlesHistory(AbstractController):
 		else:
 			self.__battles.append(data)
 			self.stateCtrl.changeBattleID(len(self.__battles) - 1)
+
+	def clearData(self):
+		self.__battles = list()
+		self.currentBattleData.clean()
+		g_eventsManager.onChangedBattleData()
+		g_eventsManager.onChangedHitData()
+		self.stateCtrl.currentBattleID = None
+		self.stateCtrl.currentHitID = None
 
 	def __loadData(self):
 

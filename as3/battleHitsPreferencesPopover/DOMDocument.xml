@@ -3,7 +3,7 @@
           <DOMFontItem name="$TitleFont" itemID="4aeab54f-0000030c" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageClassName="$TitleFont" linkageURL="gfxfontlib.swf" font="ZurichCondBold" size="0" id="1" sourceLastImported="1484257096"/>
      </fonts>
      <symbols>
-          <Include href="BatHitsPreferencesPopoverUI.xml" itemID="5900c3e8-00000197" lastModified="1541691408"/>
+          <Include href="BatHitsPreferencesPopoverUI.xml" itemID="5900c3e8-00000197" lastModified="1596219149"/>
           <Include href="ButtonNormal.xml" itemID="58909760-00000155" lastModified="1485930323"/>
           <Include href="CheckBox.xml" itemID="58bcea0f-00000720" lastModified="1493234495"/>
      </symbols>
@@ -39,6 +39,13 @@
      </persistentData>
      <PrinterSettings/>
      <publishHistory>
+          <PublishItem publishSize="2940" publishTime="1596218980"/>
+          <PublishItem publishSize="2940" publishTime="1596218963"/>
+          <PublishItem publishSize="2939" publishTime="1596218866"/>
+          <PublishItem publishSize="2939" publishTime="1596218563"/>
+          <PublishItem publishSize="2941" publishTime="1596218537"/>
+          <PublishItem publishSize="227" publishTime="1596218528"/>
+          <PublishItem publishSize="227" publishTime="1596218345"/>
           <PublishItem publishSize="2735" publishTime="1585939865"/>
           <PublishItem publishSize="2735" publishTime="1558171050"/>
           <PublishItem publishSize="2735" publishTime="1558171050"/>
@@ -52,12 +59,5 @@
           <PublishItem publishSize="2742" publishTime="1541689906"/>
           <PublishItem publishSize="2742" publishTime="1541689904"/>
           <PublishItem publishSize="2904" publishTime="1493250333"/>
-          <PublishItem publishSize="2904" publishTime="1493250045"/>
-          <PublishItem publishSize="2904" publishTime="1493247946"/>
-          <PublishItem publishSize="2904" publishTime="1493246895"/>
-          <PublishItem publishSize="2904" publishTime="1493243602"/>
-          <PublishItem publishSize="2904" publishTime="1493240341"/>
-          <PublishItem publishSize="2904" publishTime="1493234938"/>
-          <PublishItem publishSize="2807" publishTime="1493234855"/>
      </publishHistory>
 </DOMDocument>

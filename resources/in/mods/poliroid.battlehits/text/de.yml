@@ -34,3 +34,4 @@ popover.saveOnlySessionDescription: {HEADER}Nur aktuelle Sitzung{/HEADER}{BODY}D
 popover.processReplaysLabel: Replays verarbeiten
 popover.processReplaysDescription:  {HEADER}Replays verarbeiten{/HEADER}{BODY}Der Mod speichert auch Informationen aus angesehenen Replays.{/BODY}
 popover.changeStyleLabel: Stil ändern
+popover.clearDataLabel: Daten löschen
