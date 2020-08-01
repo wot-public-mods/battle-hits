@@ -2,6 +2,8 @@ import BattleReplay
 import BigWorld
 import Math
 from items import vehicles
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.tankStructure import ModelStates, TankPartIndexes
 from VehicleEffects import DamageFromShotDecoder
 
@@ -11,6 +13,8 @@ from gui.battlehits.controllers import AbstractController
 from gui.battlehits.utils import generateWheelsData
 
 class BattleProcessor(AbstractController):
+
+	guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
 	def __init__(self):
 		super(BattleProcessor, self).__init__()
@@ -78,12 +82,9 @@ class BattleProcessor(AbstractController):
 
 		self.__vehicles = {}
 
-		for vehicleID, vehicle in player.arena.vehicles.iteritems():
-			if vehicleID not in self.__vehicles:
-				try:
-					self.__vehicles[vehicleID] = int(vehicle['vehicleType'].maxHealth)
-				except: #NOSONAR
-					self.__vehicles[vehicleID] = -1
+		arenaDP = self.guiSessionProvider.getArenaDP()
+		for vInfoVO in arenaDP.getVehiclesInfoIterator():
+			self.__vehicles[vInfoVO.vehicleID] = vInfoVO.vehicleType.maxHealth
 
 	def __onDestroyBattle(self):
 
@@ -106,7 +107,7 @@ class BattleProcessor(AbstractController):
 			return
 
 		try:
-			self.__vehicles[vehicle.id] = int(vehicle.health) if vehicle.isCrewActive else 0
+			self.__vehicles[vehicle.id] = int(vehicle.health) if vehicle.isAlive() else 0
 		except: #NOSONAR
 			self.__vehicles[vehicle.id] = -1
 
