@@ -26,10 +26,12 @@ def getVehicleLabel(battleData):
 			vehicle = vehicles.VehicleDescr(compactDescr=compactDescr)
 		except KeyError:  # compact descr not valid for this wot version
 			continue
-		if resultStr != "":
+		vName = vehicle.type.shortUserString
+		#print vehicle.type.shortUserString
+		if resultStr and vName != resultStr:
 			vehiclesCounter += 1
 		else:
-			resultStr = vehicle.type.shortUserString
+			resultStr = vName
 	if vehiclesCounter:
 		resultStr += l10n('ui.battle.multiVehicle') % str(vehiclesCounter)
 	return resultStr
