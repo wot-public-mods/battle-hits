@@ -1,6 +1,7 @@
 import BattleReplay
 import BigWorld
 import Math
+from constants import ATTACK_REASON
 from items import vehicles
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -112,28 +113,40 @@ class BattleProcessor(AbstractController):
 			self.__vehicles[vehicle.id] = -1
 
 	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):
-
-		if not all([self.trackBattle, self.__battleData, self.__isAlive, attackerID]):
+		
+		# skip if any condition fired
+		if not all([self.trackBattle, self.__battleData, self.__isAlive]):
 			return
 
-		damage = 0
-		if vehicle.id in self.__vehicles:
-			damage = self.__vehicles[vehicle.id] - newHealth if newHealth >= 0.0 else self.__vehicles[vehicle.id]
-			self.__vehicles[vehicle.id] = newHealth
-
-		if attackReasonID != 0 or not vehicle.isPlayerVehicle and attackerID != BigWorld.player().playerVehicleID:
+		# we got uninitialized vehicle as victim
+		if vehicle.id not in self.__vehicles:
 			return
 
-		hitID = None
+		# get damage from HP Cache
+		damage = self.__vehicles[vehicle.id]
+		if newHealth > 0:
+			damage = self.__vehicles[vehicle.id] - newHealth
+		self.__vehicles[vehicle.id] = newHealth
+
+		# skip if atacker is not Vehicle
+		if not attackerID:
+			return
+
+		# skip if atack reason is not shot
+		if attackReasonID != ATTACK_REASON.getIndex(ATTACK_REASON.SHOT):
+			return
+
+		# skip if atacker and victim is not a player
+		if not vehicle.isPlayerVehicle and attackerID != BigWorld.player().playerVehicleID:
+			return
+
+		# find target hit, and update data there
 		for hitIdx, hitCtx in enumerate(self.__battleData['hits']):
 			if isinstance(hitCtx['damage'], tuple):
 				_attackerID, _victimID = hitCtx['damage']
 				if _attackerID == attackerID and _victimID == vehicle.id:
-					hitID = hitIdx
+					self.__battleData['hits'][hitIdx]['damage'] = damage
 					break
-
-		if hitID is not None:
-			self.__battleData['hits'][hitID]['damage'] = damage
 
 	def onModelsRefresh(self, vehicle, modelState):
 
