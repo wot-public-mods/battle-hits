@@ -63,6 +63,9 @@ CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 SETTINGS_VERSION = 10
 CACHE_VERSION = 27
 
+BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
+BATTLE_ROYALE_SPACE_PATH = 'spaces/h31_battle_royale_2020'
+
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 
 CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),

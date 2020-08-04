@@ -1,7 +1,7 @@
 import BigWorld
 import game
 
-from constants import QUEUE_TYPE
+from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui.app_loader.settings import APP_NAME_SPACE
@@ -13,8 +13,11 @@ from gui.ClientHangarSpace import ClientHangarSpace
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
-from gui.prb_control.prb_getters import getQueueType
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import EventDispatcher
+from gui.prb_control.prb_getters import getQueueType
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.shared import g_eventBus, events
 from gui.shared.personality import ServicesLocator
 from Vehicle import Vehicle
@@ -99,6 +102,15 @@ def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 		battleProcessor = dependency.instance(IBattleProcessor)
 		battleProcessor.onModelsRefresh(baseObject.getVehicle(), modelState)
 
+# fix for battleroyale prb select
+@override(battle_selector_items._BattleSelectorItems, 'select')
+def select(baseMethod, baseObject, action):
+	state = dependency.instance(IState)
+	if state.enabled and action in (PREBATTLE_ACTION_NAME.BATTLE_ROYALE, 
+									PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD):
+		state.disable(silent=True)
+	return baseMethod(baseObject, action)
+
 # handling keystrokes
 @override(game, 'handleKeyEvent')
 def handleKeyEvent(baseMethod, event):
@@ -147,10 +159,28 @@ def loadHangar(baseMethod, baseObject):
 	handleAvailability()
 	return base
 
+@override(EventDispatcher, 'loadSquad')
+def loadSquad(baseMethod, baseObject, prbType, ctx=None, isTeamReady=False):
+	base = baseMethod(baseObject, prbType, ctx, isTeamReady)
+	handleAvailability()
+	return base
+
+@override(EventDispatcher, 'updateUI')
+def updateUI(baseMethod, baseObject, loadedAlias=None):
+	base = baseMethod(baseObject, loadedAlias)
+	handleAvailability()
+	return base
+
 def handleAvailability():
 	isInQueue = getQueueType() != QUEUE_TYPE.UNKNOWN
+	battleRoyaleSquad = False
+	dispatcher = g_prbLoader.getDispatcher()
+	if dispatcher is not None:
+		state = dispatcher.getFunctionalState()
+		battleRoyaleSquad = state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE)
 	if g_modsListApi is not None:
-		g_modsListApi.updateModification(id="battlehits", enabled=not isInQueue)
+		enabled = not isInQueue and not battleRoyaleSquad
+		g_modsListApi.updateModification(id="battlehits", enabled=enabled)
 	state = dependency.instance(IState)
 	if isInQueue and state.enabled:
 		state.switch()
