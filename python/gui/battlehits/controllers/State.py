@@ -120,6 +120,9 @@ class State(AbstractController):
 		self.enabled = True
 
 	def disable(self):
+		self.__battleID = None
+		self.__hitID = None
+
 		self.vehicleCtrl.removeVehicle()
 		self.hangarCameraCtrl.disable()
 		self.hangarSceneCtrl.destroy()
