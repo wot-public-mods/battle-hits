@@ -12,7 +12,7 @@ class IState(object):
 	def enable(self):
 		raise NotImplementedError
 
-	def disable(self):
+	def disable(self, silent=False):
 		raise NotImplementedError
 
 	def switch(self):
