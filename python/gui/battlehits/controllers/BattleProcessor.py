@@ -103,6 +103,10 @@ class BattleProcessor(AbstractController):
 		self.__vehicles = {}
 
 	def processEnterWorld(self, vehicle):
+		
+		# update isAlive state for respawned vehicle
+		if vehicle and vehicle.isPlayerVehicle:
+			self.__isAlive = vehicle.isAlive()
 
 		if not all([self.trackBattle, self.__battleData, self.__isAlive]):
 			return
@@ -150,7 +154,7 @@ class BattleProcessor(AbstractController):
 
 	def onModelsRefresh(self, vehicle, modelState):
 
-		if not all([self.trackBattle, self.__battleData, self.__isAlive]):
+		if not all([self.trackBattle, self.__battleData]):
 			return
 
 		if vehicle is None or not vehicle.isPlayerVehicle:

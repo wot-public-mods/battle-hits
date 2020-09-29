@@ -49,6 +49,11 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 	from constants import SHELL_TYPES
 	shellType, shellSplash = 0, 0.0
 	shellDescr = getShell(vehicleDescriptor, effectsIndex)
+
+	# return None if shellDescr is None
+	if shellDescr is None:
+		return None, None
+
 	if shellDescr.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
 		shellType = 0
 	elif shellDescr.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:

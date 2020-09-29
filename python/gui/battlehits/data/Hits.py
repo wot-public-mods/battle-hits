@@ -103,6 +103,10 @@ class Hits(AbstractDataProvider):
 			else:
 				continue
 
+			# skip hit if shell is not shell (gaus gun of waffentrager, etc)
+			if shellType is None:
+				continue
+
 			hitResult = [max(_RESULT_LABELS)] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
 			if hitResult != [4] and hitData['damageFactor'] > 0:
 				hitResult += [4]
