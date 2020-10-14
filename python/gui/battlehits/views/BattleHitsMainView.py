@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.strongholds.sound_constants import STRONGHOLD_SOUND_SPACE
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
@@ -91,7 +92,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		if self.__backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
 			event_dispatcher.showResearchView(self.__vehicleCD)
 		else:
-			event = g_entitiesFactories.makeLoadEvent(self.__backAlias)
+			event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__backAlias))
 			self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
 	def hitsToPlayerClick(self, hitsToPlayer):
