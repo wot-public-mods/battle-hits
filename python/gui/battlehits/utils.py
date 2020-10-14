@@ -110,3 +110,20 @@ def generateWheelsData(vehicle):
 		for nodeName in nodesNames:
 			wheels[nodeName] = packMatrix(vehicle.appearance.compoundModel.node(nodeName).localMatrix)
 	return wheels
+
+def getLobbyHeader():
+	""" Getter of LobbyHeader view instance """
+	from gui.app_loader.settings import APP_NAME_SPACE
+	from gui.shared.personality import ServicesLocator
+	from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+	from frameworks.wulf import WindowLayer
+	app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+	if not app or not app.containerManager:
+		return
+	lobby = app.containerManager.getContainer(WindowLayer.VIEW)
+	if not lobby:
+		return
+	view = lobby.getView()
+	if not view:
+		return
+	return view.components.get(VIEW_ALIAS.LOBBY_HEADER, None)

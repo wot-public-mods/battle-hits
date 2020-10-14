@@ -4,6 +4,7 @@ from Account import PlayerAccount
 from gui import ClientHangarSpace as chs
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.utils import getLobbyHeader
 from gui.battlehits._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
@@ -96,6 +97,11 @@ class State(AbstractController):
 		if self.hangarSpace is None or self.hangarSpace.space is None:
 			return
 
+		# disable lobby header state
+		lobbyHeader = getLobbyHeader()
+		if lobbyHeader:
+			lobbyHeader.disableLobbyHeaderControls(True)
+
 		if self.currentBattleID is not None:
 			self.currentBattleData.battleByID(self.currentBattleID)
 			if self.currentHitID is not None:
@@ -143,3 +149,9 @@ class State(AbstractController):
 		self.enabled = False
 
 		g_eventsManager.closeMainView()
+
+		# restore lobby header state
+		lobbyHeader = getLobbyHeader()
+		if lobbyHeader:
+			lobbyHeader.disableLobbyHeaderControls(False)
+
