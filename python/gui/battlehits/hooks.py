@@ -102,15 +102,6 @@ def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 		battleProcessor = dependency.instance(IBattleProcessor)
 		battleProcessor.onModelsRefresh(baseObject.getVehicle(), modelState)
 
-# fix for battleroyale prb select
-@override(battle_selector_items._BattleSelectorItems, 'select')
-def select(baseMethod, baseObject, action):
-	state = dependency.instance(IState)
-	if state.enabled and action in (PREBATTLE_ACTION_NAME.BATTLE_ROYALE, 
-									PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD):
-		state.disable(silent=True)
-	return baseMethod(baseObject, action)
-
 # handling keystrokes
 @override(game, 'handleKeyEvent')
 def handleKeyEvent(baseMethod, event):
