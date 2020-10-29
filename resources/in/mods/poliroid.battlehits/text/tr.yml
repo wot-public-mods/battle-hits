@@ -1,0 +1,37 @@
+
+hits.sorting.num: №
+hits.sorting.tank: Araç
+hits.sorting.result: Sonuç
+hits.sorting.damage: Hasar
+
+hits.shotResult.intermediateRicochet: Sekme *
+hits.shotResult.finalRicochet: Sekme
+hits.shotResult.armorNotPierces: Delmedi
+hits.shotResult.armorPiercesNoDamage: vuruş
+hits.shotResult.armorPierces: hasar
+hits.shotResult.criticalHit: kritik isabet
+hits.shotResult.splash: patlama hasarı
+
+ui.typeMe: Ben
+ui.typeEnemys: Düşmanlar
+ui.closeButton: KAPAT
+ui.settingsButton: AYARLAR
+ui.title: Battle Hits
+
+ui.battle.noData: Savaş bulunamadı.
+ui.battle.multiVehicle:  +%s adet.
+ui.hits.noDataMe: Hasar alınmadı
+ui.hits.noDataEnemys: Hasar verilmedi.
+ui.detailedhit.noData: '################'
+
+modslist.name: Battle Hits
+modslist.description: Savaşta tankına gelen atışları gör.
+
+
+popover.titleLabel: Ayarlar
+popover.saveOnlySessionLabel: Sadece Şimdiki Oturum
+popover.saveOnlySessionDescription: {HEADER}Sadece Şimdiki Oturum{/HEADER}{BODY}Değişiklikler sadece şimdiki oturumu saklayacaktır.(diğer türlü, tüm savaşların istatistikleri kaydedilecek).{/BODY}
+popover.processReplaysLabel: Oyun tekrarlarını işle
+popover.processReplaysDescription: {HEADER}Oyun tekrarlarını işle{/HEADER}{BODY}İzlenen oyun tekrarlarını da gösterilecektir.{/BODY}
+popover.changeStyleLabel: Stil değiştir
+popover.deleteHistoryLabel: Geçmişi sil
