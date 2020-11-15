@@ -99,6 +99,16 @@ class Vehicle(AbstractController):
 			Waiting.hide('loadHangarSpaceVehicle')
 			return
 
+		# skip build if target vehicle dont loaded
+		if not resourceRefs.has_key(self.compactDescr.name):
+			Waiting.hide('loadHangarSpaceVehicle')
+			return
+
+		# skip build if collision dont loaded
+		if not resourceRefs.has_key('collisionAssembler'):
+			Waiting.hide('loadHangarSpaceVehicle')
+			return
+
 		self.removeVehicle()
 
 		self.__collision = resourceRefs['collisionAssembler']
