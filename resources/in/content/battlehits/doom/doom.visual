@@ -16,23 +16,23 @@
 			<primitive> indices </primitive>
 			<primitiveGroup> 0
 				<material>
-					<identifier> bot </identifier>
-					<fx> shaders/std_effects/glow.fx </fx>
-					<collisionFlags> 0 </collisionFlags>
-					<materialKind> 0 </materialKind>
-					<property> diffuseMap
-						<Texture> content/battlehits/floor.dds </Texture>
-					</property>
-				</material>
-			</primitiveGroup>
-			<primitiveGroup> 1
-				<material>
 					<identifier> cup </identifier>
 					<fx> shaders/std_effects/glow.fx </fx>
 					<collisionFlags> 0 </collisionFlags>
 					<materialKind> 0 </materialKind>
 					<property> diffuseMap
 						<Texture> content/battlehits/doom.dds </Texture>
+					</property>
+				</material>
+			</primitiveGroup>
+			<primitiveGroup> 1
+				<material>
+					<identifier> bot </identifier>
+					<fx> shaders/std_effects/glow.fx </fx>
+					<collisionFlags> 0 </collisionFlags>
+					<materialKind> 0 </materialKind>
+					<property> diffuseMap
+						<Texture> content/battlehits/floor.dds </Texture>
 					</property>
 				</material>
 			</primitiveGroup>
