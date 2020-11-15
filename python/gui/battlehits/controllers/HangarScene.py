@@ -293,9 +293,9 @@ class HangarScene(AbstractController):
 		hitData = self.currentBattleData.hit
 
 		if hitData['isExplosion']:
-			if hitData['shellSplash'] <= 4:
+			if hitData['shellSplash'] <= 6:
 				splashIndex = 2
-			elif hitData['shellSplash'] <= 8:
+			elif hitData['shellSplash'] <= 12:
 				splashIndex = 1
 			else:
 				splashIndex = 0
