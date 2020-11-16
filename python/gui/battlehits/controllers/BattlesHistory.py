@@ -45,16 +45,16 @@ class BattlesHistory(AbstractController):
 
 	def addBattle(self, data):
 
+		# skip battle if its replay and user disable replays record
 		if BattleReplay.isPlaying() and not self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS, False):
 			return
 
+		# store or update battle data
 		idx, _ = self.getBattleByUniqueID(data['common']['arenaUniqueID'])
 		if idx is not None:
 			self.__battles[idx] = data
-			self.stateCtrl.changeBattleID(idx)
 		else:
 			self.__battles.append(data)
-			self.stateCtrl.changeBattleID(len(self.__battles) - 1)
 
 	def deleteHistory(self):
 		self.__battles = list()

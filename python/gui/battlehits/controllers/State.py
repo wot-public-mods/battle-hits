@@ -78,21 +78,6 @@ class State(AbstractController):
 		else:
 			self.disable()
 
-	def changeBattleID(self, battleID):
-
-		if self.currentBattleID == battleID:
-			return
-
-		for availableBattleID, _ in enumerate(self.battlesHistoryCtrl.history):
-			if availableBattleID != battleID:
-				continue
-			self.currentBattleID = battleID
-			self.currentBattleData.battleByID(battleID)
-			if self.currentBattleData.battle['hits']:
-				self.currentHitID = self.hitsData.desiredID
-			else:
-				self.currentHitID = None
-
 	def enable(self):
 		if self.hangarSpace is None or self.hangarSpace.space is None:
 			return

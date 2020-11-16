@@ -17,6 +17,3 @@ class IState(object):
 
 	def switch(self):
 		raise NotImplementedError
-
-	def changeBattleID(self, battleID):
-		raise NotImplementedError

@@ -90,7 +90,10 @@ class HangarCamera(AbstractController):
 		if self.__distLimits:
 			self.__dist = math_utils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
 
-		camera = self.hangarSpace.space.camera
+		space = self.hangarSpace.space
+		if space.camera is None:
+			return
+		camera = space.camera
 		yaw = math_utils.reduceToPI(self.__yaw - self.__offset)
 		pitch = (self.__pitch - self.__offset)
 		dist = self.__dist - self.__offset
