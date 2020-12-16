@@ -1,0 +1,37 @@
+
+hits.sorting.num: №
+hits.sorting.tank: 車輌
+hits.sorting.result: 結果
+hits.sorting.damage: ダメージ
+
+hits.shotResult.intermediateRicochet: 跳弾 *
+hits.shotResult.finalRicochet: 跳弾
+hits.shotResult.armorNotPierces: 非貫通
+hits.shotResult.armorPiercesNoDamage: 貫通 (0ダメ)
+hits.shotResult.armorPierces: 貫通
+hits.shotResult.criticalHit: 損傷
+hits.shotResult.splash: 爆風
+
+ui.typeMe: 自車輌
+ui.typeEnemys: 敵車輌
+ui.closeButton: 閉じる
+ui.settingsButton: 設定
+ui.title: Battle Hits
+
+ui.battle.noData: 戦闘が見つかりません
+ui.battle.multiVehicle:  +%s 回
+ui.hits.noDataMe: 被弾はありません
+ui.hits.noDataEnemys: 命中弾はありません
+ui.detailedhit.noData: '################'
+
+modslist.name: Battle Hits
+modslist.description: 戦闘時の被弾状況を表示します
+
+
+popover.titleLabel: 設定
+popover.saveOnlySessionLabel: 現在のセッションのみ保存
+popover.saveOnlySessionDescription: {HEADER}現在のセッションのみ保存{/HEADER}{BODY}現在のゲームセッションに関する情報のみを保存します (選択しない場合は、すべての戦闘についての情報を保存します)。{/BODY}
+popover.processReplaysLabel: リプレイ情報を保存
+popover.processReplaysDescription: {HEADER}リプレイ情報を保存{/HEADER}{BODY}リプレイを表示したときの情報も保存します。{/BODY}
+popover.changeStyleLabel: 設定変更
+popover.deleteHistoryLabel: 履歴の削除
