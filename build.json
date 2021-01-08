@@ -7,13 +7,13 @@
 	},
 	"game": {
 		"folder": "E:\\wot\\cis",
-		"version": "1.11.0.0"
+		"version": "1.11.1.0"
 	},
 	"info": {
 		"id": "battlehits",
 		"author": "poliroid",
 		"name": "Battle Hits",
 		"description": "Explore received and given hits by your vehicle in battle",
-		"version": "1.6.1"
+		"version": "1.6.2"
 	}
 }
