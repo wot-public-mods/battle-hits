@@ -83,8 +83,8 @@ def showDamageFromExplosion(baseMethod, baseObject, attackerID, center, effectsI
 	battleProcessor.processExplosion(baseObject, attackerID, center, effectsIndex, damageFactor)
 
 @override(Vehicle, "onHealthChanged")
-def onHealthChanged(baseMethod, baseObject, newHealth, attackerID, attackReasonID):
-	baseMethod(baseObject, newHealth, attackerID, attackReasonID)
+def onHealthChanged(baseMethod, baseObject, newHealth, oldHealth, attackerID, attackReasonID):
+	baseMethod(baseObject, newHealth, oldHealth, attackerID, attackReasonID)
 	battleProcessor = dependency.instance(IBattleProcessor)
 	battleProcessor.processHealthChanged(baseObject, newHealth, attackerID, attackReasonID)
 
