@@ -24,10 +24,9 @@ def getVehicleLabel(battleData):
 	for compactDescr in battleData['vehicles'][playerVehicleID]:
 		try:
 			vehicle = vehicles.VehicleDescr(compactDescr=compactDescr)
-		except KeyError:  # compact descr not valid for this wot version
+		except: # dont raise on "compact descriptor to XML mismatch"
 			continue
 		vName = vehicle.type.shortUserString
-		#print vehicle.type.shortUserString
 		if resultStr and vName != resultStr:
 			vehiclesCounter += 1
 		else:
