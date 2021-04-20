@@ -1,7 +1,9 @@
 import Math
 import BigWorld
+import CGF
 
 import math_utils
+from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
@@ -12,6 +14,14 @@ from vehicle_systems.tankStructure import (ColliderTypes, ModelsSetParams, Model
 from vehicle_systems.model_assembler import prepareCompoundAssembler
 from vehicle_systems.stricted_loading import makeCallbackWeak
 
+
+class CollisionObject(ScriptGameObject):
+
+	collision = ComponentDescriptor()
+
+	def __init__(self, spaceID):
+		ScriptGameObject.__init__(self, spaceID, 'BattleHitsHangarVehicle')
+
 class Vehicle(AbstractController):
 
 	@property
@@ -20,7 +30,15 @@ class Vehicle(AbstractController):
 
 	@property
 	def collision(self):
-		return self.__collision
+		if self.__collision and self.__collision.isValid():
+			return self.__collision.collision
+
+	@collision.setter
+	def collision(self, value):
+		if self.__collision and self.__collision.isValid() and self.__collision.collision and self.__collision.collision is not None:
+			BigWorld.removeCameraCollider(self.__collision.collision.getColliderID())
+			self.__collision.removeComponentByType(BigWorld.CollisionComponent)
+		self.__collision.collision = value
 
 	@property
 	def compactDescr(self):
@@ -39,6 +57,24 @@ class Vehicle(AbstractController):
 		self.__components = {}
 		self.__compoundModel = None
 		self.__collision = None
+
+	def initialize(self):
+		self.__collision = CollisionObject(BigWorld.camera().spaceID)
+		self.__collision.activate()
+
+	def __on_closeMainView(self):
+		self.removeVehicle()
+		if self.__collision and self.__collision.isValid():
+			self.__collision.destroy()
+		self.__collision = None
+
+	def init(self):
+		g_eventsManager.closeMainView += self.__on_closeMainView
+
+	def fini(self):
+		if self.__collision:
+			self.__collision.destroy()
+		self.__compoundModel = None
 
 	def loadVehicle(self):
 
@@ -68,6 +104,7 @@ class Vehicle(AbstractController):
 
 			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
 			loadCallback = makeCallbackWeak(self.__onModelLoaded, self.__currentBuildIndex)
+			self.removeVehicle()
 			BigWorld.loadResourceListBG((normalAssembler, collisionAssembler, ), loadCallback)
 			return
 
@@ -83,15 +120,16 @@ class Vehicle(AbstractController):
 
 		self.__currentCompDescrStr = None
 
+		if self.collision:
+			BigWorld.removeCameraCollider(self.collision.getColliderID())
+			if self.__collision:
+				self.__collision.removeComponentByType(BigWorld.CollisionComponent)
+		self.collision = None
+
 		if self.__compoundModel:
 			BigWorld.delModel(self.__compoundModel)
+			self.__compoundModel.reset()
 		self.__compoundModel = None
-
-		if self.__collision:
-			BigWorld.removeCameraCollider(self.__collision.getColliderID())
-			self.__collision.deactivate()
-			self.__collision.destroy()
-		self.__collision = None
 
 	def __onModelLoaded(self, buildInd, resourceRefs):
 
@@ -111,7 +149,7 @@ class Vehicle(AbstractController):
 
 		self.removeVehicle()
 
-		self.__collision = resourceRefs['collisionAssembler']
+		self.collision = self.__collision.createComponent(BigWorld.CollisionComponent, resourceRefs['collisionAssembler'])
 		self.__compoundModel = resourceRefs[self.compactDescr.name]
 		self.__currentCompDescrStr = self.currentBattleData.victim['compDescrStr']
 
@@ -140,8 +178,6 @@ class Vehicle(AbstractController):
 			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)),
 			(TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
 		self.collision.connect(0, ColliderTypes.HANGAR_VEHICLE_COLLIDER, collisionData)
-
-		self.collision.activate()
 
 		BigWorld.appendCameraCollider((self.collision.getColliderID(), (
 			TankPartNames.getIdx(TankPartNames.GUN) + 1,

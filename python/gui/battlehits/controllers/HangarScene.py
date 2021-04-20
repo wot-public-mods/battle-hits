@@ -49,6 +49,8 @@ class HangarScene(AbstractController):
 
 		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 
+		self.vehicleCtrl.initialize()
+
 		self.__forceCameraUpdate = True
 
 		self._assambleModels()
