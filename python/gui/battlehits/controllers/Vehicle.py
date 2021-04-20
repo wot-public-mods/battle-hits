@@ -72,7 +72,7 @@ class Vehicle(AbstractController):
 		g_eventsManager.closeMainView += self.__on_closeMainView
 
 	def fini(self):
-		if self.__collision:
+		if self.__collision and self.__collision.isValid():
 			self.__collision.destroy()
 		self.__compoundModel = None
 
