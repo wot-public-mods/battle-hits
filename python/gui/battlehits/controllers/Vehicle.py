@@ -122,12 +122,16 @@ class Vehicle(AbstractController):
 
 		if self.collision:
 			BigWorld.removeCameraCollider(self.collision.getColliderID())
+			# fix for
+			# component already registered
 			if self.__collision:
 				self.__collision.removeComponentByType(BigWorld.CollisionComponent)
 		self.collision = None
 
 		if self.__compoundModel:
 			BigWorld.delModel(self.__compoundModel)
+			# fix for 
+			# Usage of dangling PyModelNodeAdapter is forbidden!
 			self.__compoundModel.reset()
 		self.__compoundModel = None
 
