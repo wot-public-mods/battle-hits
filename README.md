@@ -3,9 +3,8 @@
 
 **BattleHits** This is a modification for the game "World Of Tanks" which allows you to show shots dealt by you or to your vehicle in lobby
 
-Code license: CC BY-NC-SA 4.0
-
-P0LIR0ID 2015-2020
+SPDX-License-Identifier: LGPL-3.0-or-later  
+Copyright(c) 2021 Andrey Andruschyshyn. All rights reserved.  
 
 ### An example of what a mod looks
 ![An example of what a mod looks](https://static.poliroid.ru/battleHits.jpg)

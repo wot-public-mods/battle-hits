@@ -61,7 +61,7 @@ SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
 SETTINGS_VERSION = 10
-CACHE_VERSION = 32
+CACHE_VERSION = 33
 
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 BATTLE_ROYALE_SPACE_PATH = 'spaces/h31_battle_royale_2020'
