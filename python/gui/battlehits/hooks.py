@@ -71,8 +71,8 @@ def hangarCameraParallax_update(baseMethod, baseObject):
 
 # battlesHistory
 @override(Vehicle, "showDamageFromShot")
-def showDamageFromShot(baseMethod, baseObject, attackerID, points, effectsIndex, damageFactor):
-	baseMethod(baseObject, attackerID, points, effectsIndex, damageFactor)
+def showDamageFromShot(baseMethod, baseObject, attackerID, points, effectsIndex, damageFactor, lastMaterialIsShield):
+	baseMethod(baseObject, attackerID, points, effectsIndex, damageFactor, lastMaterialIsShield)
 	battleProcessor = dependency.instance(IBattleProcessor)
 	battleProcessor.processShot(baseObject, attackerID, points, effectsIndex, damageFactor)
 
