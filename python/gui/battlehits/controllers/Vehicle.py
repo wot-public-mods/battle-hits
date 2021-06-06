@@ -42,7 +42,7 @@ class Vehicle(AbstractController):
 
 	@property
 	def compactDescr(self):
-		return self.currentBattleData.victim['compDescr']
+		return self.currentBattleData.victim.get('compDescr', None)
 
 	@property
 	def isWheeledTech(self):
@@ -138,6 +138,11 @@ class Vehicle(AbstractController):
 	def __onModelLoaded(self, buildInd, resourceRefs):
 
 		if buildInd != self.__currentBuildIndex:
+			Waiting.hide('loadHangarSpaceVehicle')
+			return
+
+		# in case of vehicle rebuild
+		if not self.compactDescr:
 			Waiting.hide('loadHangarSpaceVehicle')
 			return
 
@@ -287,6 +292,11 @@ class Vehicle(AbstractController):
 				return partWorldMatrix
 
 		partName = self.getComponentName(partIndex)
+
+		# in case of vehicle rebuild
+		if partName not in self.__components:
+			return Math.Matrix()
+
 		partLocalMatrix = Math.Matrix(self.__components[partName][1])
 		partWorldMatrix = Math.Matrix()
 		partWorldMatrix.setRotateYPR((partLocalMatrix.yaw, partLocalMatrix.pitch, 0.0))
