@@ -1,0 +1,19 @@
+{
+	"version": 3,
+	"software": {
+		"animate": "/path/to/adobe_animate",
+		"python": "/path/to/python_27",
+		"sonar": ""
+	},
+	"game": {
+		"folder": "/path/to/wot_dir",
+		"version": "wot_version"
+	},
+	"info": {
+		"id": "battlehits",
+		"author": "poliroid",
+		"name": "Battle Hits",
+		"description": "Explore received and given hits by your vehicle in battle",
+		"version": "mod_version"
+	}
+}

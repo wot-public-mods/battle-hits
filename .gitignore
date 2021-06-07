@@ -20,3 +20,6 @@
 
 # batch files
 /*.cmd
+
+# Builder config file
+build.json
