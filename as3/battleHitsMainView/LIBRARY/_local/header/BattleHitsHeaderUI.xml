@@ -108,7 +108,7 @@
                     <DOMTextRun>
                       <characters></characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineSpacing="0" lineHeight="30.2" size="24" bitmapSize="480" face="$FieldFont*" fillColor="#F1F1E6"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineSpacing="0" lineHeight="29.05" size="24" bitmapSize="480" face="$FieldFont*" fillColor="#F1F1E6"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>

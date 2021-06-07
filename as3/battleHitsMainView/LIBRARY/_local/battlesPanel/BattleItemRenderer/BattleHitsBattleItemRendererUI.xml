@@ -2,7 +2,7 @@
   <timeline>
     <DOMTimeline name="BattleHitsBattleItemRendererUI">
       <layers>
-        <DOMLayer name="as" color="#4F80FF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="as" color="#4F80FF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="9" keyMode="9728">
               <elements/>
@@ -79,7 +79,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Labels Layer" color="#B16AAD" locked="true" heightLiteral="24">
+        <DOMLayer name="Labels Layer" color="#B16AAD" locked="true">
           <frames>
             <DOMFrame index="0" name="up" labelType="name" keyMode="9728">
               <elements/>
@@ -143,7 +143,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="focusIndicator" color="#009999" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="focusIndicator" color="#009999" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="100" keyMode="9728">
               <elements>
@@ -156,7 +156,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="hitAreaA" color="#FF4FFF" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="hitAreaA" color="#FF4FFF" current="true" isSelected="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="100" keyMode="9728">
               <elements>
@@ -172,7 +172,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="textfields" color="#4F80FF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="textfields" color="#4F80FF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="100" keyMode="9728">
               <elements>
@@ -184,7 +184,7 @@
                     <DOMTextRun>
                       <characters>map name</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -197,7 +197,7 @@
                     <DOMTextRun>
                       <characters>tank name</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -210,7 +210,7 @@
                     <DOMTextRun>
                       <characters>date time</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -219,7 +219,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="selectedBG" color="#4F80FF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="selectedBG" color="#4F80FF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements/>
@@ -235,7 +235,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="hoveredBG" color="#FF4FFF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="hoveredBG" color="#FF4FFF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="10" keyMode="9728">
               <elements/>
@@ -359,7 +359,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="normalBG" color="#FF800A" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="normalBG" color="#FF800A" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="100" keyMode="9728">
               <elements>

@@ -2,7 +2,7 @@
   <timeline>
     <DOMTimeline name="SortListItemRendererUI">
       <layers>
-        <DOMLayer name="as" color="#4F80FF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="as" color="#4F80FF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="9" keyMode="9728">
               <elements/>
@@ -44,7 +44,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Labels Layer" color="#B16AAD" locked="true" heightLiteral="24">
+        <DOMLayer name="Labels Layer" color="#B16AAD" locked="true">
           <frames>
             <DOMFrame index="0" name="up" labelType="name" keyMode="9728">
               <elements/>
@@ -78,7 +78,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 7" color="#669900" locked="true" heightLiteral="24">
+        <DOMLayer name="Layer 7" color="#669900" locked="true">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>
@@ -94,7 +94,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="label" color="#9933CC" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="label" color="#9933CC" current="true" isSelected="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>
@@ -106,7 +106,7 @@
                     <DOMTextRun>
                       <characters>sort</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="20.1" size="16" bitmapSize="320" face="$TitleFont*" fillColor="#FFFFCC"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="20.05" size="16" bitmapSize="320" face="$TitleFont*" fillColor="#FFFFCC"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -115,7 +115,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="ordersMC" color="#FF4FFF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="ordersMC" color="#FF4FFF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>
@@ -133,7 +133,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="activeMC" color="#FF800A" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="activeMC" color="#FF800A" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>
@@ -146,7 +146,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 12" color="#FF4FFF" locked="true" heightLiteral="24">
+        <DOMLayer name="Layer 12" color="#FF4FFF" locked="true">
           <frames>
             <DOMFrame index="0" duration="10" keyMode="9728">
               <elements/>
@@ -210,7 +210,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 6" color="#808080" locked="true" heightLiteral="24">
+        <DOMLayer name="Layer 6" color="#808080" locked="true">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>

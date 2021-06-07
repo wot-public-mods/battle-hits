@@ -34,7 +34,7 @@
                     <DOMTextRun>
                       <characters></characters>
                       <textAttrs>
-                        <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="17.6" size="14" bitmapSize="280" face="$TitleFont*" fillColor="#CCCCCC"/>
+                        <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="17.55" size="14" bitmapSize="280" face="$TitleFont*" fillColor="#CCCCCC"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>

@@ -2,7 +2,7 @@
   <timeline>
     <DOMTimeline name="BattleHitsHitsPanelUI">
       <layers>
-        <DOMLayer name="Layer 4" color="#FF4FFF" current="true" isSelected="true" heightLiteral="24">
+        <DOMLayer name="Layer 4" color="#FF4FFF" current="true" isSelected="true">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
@@ -42,7 +42,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 1" color="#4F80FF" locked="true" heightLiteral="24">
+        <DOMLayer name="Layer 1" color="#4F80FF" locked="true">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
@@ -62,7 +62,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 2" color="#FF800A" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="Layer 2" color="#FF800A" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
@@ -74,7 +74,7 @@
                     <DOMTextRun>
                       <characters></characters>
                       <textAttrs>
-                        <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="17.6" size="14" bitmapSize="280" face="$TitleFont*" fillColor="#CCCCCC"/>
+                        <DOMTextAttrs aliasText="false" autoKern="false" lineHeight="17.55" size="14" bitmapSize="280" face="$TitleFont*" fillColor="#CCCCCC"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -91,7 +91,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 3" color="#9933CC" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="Layer 3" color="#9933CC" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>

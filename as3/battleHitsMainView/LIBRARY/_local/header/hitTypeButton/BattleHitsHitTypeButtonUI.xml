@@ -128,7 +128,7 @@
                     <DOMTextRun>
                       <characters>hitType</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="20.1" size="16" bitmapSize="320" face="$TitleFont*" fillColor="#FFFFCC"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="20.05" size="16" bitmapSize="320" face="$TitleFont*" fillColor="#FFFFCC"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>

@@ -200,7 +200,7 @@
                     <DOMTextRun>
                       <characters>ИС-6</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -213,7 +213,7 @@
                     <DOMTextRun>
                       <characters>УРОН</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -226,7 +226,7 @@
                     <DOMTextRun>
                       <characters>БП</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -239,7 +239,7 @@
                     <DOMTextRun>
                       <characters>461</characters>
                       <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -252,7 +252,7 @@
                     <DOMTextRun>
                       <characters>1</characters>
                       <textAttrs>
-                        <DOMTextAttrs aliasText="false" lineHeight="18.85" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
+                        <DOMTextAttrs aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>

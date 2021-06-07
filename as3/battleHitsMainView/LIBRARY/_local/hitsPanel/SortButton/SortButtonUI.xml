@@ -2,21 +2,21 @@
   <timeline>
     <DOMTimeline name="SortButtonUI">
       <layers>
-        <DOMLayer name="as" color="#FF4FFF" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="as" color="#FF4FFF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="42" keyMode="9728">
               <elements/>
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="names" color="#943EE8" locked="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="names" color="#943EE8" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="42" keyMode="9728">
               <elements/>
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="name" color="#808080" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="name" color="#808080" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="42" keyMode="9728">
               <elements>
@@ -28,7 +28,7 @@
                     <DOMTextRun>
                       <characters>sort</characters>
                       <textAttrs>
-                        <DOMTextAttrs aliasText="false" lineHeight="20.1" size="16" bitmapSize="320" face="$TitleFont*" fillColor="#FFFFCC"/>
+                        <DOMTextAttrs aliasText="false" lineHeight="20.05" size="16" bitmapSize="320" face="$TitleFont*" fillColor="#FFFFCC"/>
                       </textAttrs>
                     </DOMTextRun>
                   </textRuns>
@@ -37,7 +37,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="order" color="#808080" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
+        <DOMLayer name="order" color="#808080" current="true" isSelected="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="42" keyMode="9728">
               <elements>
