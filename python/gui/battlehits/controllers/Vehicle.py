@@ -22,6 +22,22 @@ class CollisionObject(ScriptGameObject):
 	def __init__(self, spaceID):
 		ScriptGameObject.__init__(self, spaceID, 'BattleHitsHangarVehicle')
 
+	# 
+	# Fix game crash on mod UI close
+	#
+	# call GameObject.isValid() on desynced GameObject cause game crash
+	# call GameObject.id on desynced GameObject cause AssertionError
+	# if we get AssertionError GameObject already not longer available
+	#
+	def isAvailable(self):
+		if self.gameObject:
+			try:
+				self.gameObject.id
+			except AssertionError:
+				return False
+			return self.gameObject.isValid()
+		return False
+
 class Vehicle(AbstractController):
 
 	@property
@@ -30,12 +46,12 @@ class Vehicle(AbstractController):
 
 	@property
 	def collision(self):
-		if self.__collision and self.__collision.isValid():
+		if self.__collision and self.__collision.isAvailable():
 			return self.__collision.collision
 
 	@collision.setter
 	def collision(self, value):
-		if self.__collision and self.__collision.isValid() and self.__collision.collision and self.__collision.collision is not None:
+		if self.__collision and self.__collision.isAvailable() and self.__collision.collision and self.__collision.collision is not None:
 			BigWorld.removeCameraCollider(self.__collision.collision.getColliderID())
 			self.__collision.removeComponentByType(BigWorld.CollisionComponent)
 		self.__collision.collision = value
@@ -64,7 +80,7 @@ class Vehicle(AbstractController):
 
 	def __on_closeMainView(self):
 		self.removeVehicle()
-		if self.__collision and self.__collision.isValid():
+		if self.__collision and self.__collision.isAvailable():
 			self.__collision.destroy()
 		self.__collision = None
 
@@ -72,7 +88,7 @@ class Vehicle(AbstractController):
 		g_eventsManager.closeMainView += self.__on_closeMainView
 
 	def fini(self):
-		if self.__collision and self.__collision.isValid():
+		if self.__collision and self.__collision.isAvailable():
 			self.__collision.destroy()
 		self.__compoundModel = None
 
