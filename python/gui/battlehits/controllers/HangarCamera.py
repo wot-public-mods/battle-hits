@@ -73,9 +73,13 @@ class HangarCamera(AbstractController):
 
 		# force update camera
 		if forceUpdate:
-			camera.forceUpdate()
-			# just want die for this one
-			BigWorld.callback(0.1, lambda: self.updateCamera(0.0, 0.0, 0.0))
+			def forceCameraUpdate():
+				self.updateCamera(0.0, 0.0, 1.0)
+				camera.forceUpdate()
+			callback_time = 0.1
+			for _ in range(5):
+				BigWorld.callback(callback_time, forceCameraUpdate)
+				callback_time += 0.1
 
 	def updateCamera(self, dx, dy, dz):
 		self.__yaw += dx * self.__sens[0]
