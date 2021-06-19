@@ -58,7 +58,8 @@ class Vehicle(AbstractController):
 
 	@property
 	def compactDescr(self):
-		return self.currentBattleData.victim.get('compDescr', None)
+		if self.currentBattleData and self.currentBattleData.victim:
+			return self.currentBattleData.victim.get('compDescr', None)
 
 	@property
 	def isWheeledTech(self):

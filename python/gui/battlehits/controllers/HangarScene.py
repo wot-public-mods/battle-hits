@@ -162,6 +162,8 @@ class HangarScene(AbstractController):
 	def __updateCamera(self):
 
 		hitData = self.currentBattleData.hit
+		if not hitData:
+			return
 
 		if hitData['isExplosion']:
 
