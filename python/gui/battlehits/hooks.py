@@ -88,11 +88,11 @@ def onHealthChanged(baseMethod, baseObject, newHealth, oldHealth, attackerID, at
 	battleProcessor = dependency.instance(IBattleProcessor)
 	battleProcessor.processHealthChanged(baseObject, newHealth, attackerID, attackReasonID)
 
-@override(Vehicle, "onEnterWorld")
-def onEnterWorld(baseMethod, baseObject, prereqs):
-	baseMethod(baseObject, prereqs)
+@override(Vehicle, "_Vehicle__onAppearanceReady")
+def onAppearanceReady(baseMethod, baseObject, appearance):
+	baseMethod(baseObject, appearance)
 	battleProcessor = dependency.instance(IBattleProcessor)
-	battleProcessor.processEnterWorld(baseObject)
+	battleProcessor.processVehicleInit(baseObject)
 
 @override(CompoundAppearance, "_CompoundAppearance__onModelsRefresh")
 def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):

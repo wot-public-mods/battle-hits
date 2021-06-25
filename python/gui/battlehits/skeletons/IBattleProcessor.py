@@ -1,7 +1,7 @@
 class IBattleProcessor(object):
 	__slots__ = ()
 
-	def processEnterWorld(self, vehicle):
+	def processVehicleInit(self, vehicle):
 		raise NotImplementedError
 
 	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):

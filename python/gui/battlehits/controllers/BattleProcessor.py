@@ -102,7 +102,7 @@ class BattleProcessor(AbstractController):
 		self.__battleData = None
 		self.__vehicles = {}
 
-	def processEnterWorld(self, vehicle):
+	def processVehicleInit(self, vehicle):
 		
 		# update isAlive state for respawned vehicle
 		if vehicle and vehicle.isPlayerVehicle:
