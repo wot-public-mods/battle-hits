@@ -1,239 +1,128 @@
 import Math
 import BigWorld
-import CGF
 
-import math_utils
-from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
+from CurrentVehicle import g_currentPreviewVehicle
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.utils import unpackMatrix
-from gui.Scaleform.Waiting import Waiting
-from vehicle_systems.tankStructure import (ColliderTypes, ModelsSetParams, ModelStates, TankPartNames,
-										TankPartIndexes, TankNodeNames)
-from vehicle_systems.model_assembler import prepareCompoundAssembler
-from vehicle_systems.stricted_loading import makeCallbackWeak
-
-
-class CollisionObject(ScriptGameObject):
-
-	collision = ComponentDescriptor()
-
-	def __init__(self, spaceID):
-		ScriptGameObject.__init__(self, spaceID, 'BattleHitsHangarVehicle')
-
-	# 
-	# Fix game crash on mod UI close
-	#
-	# call GameObject.isValid() on desynced GameObject cause game crash
-	# call GameObject.id on desynced GameObject cause AssertionError
-	# if we get AssertionError GameObject already not longer available
-	#
-	def isAvailable(self):
-		if self.gameObject:
-			try:
-				self.gameObject.id
-			except AssertionError:
-				return False
-			return self.gameObject.isValid()
-		return False
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
 
 class Vehicle(AbstractController):
 
+	hangarSpace = dependency.descriptor(IHangarSpace)
+
+	@property
+	def vehicleEntity(self):
+		if not self.hangarSpace:
+			return
+		if not self.hangarSpace.space:
+			return
+		if not self.hangarSpace.space.spaceLoaded():
+			return
+		return BigWorld.entity(self.hangarSpace.space.vehicleEntityId)
+
 	@property
 	def compoundModel(self):
-		return self.__compoundModel
+		vehicleEntity = self.vehicleEntity
+		if not vehicleEntity:
+			return 
+		vAppearance = vehicleEntity._ClientSelectableCameraVehicle__vAppearance
+		if vAppearance:
+			return vAppearance.compoundModel
 
 	@property
 	def collision(self):
-		if self.__collision and self.__collision.isAvailable():
-			return self.__collision.collision
-
-	@collision.setter
-	def collision(self, value):
-		if self.__collision and self.__collision.isAvailable() and self.__collision.collision and self.__collision.collision is not None:
-			BigWorld.removeCameraCollider(self.__collision.collision.getColliderID())
-			self.__collision.removeComponentByType(BigWorld.CollisionComponent)
-		self.__collision.collision = value
+		vehicleEntity = self.vehicleEntity
+		if not vehicleEntity:
+			return
+		vAppearance = vehicleEntity._ClientSelectableCameraVehicle__vAppearance
+		if vAppearance:
+			return vAppearance.collisions
 
 	@property
 	def compactDescr(self):
-		if self.currentBattleData and self.currentBattleData.victim:
-			return self.currentBattleData.victim.get('compDescr', None)
+		vehicleEntity = self.vehicleEntity
+		if vehicleEntity:
+			return vehicleEntity.typeDescriptor
 
 	@property
 	def isWheeledTech(self):
 		if self.compactDescr:
-			return 'wheeledVehicle' in self.compactDescr.type.tags
+			return self.compactDescr.type.isWheeledVehicle
 		return False
 
-	def __init__(self):
-		super(Vehicle, self).__init__()
-		self.__currentBuildIndex = 1
-		self.__currentCompDescrStr = None
-		self.__components = {}
-		self.__compoundModel = None
-		self.__collision = None
-
 	def initialize(self):
-		self.__collision = CollisionObject(BigWorld.camera().spaceID)
-		self.__collision.activate()
+		print g_currentPreviewVehicle.onChanged
 
-	def __on_closeMainView(self):
-		self.removeVehicle()
-		if self.__collision and self.__collision.isAvailable():
-			self.__collision.destroy()
-		self.__collision = None
+		self.__components = {}
+		self._vehicleStrCD = None
+		self._waitingVisible = False
+		g_currentPreviewVehicle.onChanged += self._pw_onChanged
 
 	def init(self):
 		g_eventsManager.closeMainView += self.__on_closeMainView
 
 	def fini(self):
-		if self.__collision and self.__collision.isAvailable():
-			self.__collision.destroy()
-		self.__compoundModel = None
+		self.__components = {}
+		g_eventsManager.closeMainView -= self.__on_closeMainView
+
+	def removeVehicle(self):
+		g_currentPreviewVehicle.selectNoVehicle()
+		self.__components = {}
+		self._vehicleStrCD = None
+
+	def __on_closeMainView(self):
+		g_currentPreviewVehicle.onChanged -= self._pw_onChanged
+		self.removeVehicle()
+
+	def _pw_onChanged(self):
+
+		if not self.stateCtrl.enabled:
+			return
+		if self.stateCtrl.currentHitID is None:
+			return
+		if not self.currentBattleData.victim:
+			return
+
+		vEntitie = BigWorld.entity(self.hangarSpace.space.vehicleEntityId)
+		if not vEntitie:
+			return
+
+		print '_pw_onChanged'
+		self.__updateComponents()
+		self.__updateAppereance()
+
+		g_eventsManager.onVehicleBuilded()
 
 	def loadVehicle(self):
-
 		if not self.currentBattleData.victim:
 			self.removeVehicle()
 			return
 
-		if self.__currentCompDescrStr != self.currentBattleData.victim['compDescrStr']:
-
-			Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
-
-			self.__currentBuildIndex += 1
-
-			spaceID = BigWorld.camera().spaceID
-			modelsSet = ModelsSetParams('', ModelStates.UNDAMAGED, [])
-			normalAssembler = prepareCompoundAssembler(self.compactDescr, modelsSet, spaceID)
-
-			capsuleScale = Math.Vector3(1.5, 1.5, 1.5)
-			gunScale = Math.Vector3(1.0, 1.0, 1.0)
-			bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), self.compactDescr.chassis.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.HULL), self.compactDescr.hull.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.TURRET), self.compactDescr.turret.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.GUN), self.compactDescr.gun.hitTester.bspModelName),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compactDescr.hull.hitTester.bspModelName, capsuleScale),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compactDescr.turret.hitTester.bspModelName, capsuleScale),
-				(TankPartNames.getIdx(TankPartNames.GUN) + 3, self.compactDescr.gun.hitTester.bspModelName, gunScale))
-
-			collisionAssembler = BigWorld.CollisionAssembler(bspModels, spaceID)
-			loadCallback = makeCallbackWeak(self.__onModelLoaded, self.__currentBuildIndex)
-			self.removeVehicle()
-			BigWorld.loadResourceListBG((normalAssembler, collisionAssembler, ), loadCallback)
+		vehicleCD = self.currentBattleData.victim['compDescr'].type.compactDescr
+		vehicleStrCD = self.currentBattleData.victim['compDescrStr']
+		print 'loadVehicle'
+		if self._vehicleStrCD != vehicleStrCD:
+			self._vehicleStrCD = vehicleStrCD
+			g_currentPreviewVehicle.selectVehicle(vehicleCD, vehicleStrCD)
 			return
 
 		self.__updateComponents()
-		self.__updateTurretAndGun()
-		self.__updateWheels()
+		self.__updateAppereance()
 
 		g_eventsManager.onVehicleBuilded()
 
-	def removeVehicle(self):
-
-		self.__components = {}
-
-		self.__currentCompDescrStr = None
-
-		if self.collision:
-			BigWorld.removeCameraCollider(self.collision.getColliderID())
-			# fix for
-			# component already registered
-			if self.__collision:
-				self.__collision.removeComponentByType(BigWorld.CollisionComponent)
-		self.collision = None
-
-		if self.__compoundModel:
-			BigWorld.delModel(self.__compoundModel)
-			# fix for 
-			# Usage of dangling PyModelNodeAdapter is forbidden!
-			self.__compoundModel.reset()
-		self.__compoundModel = None
-
-	def __onModelLoaded(self, buildInd, resourceRefs):
-
-		if buildInd != self.__currentBuildIndex:
-			Waiting.hide('loadHangarSpaceVehicle')
-			return
-
-		# in case of vehicle rebuild
-		if not self.compactDescr:
-			Waiting.hide('loadHangarSpaceVehicle')
-			return
-
-		# skip build if target vehicle dont loaded
-		if not resourceRefs.has_key(self.compactDescr.name):
-			Waiting.hide('loadHangarSpaceVehicle')
-			return
-
-		# skip build if collision dont loaded
-		if not resourceRefs.has_key('collisionAssembler'):
-			Waiting.hide('loadHangarSpaceVehicle')
-			return
-
-		self.removeVehicle()
-
-		self.collision = self.__collision.createComponent(BigWorld.CollisionComponent, resourceRefs['collisionAssembler'])
-		self.__compoundModel = resourceRefs[self.compactDescr.name]
-		self.__currentCompDescrStr = self.currentBattleData.victim['compDescrStr']
-
-		BigWorld.addModel(self.compoundModel)
-
-		m = Math.Matrix()
-		m.setTranslate(SCENE_OFFSET)
-		self.compoundModel.matrix = m
-
-		# connect VEHICLE_COLLIDER
-		chassisColisionMatrix = Math.WGAdaptiveMatrixProvider()
-		chassisColisionMatrix.target = self.compoundModel.matrix
-		collisionData = ((TankPartNames.getIdx(TankPartNames.HULL), self.compoundModel.node(TankPartNames.HULL)),
-			(TankPartNames.getIdx(TankPartNames.TURRET), self.compoundModel.node(TankPartNames.TURRET)),
-			(TankPartNames.getIdx(TankPartNames.CHASSIS), chassisColisionMatrix),
-			(TankPartNames.getIdx(TankPartNames.GUN), self.compoundModel.node(TankNodeNames.GUN_INCLINATION)))
-		self.collision.connect(0, ColliderTypes.VEHICLE_COLLIDER, collisionData)
-
-		# connect HANGAR_VEHICLE_COLLIDER
-		gunColBox = self.collision.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
-		center = 0.5 * (gunColBox[1] - gunColBox[0])
-		gunoffset = Math.Matrix()
-		gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
-		gunLink = math_utils.MatrixProviders.product(gunoffset, self.compoundModel.node(TankPartNames.GUN))
-		collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.compoundModel.node(TankPartNames.HULL)),
-			(TankPartNames.getIdx(TankPartNames.GUN) + 2, self.compoundModel.node(TankPartNames.TURRET)),
-			(TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
-		self.collision.connect(0, ColliderTypes.HANGAR_VEHICLE_COLLIDER, collisionData)
-
-		BigWorld.appendCameraCollider((self.collision.getColliderID(), (
-			TankPartNames.getIdx(TankPartNames.GUN) + 1,
-			TankPartNames.getIdx(TankPartNames.GUN) + 2,
-			TankPartNames.getIdx(TankPartNames.GUN) + 3
-		)))
-
-		self.__updateComponents()
-		self.__updateTurretAndGun()
-		self.__updateWheels()
-
-		BigWorld.callback(0, g_eventsManager.onVehicleBuilded)
-
-		Waiting.hide('loadHangarSpaceVehicle')
-
-	def __updateWheels(self):
+	def __updateAppereance(self):
 
 		if not self.compoundModel:
 			return
 
-		if not self.isWheeledTech:
-			return
-
-		for nodeName, matrixData in self.currentBattleData.hit['wheels'].iteritems():
-			self.compoundModel.node(nodeName, unpackMatrix(matrixData))
-
-	def __updateTurretAndGun(self):
-
-		if not self.compoundModel:
-			return
+		matrix = Math.Matrix()
+		matrix.setTranslate(SCENE_OFFSET)
+		self.compoundModel.matrix = matrix
 
 		turretYaw, gunPitch = self.currentBattleData.hit['aimParts']
 
@@ -244,6 +133,15 @@ class Vehicle(AbstractController):
 		matrix = Math.Matrix()
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
+		
+		# 
+		# TODO 
+		# set wheels state
+		# broken after swap to ingame model builder
+		if self.isWheeledTech:
+			for nodeName, matrixData in self.currentBattleData.hit['wheels'].iteritems():
+				#self.compoundModel.node(nodeName, unpackMatrix(matrixData))
+				pass
 
 	def __updateComponents(self):
 
@@ -289,13 +187,13 @@ class Vehicle(AbstractController):
 	def partWorldMatrix(self, partIndex):
 
 		if self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
-
+			 
 			def getNodeNameByPartIndex(partIndex):
 				wheelNodeNames = self.compactDescr.chassis.generalWheelsAnimatorConfig.getWheelNodeNames()
 				wheelNodeLength = len(wheelNodeNames)
 				delta = [2, wheelNodeLength, 4, 6]
 				result1, result2 = [], []
-				for i in xrange(0, wheelNodeLength / 2):
+				for i in range(wheelNodeLength / 2):
 					result1.append(wheelNodeLength - delta[i])
 					result2.append(wheelNodeLength - delta[i] + 1)
 				result = result1 + result2
@@ -304,8 +202,9 @@ class Vehicle(AbstractController):
 			nodeName = getNodeNameByPartIndex(partIndex - len(TankPartIndexes.ALL))
 
 			if self.compoundModel:
+				partLocalMatrix = Math.Matrix(self.compoundModel.node(nodeName))
 				partWorldMatrix = Math.Matrix()
-				partWorldMatrix.setTranslate(self.compoundModel.node(nodeName).position)
+				partWorldMatrix.translation = partLocalMatrix.translation + SCENE_OFFSET
 				return partWorldMatrix
 
 		partName = self.getComponentName(partIndex)
