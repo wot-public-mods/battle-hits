@@ -23,8 +23,5 @@ class IVehicle(object):
 	def loadVehicle(self):
 		raise NotImplementedError
 
-	def partDescriptor(self, partIndex):
-		raise NotImplementedError
-
 	def partWorldMatrix(self, partIndex):
 		raise NotImplementedError

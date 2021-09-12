@@ -5,7 +5,6 @@ from CurrentVehicle import g_currentPreviewVehicle
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.utils import unpackMatrix
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
@@ -55,30 +54,25 @@ class Vehicle(AbstractController):
 		return False
 
 	def initialize(self):
-		print g_currentPreviewVehicle.onChanged
-
-		self.__components = {}
 		self._vehicleStrCD = None
 		self._waitingVisible = False
-		g_currentPreviewVehicle.onChanged += self._pw_onChanged
+		g_currentPreviewVehicle.onChanged += self._preview_onChanged
 
 	def init(self):
 		g_eventsManager.closeMainView += self.__on_closeMainView
 
 	def fini(self):
-		self.__components = {}
 		g_eventsManager.closeMainView -= self.__on_closeMainView
 
 	def removeVehicle(self):
 		g_currentPreviewVehicle.selectNoVehicle()
-		self.__components = {}
 		self._vehicleStrCD = None
 
 	def __on_closeMainView(self):
-		g_currentPreviewVehicle.onChanged -= self._pw_onChanged
+		g_currentPreviewVehicle.onChanged -= self._preview_onChanged
 		self.removeVehicle()
 
-	def _pw_onChanged(self):
+	def _preview_onChanged(self):
 
 		if not self.stateCtrl.enabled:
 			return
@@ -91,11 +85,8 @@ class Vehicle(AbstractController):
 		if not vEntitie:
 			return
 
-		print '_pw_onChanged'
-		self.__updateComponents()
 		self.__updateAppereance()
-
-		g_eventsManager.onVehicleBuilded()
+		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
 	def loadVehicle(self):
 		if not self.currentBattleData.victim:
@@ -104,16 +95,13 @@ class Vehicle(AbstractController):
 
 		vehicleCD = self.currentBattleData.victim['compDescr'].type.compactDescr
 		vehicleStrCD = self.currentBattleData.victim['compDescrStr']
-		print 'loadVehicle'
 		if self._vehicleStrCD != vehicleStrCD:
 			self._vehicleStrCD = vehicleStrCD
 			g_currentPreviewVehicle.selectVehicle(vehicleCD, vehicleStrCD)
 			return
 
-		self.__updateComponents()
 		self.__updateAppereance()
-
-		g_eventsManager.onVehicleBuilded()
+		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
 	def __updateAppereance(self):
 
@@ -121,7 +109,8 @@ class Vehicle(AbstractController):
 			return
 
 		matrix = Math.Matrix()
-		matrix.setTranslate(SCENE_OFFSET)
+		matrix.setRotateYPR((0.0, 0.0, 0.0))
+		matrix.translation = SCENE_OFFSET
 		self.compoundModel.matrix = matrix
 
 		turretYaw, gunPitch = self.currentBattleData.hit['aimParts']
@@ -133,95 +122,44 @@ class Vehicle(AbstractController):
 		matrix = Math.Matrix()
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
-		
-		# 
+
 		# TODO 
 		# set wheels state
 		# broken after swap to ingame model builder
-		if self.isWheeledTech:
-			for nodeName, matrixData in self.currentBattleData.hit['wheels'].iteritems():
-				#self.compoundModel.node(nodeName, unpackMatrix(matrixData))
-				pass
-
-	def __updateComponents(self):
-
-		aimParts = self.currentBattleData.hit['aimParts']
-
-		hullOffset = self.compactDescr.chassis.hullPosition
-		turretOffset = self.compactDescr.hull.turretPositions[0]
-		gunOffset = self.compactDescr.turret.gunPosition
-
-		turretYaw, gunPitch = aimParts
-
-		chassisMatrix = Math.Matrix()
-		chassisMatrix.setIdentity()
-		self.__components[TankPartNames.CHASSIS] = (self.compactDescr.chassis, chassisMatrix, )
-
-		hullMatrix = Math.Matrix()
-		hullMatrix.setTranslate(-hullOffset)
-		self.__components[TankPartNames.HULL] = (self.compactDescr.hull, hullMatrix, )
-
-		turretMatrix = Math.Matrix()
-		turretMatrix.setTranslate(-hullOffset - turretOffset)
-		turretRotate = Math.Matrix()
-		turretRotate.setRotateY(-turretYaw)
-		turretMatrix.postMultiply(turretRotate)
-		self.__components[TankPartNames.TURRET] = (self.compactDescr.turret, turretMatrix)
-
-		gunMatrix = Math.Matrix()
-		gunMatrix.setTranslate(-gunOffset)
-		gunRotate = Math.Matrix()
-		gunRotate.setRotateX(-gunPitch)
-		gunMatrix.postMultiply(gunRotate)
-		gunMatrix.preMultiply(turretMatrix)
-		self.__components[TankPartNames.GUN] = (self.compactDescr.gun, gunMatrix)
-
-		hullMatrix.invert()
-		turretMatrix.invert()
-		gunMatrix.invert()
-
-	def partDescriptor(self, partIndex):
-		partName = self.getComponentName(partIndex)
-		return self.__components[partName][0]
+		#if self.isWheeledTech:
+		#	for nodeName, matrixData in self.currentBattleData.hit['wheels'].iteritems():
+		#		self.compoundModel.node(nodeName, unpackMatrix(matrixData))
 
 	def partWorldMatrix(self, partIndex):
-
+		result = Math.Matrix()
+		result.translation = SCENE_OFFSET
+		if not self.compoundModel:
+			return result
 		if self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
-			 
-			def getNodeNameByPartIndex(partIndex):
-				wheelNodeNames = self.compactDescr.chassis.generalWheelsAnimatorConfig.getWheelNodeNames()
-				wheelNodeLength = len(wheelNodeNames)
-				delta = [2, wheelNodeLength, 4, 6]
-				result1, result2 = [], []
-				for i in range(wheelNodeLength / 2):
-					result1.append(wheelNodeLength - delta[i])
-					result2.append(wheelNodeLength - delta[i] + 1)
-				result = result1 + result2
-				return wheelNodeNames[result.index(partIndex)]
-
-			nodeName = getNodeNameByPartIndex(partIndex - len(TankPartIndexes.ALL))
-
-			if self.compoundModel:
-				partLocalMatrix = Math.Matrix(self.compoundModel.node(nodeName))
-				partWorldMatrix = Math.Matrix()
-				partWorldMatrix.translation = partLocalMatrix.translation + SCENE_OFFSET
-				return partWorldMatrix
-
-		partName = self.getComponentName(partIndex)
-
-		# in case of vehicle rebuild
-		if partName not in self.__components:
-			return Math.Matrix()
-
-		partLocalMatrix = Math.Matrix(self.__components[partName][1])
-		partWorldMatrix = Math.Matrix()
-		partWorldMatrix.setRotateYPR((partLocalMatrix.yaw, partLocalMatrix.pitch, 0.0))
-		partWorldMatrix.translation = partLocalMatrix.translation + SCENE_OFFSET
-		return partWorldMatrix
+			nodeName = self.getComponentName(partIndex)
+			worldMatrix = Math.Matrix(self.compoundModel.node(nodeName))
+			result.translation = worldMatrix.translation
+		else:
+			nodeName = self.getComponentName(partIndex)
+			worldMatrix = Math.Matrix(self.compoundModel.node(nodeName))
+			result.setRotateYPR((worldMatrix.yaw, worldMatrix.pitch, 0.0))
+			result.translation = worldMatrix.translation
+		if result.translation.y < SCENE_OFFSET.y / 2:
+			result.translation = worldMatrix.translation + SCENE_OFFSET
+		return result
 
 	def getComponentName(self, partIndex):
-		if partIndex > TankPartIndexes.ALL[-1]:
-			return TankPartNames.CHASSIS
 		if partIndex in TankPartIndexes.ALL:
 			return TankPartIndexes.getName(partIndex)
+		if partIndex > TankPartIndexes.ALL[-1]:
+			partIndex -= len(TankPartIndexes.ALL)
+			wheelNodeNames = self.compactDescr.chassis.generalWheelsAnimatorConfig.getWheelNodeNames()
+			wheelNodeLength = len(wheelNodeNames)
+			delta = [2, wheelNodeLength, 4, 6]
+			result1, result2 = [], []
+			for i in range(wheelNodeLength / 2):
+				result1.append(wheelNodeLength - delta[i])
+				result2.append(wheelNodeLength - delta[i] + 1)
+			result = result1 + result2
+			return wheelNodeNames[result.index(partIndex)]
 		return partIndex
