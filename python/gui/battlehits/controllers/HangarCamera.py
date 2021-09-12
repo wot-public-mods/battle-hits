@@ -76,10 +76,13 @@ class HangarCamera(AbstractController):
 			def forceCameraUpdate():
 				self.updateCamera(0.0, 0.0, 1.0)
 				camera.forceUpdate()
-			callback_time = 0.1
-			for _ in range(5):
-				BigWorld.callback(callback_time, forceCameraUpdate)
-				callback_time += 0.1
+			forceCameraUpdate()
+			BigWorld.callback(.0, forceCameraUpdate)
+			#forceCameraUpdate()
+			#callback_time = 0.1
+			#for _ in range(5):
+			#	BigWorld.callback(callback_time, forceCameraUpdate)
+			#	callback_time += 0.1
 
 	def updateCamera(self, dx, dy, dz):
 		self.__yaw += dx * self.__sens[0]
