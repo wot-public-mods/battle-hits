@@ -123,12 +123,8 @@ class Vehicle(AbstractController):
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
 
-		# TODO 
-		# set wheels state
-		# broken after swap to ingame model builder
-		#if self.isWheeledTech:
-		#	for nodeName, matrixData in self.currentBattleData.hit['wheels'].iteritems():
-		#		self.compoundModel.node(nodeName, unpackMatrix(matrixData))
+		# TODO - set wheels state
+		# UPDATE - we dont need this, bcs collision always same, wheel YPR its only local visual 
 
 	def partWorldMatrix(self, partIndex):
 		result = Math.Matrix()

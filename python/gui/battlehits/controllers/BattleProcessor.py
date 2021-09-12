@@ -11,7 +11,6 @@ from VehicleEffects import DamageFromShotDecoder
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.controllers import AbstractController
-from gui.battlehits.utils import generateWheelsData
 
 class BattleProcessor(AbstractController):
 
@@ -184,7 +183,6 @@ class BattleProcessor(AbstractController):
 			'damageFactor': damageFactor,
 			'effectsIndex': effectsIndex,
 			'aimParts': vehicle.getAimParams(),
-			'wheels': generateWheelsData(vehicle),
 			'isExplosion': False,
 			'position': None,
 			'points': pointsData,
@@ -214,7 +212,6 @@ class BattleProcessor(AbstractController):
 			'damageFactor': damageFactor,
 			'effectsIndex': effectsIndex,
 			'aimParts': vehicle.getAimParams(),
-			'wheels': generateWheelsData(vehicle),
 			'isExplosion': True,
 			'position': position,
 			'points': None,

@@ -78,7 +78,6 @@ class CurrentBattle(AbstractData):
 			'isExplosion': hitData['isExplosion'],
 			'damageFactor': hitData['damageFactor'],
 			'aimParts': hitData['aimParts'],
-			'wheels': hitData['wheels'],
 			'shellType': shellType,
 			'shellSplash': shellSplash,
 			'points': hitData['points'],
