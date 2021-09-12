@@ -3,9 +3,9 @@ __author__ = "Andruschyshyn Andrey"
 __copyright__ = "Copyright 2021, poliroid"
 __credits__ = ["Andruschyshyn Andrey"]
 __license__ = "LGPL-3.0-or-later"
-__version__ = "1.6.8"
+__version__ = "1.6.9"
 __maintainer__ = "Andruschyshyn Andrey"
-__email__ = "p0lir0id@yandex.ru"
+__email__ = "poliroid@pm.me"
 __status__ = "Production"
 
 from gui.battlehits.controllers import *
