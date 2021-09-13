@@ -121,7 +121,7 @@
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
-                <DOMComponentInstance libraryItemName="_local/header/BattleHitsHeaderBackgroundUI" name="background" uniqueID="3">
+                <DOMComponentInstance libraryItemName="_local/header/BattleHitsHeaderBackground" name="background" uniqueID="3">
                   <matrix>
                     <Matrix a="0.5389404296875"/>
                   </matrix>

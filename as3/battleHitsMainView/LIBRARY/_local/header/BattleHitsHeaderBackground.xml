@@ -1,6 +1,6 @@
-<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/BattleHitsHeaderBackgroundUI" itemID="58841f02-00000178" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.HeaderBackground" linkageClassName="BattleHitsHeaderBackgroundUI" lastModified="1499709183" displayAsComponent="false" customIconID="0" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
+<DOMComponentItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/BattleHitsHeaderBackground" itemID="613f180f-00000188" linkageExportForAS="true" linkageBaseClass="flash.display.Sprite" linkageClassName="BattleHitsHeaderBackground" lastModified="1631524879" isSpriteSubclass="true" displayAsComponent="false" customIconID="0" actionscriptClass="BattleHitsHeaderBackground" persistLivePreview11="true" editFrameIndex="1" requiredMinimumPlayerVersion="0" requiredMinimumASVersion="0" parametersAreLocked="true">
   <timeline>
-    <DOMTimeline name="BattleHitsHeaderBackgroundUI">
+    <DOMTimeline name="BattleHitsHeaderBackground">
       <layers>
         <DOMLayer name="bitmaps" color="#4F4FFF" current="true" isSelected="true">
           <frames>

@@ -70,8 +70,8 @@
           <Include href="_local/battlesPanel/infoMC.xml" loadImmediate="false" itemID="58ffd44c-00000176" lastModified="1493155650"/>
           <Include href="_local/controls/BattleHitsAutosizeTileListUI.xml" itemID="5891f47d-0000016b" lastModified="1485960333"/>
           <Include href="_local/controls/ExtendedScrollingList/BattleHitsCustomScrollingListUI.xml" itemID="5891fefc-000001d0" lastModified="1527050635"/>
+          <Include href="_local/header/BattleHitsHeaderBackground.xml" itemID="613f180f-00000188" lastModified="1631524879"/>
           <Include href="_local/header/BattleHitsHeaderBackgroundBitmaps.xml" loadImmediate="false" itemID="58841f21-0000017a" lastModified="1499653691"/>
-          <Include href="_local/header/BattleHitsHeaderBackgroundUI.xml" itemID="58841f02-00000178" lastModified="1499709183"/>
           <Include href="_local/header/BattleHitsHeaderUI.xml" itemID="5884f168-0000014f" lastModified="1544551925"/>
           <Include href="_local/header/hitTypeButton/BattleHitsHitTypeButtonUI.xml" itemID="593ac685-0000025b" lastModified="1525165193"/>
           <Include href="_local/header/hitTypeButton/symbols/play_hovered.xml" loadImmediate="false" itemID="589e5218-00000b06" lastModified="1585941018"/>
