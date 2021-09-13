@@ -211,6 +211,8 @@ class HangarScene(AbstractController):
 			model.visible = False
 
 		hitData = self.currentBattleData.hit
+		if not hitData:
+			return
 
 		if hitData['isExplosion']:
 
@@ -254,6 +256,8 @@ class HangarScene(AbstractController):
 			model.visible = False
 
 		hitData = self.currentBattleData.hit
+		if not hitData:
+			return
 
 		if not hitData['isExplosion']:
 
@@ -295,6 +299,8 @@ class HangarScene(AbstractController):
 			model.visible = False
 
 		hitData = self.currentBattleData.hit
+		if not hitData:
+			return
 
 		if hitData['isExplosion']:
 			if hitData['shellSplash'] <= 6:
@@ -316,6 +322,8 @@ class HangarScene(AbstractController):
 			model.visible = False
 
 		hitData = self.currentBattleData.hit
+		if not hitData:
+			return
 
 		if hitData['isExplosion']:
 			return
@@ -365,6 +373,8 @@ class HangarScene(AbstractController):
 	def __updateOutRicochet(self, attemp=0):
 
 		hitData = self.currentBattleData.hit
+		if not hitData:
+			return
 
 		if hitData['isExplosion']:
 			return

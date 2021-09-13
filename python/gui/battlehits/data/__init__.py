@@ -79,7 +79,8 @@ class AbstractDataProvider(AbstractData):
 			if len(self.__dataVO) > destination and destination > -1:
 				result = self.__dataVO[destination]['id']
 			else:
-				result = self.__dataVO[self.__selectedIndex]['id']
+				if self.__selectedIndex < len(self.__dataVO):
+					result = self.__dataVO[self.__selectedIndex]['id']
 		return result
 
 
