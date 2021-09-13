@@ -2,53 +2,29 @@
 {
 	import flash.display.MovieClip;
 	import flash.text.TextField;
-	
-	import net.wg.gui.components.controls.ScrollingListEx;
 	import net.wg.data.constants.Linkages;
-	import net.wg.gui.components.controls.DropdownMenu;
-	import net.wg.gui.components.controls.ScrollingListEx;
-	
-	import scaleform.clik.constants.InvalidationType;
-	import scaleform.clik.events.ButtonEvent;
 	import scaleform.clik.events.ListEvent;
-	
 	import scaleform.clik.constants.InvalidationType;
-	import scaleform.clik.events.InputEvent;
 	import scaleform.clik.data.DataProvider;
 	import scaleform.clik.utils.Padding;
-	
-	import net.wg.gui.components.advanced.interfaces.IBackButton;
-	import net.wg.gui.interfaces.ISoundButtonEx;
 	import net.wg.infrastructure.base.UIComponentEx;
-	
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsBattlesVO;
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsBattleVO;
-	import com.poliroid.gui.lobby.battleHits.events.BatHitsEvent;
 	import com.poliroid.gui.lobby.battleHits.events.BatHitsIndexEvent;
 	import com.poliroid.gui.lobby.battleHits.interfaces.IBatHitsBattlesPanel;
 	import com.poliroid.gui.lobby.battleHits.controls.CustomScrollingList;
-	
+
 	public class BatHitsBattlesPanel extends UIComponentEx implements IBatHitsBattlesPanel
 	{
-		
 		private static const RENDER_HEIGHT:Number = 35;
-		
 		private static const BG_PADDING:Number = 20;
-		
+
 		public var battlesList:CustomScrollingList = null;
-		
 		public var background:MovieClip = null;
-		
 		public var noDataMC:MovieClip = null;
-		
 		public var noDataTF:TextField = null;
-		
-		public function BatHitsBattlesPanel() 
-		{
-			super();
-		}
-		
-		override protected function configUI() : void
+
+		override protected function configUI(): void
 		{
 			super.configUI();
 			battlesList.scrollBar = Linkages.SCROLL_BAR;
@@ -58,37 +34,32 @@
 			battlesList.isOpened = false;
 			battlesList.addEventListener(ListEvent.ITEM_CLICK, onBattleClickHandler);
 		}
-		
-		override protected function onDispose() : void
+
+		override protected function onDispose(): void
 		{
 			battlesList.removeEventListener(ListEvent.ITEM_CLICK, onBattleClickHandler);
 			battlesList.dispose();
+
 			battlesList = null;
+			background = null;
+			noDataMC = null;
+			noDataTF = null;
+
 			super.onDispose();
 		}
-		
-		public function update(data:Object) : void
+
+		public function updateDP(model:BatHitsBattlesVO): void
 		{
-			var dp:BatHitsBattlesVO = BatHitsBattlesVO(data);
-			
-			updateDP(dp);
-			
-			dp.dispose();
-		}
-		
-		public function updateDP(data:BatHitsBattlesVO) : void
-		{
-			noDataTF.text = data.noDataLabel;	
-			
-			battlesList.dataProvider = new DataProvider(data.battlesList);
-			battlesList.selectedIndex = data.selectedIndex;
-			
+			noDataTF.text = model.noDataLabel;
+			battlesList.dataProvider = new DataProvider(model.battlesList);
+			battlesList.selectedIndex = model.selectedIndex;
 			invalidateData();
 		}
-		
-		override protected function draw() : void
+
+		override protected function draw(): void
 		{
 			super.draw();
+
 			if (isInvalid(InvalidationType.DATA)) 
 			{
 				if (battlesList.dataProvider.length > 0) 
@@ -115,8 +86,8 @@
 				}
 			}
 		}
-		
-		private function onBattleClickHandler(e:ListEvent) : void 
+
+		private function onBattleClickHandler(e:ListEvent): void 
 		{
 			battlesList.isOpened = !battlesList.isOpened;
 			invalidateData();
@@ -125,6 +96,5 @@
 				dispatchEvent(new BatHitsIndexEvent(BatHitsIndexEvent.BATTLE_CHANGED, BatHitsBattleVO(e.itemData).id, true));
 			}
 		}
-		
 	}
 }

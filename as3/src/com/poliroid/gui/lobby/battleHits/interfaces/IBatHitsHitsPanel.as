@@ -1,12 +1,10 @@
 package com.poliroid.gui.lobby.battleHits.interfaces
 {
-	import com.poliroid.gui.lobby.battleHits.controls.CustomScrollingList;
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsHitsVO;
-	import net.wg.gui.interfaces.IUpdatableComponent;
-	
-	public interface IBatHitsHitsPanel extends IUpdatableComponent
+	import net.wg.infrastructure.interfaces.IUIComponentEx;
+
+	public interface IBatHitsHitsPanel extends IUIComponentEx
 	{
-		
-		function updateDP(ctx:BatHitsHitsVO) : void;
+		function updateDP(model:BatHitsHitsVO): void;
 	}
 }

@@ -6,12 +6,12 @@
           <DOMFolderItem name="_local/battlesPanel/BattleItemRenderer" itemID="58919698-00000244" isExpanded="true"/>
           <DOMFolderItem name="_local/controls" itemID="58919627-00000231"/>
           <DOMFolderItem name="_local/controls/ExtendedScrollingList" itemID="58919656-0000023a" isExpanded="true"/>
-          <DOMFolderItem name="_local/header" itemID="5884a349-00000189"/>
+          <DOMFolderItem name="_local/header" itemID="5884a349-00000189" isExpanded="true"/>
           <DOMFolderItem name="_local/header/hitTypeButton" itemID="593ac4c6-0000018e"/>
           <DOMFolderItem name="_local/header/hitTypeButton/images" itemID="589e4d48-00000a98"/>
           <DOMFolderItem name="_local/header/hitTypeButton/symbols" itemID="589e4d4a-00000a9c"/>
           <DOMFolderItem name="_local/header/popoverCallerButton" itemID="5be47833-00000087"/>
-          <DOMFolderItem name="_local/hitsPanel" itemID="5891989f-00000250" isExpanded="true"/>
+          <DOMFolderItem name="_local/hitsPanel" itemID="5891989f-00000250"/>
           <DOMFolderItem name="_local/hitsPanel/HitItemRenderer" itemID="58919667-0000023f"/>
           <DOMFolderItem name="_local/hitsPanel/SortButton" itemID="5af3e28e-00000190" isExpanded="true"/>
           <DOMFolderItem name="_local/hitsPanel/SortButton/_resources" itemID="5af3e309-000001d7" isExpanded="true"/>
@@ -21,8 +21,8 @@
           <DOMFolderItem name="_local/hitsPanel/SortListItemRenderer/_symbols" itemID="5891a8c7-00000306"/>
      </folders>
      <fonts>
-          <DOMFontItem name="_imports/$TitleFont" itemID="5881fc6e-0000068d" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$TitleFont" linkageURL="gfxfontlib.swf" font="ZurichCondBold" size="0" id="6" sourceLastImported="1361352889"/>
           <DOMFontItem name="_imports/$FieldFont" itemID="5881fc6e-0000068b" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$FieldFont" linkageURL="gfxfontlib.swf" font="ZurichCond" size="0" id="7" sourceLastImported="1364979294"/>
+          <DOMFontItem name="_imports/$TitleFont" itemID="5881fc6e-0000068d" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageBaseClass="flash.text.Font" linkageClassName="$TitleFont" linkageURL="gfxfontlib.swf" font="ZurichCondBold" size="0" id="6" sourceLastImported="1361352889"/>
      </fonts>
      <media>
           <DOMBitmapItem name="_local/hitsPanel/SortListItemRenderer/_resources/active_bg.png" itemID="5e878cbc-0000008a" sourceExternalFilepath="./LIBRARY/_local/hitsPanel/SortListItemRenderer/_resources/active_bg.png" sourceLastImported="1622969947" externalFileSize="1074" allowSmoothing="true" useImportedJPEGData="false" compressionType="lossless" originalCompressionType="lossless" quality="50" href="_local/hitsPanel/SortListItemRenderer/_resources/active_bg.png" bitmapDataHRef="M 23 1585941681.dat" frameRight="2100" frameBottom="700"/>

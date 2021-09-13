@@ -1,80 +1,65 @@
 ﻿package com.poliroid.gui.lobby.battleHits.data
 {
 	import net.wg.data.daapi.base.DAAPIDataClass;
-	
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsBattlesVO;
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsDetailedHitVO;
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsHeaderVO;
 	import com.poliroid.gui.lobby.battleHits.data.BatHitsHitsVO;
-	
+
 	public class BatHitsStaticDataVO extends DAAPIDataClass
 	{
-		
 		private static const HEADER_FIELD_NAME:String = "header";
-		
 		private static const BATTLES_FIELD_NAME:String = "battles";
-		
 		private static const HITS_FIELD_NAME:String = "hits";
-		
 		private static const DETAILED_HIT_FIELD_NAME:String = "detailedHit";
-		
+
 		public var header:BatHitsHeaderVO = null;
-		
 		public var battles:BatHitsBattlesVO = null;
-		
 		public var hits:BatHitsHitsVO = null;
-		
 		public var detaildeHit:BatHitsDetailedHitVO = null;
-		
-		
-		public function BatHitsStaticDataVO(param1:Object)
+
+		public function BatHitsStaticDataVO(data:Object): void
 		{
-			super(param1);
+			super(data);
 		}
-		
-		override protected function onDataWrite(param1:String, param2:Object) : Boolean
+
+		override protected function onDataWrite(dataName:String, dataValue:Object): Boolean
 		{
-			if(param1 == HEADER_FIELD_NAME)
+			if(dataName == HEADER_FIELD_NAME)
 			{
-				header = new BatHitsHeaderVO(param2);
+				header = new BatHitsHeaderVO(dataValue);
 				return false;
 			}
-			
-			if(param1 == BATTLES_FIELD_NAME)
+			if(dataName == BATTLES_FIELD_NAME)
 			{
-				battles = new BatHitsBattlesVO(param2);
+				battles = new BatHitsBattlesVO(dataValue);
 				return false;
 			}
-			
-			if(param1 == HITS_FIELD_NAME)
+			if(dataName == HITS_FIELD_NAME)
 			{
-				hits = new BatHitsHitsVO(param2);
+				hits = new BatHitsHitsVO(dataValue);
 				return false;
 			}
-			
-			if(param1 == DETAILED_HIT_FIELD_NAME)
+			if(dataName == DETAILED_HIT_FIELD_NAME)
 			{
-				detaildeHit = new BatHitsDetailedHitVO(param2);
+				detaildeHit = new BatHitsDetailedHitVO(dataValue);
 				return false;
 			}
-			
-			return super.onDataWrite(param1,param2);
+			return super.onDataWrite(dataName, dataValue);
 		}
-		
-		override protected function onDispose() : void
+
+		override protected function onDispose(): void
 		{
 			header.dispose();
-			header = null;
-			
 			battles.dispose();
-			battles = null;
-			
 			hits.dispose();
-			hits = null;
-			
 			detaildeHit.dispose();
+
+			header = null;
+			battles = null;
+			hits = null;
 			detaildeHit = null;
-			
+
 			super.onDispose();
 		}
 	}
