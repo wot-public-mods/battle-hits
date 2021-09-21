@@ -2,7 +2,7 @@
 import types
 import ResMgr
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', )
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 'simplifyVehicleCompactDescr')
 
 def override(holder, name, wrapper=None, setter=None):
 	"""Override methods, properties, functions, attributes
@@ -99,3 +99,16 @@ def getLobbyHeader():
 	if not view:
 		return
 	return view.components.get(VIEW_ALIAS.LOBBY_HEADER, None)
+
+def simplifyVehicleCompactDescr(compactDescr):
+	from items.vehicles import _combineVehicleCompactDescr, _splitVehicleCompactDescr
+	if not compactDescr:
+		return
+	splitted = _splitVehicleCompactDescr(compactDescr)
+	fixed = []
+	for idx, param in enumerate(splitted):
+		if idx < 2: fixed.append(param)
+		elif idx == 2: fixed.append(0)
+		elif idx == 3: fixed.append('')
+		else: fixed.append(None)
+	return _combineVehicleCompactDescr(*fixed)

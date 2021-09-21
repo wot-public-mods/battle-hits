@@ -11,6 +11,7 @@ from VehicleEffects import DamageFromShotDecoder
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.controllers import AbstractController
+from gui.battlehits.utils import simplifyVehicleCompactDescr
 
 class BattleProcessor(AbstractController):
 
@@ -259,6 +260,7 @@ class BattleProcessor(AbstractController):
 			self.__battleData['vehicles'][vehicleID] = []
 
 		compactDescr = vehicle['vehicleType'].makeCompactDescr()
+		compactDescr = simplifyVehicleCompactDescr(compactDescr)
 		if compactDescr not in self.__battleData['vehicles'][vehicleID]:
 			self.__battleData['vehicles'][vehicleID].append(compactDescr)
 

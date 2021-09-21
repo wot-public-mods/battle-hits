@@ -5,6 +5,7 @@ from CurrentVehicle import g_currentPreviewVehicle
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.utils import simplifyVehicleCompactDescr
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
@@ -88,6 +89,9 @@ class Vehicle(AbstractController):
 		if not vEntitie:
 			return
 
+		compDescrStr = vEntitie.typeDescriptor.makeCompactDescr()
+		self._vehicleStrCD = simplifyVehicleCompactDescr(compDescrStr)
+
 		self.__updateAppereance()
 		self.__updateComponents()
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
@@ -98,9 +102,8 @@ class Vehicle(AbstractController):
 			return
 
 		vehicleCD = self.currentBattleData.victim['compDescr'].type.compactDescr
-		vehicleStrCD = self.currentBattleData.victim['compDescrStr']
+		vehicleStrCD = simplifyVehicleCompactDescr(self.currentBattleData.victim['compDescrStr'])
 		if self._vehicleStrCD != vehicleStrCD:
-			self._vehicleStrCD = vehicleStrCD
 			g_currentPreviewVehicle.selectVehicle(vehicleCD, vehicleStrCD)
 			return
 
