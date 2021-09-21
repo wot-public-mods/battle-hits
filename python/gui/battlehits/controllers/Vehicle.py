@@ -188,7 +188,7 @@ class Vehicle(AbstractController):
 		if partName not in self._components:
 			return defMatrix
 
-		if not self.isWheeledTech and partIndex <= TankPartIndexes.ALL[-1]:
+		if partName in TankPartNames.ALL:
 			localMatrix = self._components[partName]
 			rotation = Math.Matrix()
 			rotation.setRotateYPR((localMatrix.yaw, localMatrix.pitch, 0.0))
