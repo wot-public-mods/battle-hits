@@ -18,6 +18,7 @@ class HangarCamera(AbstractController):
 		super(HangarCamera, self).__init__()
 		self.enabled = False
 
+		self.__forcedUpdate = True
 		self.__originalCameraData = None
 		self.__offset = SCENE_OFFSET[1]
 		self.__yaw = None
@@ -46,9 +47,10 @@ class HangarCamera(AbstractController):
 				manager.setCameraLocation(**self.__originalCameraData)
 
 		self.enabled = False
+		self.__forcedUpdate = True
 		self.__originalCameraData = None
 
-	def setCameraData(self, default, current, lim, sens, target, forceUpdate=False):
+	def setCameraData(self, default, current, lim, sens, target):
 
 		if not self.hangarSpace.space:
 			return
@@ -72,17 +74,13 @@ class HangarCamera(AbstractController):
 		camera.pivotPosition = Math.Vector3(0.0, 0.0, 0.0)
 
 		# force update camera
-		if forceUpdate:
+		if self.__forcedUpdate:
+			self.__forcedUpdate = False
 			def forceCameraUpdate():
 				self.updateCamera(0.0, 0.0, 1.0)
 				camera.forceUpdate()
 			forceCameraUpdate()
 			BigWorld.callback(.0, forceCameraUpdate)
-			#forceCameraUpdate()
-			#callback_time = 0.1
-			#for _ in range(5):
-			#	BigWorld.callback(callback_time, forceCameraUpdate)
-			#	callback_time += 0.1
 
 	def updateCamera(self, dx, dy, dz):
 		self.__yaw += dx * self.__sens[0]

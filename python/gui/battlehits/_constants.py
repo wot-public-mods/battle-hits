@@ -70,7 +70,7 @@ SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 
 CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
 				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001),
-				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET, True)
+				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET)
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25
 

@@ -21,8 +21,6 @@ class HangarScene(AbstractController):
 	def __init__(self):
 		super(HangarScene, self).__init__()
 
-		self.__forceCameraUpdate = False
-
 		self.__models = {
 			MODEL_TYPES.DOME: None,
 			MODEL_TYPES.SHELL: [],
@@ -50,8 +48,6 @@ class HangarScene(AbstractController):
 		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
 
 		self.vehicleCtrl.initialize()
-
-		self.__forceCameraUpdate = True
 
 		self._assambleModels()
 
@@ -178,8 +174,7 @@ class HangarScene(AbstractController):
 				(math_utils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
 				(None, math.radians(20.0), (5.0, 15.0)),
 				(0.005, 0.005, 0.001),
-				targetPoint,
-				self.__forceCameraUpdate
+				targetPoint
 			)
 		else:
 
@@ -198,12 +193,8 @@ class HangarScene(AbstractController):
 				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0),
 				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)),
 				(0.005, 0.005, 0.001),
-				worldStartPoint,
-				self.__forceCameraUpdate
+				worldStartPoint
 			)
-
-		if self.__forceCameraUpdate:
-			self.__forceCameraUpdate = False
 
 	def __updateShell(self):
 
