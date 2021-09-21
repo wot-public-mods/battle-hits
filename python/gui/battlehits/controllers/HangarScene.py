@@ -376,7 +376,16 @@ class HangarScene(AbstractController):
 		if not hitData:
 			return
 
+		# i dont remember why we have attemp
+		# but its safer break callback cycle
+		if attemp > 10:
+			return
+
 		if hitData['isExplosion']:
+			return
+
+		# skip if we dont have collider
+		if not self.vehicleCtrl.collision:
 			return
 
 		componentIDx, shotResult, startPoint, endPoint = hitData['points'][-1]

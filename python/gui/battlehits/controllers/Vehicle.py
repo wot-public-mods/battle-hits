@@ -54,8 +54,8 @@ class Vehicle(AbstractController):
 		return False
 
 	def initialize(self):
+		self._components = {}
 		self._vehicleStrCD = None
-		self._waitingVisible = False
 		g_currentPreviewVehicle.onChanged += self._preview_onChanged
 
 	def init(self):
@@ -63,9 +63,12 @@ class Vehicle(AbstractController):
 
 	def fini(self):
 		g_eventsManager.closeMainView -= self.__on_closeMainView
+		self._components = {}
+		self._vehicleStrCD = None
 
 	def removeVehicle(self):
 		g_currentPreviewVehicle.selectNoVehicle()
+		self._components = {}
 		self._vehicleStrCD = None
 
 	def __on_closeMainView(self):
@@ -86,6 +89,7 @@ class Vehicle(AbstractController):
 			return
 
 		self.__updateAppereance()
+		self.__updateComponents()
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
 	def loadVehicle(self):
@@ -101,6 +105,7 @@ class Vehicle(AbstractController):
 			return
 
 		self.__updateAppereance()
+		self.__updateComponents()
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
 	def __updateAppereance(self):
@@ -126,25 +131,72 @@ class Vehicle(AbstractController):
 		# TODO - set wheels state
 		# UPDATE - we dont need this, bcs collision always same, wheel YPR its only local visual 
 
-	def partWorldMatrix(self, partIndex):
-		result = Math.Matrix()
-		result.translation = SCENE_OFFSET
-		if not self.compoundModel:
-			return result
-		if self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
-			nodeName = self.getComponentName(partIndex)
-			worldMatrix = Math.Matrix(self.compoundModel.node(nodeName))
-			result.translation = worldMatrix.translation
-		else:
-			nodeName = self.getComponentName(partIndex)
-			worldMatrix = Math.Matrix(self.compoundModel.node(nodeName))
-			result.setRotateYPR((worldMatrix.yaw, worldMatrix.pitch, 0.0))
-			result.translation = worldMatrix.translation
-		if result.translation.y < SCENE_OFFSET.y / 2:
-			result.translation = worldMatrix.translation + SCENE_OFFSET
-		return result
+	def __updateComponents(self):
 
-	def getComponentName(self, partIndex):
+		aimParts = self.currentBattleData.hit['aimParts']
+
+		hullOffset = self.compactDescr.chassis.hullPosition
+		turretOffset = self.compactDescr.hull.turretPositions[0]
+		gunOffset = self.compactDescr.turret.gunPosition
+
+		turretYaw, gunPitch = aimParts
+
+		chassisMatrix = Math.Matrix()
+		chassisMatrix.setIdentity()
+		self._components[TankPartNames.CHASSIS] = chassisMatrix
+
+		hullMatrix = Math.Matrix()
+		hullMatrix.setTranslate(-hullOffset)
+		self._components[TankPartNames.HULL] = hullMatrix
+
+		turretMatrix = Math.Matrix()
+		turretMatrix.setTranslate(-hullOffset - turretOffset)
+		turretRotate = Math.Matrix()
+		turretRotate.setRotateY(-turretYaw)
+		turretMatrix.postMultiply(turretRotate)
+		self._components[TankPartNames.TURRET] = turretMatrix
+
+		gunMatrix = Math.Matrix()
+		gunMatrix.setTranslate(-gunOffset)
+		gunRotate = Math.Matrix()
+		gunRotate.setRotateX(-gunPitch)
+		gunMatrix.postMultiply(gunRotate)
+		gunMatrix.preMultiply(turretMatrix)
+		self._components[TankPartNames.GUN] = gunMatrix
+
+		hullMatrix.invert()
+		turretMatrix.invert()
+		gunMatrix.invert()
+
+	def partWorldMatrix(self, partIndex):
+		defMatrix = Math.Matrix()
+		defMatrix.setTranslate(SCENE_OFFSET)
+
+		partName = self.__getPartName(partIndex)
+		if partName == partIndex:
+			return defMatrix
+
+		if self.compoundModel and self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
+			worldMatrix = Math.Matrix(self.compoundModel.node(partName))
+			result = Math.Matrix()
+			result.setTranslate(worldMatrix.translation)
+			return result
+
+		if partName not in self._components:
+			return defMatrix
+
+		if not self.isWheeledTech and partIndex <= TankPartIndexes.ALL[-1]:
+			localMatrix = self._components[partName]
+			rotation = Math.Matrix()
+			rotation.setRotateYPR((localMatrix.yaw, localMatrix.pitch, 0.0))
+			result = Math.Matrix()
+			result.setTranslate(localMatrix.translation + SCENE_OFFSET)
+			result.preMultiply(rotation)
+			return result
+
+		return defMatrix
+
+	def __getPartName(self, partIndex):
 		if partIndex in TankPartIndexes.ALL:
 			return TankPartIndexes.getName(partIndex)
 		if partIndex > TankPartIndexes.ALL[-1]:
