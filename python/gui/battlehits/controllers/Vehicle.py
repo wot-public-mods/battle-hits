@@ -57,6 +57,7 @@ class Vehicle(AbstractController):
 	def initialize(self):
 		self._components = {}
 		self._vehicleStrCD = None
+		self._presentCBID = None
 		g_currentPreviewVehicle.onChanged += self._preview_onChanged
 
 	def init(self):
@@ -65,11 +66,13 @@ class Vehicle(AbstractController):
 	def fini(self):
 		g_eventsManager.closeMainView -= self.__on_closeMainView
 		self._components = {}
+		self._presentCBID = None
 		self._vehicleStrCD = None
 
 	def removeVehicle(self):
 		g_currentPreviewVehicle.selectNoVehicle()
 		self._components = {}
+		self._presentCBID = None
 		self._vehicleStrCD = None
 
 	def __on_closeMainView(self):
@@ -96,26 +99,37 @@ class Vehicle(AbstractController):
 		self.__updateComponents()
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
+		if self._presentCBID is not None:
+			BigWorld.cancelCallback(self._presentCBID)
+			self._presentCBID = None
+		self._presentCBID = BigWorld.callback(.1, self._presentCallback)
+
 	def loadVehicle(self):
 		if not self.currentBattleData.victim:
 			self.removeVehicle()
 			return
-
 		vehicleCD = self.currentBattleData.victim['compDescr'].type.compactDescr
 		vehicleStrCD = simplifyVehicleCompactDescr(self.currentBattleData.victim['compDescrStr'])
 		if self._vehicleStrCD != vehicleStrCD:
 			g_currentPreviewVehicle.selectVehicle(vehicleCD, vehicleStrCD)
 			return
+		self._presentCallback()
 
-		self.__updateAppereance()
-		self.__updateComponents()
-		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
-
-	def __updateAppereance(self):
-
+	def _presentCallback(self):
+		self._presentCBID = None
+		if not self.currentBattleData.hit:
+			return
 		if not self.compoundModel:
 			return
+		self.__updateAppereance()
+		self.__updateComponents()
+		g_eventsManager.onVehicleBuilded()
 
+	def __updateAppereance(self):
+		if not self.compoundModel:
+			return
+		if not self.currentBattleData.hit:
+			return
 		matrix = Math.Matrix()
 		matrix.setRotateYPR((0.0, 0.0, 0.0))
 		matrix.translation = SCENE_OFFSET
@@ -135,6 +149,9 @@ class Vehicle(AbstractController):
 		# UPDATE - we dont need this, bcs collision always same, wheel YPR its only local visual 
 
 	def __updateComponents(self):
+
+		if not self.currentBattleData.hit:
+			return
 
 		aimParts = self.currentBattleData.hit['aimParts']
 
