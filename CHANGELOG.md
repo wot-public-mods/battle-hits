@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.7.2
+
+* fix vehicle assamble on first load
+
 ## v1.7.1
 
 * fix camera forced update
