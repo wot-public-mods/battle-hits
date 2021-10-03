@@ -5,7 +5,7 @@ from CurrentVehicle import g_currentPreviewVehicle
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
-from gui.battlehits.utils import simplifyVehicleCompactDescr
+from gui.battlehits.utils import simplifyVehicleCompactDescr, cancelCallbackSafe
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
@@ -29,7 +29,7 @@ class Vehicle(AbstractController):
 		vehicleEntity = self.vehicleEntity
 		if not vehicleEntity:
 			return 
-		vAppearance = vehicleEntity._ClientSelectableCameraVehicle__vAppearance
+		vAppearance = vehicleEntity.appearance
 		if vAppearance:
 			return vAppearance.compoundModel
 
@@ -71,6 +71,9 @@ class Vehicle(AbstractController):
 
 	def removeVehicle(self):
 		g_currentPreviewVehicle.selectNoVehicle()
+		if self._presentCBID is not None:
+			cancelCallbackSafe(self._presentCBID)
+			self._presentCBID = None
 		self._components = {}
 		self._presentCBID = None
 		self._vehicleStrCD = None
@@ -100,7 +103,7 @@ class Vehicle(AbstractController):
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
 		if self._presentCBID is not None:
-			BigWorld.cancelCallback(self._presentCBID)
+			cancelCallbackSafe(self._presentCBID)
 			self._presentCBID = None
 		self._presentCBID = BigWorld.callback(.1, self._presentCallback)
 
@@ -119,7 +122,10 @@ class Vehicle(AbstractController):
 		self._presentCBID = None
 		if not self.currentBattleData.hit:
 			return
+		if not self.stateCtrl.enabled:
+			return
 		if not self.compoundModel:
+			self._presentCBID = BigWorld.callback(.1, self._presentCallback)
 			return
 		self.__updateAppereance()
 		self.__updateComponents()

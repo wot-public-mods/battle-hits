@@ -2,7 +2,8 @@
 import types
 import ResMgr
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 'simplifyVehicleCompactDescr')
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 
+			'simplifyVehicleCompactDescr', 'cancelCallbackSafe')
 
 def override(holder, name, wrapper=None, setter=None):
 	"""Override methods, properties, functions, attributes
@@ -112,3 +113,11 @@ def simplifyVehicleCompactDescr(compactDescr):
 		elif idx == 3: fixed.append('')
 		else: fixed.append(None)
 	return _combineVehicleCompactDescr(*fixed)
+
+def cancelCallbackSafe(cbid):
+	import BigWorld
+	try:
+		BigWorld.cancelCallback(cbid)
+		return True
+	except AttributeError:
+		return False
