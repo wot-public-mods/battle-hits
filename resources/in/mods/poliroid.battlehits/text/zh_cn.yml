@@ -1,0 +1,37 @@
+
+hits.sorting.num: №
+hits.sorting.tank: 坦克
+hits.sorting.result: 结果
+hits.sorting.damage: 伤害
+
+hits.shotResult.intermediateRicochet: 跳弹 *
+hits.shotResult.finalRicochet: 跳弹
+hits.shotResult.armorNotPierces: 未击穿
+hits.shotResult.armorPiercesNoDamage: 未击伤
+hits.shotResult.armorPierces: 伤害
+hits.shotResult.criticalHit: 致命一击
+hits.shotResult.splash: 溅射
+
+ui.typeMe: 我的坦克
+ui.typeEnemys: 敌人的坦克
+ui.closeButton: 关闭
+ui.settingsButton: 设置
+ui.title: Battle Hits
+
+ui.battle.noData: 没有找到战斗数据
+ui.battle.multiVehicle:  +%s 次
+ui.hits.noDataMe: 没有受到伤害
+ui.hits.noDataEnemys: 没有对敌人造成伤害
+ui.detailedhit.noData: '################'
+
+modslist.name: Battle Hits
+modslist.description: 中弹检视，检视你造成和受到的伤害
+
+
+popover.titleLabel: 设置
+popover.saveOnlySessionLabel: 仅当前会话
+popover.saveOnlySessionDescription: {HEADER}仅保存当前会话数据{/HEADER}{BODY}模组将仅存储当前游戏会话的信息，关闭游戏后数据消失（否则，所有战斗的信息都会被保存）。{/BODY}
+popover.processReplaysLabel: 处理回放
+popover.processReplaysDescription: {HEADER}处理回放{/HEADER}{BODY}模组也会从回放中保存信息。{/BODY}
+popover.changeStyleLabel: 切换炮线样式
+popover.deleteHistoryLabel: 删除历史记录
