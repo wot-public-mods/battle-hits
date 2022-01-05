@@ -42,6 +42,7 @@ class Settings(AbstractController):
 
 		if os.path.isfile(SETTINGS_FILE):
 			try:
+				data = None
 				with open(SETTINGS_FILE, 'rb') as fh:
 					data = fh.read()
 					settings, version = cPickle.loads(zlib.decompress(data))
