@@ -22,31 +22,31 @@ class Vehicle(AbstractController):
 			return
 		if not self.hangarSpace.space.spaceLoaded():
 			return
-		return BigWorld.entity(self.hangarSpace.space.vehicleEntityId)
+		return self.hangarSpace.space.getVehicleEntity()
 
 	@property
 	def compoundModel(self):
-		vehicleEntity = self.vehicleEntity
-		if not vehicleEntity:
+		vEntity = self.vehicleEntity
+		if not vEntity:
 			return 
-		vAppearance = vehicleEntity.appearance
+		vAppearance = vEntity.appearance
 		if vAppearance:
 			return vAppearance.compoundModel
 
 	@property
 	def collision(self):
-		vehicleEntity = self.vehicleEntity
-		if not vehicleEntity:
+		vEntity = self.vehicleEntity
+		if not vEntity:
 			return
-		vAppearance = vehicleEntity._ClientSelectableCameraVehicle__vAppearance
+		vAppearance = vEntity._ClientSelectableCameraVehicle__vAppearance
 		if vAppearance:
 			return vAppearance.collisions
 
 	@property
 	def compactDescr(self):
-		vehicleEntity = self.vehicleEntity
-		if vehicleEntity:
-			return vehicleEntity.typeDescriptor
+		vEntity = self.vehicleEntity
+		if vEntity:
+			return vEntity.typeDescriptor
 
 	@property
 	def isWheeledTech(self):
@@ -58,7 +58,7 @@ class Vehicle(AbstractController):
 		self._components = {}
 		self._vehicleStrCD = None
 		self._presentCBID = None
-		g_currentPreviewVehicle.onChanged += self._preview_onChanged
+		self.hangarSpace.onVehicleChanged += self._onVehicleChanged
 
 	def init(self):
 		g_eventsManager.closeMainView += self.__on_closeMainView
@@ -79,10 +79,15 @@ class Vehicle(AbstractController):
 		self._vehicleStrCD = None
 
 	def __on_closeMainView(self):
-		g_currentPreviewVehicle.onChanged -= self._preview_onChanged
+		self.hangarSpace.onVehicleChanged -= self._onVehicleChanged
 		self.removeVehicle()
 
-	def _preview_onChanged(self):
+	def _onVehicleChanged(self):
+		self.onVehicleChanged()
+		if not self.vehicleEntity:
+			BigWorld.callback(.1, self.onVehicleChanged)
+
+	def onVehicleChanged(self):
 
 		if not self.stateCtrl.enabled:
 			return
@@ -91,11 +96,11 @@ class Vehicle(AbstractController):
 		if not self.currentBattleData.victim:
 			return
 
-		vEntitie = BigWorld.entity(self.hangarSpace.space.vehicleEntityId)
-		if not vEntitie:
+		vEntity = self.vehicleEntity
+		if not vEntity:
 			return
 
-		compDescrStr = vEntitie.typeDescriptor.makeCompactDescr()
+		compDescrStr = vEntity.typeDescriptor.makeCompactDescr()
 		self._vehicleStrCD = simplifyVehicleCompactDescr(compDescrStr)
 
 		self.__updateAppereance()
