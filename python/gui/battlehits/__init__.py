@@ -1,9 +1,9 @@
 
 __author__ = "Andruschyshyn Andrey"
-__copyright__ = "Copyright 2021, poliroid"
+__copyright__ = "Copyright 2022, poliroid"
 __credits__ = ["Andruschyshyn Andrey"]
 __license__ = "LGPL-3.0-or-later"
-__version__ = "1.7.2"
+__version__ = "1.7.4"
 __maintainer__ = "Andruschyshyn Andrey"
 __email__ = "poliroid@pm.me"
 __status__ = "Production"

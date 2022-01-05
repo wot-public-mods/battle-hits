@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.4
+
+* fix vehicle load bug
+* space binary
+
 ## v1.7.3
 
 * added simplified Chinese translation (ty for @cryse)
