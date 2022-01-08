@@ -10,7 +10,6 @@ from gui.battlehits._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SE
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.utils import cancelCallbackSafe
-from gui.Scaleform.Waiting import Waiting
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
@@ -57,9 +56,6 @@ class HangarScene(AbstractController):
 		self.vehicleCtrl.loadVehicle()
 
 		g_eventsManager.showMainView()
-
-		Waiting.hide('loadHangarSpaceVehicle')
-		Waiting.hide('loadHangarSpace')
 
 	def destroy(self):
 
