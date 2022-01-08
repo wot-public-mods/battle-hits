@@ -10,7 +10,9 @@ __all__ = ('l10n', )
 _LANGUAGES = {}
 
 for langCode in LANGUAGE_CODES:
-	_LANGUAGES[langCode] = parseLangFields(langCode)
+	langData = parseLangFields(langCode)
+	if langData:
+		_LANGUAGES[langCode] = langData
 
 _CLIENT_LANGUAGE = getClientLanguage()
 if _CLIENT_LANGUAGE in _LANGUAGES.keys():
