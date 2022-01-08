@@ -8,6 +8,10 @@ from gui.battlehits.utils import getLobbyHeader
 from gui.battlehits._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
+from gui.shared import event_dispatcher
+from gui.shared.personality import ServicesLocator
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
 from skeletons.gui.shared.utils import IHangarSpace
 
 class State(AbstractController):
@@ -81,6 +85,15 @@ class State(AbstractController):
 	def enable(self):
 		if self.hangarSpace is None or self.hangarSpace.space is None:
 			return
+
+		# in case if we in Vehicle Preview
+		# try load hangar first
+		app = ServicesLocator.appLoader.getApp()
+		if app is not None and app.containerManager is not None:
+			viewKey = ViewKey(VIEW_ALIAS.VEHICLE_PREVIEW)
+			previewWindow = app.containerManager.getViewByKey(viewKey)
+			if previewWindow is not None:
+				event_dispatcher.showHangar()
 
 		# disable lobby header state
 		lobbyHeader = getLobbyHeader()

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.5
+
+* fix out richoshet display logic
+* fix shot result labels
+* fix language initialization
+
 ## v1.7.4
 
 * fix vehicle load bug
