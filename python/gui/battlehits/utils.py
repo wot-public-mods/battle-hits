@@ -119,5 +119,5 @@ def cancelCallbackSafe(cbid):
 	try:
 		BigWorld.cancelCallback(cbid)
 		return True
-	except AttributeError:
+	except (AttributeError, ValueError):
 		return False
