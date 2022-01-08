@@ -1,3 +1,4 @@
+import functools
 import math
 
 import math_utils
@@ -8,6 +9,7 @@ from gui.battlehits._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SE
 									SCENE_OFFSET, CAMERA_DEFAULTS)
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
+from gui.battlehits.utils import cancelCallbackSafe
 from gui.Scaleform.Waiting import Waiting
 from debug_utils import LOG_ERROR
 from helpers import dependency
@@ -20,6 +22,7 @@ class HangarScene(AbstractController):
 
 	def __init__(self):
 		super(HangarScene, self).__init__()
+		self._ricochetCBID = None
 
 		self.__models = {
 			MODEL_TYPES.DOME: None,
@@ -110,6 +113,10 @@ class HangarScene(AbstractController):
 		for model in self.__models[MODEL_TYPES.SHELL] + self.__models[MODEL_TYPES.SPLASH] + \
 					self.__models[MODEL_TYPES.RICOCHET] + self.__models[MODEL_TYPES.EFFECT]:
 			model.visible = False
+
+		if self._ricochetCBID is not None:
+			cancelCallbackSafe(self._ricochetCBID)
+			self._ricochetCBID = None
 
 	def _deleteModels(self):
 		if self.__models[MODEL_TYPES.DOME]:
@@ -393,7 +400,10 @@ class HangarScene(AbstractController):
 
 			collisionResult = self.vehicleCtrl.collision.collideAllWorld(worldStartPoint, worldEndPoint)
 			if not collisionResult:
-				BigWorld.callback(0.01, lambda: self.__updateOutRicochet(attemp + 1))
+				attemp += 1
+				timeout = attemp / 100.0
+				callback = functools.partial(self.__updateOutRicochet, attemp)
+				self._ricochetCBID = BigWorld.callback(timeout, callback)
 				return
 
 			collisionPoints = []
