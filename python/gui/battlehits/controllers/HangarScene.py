@@ -387,8 +387,7 @@ class HangarScene(AbstractController):
 			return
 
 		componentIDx, shotResult, startPoint, endPoint = hitData['points'][-1]
-
-		if shotResult == HIT_EFFECT.INTERMEDIATE_RICOCHET:
+		if shotResult in (HIT_EFFECT.INTERMEDIATE_RICOCHET, HIT_EFFECT.FINAL_RICOCHET):
 
 			localStartPoint = Math.Vector3(startPoint)
 			localEndPoint = Math.Vector3(endPoint)
