@@ -1,13 +1,14 @@
 import Math
 import BigWorld
 
-from CurrentVehicle import g_currentPreviewVehicle
 from gui.battlehits._constants import SCENE_OFFSET
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.utils import simplifyVehicleCompactDescr, cancelCallbackSafe
+from gui.shared.gui_items.Vehicle import Vehicle as VehicleItem
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
+from vehicle_outfit.outfit import Outfit
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
 
 class Vehicle(AbstractController):
@@ -70,7 +71,7 @@ class Vehicle(AbstractController):
 		self._vehicleStrCD = None
 
 	def removeVehicle(self):
-		g_currentPreviewVehicle.selectNoVehicle()
+		self.hangarSpace.removeVehicle()
 		if self._presentCBID is not None:
 			cancelCallbackSafe(self._presentCBID)
 			self._presentCBID = None
@@ -116,12 +117,12 @@ class Vehicle(AbstractController):
 		if not self.currentBattleData.victim:
 			self.removeVehicle()
 			return
-		vehicleCD = self.currentBattleData.victim['compDescr'].type.compactDescr
 		vehicleStrCD = simplifyVehicleCompactDescr(self.currentBattleData.victim['compDescrStr'])
 		if self._vehicleStrCD != vehicleStrCD:
-			g_currentPreviewVehicle.selectVehicle(vehicleCD, vehicleStrCD)
-			return
-		self._presentCallback()
+			vehicle, outfit = VehicleItem(strCompactDescr=vehicleStrCD), Outfit()
+			self.hangarSpace.updatePreviewVehicle(vehicle, outfit)
+		else:
+			self._presentCallback()
 
 	def _presentCallback(self):
 		self._presentCBID = None
