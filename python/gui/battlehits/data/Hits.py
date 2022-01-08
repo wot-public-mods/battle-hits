@@ -23,10 +23,10 @@ _SHELL_LABELS = {
 }
 
 _RESULT_LABELS = {
-	0: l10n('hits.shotResult.intermediateRicochet'),
-	1: l10n('hits.shotResult.finalRicochet'),
-	2: l10n('hits.shotResult.armorNotPierces'),
-	3: l10n('hits.shotResult.armorPiercesNoDamage'),
+	0: l10n('hits.shotResult.armorPiercesNoDamage'),
+	1: l10n('hits.shotResult.intermediateRicochet'),
+	2: l10n('hits.shotResult.finalRicochet'),
+	3: l10n('hits.shotResult.armorNotPierces'),
 	4: l10n('hits.shotResult.armorPierces'),
 	5: l10n('hits.shotResult.criticalHit'),
 	6: l10n('hits.shotResult.criticalHit'),
