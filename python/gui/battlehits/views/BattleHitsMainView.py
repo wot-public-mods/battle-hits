@@ -3,13 +3,13 @@ import Keys
 from helpers import dependency
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.strongholds.sound_constants import STRONGHOLD_SOUND_SPACE
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
+from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
 
 from gui.battlehits._constants import SETTINGS
 from gui.battlehits.events import g_eventsManager
@@ -57,7 +57,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 
 	__sound_env__ = LobbySubViewEnv
 	__background_alpha__ = 0.0
-	_COMMON_SOUND_SPACE = STRONGHOLD_SOUND_SPACE
+	_COMMON_SOUND_SPACE = PP_VIEW_SOUND_SPACE
 
 	hotkeysCtrl = dependency.descriptor(IHotkeys)
 	settingsCtrl = dependency.descriptor(ISettings)
