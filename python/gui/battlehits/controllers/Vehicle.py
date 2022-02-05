@@ -8,6 +8,7 @@ from gui.battlehits.utils import simplifyVehicleCompactDescr, cancelCallbackSafe
 from gui.shared.gui_items.Vehicle import Vehicle as VehicleItem
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
+from VehicleEffects import DamageFromShotDecoder
 from vehicle_outfit.outfit import Outfit
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
 
@@ -157,9 +158,6 @@ class Vehicle(AbstractController):
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
 
-		# TODO - set wheels state
-		# UPDATE - we dont need this, bcs collision always same, wheel YPR its only local visual 
-
 	def __updateComponents(self):
 
 		if not self.currentBattleData.hit:
@@ -201,23 +199,9 @@ class Vehicle(AbstractController):
 		gunMatrix.invert()
 
 	def partWorldMatrix(self, partIndex):
-		defMatrix = Math.Matrix()
-		defMatrix.setTranslate(SCENE_OFFSET)
-
 		partName = self.__getPartName(partIndex)
-		if partName == partIndex:
-			return defMatrix
 
-		if self.compoundModel and self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
-			worldMatrix = Math.Matrix(self.compoundModel.node(partName))
-			result = Math.Matrix()
-			result.setTranslate(worldMatrix.translation)
-			return result
-
-		if partName not in self._components:
-			return defMatrix
-
-		if partName in TankPartNames.ALL:
+		if partName in self._components:
 			localMatrix = self._components[partName]
 			rotation = Math.Matrix()
 			rotation.setRotateYPR((localMatrix.yaw, localMatrix.pitch, 0.0))
@@ -226,14 +210,30 @@ class Vehicle(AbstractController):
 			result.preMultiply(rotation)
 			return result
 
-		return defMatrix
+		if self.compoundModel and self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
+			worldMatrix = Math.Matrix(self.compoundModel.node(partName))
+			result = Math.Matrix()
+			result.setTranslate(worldMatrix.translation)
+			return result
+
+		result = Math.Matrix()
+		result.setTranslate(SCENE_OFFSET)
+		return result
 
 	def __getPartName(self, partIndex):
+
 		if partIndex in TankPartIndexes.ALL:
 			return TankPartIndexes.getName(partIndex)
-		if partIndex > TankPartIndexes.ALL[-1]:
-			partIndex -= len(TankPartIndexes.ALL)
-			wheelNodeNames = self.compactDescr.chassis.generalWheelsAnimatorConfig.getWheelNodeNames()
+
+		partIndex = DamageFromShotDecoder.convertComponentIndex(partIndex)
+
+		tracksConfig = self.compactDescr.chassis.tracks
+		if tracksConfig is not None:
+			return partIndex
+
+		wheelsConfig = self.compactDescr.chassis.generalWheelsAnimatorConfig
+		if wheelsConfig is not None:
+			wheelNodeNames = wheelsConfig.getWheelNodeNames()
 			wheelNodeLength = len(wheelNodeNames)
 			delta = [2, wheelNodeLength, 4, 6]
 			result1, result2 = [], []
@@ -242,4 +242,5 @@ class Vehicle(AbstractController):
 				result2.append(wheelNodeLength - delta[i] + 1)
 			result = result1 + result2
 			return wheelNodeNames[result.index(partIndex)]
+
 		return partIndex

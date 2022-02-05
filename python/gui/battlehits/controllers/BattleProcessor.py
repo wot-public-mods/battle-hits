@@ -5,7 +5,7 @@ from constants import ATTACK_REASON
 from items import vehicles
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicle_systems.tankStructure import ModelStates, TankPartIndexes
+from vehicle_systems.tankStructure import ModelStates
 from VehicleEffects import DamageFromShotDecoder
 
 from gui.battlehits._constants import SETTINGS
@@ -172,12 +172,10 @@ class BattleProcessor(AbstractController):
 
 		pointsData = []
 		for point in points:
-			maxComponentIdx = TankPartIndexes.ALL[-1]
-			wheelsConfig = vehicle.appearance.typeDescriptor.chassis.generalWheelsAnimatorConfig
-			if wheelsConfig:
-				maxComponentIdx = maxComponentIdx + wheelsConfig.getWheelsCount()
+			maxComponentIdx = vehicle.calcMaxComponentIdx()
 			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(point,
-															vehicle.appearance.collisions, maxComponentIdx)
+															vehicle.appearance.collisions, maxComponentIdx,
+															vehicle.appearance.typeDescriptor)
 			pointsData.append((compIdx, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 
 		self.__battleData['hits'].append({
