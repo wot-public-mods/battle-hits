@@ -28,6 +28,7 @@ class SETTINGS:
 	SORTING_RULE = 'sortingRule'
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
+	SWAP_HANGAR = 'swapHangar'
 
 DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,
@@ -35,7 +36,8 @@ DEFAULT_SETTINGS = {
 	SETTINGS.CURRENT_STYLE: MODEL_STYLE.CLEAN,
 	SETTINGS.SORTING_RULE: 1,
 	SETTINGS.SORTING_REVERSED: True,
-	SETTINGS.HITS_TO_PLAYER: True
+	SETTINGS.HITS_TO_PLAYER: True,
+	SETTINGS.SWAP_HANGAR: False
 }
 
 class MODEL_TYPES:
@@ -65,11 +67,13 @@ wgAppDataFolder = os.path.dirname(unicode(preferencesFilePath, 'utf-8', errors='
 SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
 CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
 
-SETTINGS_VERSION = 10
-CACHE_VERSION = 33
+SETTINGS_VERSION = 11
+CACHE_VERSION = 34
 
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 BATTLE_ROYALE_SPACE_PATH = 'spaces/h31_battle_royale_2020'
+DEFAULT_HANGAR_SPACES = ('spaces/hangar_v3', 'spaces/hangar_v3_poster_2020',
+				'spaces/h34_lunar_ny_2022', )
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 

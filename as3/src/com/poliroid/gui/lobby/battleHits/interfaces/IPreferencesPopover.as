@@ -4,8 +4,9 @@
 
 	public interface IPreferencesPopover extends IEventDispatcher
 	{
-		function invokeChangeS(processReplays:Boolean, saveOnlySession:Boolean): void;
-		function invokeStyleS(): void;
-		function invokeDataS(): void;
+		function invokeSettingsChangeS(processReplays:Boolean,
+			saveOnlySession:Boolean, swapHangar:Boolean): void;
+		function invokeStyleChangeS(): void;
+		function invokeHistoryDeleteS(): void;
 	}
 }

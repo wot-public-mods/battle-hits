@@ -5,7 +5,7 @@ from gui import ClientHangarSpace as chs
 from gui.battlehits.controllers import AbstractController
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.utils import getLobbyHeader
-from gui.battlehits._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH
+from gui.battlehits._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH, SETTINGS
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
 from gui.shared import event_dispatcher
@@ -117,10 +117,13 @@ class State(AbstractController):
 		if chs._EVENT_HANGAR_PATHS:
 			self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium][0]
 
-		g_clientHangarSpaceOverride.setPath(BATTLE_HITS_SPACE_PATH)
-
-		self.hangarSpace.onSpaceCreate += self.hangarSceneCtrl.create
-		self.hangarSpace.onSpaceCreate += self.hangarCameraCtrl.enable
+		if self.hangarSpace.spacePath != BATTLE_HITS_SPACE_PATH:
+			g_clientHangarSpaceOverride.setPath(BATTLE_HITS_SPACE_PATH)
+			self.hangarSpace.onSpaceCreate += self.hangarSceneCtrl.create
+			self.hangarSpace.onSpaceCreate += self.hangarCameraCtrl.enable
+		else:
+			self.hangarCameraCtrl.enable()
+			self.hangarSceneCtrl.create()
 
 		self.enabled = True
 
@@ -138,7 +141,8 @@ class State(AbstractController):
 
 		isHangar = isinstance(BigWorld.player(), PlayerAccount)
 		previousSpace = self.__savedHangarData["path"]
-		if isHangar and not silent:
+		swapHangar = self.settingsCtrl.get(SETTINGS.SWAP_HANGAR, False)
+		if isHangar and not silent and not swapHangar:
 			isPremium = self.hangarSpace.isPremium
 			if previousSpace == BATTLE_ROYALE_SPACE_PATH:
 				previousSpace = chs._getDefaultHangarPath(False)

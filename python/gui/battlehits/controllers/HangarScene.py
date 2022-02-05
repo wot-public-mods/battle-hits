@@ -47,8 +47,6 @@ class HangarScene(AbstractController):
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
 		g_eventsManager.onVehicleBuilded += self.__onVehicleBuilded
 
-		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
-
 		self.vehicleCtrl.initialize()
 
 		self._assambleModels()

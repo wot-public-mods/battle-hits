@@ -12,6 +12,9 @@ package com.poliroid.gui.lobby.battleHits.data
 		public var processReplays:Boolean = false;
 		public var processReplaysLabel:String = "processReplaysLabel";
 		public var processReplaysDescription:String = "processReplaysDescription";
+		public var swapHangar:Boolean = false;
+		public var swapHangarLabel:String = "swapHangarLabel";
+		public var swapHangarDescription:String = "swapHangarDescription";
 		public var changeStyleLabel:String = "changeStyleLabel";
 		public var deleteHistoryLabel:String = "deleteHistoryLabel";
 

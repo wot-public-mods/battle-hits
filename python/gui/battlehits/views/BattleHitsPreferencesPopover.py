@@ -7,8 +7,14 @@ from gui.battlehits.lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 
-	def invokeChange(self, processReplays, saveOnlySession):
-		self._printOverrideError('invokeChange')
+	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar):
+		self._printOverrideError('invokeSettingsChange')
+
+	def invokeStyleChange(self):
+		self._printOverrideError('invokeStyleChange')
+
+	def invokeHistoryDelete(self):
+		self._printOverrideError('invokeHistoryDelete')
 
 	def as_setPreferencesS(self, data):
 		""":param data: Represented by BattleHitsPreferencesDataVO (AS)"""
@@ -24,13 +30,14 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 		super(BattleHitsPreferencesPopover, self)._populate()
 		self.__updateStaticData()
 
-	def invokeChange(self, processReplays, saveOnlySession):
+	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar):
 		if not self.settingsCtrl:
 			return
 		self.settingsCtrl.apply({SETTINGS.PROCESS_REPLAYS: processReplays,
-								SETTINGS.SAVE_ONLY_SESSION: saveOnlySession})
+								SETTINGS.SAVE_ONLY_SESSION: saveOnlySession,
+								SETTINGS.SWAP_HANGAR: swapHangar})
 
-	def invokeStyle(self):
+	def invokeStyleChange(self):
 		if not self.settingsCtrl:
 			return
 		newStyle = MODEL_STYLE.CLEAN
@@ -38,7 +45,7 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			newStyle = MODEL_STYLE.NICE
 		self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: newStyle})
 
-	def invokeData(self):
+	def invokeHistoryDelete(self):
 		self.battlesHistoryCtrl.deleteHistory()
 
 	def __updateStaticData(self):
@@ -50,5 +57,9 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			'processReplays': self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS),
 			'processReplaysLabel': l10n('popover.processReplaysLabel'),
 			'processReplaysDescription': l10n('popover.processReplaysDescription'),
+			'swapHangar': self.settingsCtrl.get(SETTINGS.SWAP_HANGAR),
+			'swapHangarLabel': l10n('popover.swapHangarLabel'),
+			'swapHangarDescription': l10n('popover.swapHangarDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel'),
-			'deleteHistoryLabel': l10n('popover.deleteHistoryLabel')})
+			'deleteHistoryLabel': l10n('popover.deleteHistoryLabel'),
+			})

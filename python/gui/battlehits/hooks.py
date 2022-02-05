@@ -6,9 +6,10 @@ from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui import ClientHangarSpace
 from gui.app_loader.settings import APP_NAME_SPACE
+from gui.battlehits._constants import SETTINGS, BATTLE_HITS_SPACE_PATH, DEFAULT_HANGAR_SPACES
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
-from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState
+from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState, ISettings
 from gui.battlehits.utils import override
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
@@ -175,3 +176,27 @@ def handleAvailability(stateCtrl=None):
 		state.switch()
 
 g_eventsManager.onDestroyBattle += handleAvailability
+
+@dependency.replace_none_kwargs(settingsCtrl=ISettings)
+def fixHangarPath(path, settingsCtrl=None):
+	swapHangar = settingsCtrl.get(SETTINGS.SWAP_HANGAR, False)
+	if not swapHangar:
+		return path
+	if path not in DEFAULT_HANGAR_SPACES:
+		return path
+	return BATTLE_HITS_SPACE_PATH
+
+@override(ClientHangarSpace, '_getDefaultHangarPath')
+def _getDefaultHangarPath(baseMethod, isPremium):
+	path = baseMethod(isPremium)
+	return fixHangarPath(path)
+
+@override(ClientHangarSpace, '_getHangarPath')
+def _getHangarPath(baseMethod, isPremium, isPremIGR):
+	path = baseMethod(isPremium, isPremIGR)
+	return fixHangarPath(path)
+
+@override(ClientHangarSpace._ClientHangarSpacePathOverride, 'setPath')
+def setPath(baseMethod, baseObject, path, visibilityMask=~0, isPremium=None, isReload=True):
+	path = fixHangarPath(path)
+	return baseMethod(baseObject, path, visibilityMask, isPremium, isReload)

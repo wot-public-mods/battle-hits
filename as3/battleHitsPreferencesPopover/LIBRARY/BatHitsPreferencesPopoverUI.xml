@@ -8,7 +8,7 @@
               <elements>
                 <DOMComponentInstance libraryItemName="CheckBox" name="processReplays" uniqueID="4">
                   <matrix>
-                    <Matrix tx="20" ty="80"/>
+                    <Matrix tx="20" ty="40"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="10.75" y="10.75"/>
@@ -23,7 +23,7 @@
                 </DOMComponentInstance>
                 <DOMComponentInstance libraryItemName="CheckBox" name="saveOnlySession" uniqueID="5">
                   <matrix>
-                    <Matrix tx="20" ty="50"/>
+                    <Matrix tx="20" ty="10"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="10.75" y="10.75"/>
@@ -38,7 +38,7 @@
                 </DOMComponentInstance>
                 <DOMComponentInstance libraryItemName="ButtonNormal" name="changeStyle" uniqueID="6">
                   <matrix>
-                    <Matrix tx="24" ty="10"/>
+                    <Matrix tx="24" ty="110"/>
                   </matrix>
                   <transformationPoint>
                     <Point/>
@@ -56,7 +56,7 @@
                 </DOMComponentInstance>
                 <DOMComponentInstance libraryItemName="ButtonNormal" name="deleteHistory" uniqueID="7">
                   <matrix>
-                    <Matrix tx="24" ty="120"/>
+                    <Matrix tx="24" ty="150"/>
                   </matrix>
                   <transformationPoint>
                     <Point/>
@@ -72,6 +72,21 @@
    </property>
 ]]></parametersAsXML>
                 </DOMComponentInstance>
+                <DOMComponentInstance libraryItemName="CheckBox" name="swapHangar" uniqueID="8">
+                  <matrix>
+                    <Matrix tx="20" ty="70"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="10.75" y="10.75"/>
+                  </transformationPoint>
+                  <parametersAsXML><![CDATA[   <property id="width">
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="250" type="Number"/>
+   </property>
+   <property id="infoIcoType">
+      <Inspectable name="infoIcoType" unlocalizedName="infoIcoType" variable="infoIcoType" category="" verbose="0" defaultValue="info" type="String"/>
+   </property>
+]]></parametersAsXML>
+                </DOMComponentInstance>
               </elements>
             </DOMFrame>
           </frames>
@@ -84,6 +99,9 @@
    </property>
    <property id="width">
       <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="100" type="Number"/>
+   </property>
+   <property id="height">
+      <Inspectable name="height" unlocalizedName="" variable="height" category="" verbose="0" defaultValue="100" type="Number"/>
    </property>
 ]]></parametersAsXML>
 </DOMComponentItem>

@@ -7,7 +7,7 @@ import math_utils
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
-from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET
+from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET, CAMERA_DEFAULTS
 from gui.battlehits.controllers import AbstractController
 
 class HangarCamera(AbstractController):
@@ -35,7 +35,7 @@ class HangarCamera(AbstractController):
 		if self.hangarSpace.space:
 			self.__originalCameraData = self.hangarSpace.space.getCameraLocation()
 			self.enabled = True
-
+		self.setCameraData(*CAMERA_DEFAULTS)
 		self.updateCamera(0.0, 0.0, 0.0)
 
 	def disable(self):

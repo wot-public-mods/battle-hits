@@ -22,7 +22,10 @@
       <Inspectable name="visible" unlocalizedName="visible" variable="visible" category="" verbose="0" defaultValue="true" type="Boolean"/>
    </property>
    <property id="width">
-      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="280" type="Number"/>
+      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="260" type="Number"/>
+   </property>
+   <property id="height">
+      <Inspectable name="height" unlocalizedName="" variable="height" category="" verbose="0" defaultValue="200" type="Number"/>
    </property>
 ]]></parametersAsXML>
                                         </DOMComponentInstance>

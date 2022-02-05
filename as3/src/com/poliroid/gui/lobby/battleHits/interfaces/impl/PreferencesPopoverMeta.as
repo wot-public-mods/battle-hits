@@ -8,9 +8,9 @@
 
 	public class PreferencesPopoverMeta extends SmartPopOverView
 	{
-		public var invokeChange:Function;
-		public var invokeStyle:Function;
-		public var invokeData:Function;
+		public var invokeSettingsChange:Function;
+		public var invokeStyleChange:Function;
+		public var invokeHistoryDelete:Function;
 
 		// bcs SWC in very good condition
 		public function get wrapperLinkage(): String 
@@ -18,22 +18,22 @@
 			return Linkages.SMART_POPOVER;
 		}
 
-		public function invokeChangeS(processReplays:Boolean, saveOnlySession:Boolean): void
+		public function invokeSettingsChangeS(processReplays:Boolean, saveOnlySession:Boolean, swapHangar:Boolean): void
 		{
-			App.utils.asserter.assertNotNull(invokeChange, "invokeChange" + Errors.CANT_NULL);
-			invokeChange(processReplays, saveOnlySession);
+			App.utils.asserter.assertNotNull(invokeSettingsChange, "invokeSettingsChange" + Errors.CANT_NULL);
+			invokeSettingsChange(processReplays, saveOnlySession, swapHangar);
 		}
 
-		public function invokeStyleS(): void
+		public function invokeStyleChangeS(): void
 		{
-			App.utils.asserter.assertNotNull(invokeStyle, "invokeStyle" + Errors.CANT_NULL);
-			invokeStyle();
+			App.utils.asserter.assertNotNull(invokeStyleChange, "invokeStyleChange" + Errors.CANT_NULL);
+			invokeStyleChange();
 		}
 
-		public function invokeDataS(): void
+		public function invokeHistoryDeleteS(): void
 		{
-			App.utils.asserter.assertNotNull(invokeData, "invokeData" + Errors.CANT_NULL);
-			invokeData();
+			App.utils.asserter.assertNotNull(invokeHistoryDelete, "invokeHistoryDelete" + Errors.CANT_NULL);
+			invokeHistoryDelete();
 		}
 
 		public final function as_setPreferences(data:Object): void
