@@ -4,20 +4,18 @@ import game
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from helpers import dependency
+from gui import ClientHangarSpace
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits.lang import l10n
 from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState
 from gui.battlehits.utils import override
-from gui.ClientHangarSpace import ClientHangarSpace
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import EventDispatcher
 from gui.prb_control.prb_getters import getQueueType
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.shared import g_eventBus, events
 from gui.shared.personality import ServicesLocator
 from Vehicle import Vehicle
@@ -42,7 +40,7 @@ def onAppDestroyed(event):
 g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
 
 # fix space change vehicle getVehicleEntity error
-@override(ClientHangarSpace, 'getVehicleEntity')
+@override(ClientHangarSpace.ClientHangarSpace, 'getVehicleEntity')
 def getVehicleEntity(baseMethod, baseObject):
 	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
 
@@ -162,7 +160,8 @@ def updateUI(baseMethod, baseObject, loadedAlias=None):
 	handleAvailability()
 	return base
 
-def handleAvailability():
+@dependency.replace_none_kwargs(stateCtrl=IState)
+def handleAvailability(stateCtrl=None):
 	isInQueue = getQueueType() != QUEUE_TYPE.UNKNOWN
 	battleRoyaleSquad = False
 	dispatcher = g_prbLoader.getDispatcher()
@@ -172,8 +171,7 @@ def handleAvailability():
 	if g_modsListApi is not None:
 		enabled = not isInQueue and not battleRoyaleSquad
 		g_modsListApi.updateModification(id="battlehits", enabled=enabled)
-	state = dependency.instance(IState)
-	if isInQueue and state.enabled:
+	if isInQueue and stateCtrl.enabled:
 		state.switch()
 
 g_eventsManager.onDestroyBattle += handleAvailability

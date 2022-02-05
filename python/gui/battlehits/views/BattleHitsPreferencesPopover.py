@@ -1,7 +1,7 @@
 from helpers import dependency
 from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
-from gui.battlehits._constants import SETTINGS
+from gui.battlehits._constants import SETTINGS, MODEL_STYLE
 from gui.battlehits.skeletons import IBattlesHistory, ISettings
 from gui.battlehits.lang import l10n
 
@@ -33,10 +33,10 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 	def invokeStyle(self):
 		if not self.settingsCtrl:
 			return
-		if self.settingsCtrl.get(SETTINGS.CURRENT_STYLE) == 'style1':
-			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style2'})
-		else:
-			self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: 'style1'})
+		newStyle = MODEL_STYLE.CLEAN
+		if self.settingsCtrl.get(SETTINGS.CURRENT_STYLE) == newStyle:
+			newStyle = MODEL_STYLE.NICE
+		self.settingsCtrl.apply({SETTINGS.CURRENT_STYLE: newStyle})
 
 	def invokeData(self):
 		self.battlesHistoryCtrl.deleteHistory()
