@@ -1,0 +1,39 @@
+
+hits.sorting.num: №
+hits.sorting.tank: танк
+hits.sorting.result: результат
+hits.sorting.damage: шкода
+
+hits.shotResult.intermediateRicochet: рикошет *
+hits.shotResult.finalRicochet: рикошет
+hits.shotResult.armorNotPierces: не пробито
+hits.shotResult.armorPiercesNoDamage: влучення
+hits.shotResult.armorPierces: шкода
+hits.shotResult.criticalHit: крит
+hits.shotResult.splash: влуч. осколками
+
+ui.typeMe: ПО МЕНІ
+ui.typeEnemys: ПО ВОРОГАМ
+ui.closeButton: ЗАКРИТИ
+ui.settingsButton: НАЛАШТУВАННЯ
+ui.title: Перегляд влучень
+
+ui.battle.noData: Не було зіграно жодного бою
+ui.battle.multiVehicle:  +%s од.
+ui.hits.noDataMe: В бою не було отримано влучень
+ui.hits.noDataEnemys: В бою не було завдано влучень
+ui.detailedhit.noData: '################'
+
+modslist.name: Перегляд влучень
+modslist.description: Перегляд влучень, отриманих та нанесених вами у проведених боях.
+
+
+popover.titleLabel: Налаштування
+popover.saveOnlySessionLabel: Тільки ігрова сесія
+popover.saveOnlySessionDescription: {HEADER}Тільки ігрова сесія{/HEADER}{BODY}Модифікація зберігатиме інформацію лише про поточну ігрову сесію (інакше зберігатиметься інформація про всі бої).{/BODY}
+popover.processReplaysLabel: Обробляти реплеї
+popover.processReplaysDescription: {HEADER}Обробляти реплеї{/HEADER}{BODY}Модифікація зберігатиме інформацію не лише з боїв, а й із переглянутих реплеїв.{/BODY}
+popover.changeStyleLabel: Змінити оформлення
+popover.deleteHistoryLabel: Видалити історію
+popover.swapHangarLabel: Замінити Ангар
+popover.swapHangarDescription: {HEADER}Замінити Ангар{/HEADER}{BODY}Замість стандартного ангару відображатиметься ангар модифікації.<br>Під час ігрових подій відображатиметься ангар події.{/BODY}
