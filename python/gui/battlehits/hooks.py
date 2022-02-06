@@ -15,6 +15,7 @@ from gui.battlehits.utils import override
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
+from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import EventDispatcher
 from gui.prb_control.prb_getters import getQueueType
@@ -207,3 +208,11 @@ def setPath(baseMethod, baseObject, path, visibilityMask=~0, isPremium=None, isR
 def isPresent(baseMethod, baseObject):
 	stateCtrl = dependency.instance(IState)
 	return stateCtrl.enabled or baseMethod(baseObject)
+
+# Fix vehicle insignia rank display on preview vehicle.
+@override(HangarVehicleAppearance, '_getThisVehicleDossierInsigniaRank')
+def getThisVehicleDossierInsigniaRank(baseMethod, baseObject):
+	stateCtrl = dependency.instance(IState)
+	if stateCtrl.enabled:
+		return 0
+	return baseMethod(baseObject)
