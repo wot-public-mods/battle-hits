@@ -35,3 +35,6 @@ popover.processReplaysLabel: Replays verarbeiten
 popover.processReplaysDescription: {HEADER}Replays verarbeiten{/HEADER}{BODY}Der Mod speichert auch Informationen aus angesehenen Replays.{/BODY}
 popover.changeStyleLabel: Stil ändern
 popover.deleteHistoryLabel: Verlauf löschen
+popover.swapHangarLabel: Hangar ersetzen
+popover.swapHangarDescription: {HEADER}Hangar ersetzen{/HEADER}{BODY}Der Modifikationshangar wird anstelle des Standardhangars angezeigt.<br>Während Spielereignissen wird der Ereignishangar angezeigt.{/BODY}
+

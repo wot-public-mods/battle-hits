@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.7.6
+
+* added swap hangar feature
+* fix YOH vehicles bug
+* fix vehicle rebuild bug
+* fix vehicle insignia rank display bug
+* fix out richoshet bug
+* added ukranian localization
+* changed ui sound theme
+
 ## v1.7.5
 
 * fix out richoshet display logic
