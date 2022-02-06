@@ -35,3 +35,5 @@ popover.processReplaysLabel: Апрацоўваць запісы бою
 popover.processReplaysDescription: {HEADER}Апрацоўваць запісы бою{/HEADER}{BODY}Мадыфікацыя будзе захоўваць інфармацыю не толькі пра адваяваныя баі, але і пра прагледжаныя запісы баёў.{/BODY}
 popover.changeStyleLabel: Змяніць афармленне
 popover.deleteHistoryLabel: Выдаліць гісторыю
+popover.swapHangarLabel: Замяніць ангар
+popover.swapHangarDescription: {HEADER}Замяніць ангар{/HEADER}{BODY}Замест стандартнага ангара будзе адлюстроўвацца ангар мадыфікацыі.<br>Падчас гульнявых падзей будзе адлюстроўвацца ангар падзеі.{/BODY}

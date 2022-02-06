@@ -35,3 +35,5 @@ popover.processReplaysLabel: Process replays
 popover.processReplaysDescription: {HEADER}Process replays{/HEADER}{BODY}Modification will also save information from viewed replays.{/BODY}
 popover.changeStyleLabel: Switch styles
 popover.deleteHistoryLabel: Delete history
+popover.swapHangarLabel: Replace Hangar
+popover.swapHangarDescription: {HEADER}Replace Hangar{/HEADER}{BODY}The modification hangar will be displayed instead of the standard hangar.<br>During game events, the event hangar will be displayed.{/BODY}

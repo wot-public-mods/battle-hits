@@ -35,5 +35,5 @@ popover.processReplaysLabel: Обрабатывать реплеи
 popover.processReplaysDescription: {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
 popover.changeStyleLabel: Изменить оформление
 popover.deleteHistoryLabel: Удалить историю
-popover.swapHangarLabel: Заменить Ангар
-popover.swapHangarDescription: {HEADER}Заменить Ангар{/HEADER}{BODY}Вместо текущего ангара будет отображатся ангар из мода.{/BODY}
+popover.swapHangarLabel: Заменить ангар
+popover.swapHangarDescription: {HEADER}Заменить ангар{/HEADER}{BODY}Вместо стандартного ангара будет отображаться ангар модификации.<br>Во время игровых событий будет отображаться ангар события.{/BODY}
