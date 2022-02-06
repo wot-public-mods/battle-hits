@@ -155,6 +155,8 @@ class HangarScene(AbstractController):
 		self.__updateSplash()
 		self.__updateRicochet()
 		self.__updateOutRicochet()
+		# on slow PC collison can update not on firs frame
+		BigWorld.callback(.15, self.__updateOutRicochet)
 
 	def __updateCamera(self):
 
@@ -400,21 +402,13 @@ class HangarScene(AbstractController):
 				return
 
 			collisionPoints = []
-
-			for offsetVector in (0.001, 0.0, 0.0), (0.0, 0.001, 0.0), (0.0, 0.0, 0.001):
+			for offsetVector in (0.0001, 0.0, 0.0), (0.0, 0.0001, 0.0), (0.0, 0.0, 0.0001):
 				collisionPoint = self.vehicleCtrl.collision.collideLocalPoint(componentIDx, localHitPoint + offsetVector, 10.0)
 				collisionPoints.append(collisionPoint)
 
-			if len(collisionPoints) < 3:
-				return
-
 			planeNormal = (collisionPoints[1] - collisionPoints[0]) * (collisionPoints[2] - collisionPoints[0])
-			planeDistanceCoeffD = -planeNormal.dot(collisionPoints[0])
-			distance = Math.Vector4(planeNormal.x, planeNormal.y, planeNormal.z, planeDistanceCoeffD).dot(Math.Vector4(
-											localStartPoint.x, localStartPoint.y, localStartPoint.z, 1.0))
-			# in normal case we need check for distance lower than 0
-			# but we live in bagworld Kappa
-			if distance > 0:
+			planeNormal.normalise()
+			if (localStartPoint - (localHitPoint - planeNormal)).length > (localStartPoint - (localHitPoint + planeNormal)).length:
 				planeNormal = -planeNormal
 
 			_, hitAngleCos, _, _ = collisionResult[0]
