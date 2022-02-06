@@ -2,6 +2,7 @@ import BigWorld
 import game
 
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from CurrentVehicle import _CurrentPreviewVehicle
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui import ClientHangarSpace
@@ -200,3 +201,9 @@ def _getHangarPath(baseMethod, isPremium, isPremIGR):
 def setPath(baseMethod, baseObject, path, visibilityMask=~0, isPremium=None, isReload=True):
 	path = fixHangarPath(path)
 	return baseMethod(baseObject, path, visibilityMask, isPremium, isReload)
+
+# Fix vehicle rebuild bug on currentVehicle present.
+@override(_CurrentPreviewVehicle, 'isPresent')
+def isPresent(baseMethod, baseObject):
+	stateCtrl = dependency.instance(IState)
+	return stateCtrl.enabled or baseMethod(baseObject)
