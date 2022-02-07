@@ -2,7 +2,7 @@ import BigWorld
 import game
 
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
-from CurrentVehicle import _CurrentPreviewVehicle
+from CurrentVehicle import _CurrentVehicle
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui import ClientHangarSpace
@@ -203,12 +203,6 @@ def setPath(baseMethod, baseObject, path, visibilityMask=~0, isPremium=None, isR
 	path = fixHangarPath(path)
 	return baseMethod(baseObject, path, visibilityMask, isPremium, isReload)
 
-# Fix vehicle rebuild bug on currentVehicle present.
-@override(_CurrentPreviewVehicle, 'isPresent')
-def isPresent(baseMethod, baseObject):
-	stateCtrl = dependency.instance(IState)
-	return stateCtrl.enabled or baseMethod(baseObject)
-
 # Fix vehicle insignia rank display on preview vehicle.
 @override(HangarVehicleAppearance, '_getThisVehicleDossierInsigniaRank')
 def getThisVehicleDossierInsigniaRank(baseMethod, baseObject):
@@ -216,3 +210,18 @@ def getThisVehicleDossierInsigniaRank(baseMethod, baseObject):
 	if stateCtrl.enabled:
 		return 0
 	return baseMethod(baseObject)
+
+# Fix vehicle rebuild bug on currentVehicle present.
+@override(_CurrentVehicle, 'updateVehicleDescriptorInModel')
+def isPresent(baseMethod, baseObject):
+	stateCtrl = dependency.instance(IState)
+	if stateCtrl.enabled:
+		return
+	return baseMethod(baseObject)
+
+@override(_CurrentVehicle, 'refreshModel')
+def isPresent(baseMethod, baseObject, outfit=None):
+	stateCtrl = dependency.instance(IState)
+	if stateCtrl.enabled:
+		return
+	return baseMethod(baseObject, outfit)
