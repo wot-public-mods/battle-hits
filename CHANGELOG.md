@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.7
+
+* fix swap hangar feature
+* fix vehicle present bug
+
 ## v1.7.6
 
 * added swap hangar feature
