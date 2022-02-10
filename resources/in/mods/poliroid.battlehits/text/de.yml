@@ -6,10 +6,10 @@ hits.sorting.damage: Schaden
 
 hits.shotResult.intermediateRicochet: Abpraller *
 hits.shotResult.finalRicochet: Abpraller
-hits.shotResult.armorNotPierces: nicht durchschlagen
+hits.shotResult.armorNotPierces: Nicht durchschlagen
 hits.shotResult.armorPiercesNoDamage: Treffer
 hits.shotResult.armorPierces: Dmg
-hits.shotResult.criticalHit: kritisch
+hits.shotResult.criticalHit: Kritisch
 hits.shotResult.splash: Splash
 
 ui.typeMe: ICH
