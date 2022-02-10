@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.8
+
+* fix whelled vehicles
+* fix localization
+
 ## v1.7.7
 
 * fix swap hangar feature
