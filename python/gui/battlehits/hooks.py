@@ -169,13 +169,15 @@ def handleAvailability(stateCtrl=None):
 	battleRoyaleSquad = False
 	dispatcher = g_prbLoader.getDispatcher()
 	if dispatcher is not None:
-		state = dispatcher.getFunctionalState()
-		battleRoyaleSquad = state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE)
+		factories = dispatcher.getControlFactories()
+		if factories is not None:
+			state = dispatcher.getFunctionalState()
+			battleRoyaleSquad = state.isInUnit(PREBATTLE_TYPE.BATTLE_ROYALE)
 	if g_modsListApi is not None:
 		enabled = not isInQueue and not battleRoyaleSquad
 		g_modsListApi.updateModification(id="battlehits", enabled=enabled)
 	if isInQueue and stateCtrl.enabled:
-		state.switch()
+		stateCtrl.switch()
 
 g_eventsManager.onDestroyBattle += handleAvailability
 

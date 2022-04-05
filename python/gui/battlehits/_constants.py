@@ -73,7 +73,7 @@ CACHE_VERSION = 34
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 BATTLE_ROYALE_SPACE_PATH = 'spaces/h31_battle_royale_2020'
 DEFAULT_HANGAR_SPACES = ('spaces/hangar_v3', 'spaces/hangar_v3_poster_2020',
-				'spaces/h34_lunar_ny_2022', )
+				'spaces/h34_lunar_ny_2022', 'spaces/hangar_v3_rts', )
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 

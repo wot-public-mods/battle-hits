@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.9
+
+* fixes for wot update
+* space binary
+
 ## v1.7.8
 
 * fix whelled vehicles
