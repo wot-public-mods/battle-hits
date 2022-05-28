@@ -116,7 +116,10 @@ class State(AbstractController):
 		}
 
 		if chs._EVENT_HANGAR_PATHS:
-			self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium][0]
+			if self.hangarSpace.isPremium in chs._EVENT_HANGAR_PATHS:
+				self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium][0]
+			else:
+				self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[chs._EVENT_HANGAR_PATHS.keys()[0]][0]
 
 		if self.hangarSpace.spacePath != BATTLE_HITS_SPACE_PATH:
 			g_clientHangarSpaceOverride.setPath(BATTLE_HITS_SPACE_PATH)

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.0
+
+* fix UI open bug
+
 ## v1.7.9
 
 * fixes for wot update
