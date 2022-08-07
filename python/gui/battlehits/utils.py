@@ -1,9 +1,10 @@
 
+import functools
 import types
 import ResMgr
 
 __all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 
-			'simplifyVehicleCompactDescr', 'cancelCallbackSafe')
+			'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cacheResult')
 
 def override(holder, name, wrapper=None, setter=None):
 	"""Override methods, properties, functions, attributes
@@ -64,11 +65,11 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 		shellSplash = shellDescr.shell.type.explosionRadius
 	return shellType, shellSplash
 
-def parseLangFields(langCode):
-	"""split items by lines and key value by ': ' like yaml format"""
-	from gui.battlehits._constants import LANGUAGE_FILE_PATH
+def parseLangFields(langFile):
+	"""split items by lines and key value by ':'
+	like yaml format"""
 	result = {}
-	langData = readFromVFS(LANGUAGE_FILE_PATH % langCode)
+	langData = readFromVFS(langFile)
 	if langData:
 		for item in langData.splitlines():
 			if ': ' not in item:
@@ -121,3 +122,15 @@ def cancelCallbackSafe(cbid):
 		return True
 	except (AttributeError, ValueError):
 		return False
+
+def cacheResult(function):
+	memo = {}
+	@functools.wraps(function)
+	def wrapper(cache_key):
+		try:
+			return memo[cache_key]
+		except KeyError:
+			rv = function(cache_key)
+			memo[cache_key] = rv
+			return rv
+	return wrapper
