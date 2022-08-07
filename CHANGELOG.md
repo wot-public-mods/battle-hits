@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.8.1
+
+* improved localization
+* wot 1.18 fixes
+
 ## v1.8.0
 
 * fix UI open bug
