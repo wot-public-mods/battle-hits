@@ -61,14 +61,13 @@ class MODEL_PATHS:
 	RICOCHET = 'content/battlehits/%s/ricochets/%s/ricochet.model'
 	DOME = 'content/battlehits/doom/doom.model'
 
-preferencesFilePath = BigWorld.wg_getPreferencesFilePath()
-wgAppDataFolder = os.path.dirname(unicode(preferencesFilePath, 'utf-8', errors='ignore'))
-
-SETTINGS_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'setting.dat')
-CACHE_FILE = "%s\\battlehits\\%s" % (wgAppDataFolder, 'cache.dat')
+from external_strings_utils import unicode_from_utf8
+prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
+SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'battlehits', 'setting.dat'))
+CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'battlehits', 'cache.dat'))
 
 SETTINGS_VERSION = 11
-CACHE_VERSION = 34
+CACHE_VERSION = 35
 
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 BATTLE_ROYALE_SPACE_PATH = 'spaces/h31_battle_royale_2020'
@@ -82,5 +81,3 @@ CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
 				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET)
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25
-
-del wgAppDataFolder, preferencesFilePath, BigWorld, os, Math, math
