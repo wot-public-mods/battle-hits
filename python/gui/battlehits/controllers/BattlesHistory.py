@@ -3,7 +3,7 @@ import os
 import zlib
 
 import BattleReplay
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 from gui.battlehits._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
 from gui.battlehits.controllers import AbstractController
@@ -70,28 +70,51 @@ class BattlesHistory(AbstractController):
 			return
 
 		succes = False
+		cache_dir = os.path.dirname(CACHE_FILE)
 
-		cacheDir = os.path.dirname(CACHE_FILE)
+		try:
+			if not os.path.isdir(cache_dir):
+				os.makedirs(cache_dir)
+		except IOError:
+			LOG_ERROR('Failed to create directory for cache files')
+		except Exception:
+			LOG_CURRENT_EXCEPTION()
 
-		if not os.path.isdir(cacheDir):
-			os.makedirs(cacheDir)
-
-		if os.path.isfile(CACHE_FILE):
-			try:
+		try:
+			if os.path.isfile(CACHE_FILE):
 				with open(CACHE_FILE, 'rb') as fh:
 					data = fh.read()
 					battles, version = cPickle.loads(zlib.decompress(data))
 					if version == CACHE_VERSION:
 						succes = True
 						self.__battles = battles
-			except Exception: #NOSONAR
-				LOG_ERROR('Error while unpickling cache data information', data)
+		except Exception: #NOSONAR
+			LOG_ERROR('Error while unpickling cache data information', data)
 
 		if not succes:
 			self.__saveData()
 
 	def __saveData(self):
 
-		with open(CACHE_FILE, 'wb') as fh:
-			data = zlib.compress(cPickle.dumps((self.__battles, CACHE_VERSION)), 1)
-			fh.write(data)
+		cache_dir = os.path.dirname(CACHE_FILE)
+
+		try:
+			if not os.path.isdir(cache_dir):
+				os.makedirs(cache_dir)
+		except IOError:
+			LOG_ERROR('Failed to create directory for cache files')
+			return
+		except Exception:
+			LOG_CURRENT_EXCEPTION()
+			return
+
+		try:
+			with open(CACHE_FILE, 'wb') as fh:
+				data = zlib.compress(cPickle.dumps((self.__battles, CACHE_VERSION)), 1)
+				fh.write(data)
+		except IOError:
+			LOG_ERROR('Failed to write cache file')
+			return
+		except Exception:
+			LOG_CURRENT_EXCEPTION()
+			return

@@ -63,8 +63,8 @@ class MODEL_PATHS:
 
 from external_strings_utils import unicode_from_utf8
 prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
-SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'battlehits', 'setting.dat'))
-CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'battlehits', 'cache.dat'))
+SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'setting.dat'))
+CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'cache.dat'))
 
 SETTINGS_VERSION = 11
 CACHE_VERSION = 35

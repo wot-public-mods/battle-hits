@@ -2,7 +2,7 @@ import cPickle
 import os
 import zlib
 
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 from gui.battlehits.events import g_eventsManager
 from gui.battlehits._constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
@@ -34,14 +34,20 @@ class Settings(AbstractController):
 				self.__settings[key] = value
 
 	def __loadData(self):
+
 		succes = False
-		cacheDir = os.path.dirname(SETTINGS_FILE)
+		settings_dir = os.path.dirname(SETTINGS_FILE)
 
-		if not os.path.isdir(cacheDir):
-			os.makedirs(cacheDir)
+		try:
+			if not os.path.isdir(settings_dir):
+				os.makedirs(settings_dir)
+		except IOError:
+			LOG_ERROR('Failed to create directory for settings files')
+		except Exception:
+			LOG_CURRENT_EXCEPTION()
 
-		if os.path.isfile(SETTINGS_FILE):
-			try:
+		try:
+			if os.path.isfile(SETTINGS_FILE):
 				data = None
 				with open(SETTINGS_FILE, 'rb') as fh:
 					data = fh.read()
@@ -49,13 +55,33 @@ class Settings(AbstractController):
 					if version == SETTINGS_VERSION:
 						succes = True
 						self.__settings = settings
-			except Exception: #NOSONAR
-				LOG_ERROR('Error while unpickling settings data information', data)
+		except Exception: #NOSONAR
+			LOG_ERROR('Error while unpickling settings data information', data)
 
 		if not succes:
 			self.__saveData()
 
 	def __saveData(self):
-		with open(SETTINGS_FILE, 'wb') as fh:
-			data = zlib.compress(cPickle.dumps((self.__settings, SETTINGS_VERSION)), 1)
-			fh.write(data)
+
+		settings_dir = os.path.dirname(SETTINGS_FILE)
+
+		try:
+			if not os.path.isdir(settings_dir):
+				os.makedirs(settings_dir)
+		except IOError:
+			LOG_ERROR('Failed to create directory for settings files')
+			return
+		except Exception:
+			LOG_CURRENT_EXCEPTION()
+			return
+
+		try:
+			with open(SETTINGS_FILE, 'wb') as fh:
+				data = zlib.compress(cPickle.dumps((self.__settings, SETTINGS_VERSION)), 1)
+				fh.write(data)
+		except IOError:
+			LOG_ERROR('Failed to write settings file')
+			return
+		except Exception:
+			LOG_CURRENT_EXCEPTION()
+			return
