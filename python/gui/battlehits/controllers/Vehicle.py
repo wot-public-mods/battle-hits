@@ -99,7 +99,7 @@ class Vehicle(AbstractController):
 			return
 
 		vEntity = self.vehicleEntity
-		if not vEntity:
+		if not vEntity or not vEntity.typeDescriptor:
 			return
 
 		compDescrStr = vEntity.typeDescriptor.makeCompactDescr()

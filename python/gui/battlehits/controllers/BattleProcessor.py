@@ -257,6 +257,9 @@ class BattleProcessor(AbstractController):
 		if vehicleID not in self.__battleData['vehicles']:
 			self.__battleData['vehicles'][vehicleID] = []
 
+		if not vehicle or not vehicle['vehicleType']:
+			return
+
 		compactDescr = vehicle['vehicleType'].makeCompactDescr()
 		compactDescr = simplifyVehicleCompactDescr(compactDescr)
 		if compactDescr not in self.__battleData['vehicles'][vehicleID]:
