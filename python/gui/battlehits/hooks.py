@@ -122,7 +122,7 @@ def handleKeyEvent(baseMethod, event):
 g_dataCollector = None
 try:
 	from gui.battlehits import __version__
-	from gui.battlehits.data_collector import g_dataCollector
+	from .data_collector import g_dataCollector
 except ImportError:
 	LOG_ERROR('datacollector broken')
 if g_dataCollector:
@@ -191,8 +191,8 @@ def fixHangarPath(path, settingsCtrl=None):
 		return path
 	return BATTLE_HITS_SPACE_PATH
 
-@override(ClientHangarSpace, '_getDefaultHangarPath')
-def _getDefaultHangarPath(baseMethod, isPremium):
+@override(ClientHangarSpace, 'getDefaultHangarPath')
+def getDefaultHangarPath(baseMethod, isPremium):
 	path = baseMethod(isPremium)
 	return fixHangarPath(path)
 
@@ -202,9 +202,9 @@ def _getHangarPath(baseMethod, isPremium, isPremIGR):
 	return fixHangarPath(path)
 
 @override(ClientHangarSpace._ClientHangarSpacePathOverride, 'setPath')
-def setPath(baseMethod, baseObject, path, visibilityMask=~0, isPremium=None, isReload=True):
+def setPath(baseMethod, baseObject, path, *a, **kw):
 	path = fixHangarPath(path)
-	return baseMethod(baseObject, path, visibilityMask, isPremium, isReload)
+	return baseMethod(baseObject, path, *a, **kw)
 
 # Fix vehicle insignia rank display on preview vehicle.
 @override(HangarVehicleAppearance, '_getThisVehicleDossierInsigniaRank')
