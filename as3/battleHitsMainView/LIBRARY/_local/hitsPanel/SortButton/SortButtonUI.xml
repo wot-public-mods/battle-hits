@@ -1,4 +1,4 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/hitsPanel/SortButton/SortButtonUI" itemID="5af3e2f5-000001d1" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.SortButton" linkageClassName="SortButtonUI" lastModified="1539077948">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/hitsPanel/SortButton/SortButtonUI" itemID="5af3e2f5-000001d1" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.controls.SortButton" linkageClassName="SortButtonUI" lastModified="1539077948">
   <timeline>
     <DOMTimeline name="SortButtonUI">
       <layers>

@@ -1,4 +1,4 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/popoverCallerButton/BattleHitsPopoverCallerButtonUI" itemID="5be477ed-00000084" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.PopoverCallerButton" linkageClassName="BattleHitsPopoverCallerButtonUI" lastModified="1544552105">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/popoverCallerButton/BattleHitsPopoverCallerButtonUI" itemID="5be477ed-00000084" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.controls.PopoverCallerButton" linkageClassName="BattleHitsPopoverCallerButtonUI" lastModified="1544552105">
   <timeline>
     <DOMTimeline name="BattleHitsPopoverCallerButtonUI">
       <layers>

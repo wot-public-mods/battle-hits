@@ -1,4 +1,4 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/hitsPanel/BattleHitsHitsPanelUI" itemID="588cc07a-000001e2" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.components.BatHitsHitsPanel" linkageClassName="BattleHitsHitsPanelUI" lastModified="1585943067" lastUniqueIdentifier="7">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/hitsPanel/BattleHitsHitsPanelUI" itemID="588cc07a-000001e2" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.components.BatHitsHitsPanel" linkageClassName="BattleHitsHitsPanelUI" lastModified="1585943067" lastUniqueIdentifier="7">
   <timeline>
     <DOMTimeline name="BattleHitsHitsPanelUI">
       <layers>

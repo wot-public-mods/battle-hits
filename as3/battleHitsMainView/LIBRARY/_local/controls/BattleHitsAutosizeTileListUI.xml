@@ -1,4 +1,4 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/controls/BattleHitsAutosizeTileListUI" itemID="5891f47d-0000016b" linkageExportForAS="true" linkageBaseClass="com.poliroid.gui.lobby.battleHits.controls.AutosizeTileList" linkageClassName="BattleHitsAutosizeTileListUI" lastModified="1485960333">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/controls/BattleHitsAutosizeTileListUI" itemID="5891f47d-0000016b" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.controls.AutosizeTileList" linkageClassName="BattleHitsAutosizeTileListUI" lastModified="1485960333">
   <timeline>
     <DOMTimeline name="BattleHitsAutosizeTileListUI">
       <layers>
