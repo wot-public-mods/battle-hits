@@ -1,7 +1,5 @@
 from helpers import dependency
-from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera,
-									IHangarScene, IHotkeys, IState, ISettings, IVehicle,
-									IBattlesData, IHitsData, ICurrentBattleData)
+from ..skeletons import *
 
 __all__ = ('AbstractController', )
 

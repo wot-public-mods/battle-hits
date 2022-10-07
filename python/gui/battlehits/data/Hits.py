@@ -2,11 +2,11 @@
 from items import vehicles
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
-from gui.battlehits._constants import SETTINGS
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.lang import l10n
-from gui.battlehits.utils import getShellParams
-from gui.battlehits.data import AbstractDataProvider
+from .._constants import SETTINGS
+from ..events import g_eventsManager
+from ..lang import l10n
+from ..utils import getShellParams
+from ..data import AbstractDataProvider
 
 _SORTING_LABELS = {
 	1: l10n('hits.sorting.num'),

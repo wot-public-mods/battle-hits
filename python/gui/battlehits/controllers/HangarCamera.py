@@ -7,8 +7,8 @@ import math_utils
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 
-from gui.battlehits._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET, CAMERA_DEFAULTS
-from gui.battlehits.controllers import AbstractController
+from .._constants import SCENE_OFFSET, CAMERA_UNDER_FLOOR_OFFSET, CAMERA_DEFAULTS
+from ..controllers import AbstractController
 
 class HangarCamera(AbstractController):
 

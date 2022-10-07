@@ -8,10 +8,10 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.tankStructure import ModelStates
 from VehicleEffects import DamageFromShotDecoder
 
-from gui.battlehits._constants import SETTINGS
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.controllers import AbstractController
-from gui.battlehits.utils import simplifyVehicleCompactDescr
+from .._constants import SETTINGS
+from ..events import g_eventsManager
+from ..controllers import AbstractController
+from ..utils import simplifyVehicleCompactDescr
 
 class BattleProcessor(AbstractController):
 

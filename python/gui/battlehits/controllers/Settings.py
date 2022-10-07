@@ -4,9 +4,9 @@ import zlib
 
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits._constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
-from gui.battlehits.controllers import AbstractController
+from ..events import g_eventsManager
+from .._constants import DEFAULT_SETTINGS, SETTINGS_FILE, SETTINGS_VERSION
+from ..controllers import AbstractController
 
 class Settings(AbstractController):
 

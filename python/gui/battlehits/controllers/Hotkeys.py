@@ -1,7 +1,7 @@
 from messenger import MessengerEntry
 
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.controllers import AbstractController
+from ..events import g_eventsManager
+from ..controllers import AbstractController
 
 class Hotkeys(AbstractController):
 

@@ -7,11 +7,6 @@ from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui import ClientHangarSpace
 from gui.app_loader.settings import APP_NAME_SPACE
-from gui.battlehits._constants import SETTINGS, BATTLE_HITS_SPACE_PATH, DEFAULT_HANGAR_SPACES
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.lang import l10n
-from gui.battlehits.skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState, ISettings
-from gui.battlehits.utils import override
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
@@ -23,6 +18,12 @@ from gui.shared import g_eventBus, events
 from gui.shared.personality import ServicesLocator
 from Vehicle import Vehicle
 from vehicle_systems.CompoundAppearance import CompoundAppearance
+
+from ._constants import SETTINGS, BATTLE_HITS_SPACE_PATH, DEFAULT_HANGAR_SPACES
+from .events import g_eventsManager
+from .lang import l10n
+from .skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState, ISettings
+from .utils import override
 
 __all__ = ()
 

@@ -5,15 +5,16 @@ import math_utils
 import BigWorld
 import Math
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
-from gui.battlehits._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
-									SCENE_OFFSET, CAMERA_DEFAULTS)
-from gui.battlehits.controllers import AbstractController
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.utils import cancelCallbackSafe
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartIndexes
+
+from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
+									SCENE_OFFSET, CAMERA_DEFAULTS)
+from ..controllers import AbstractController
+from ..events import g_eventsManager
+from ..utils import cancelCallbackSafe
 
 class HangarScene(AbstractController):
 

@@ -1,16 +1,17 @@
 import Math
 import BigWorld
 
-from gui.battlehits._constants import SCENE_OFFSET
-from gui.battlehits.controllers import AbstractController
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.utils import simplifyVehicleCompactDescr, cancelCallbackSafe
 from gui.shared.gui_items.Vehicle import Vehicle as VehicleItem
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from VehicleEffects import DamageFromShotDecoder
 from vehicle_outfit.outfit import Outfit
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
+
+from .._constants import SCENE_OFFSET
+from ..controllers import AbstractController
+from ..events import g_eventsManager
+from ..utils import simplifyVehicleCompactDescr, cancelCallbackSafe
 
 class Vehicle(AbstractController):
 

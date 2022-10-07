@@ -2,8 +2,8 @@
 from constants import DEFAULT_LANGUAGE
 from helpers import getClientLanguage
 
-from gui.battlehits._constants import DEFAULT_UI_LANGUAGE, LANGUAGE_CODES, LANGUAGE_FILE_MASK
-from gui.battlehits.utils import parseLangFields, cacheResult
+from ._constants import DEFAULT_UI_LANGUAGE, LANGUAGE_CODES, LANGUAGE_FILE_MASK
+from .utils import parseLangFields, cacheResult
 
 __all__ = ('l10n', )
 

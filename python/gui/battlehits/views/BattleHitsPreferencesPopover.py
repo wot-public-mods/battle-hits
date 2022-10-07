@@ -1,9 +1,9 @@
 from helpers import dependency
 from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
-from gui.battlehits._constants import SETTINGS, MODEL_STYLE
-from gui.battlehits.skeletons import IBattlesHistory, ISettings
-from gui.battlehits.lang import l10n
+from .._constants import SETTINGS, MODEL_STYLE
+from ..skeletons import IBattlesHistory, ISettings
+from ..lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 

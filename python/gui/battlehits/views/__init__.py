@@ -5,10 +5,10 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.personality import ServicesLocator
 from frameworks.wulf import WindowLayer
 
-from gui.battlehits._constants import BATTLE_HITS_MAIN_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.views.BattleHitsMainView import BattleHitsMainView
-from gui.battlehits.views.BattleHitsPreferencesPopover import BattleHitsPreferencesPopover
+from .._constants import BATTLE_HITS_MAIN_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
+from ..events import g_eventsManager
+from .BattleHitsMainView import BattleHitsMainView
+from .BattleHitsPreferencesPopover import BattleHitsPreferencesPopover
 
 def getViewSettings():
 	viewSettings = []

@@ -1,7 +1,5 @@
 from helpers import dependency
-from gui.battlehits.skeletons import (IBattlesHistory, IBattleProcessor, IHangarCamera,
-									IHangarScene, IHotkeys, IState, ISettings, IVehicle,
-									IBattlesData, IHitsData, ICurrentBattleData)
+from ..skeletons import *
 
 __all__ = ('AbstractData', 'AbstractDataProvider')
 
@@ -86,9 +84,9 @@ class AbstractDataProvider(AbstractData):
 
 def configure():
 	from helpers.dependency import _g_manager as manager
-	from gui.battlehits.data.CurrentBattle import CurrentBattle
-	from gui.battlehits.data.Hits import Hits
-	from gui.battlehits.data.Battles import Battles
+	from .CurrentBattle import CurrentBattle
+	from .Hits import Hits
+	from .Battles import Battles
 
 	manager.addInstance(ICurrentBattleData, CurrentBattle(), finalizer='clean')
 	manager.addInstance(IHitsData, Hits(), finalizer='clean')

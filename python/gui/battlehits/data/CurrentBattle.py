@@ -1,8 +1,8 @@
 from items import vehicles
 
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.utils import getShell, getShellParams
-from gui.battlehits.data import AbstractData
+from ..events import g_eventsManager
+from ..utils import getShell, getShellParams
+from ..data import AbstractData
 
 class CurrentBattle(AbstractData):
 

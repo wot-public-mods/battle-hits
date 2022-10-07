@@ -8,10 +8,10 @@ __maintainer__ = "Andrii Andrushchyshyn"
 __email__ = "contact@poliroid.me"
 __status__ = "Production"
 
-from gui.battlehits.controllers import *
-from gui.battlehits.events import *
-from gui.battlehits.data import *
-from gui.battlehits.hooks import *
-from gui.battlehits.views import *
+from .controllers import *
+from .events import *
+from .data import *
+from .hooks import *
+from .views import *
 
 __all__ = ()

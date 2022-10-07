@@ -11,10 +11,10 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
 
-from gui.battlehits._constants import SETTINGS
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.lang import l10n
-from gui.battlehits.skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
+from .._constants import SETTINGS
+from ..events import g_eventsManager
+from ..lang import l10n
+from ..skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
 
 class BattleHitsMainViewMeta(LobbySubView, View):
 

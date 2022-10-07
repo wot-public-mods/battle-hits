@@ -5,9 +5,9 @@ import zlib
 import BattleReplay
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
-from gui.battlehits._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
-from gui.battlehits.controllers import AbstractController
-from gui.battlehits.events import g_eventsManager
+from .._constants import CACHE_FILE, CACHE_VERSION, SETTINGS
+from ..controllers import AbstractController
+from ..events import g_eventsManager
 
 class BattlesHistory(AbstractController):
 

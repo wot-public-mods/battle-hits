@@ -3,9 +3,9 @@ import ArenaType
 from helpers import i18n
 from items import vehicles
 
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.lang import l10n
-from gui.battlehits.data import AbstractDataProvider
+from ..events import g_eventsManager
+from ..lang import l10n
+from ..data import AbstractDataProvider
 
 def getVehicleLabel(battleData):
 	# get playerVehicleID from players ctx list
@@ -67,7 +67,7 @@ class Battles(AbstractDataProvider):
 			if arenaTypeID not in ArenaType.g_cache:
 				continue
 
-			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295L
+			battleStartTime = battleData['common']['arenaUniqueID'] & 4294967295
 			battleStartLabel = datetime.datetime.fromtimestamp(battleStartTime).strftime('%d.%m.%Y %H:%M:%S')
 
 			vehicleNameLabel = getVehicleLabel(battleData)

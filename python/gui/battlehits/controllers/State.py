@@ -3,10 +3,6 @@ import BigWorld
 import copy
 from Account import PlayerAccount
 from gui import ClientHangarSpace as chs
-from gui.battlehits.controllers import AbstractController
-from gui.battlehits.events import g_eventsManager
-from gui.battlehits.utils import getLobbyHeader
-from gui.battlehits._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH, SETTINGS
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
 from gui.shared import event_dispatcher
@@ -14,6 +10,11 @@ from gui.shared.personality import ServicesLocator
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from skeletons.gui.shared.utils import IHangarSpace
+
+from ..controllers import AbstractController
+from ..events import g_eventsManager
+from ..utils import getLobbyHeader
+from .._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH, SETTINGS
 
 class State(AbstractController):
 
@@ -112,7 +113,7 @@ class State(AbstractController):
 
 		self.__savedHangarData = {
 			"_EVENT_HANGAR_PATHS": copy.deepcopy(chs._EVENT_HANGAR_PATHS),
-			"path": chs._getDefaultHangarPath(False)
+			"path": chs.getDefaultHangarPath(False)
 		}
 
 		if chs._EVENT_HANGAR_PATHS:
