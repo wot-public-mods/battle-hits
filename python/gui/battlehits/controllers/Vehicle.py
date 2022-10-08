@@ -7,6 +7,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from VehicleEffects import DamageFromShotDecoder
 from vehicle_outfit.outfit import Outfit
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
+from VehicleStickers import SlotTypes
 
 from .._constants import SCENE_OFFSET
 from ..controllers import AbstractController
@@ -28,22 +29,29 @@ class Vehicle(AbstractController):
 		return self.hangarSpace.space.getVehicleEntity()
 
 	@property
-	def compoundModel(self):
+	def vehicleAppearance(self):
 		vEntity = self.vehicleEntity
 		if not vEntity:
 			return 
-		vAppearance = vEntity.appearance
+		return vEntity.appearance
+
+	@property
+	def compoundModel(self):
+		vAppearance = self.vehicleAppearance
 		if vAppearance:
 			return vAppearance.compoundModel
 
 	@property
 	def collision(self):
-		vEntity = self.vehicleEntity
-		if not vEntity:
-			return
-		vAppearance = vEntity._ClientSelectableCameraVehicle__vAppearance
+		vAppearance = self.vehicleAppearance
 		if vAppearance:
 			return vAppearance.collisions
+
+	@property
+	def vehicleStickers(self):
+		vAppearance = self.vehicleAppearance
+		if vAppearance:
+			return getattr(vAppearance, '_HangarVehicleAppearance__vehicleStickers', None)
 
 	@property
 	def compactDescr(self):
@@ -107,6 +115,7 @@ class Vehicle(AbstractController):
 		self._vehicleStrCD = simplifyVehicleCompactDescr(compDescrStr)
 
 		self.__updateAppereance()
+		self.__updateStickers()
 		self.__updateComponents()
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
@@ -136,6 +145,7 @@ class Vehicle(AbstractController):
 			self._presentCBID = BigWorld.callback(.1, self._presentCallback)
 			return
 		self.__updateAppereance()
+		self.__updateStickers()
 		self.__updateComponents()
 		g_eventsManager.onVehicleBuilded()
 
@@ -158,6 +168,31 @@ class Vehicle(AbstractController):
 		matrix = Math.Matrix()
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
+
+	def __updateStickers(self):
+		if not self.compoundModel:
+			return
+		if not self.currentBattleData.victim:
+			return
+
+		vStickers = self.vehicleStickers
+		if not vStickers:
+			return
+
+		for componentStickers in vStickers._VehicleStickers__stickers.itervalues():
+			# clear the previous clanId to initialize loading of new one
+			clanStickerPackTuple = componentStickers.stickers._ModelStickers__stickerPacks[SlotTypes.CLAN]
+			for clanStickerPack in clanStickerPackTuple:
+				clanStickerPack._clanId = 0
+			# clear the sticker models so that the icons do not overlap
+			stickerModel = componentStickers.stickers._ModelStickers__stickerModel
+			if stickerModel:
+				stickerModel.clear()
+
+		# try display victim clan icon
+		clanDBID = self.currentBattleData.victim.get('clanDBID')
+		if clanDBID:
+			self.vehicleStickers.setClanID(clanDBID)
 
 	def __updateComponents(self):
 
