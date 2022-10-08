@@ -76,6 +76,8 @@
 			changeStyle.label = data.changeStyleLabel;
 
 			deleteHistory.label = data.deleteHistoryLabel;
+
+			updateProcessReplays();
 		}
 
 		private function handeButtonClick(e:ButtonEvent): void 
@@ -94,6 +96,13 @@
 		private function handeCheckBoxSelect(e:Event): void
 		{
 			invokeSettingsChangeS(processReplays.selected, saveOnlySession.selected, swapHangar.selected);
+			updateProcessReplays();
+		}
+
+		private function updateProcessReplays(): void
+		{
+			processReplays.enabled = !saveOnlySession.selected;
+			processReplays.infoIcoType = saveOnlySession.selected ? 'warning' : 'info';
 		}
 	}
 }
