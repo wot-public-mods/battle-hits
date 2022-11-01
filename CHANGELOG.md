@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.2
+
+* wot 1.18.1 fixes
+* cache and settings behavior handling
+* closed #2 
+* closed #3
+
 ## v1.8.1
 
 * improved localization
