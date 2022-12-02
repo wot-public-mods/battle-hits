@@ -59,7 +59,9 @@ class HangarCamera(AbstractController):
 
 		self.updateCamera(0.0, 0.0, 0.0)
 
-		camera = self.hangarSpace.space.camera
+		camera = BigWorld.camera()
+		if not camera:
+			return
 
 		if lim[2]:
 			camera.pivotMinDist = lim[2][0]
@@ -92,10 +94,11 @@ class HangarCamera(AbstractController):
 		if self.__distLimits:
 			self.__dist = math_utils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
 
-		space = self.hangarSpace.space
-		if space is None or space.camera is None:
+
+		camera = BigWorld.camera()
+		if not camera:
 			return
-		camera = space.camera
+
 		yaw = math_utils.reduceToPI(self.__yaw - self.__offset)
 		pitch = (self.__pitch - self.__offset)
 		dist = self.__dist - self.__offset
