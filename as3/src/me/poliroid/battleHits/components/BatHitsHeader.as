@@ -15,7 +15,7 @@
 
 	public class BatHitsHeader extends UIComponentEx implements IBatHitsHeader
 	{
-		private static const CLOSE_BTN_OFFSET:int = 15;
+		private static const BUTTONS_OFFSET:int = 15;
 		private static const HIT_TYPE_BTN_OFFSET:int = 127;
 
 		public var background:Sprite;
@@ -66,8 +66,8 @@
 				var screenWidth:int = App.appWidth;
 				background.width = int(screenWidth);
 				titleTF.x = int((screenWidth - titleTF.width) / 2);
-				closeBtn.x = int(screenWidth - closeBtn.width - CLOSE_BTN_OFFSET);
-				settingsBtn.x = int(closeBtn.x  - settingsBtn.width);
+				closeBtn.x = int(screenWidth - closeBtn.width - BUTTONS_OFFSET);
+				settingsBtn.x = int(closeBtn.x - settingsBtn.width - BUTTONS_OFFSET);
 				hitsTypeToPlayer.x = int((screenWidth - HIT_TYPE_BTN_OFFSET * 2) / 2);
 				hitsTypeFromPlayer.x = int(hitsTypeToPlayer.x + HIT_TYPE_BTN_OFFSET);
 			}
