@@ -66,7 +66,7 @@ class HangarCamera(AbstractController):
 		if lim[2]:
 			camera.pivotMinDist = lim[2][0]
 		camera.target.setTranslate(Math.Vector3(target))
-		camera.pivotPosition = Math.Vector3(0.0, 0.0, 0.0)
+		camera.pivotPosition = Math.Vector3(0.0, 0.3, 0.0)
 
 		# force update camera
 		if self.__forcedUpdate:
