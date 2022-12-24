@@ -183,8 +183,10 @@ def handleAvailability(stateCtrl=None):
 
 g_eventsManager.onDestroyBattle += handleAvailability
 
-@dependency.replace_none_kwargs(settingsCtrl=ISettings)
-def fixHangarPath(path, settingsCtrl=None):
+@dependency.replace_none_kwargs(settingsCtrl=ISettings, stateCtrl=IState)
+def fixHangarPath(path, settingsCtrl=None, stateCtrl=None):
+	if stateCtrl.enabled:
+		return BATTLE_HITS_SPACE_PATH
 	swapHangar = settingsCtrl.get(SETTINGS.SWAP_HANGAR, False)
 	if not swapHangar:
 		return path
@@ -201,11 +203,6 @@ def getDefaultHangarPath(baseMethod, isPremium):
 def _getHangarPath(baseMethod, isPremium, isPremIGR):
 	path = baseMethod(isPremium, isPremIGR)
 	return fixHangarPath(path)
-
-@override(ClientHangarSpace._ClientHangarSpacePathOverride, 'setPath')
-def setPath(baseMethod, baseObject, path, *a, **kw):
-	path = fixHangarPath(path)
-	return baseMethod(baseObject, path, *a, **kw)
 
 # Fix vehicle insignia rank display on preview vehicle.
 @override(HangarVehicleAppearance, '_getThisVehicleDossierInsigniaRank')

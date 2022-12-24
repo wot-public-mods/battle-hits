@@ -1,9 +1,7 @@
 
 import BigWorld
-import copy
 from Account import PlayerAccount
 from gui import ClientHangarSpace as chs
-from gui.ClientHangarSpace import g_clientHangarSpaceOverride
 from helpers import dependency
 from gui.shared import event_dispatcher
 from gui.shared.personality import ServicesLocator
@@ -24,7 +22,6 @@ class State(AbstractController):
 		super(State, self).__init__()
 		self.__battleID = None
 		self.__hitID = None
-		self.__savedHangarData = {}
 		self.enabled = False
 
 	@property
@@ -111,26 +108,15 @@ class State(AbstractController):
 		else:
 			self.currentBattleID = self.battlesData.desiredID
 
-		self.__savedHangarData = {
-			"_EVENT_HANGAR_PATHS": copy.deepcopy(chs._EVENT_HANGAR_PATHS),
-			"path": chs.getDefaultHangarPath(False)
-		}
-
-		if chs._EVENT_HANGAR_PATHS:
-			if self.hangarSpace.isPremium in chs._EVENT_HANGAR_PATHS:
-				self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[self.hangarSpace.isPremium][0]
-			else:
-				self.__savedHangarData["path"] = chs._EVENT_HANGAR_PATHS[chs._EVENT_HANGAR_PATHS.keys()[0]][0]
+		self.enabled = True
 
 		if self.hangarSpace.spacePath != BATTLE_HITS_SPACE_PATH:
-			g_clientHangarSpaceOverride.setPath(BATTLE_HITS_SPACE_PATH)
 			self.hangarSpace.onSpaceCreate += self.hangarSceneCtrl.create
 			self.hangarSpace.onSpaceCreate += self.hangarCameraCtrl.enable
+			self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
 		else:
 			self.hangarCameraCtrl.enable()
 			self.hangarSceneCtrl.create()
-
-		self.enabled = True
 
 	def disable(self, silent=False):
 
@@ -142,19 +128,10 @@ class State(AbstractController):
 		self.hangarSceneCtrl.destroy()
 		self.currentBattleData.clean()
 
-		chs._EVENT_HANGAR_PATHS = self.__savedHangarData["_EVENT_HANGAR_PATHS"]
-
 		self.enabled = False
 
-		isHangar = isinstance(BigWorld.player(), PlayerAccount)
-		previousSpace = self.__savedHangarData["path"]
-		swapHangar = self.settingsCtrl.get(SETTINGS.SWAP_HANGAR, False)
-		if isHangar and not silent:
-			if previousSpace == BATTLE_ROYALE_SPACE_PATH or not swapHangar and previousSpace == BATTLE_HITS_SPACE_PATH:
-				previousSpace = chs._getHangarPath(False, False)
-			if swapHangar:
-				previousSpace = BATTLE_HITS_SPACE_PATH
-			g_clientHangarSpaceOverride.setPath(path=previousSpace, isPremium=True)
+		if isinstance(BigWorld.player(), PlayerAccount) and not silent:
+			self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
 
 		g_eventsManager.closeMainView()
 
