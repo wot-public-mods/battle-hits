@@ -1,4 +1,5 @@
 
+import constants
 import functools
 import types
 import ResMgr
@@ -44,26 +45,35 @@ def getShell(vehicleDescriptor, effectsIndex):
 			return shellDescr
 	return None
 
+_ST = constants.SHELL_TYPES
+_SHELL_NAME_TO_ID = {
+	_ST.ARMOR_PIERCING: 0,
+	_ST.ARMOR_PIERCING_CR: 1,
+	_ST.HOLLOW_CHARGE: 2,
+	_ST.HIGH_EXPLOSIVE: 3,
+}
+
 def getShellParams(vehicleDescriptor, effectsIndex):
 	"""form shell params from shellDescr"""
-	from constants import SHELL_TYPES
-	shellType, shellSplash = 0, 0.0
 	shellDescr = getShell(vehicleDescriptor, effectsIndex)
 
 	# return None if shellDescr is None
 	if shellDescr is None:
-		return None, None
+		return None, None, False
 
-	if shellDescr.shell.kind == SHELL_TYPES.ARMOR_PIERCING:
-		shellType = 0
-	elif shellDescr.shell.kind == SHELL_TYPES.ARMOR_PIERCING_CR:
-		shellType = 1
-	elif shellDescr.shell.kind == SHELL_TYPES.HOLLOW_CHARGE:
-		shellType = 2
-	elif shellDescr.shell.kind in [SHELL_TYPES.HIGH_EXPLOSIVE, SHELL_TYPES.ARMOR_PIERCING_HE]:
-		shellType = 3
-		shellSplash = shellDescr.shell.type.explosionRadius
-	return shellType, shellSplash
+	shell = shellDescr.shell
+
+	shellType = 0
+	if shell.kind in _SHELL_NAME_TO_ID:
+		shellType = _SHELL_NAME_TO_ID[shell.kind]
+
+	explosionRadius = 0
+	if shell.kind in (_ST.ARMOR_PIERCING_HE, _ST.HIGH_EXPLOSIVE):
+		explosionRadius = shell.type.explosionRadius
+
+	isShellGold = shell.isGold
+
+	return shellType, explosionRadius, isShellGold
 
 def parseLangFields(langFile):
 	"""split items by lines and key value by ':'

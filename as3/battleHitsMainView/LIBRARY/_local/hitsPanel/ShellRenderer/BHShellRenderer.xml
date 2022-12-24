@@ -1,0 +1,49 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/hitsPanel/ShellRenderer/BHShellRenderer" itemID="63a4e215-00000686" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.controls.ShellRenderer" linkageClassName="BHShellRenderer" lastModified="1671754316">
+  <timeline>
+    <DOMTimeline name="BHShellRenderer">
+      <layers>
+        <DOMLayer name="Layer_3" color="#FF800A" current="true" isSelected="true">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMDynamicText name="labelTF" selected="true" width="56" height="14.5">
+                  <matrix>
+                    <Matrix tx="7" ty="2"/>
+                  </matrix>
+                  <textRuns>
+                    <DOMTextRun>
+                      <characters>HE</characters>
+                      <textAttrs>
+                        <DOMTextAttrs aliasText="false" lineHeight="14.5" bitmapSize="240" face="$FieldFont*" fillColor="#FFFFFF"/>
+                      </textAttrs>
+                    </DOMTextRun>
+                  </textRuns>
+                </DOMDynamicText>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Layer_2" color="#9933CC">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/hitsPanel/ShellRenderer/background" name="background">
+                  <transformationPoint>
+                    <Point x="7" y="7"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="Layer_1" color="#00FFFF">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements/>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

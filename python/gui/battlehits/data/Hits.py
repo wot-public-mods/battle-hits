@@ -95,10 +95,12 @@ class Hits(AbstractDataProvider):
 
 			if self.__hitsToPlayer and victimInfo['isPlayer'] and not attackerInfo['isPlayer']:
 				vehicleCompDesc = vehicles.VehicleDescr(compactDescr=currentBattle['vehicles'][attackerID][attackerCompDescID])
-				shellType, _ = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
+				shellType, _, isShellGold = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
+				isAtackerSpg = 'SPG' in vehicleCompDesc.type.tags
 			elif not self.__hitsToPlayer and not victimInfo['isPlayer'] and attackerInfo['isPlayer']:
 				vehicleCompDesc = vehicles.VehicleDescr(compactDescr=currentBattle['vehicles'][attackerID][attackerCompDescID])
-				shellType, _ = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
+				shellType, _, isShellGold = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
+				isAtackerSpg = 'SPG' in vehicleCompDesc.type.tags
 				vehicleCompDesc = vehicles.VehicleDescr(compactDescr=currentBattle['vehicles'][victimID][victimCompDescID])
 			else:
 				continue
@@ -122,6 +124,8 @@ class Hits(AbstractDataProvider):
 				"vehicle": vehicleCompDesc.type.shortUserString,
 				"result": hitResult,
 				"shell": shellType,
+				"isSPG": isAtackerSpg,
+				"isImproved": isShellGold,
 				"damage": hitData["damage"],
 				'anonymized': anonymized
 			})
@@ -147,6 +151,8 @@ class Hits(AbstractDataProvider):
 				"vehicleLabel": itemData["vehicle"],
 				"resultLabel": resultLabel,
 				"shellLabel": shellLabel,
+				"isImproved": itemData['isImproved'],
+				"isSPG": itemData['isSPG'],
 				"damageLabel": damageLabel,
 				'anonymized': itemData['anonymized']
 			})

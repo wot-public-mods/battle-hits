@@ -52,7 +52,7 @@ class CurrentBattle(AbstractData):
 		attackerCompDesc = vehicles.VehicleDescr(compactDescr=attackerCompDescStr)
 		victimCompDesc = vehicles.VehicleDescr(compactDescr=victimCompDescStr)
 
-		shellType, shellSplash = getShellParams(attackerCompDesc, hitData['effectsIndex'])
+		shellType, shellSplash, _ = getShellParams(attackerCompDesc, hitData['effectsIndex'])
 
 		self.__victim = {
 			'name': victimInfo['name'],

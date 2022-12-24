@@ -218,19 +218,6 @@
                     </DOMTextRun>
                   </textRuns>
                 </DOMDynamicText>
-                <DOMDynamicText name="shellTF" width="51" height="21" isSelectable="false" lineType="multiline">
-                  <matrix>
-                    <Matrix tx="220" ty="16"/>
-                  </matrix>
-                  <textRuns>
-                    <DOMTextRun>
-                      <characters>БП</characters>
-                      <textAttrs>
-                        <DOMTextAttrs alignment="center" aliasText="false" lineHeight="18.15" size="15" bitmapSize="300" face="$FieldFont*" fillColor="#F9F9F9"/>
-                      </textAttrs>
-                    </DOMTextRun>
-                  </textRuns>
-                </DOMDynamicText>
                 <DOMDynamicText name="damageTF" width="51" height="21" isSelectable="false" lineType="multiline">
                   <matrix>
                     <Matrix tx="275" ty="16"/>
@@ -257,6 +244,14 @@
                     </DOMTextRun>
                   </textRuns>
                 </DOMDynamicText>
+                <DOMSymbolInstance libraryItemName="_local/hitsPanel/ShellRenderer/BHShellRenderer" name="shell" selected="true">
+                  <matrix>
+                    <Matrix tx="235" ty="18"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="31" y="7.05"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
               </elements>
             </DOMFrame>
           </frames>
