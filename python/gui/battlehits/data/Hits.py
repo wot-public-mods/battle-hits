@@ -20,6 +20,8 @@ _SHELL_LABELS = {
 	1: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR,
 	2: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
 	3: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
+	4: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
+	5: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 }
 
 _RESULT_LABELS = {
@@ -95,18 +97,16 @@ class Hits(AbstractDataProvider):
 
 			if self.__hitsToPlayer and victimInfo['isPlayer'] and not attackerInfo['isPlayer']:
 				vehicleCompDesc = vehicles.VehicleDescr(compactDescr=currentBattle['vehicles'][attackerID][attackerCompDescID])
-				shellType, _, isShellGold = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
-				isAtackerSpg = 'SPG' in vehicleCompDesc.type.tags
+				shellParams = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
 			elif not self.__hitsToPlayer and not victimInfo['isPlayer'] and attackerInfo['isPlayer']:
 				vehicleCompDesc = vehicles.VehicleDescr(compactDescr=currentBattle['vehicles'][attackerID][attackerCompDescID])
-				shellType, _, isShellGold = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
-				isAtackerSpg = 'SPG' in vehicleCompDesc.type.tags
+				shellParams = getShellParams(vehicleCompDesc, hitData['effectsIndex'])
 				vehicleCompDesc = vehicles.VehicleDescr(compactDescr=currentBattle['vehicles'][victimID][victimCompDescID])
 			else:
 				continue
 
 			# skip hit if shell is not shell (gaus gun of waffentrager, etc)
-			if shellType is None:
+			if shellParams.index is None:
 				continue
 
 			hitResult = [max(_RESULT_LABELS)] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
@@ -123,9 +123,9 @@ class Hits(AbstractDataProvider):
 				"number": hitNumber,
 				"vehicle": vehicleCompDesc.type.shortUserString,
 				"result": hitResult,
-				"shell": shellType,
-				"isSPG": isAtackerSpg,
-				"isImproved": isShellGold,
+				"shell": shellParams.index,
+				"isSPG": shellParams.isSpg,
+				"isImproved": shellParams.isImproved,
 				"damage": hitData["damage"],
 				'anonymized': anonymized
 			})

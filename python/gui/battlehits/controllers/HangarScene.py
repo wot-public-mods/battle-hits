@@ -95,7 +95,8 @@ class HangarScene(AbstractController):
 		for models, motors, modelTypes, modelPath in SHELL_SET, EFFECT_SET, SPLASH_SET, RICOCHET_SET:
 			del models[:], motors[:]
 			for modelType in modelTypes:
-				model = BigWorld.Model(modelPath % (currentStyle, modelType))
+				_modelPath = modelPath.format(style=currentStyle, type=modelType)
+				model = BigWorld.Model(_modelPath)
 				motor = BigWorld.Servo(Math.Matrix())
 				model.addMotor(motor)
 				models.append(model)
@@ -209,6 +210,10 @@ class HangarScene(AbstractController):
 		if not hitData:
 			return
 
+		shellParams = hitData['shellParams']
+		motor = self.__motors[MODEL_TYPES.SHELL][shellParams.index]
+		model = self.__models[MODEL_TYPES.SHELL][shellParams.index]
+
 		if hitData['isExplosion']:
 
 			worldComponentMatrix = self.vehicleCtrl.partWorldMatrix(TankPartIndexes.CHASSIS)
@@ -218,9 +223,6 @@ class HangarScene(AbstractController):
 			worldContactMatrix = Math.Matrix()
 			worldContactMatrix.setRotateYPR((0.0, math.pi / 2, 0.0))
 			worldContactMatrix.translation = Math.Vector3(worldHitPoint)
-
-			self.__motors[MODEL_TYPES.SHELL][hitData['shellType']].signal = worldContactMatrix
-			self.__models[MODEL_TYPES.SHELL][hitData['shellType']].visible = True
 
 		else:
 
@@ -242,8 +244,8 @@ class HangarScene(AbstractController):
 			worldContactMatrix.setRotateYPR((worldHitDirection.yaw, worldHitDirection.pitch, 0.0))
 			worldContactMatrix.translation = worldHitPoint
 
-			self.__motors[MODEL_TYPES.SHELL][hitData['shellType']].signal = worldContactMatrix
-			self.__models[MODEL_TYPES.SHELL][hitData['shellType']].visible = True
+		motor.signal = worldContactMatrix
+		model.visible = True
 
 	def __updateEffect(self):
 
@@ -297,10 +299,11 @@ class HangarScene(AbstractController):
 		if not hitData:
 			return
 
+		shellParams = hitData['shellParams']
 		if hitData['isExplosion']:
-			if hitData['shellSplash'] <= 6:
+			if shellParams.explosionRadius <= 6:
 				splashIndex = 2
-			elif hitData['shellSplash'] <= 12:
+			elif shellParams.explosionRadius <= 12:
 				splashIndex = 1
 			else:
 				splashIndex = 0

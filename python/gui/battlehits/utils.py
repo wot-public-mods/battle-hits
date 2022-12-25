@@ -1,8 +1,8 @@
-
-import constants
 import functools
 import types
 import ResMgr
+from collections import namedtuple
+from constants import SHELL_TYPES
 
 __all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 
 			'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cacheResult')
@@ -45,12 +45,15 @@ def getShell(vehicleDescriptor, effectsIndex):
 			return shellDescr
 	return None
 
-_ST = constants.SHELL_TYPES
+_SHELL_PARAMS = namedtuple('ShellParams', ['index', 'explosionRadius', 'isImproved', 'isSpg',
+										'hasStun'])
+_SHELL_PARAMS.__new__.__defaults__ = (None,) * len(_SHELL_PARAMS._fields)
+
 _SHELL_NAME_TO_ID = {
-	_ST.ARMOR_PIERCING: 0,
-	_ST.ARMOR_PIERCING_CR: 1,
-	_ST.HOLLOW_CHARGE: 2,
-	_ST.HIGH_EXPLOSIVE: 3,
+	SHELL_TYPES.ARMOR_PIERCING: 0,
+	SHELL_TYPES.ARMOR_PIERCING_CR: 1,
+	SHELL_TYPES.HOLLOW_CHARGE: 2,
+	SHELL_TYPES.HIGH_EXPLOSIVE: 3,
 }
 
 def getShellParams(vehicleDescriptor, effectsIndex):
@@ -59,21 +62,28 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 
 	# return None if shellDescr is None
 	if shellDescr is None:
-		return None, None, False
+		return _SHELL_PARAMS()
 
 	shell = shellDescr.shell
 
-	shellType = 0
-	if shell.kind in _SHELL_NAME_TO_ID:
-		shellType = _SHELL_NAME_TO_ID[shell.kind]
-
 	explosionRadius = 0
-	if shell.kind in (_ST.ARMOR_PIERCING_HE, _ST.HIGH_EXPLOSIVE):
+	hasStun = False
+	if shell.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
 		explosionRadius = shell.type.explosionRadius
+		hasStun = shell.stun is not None
 
-	isShellGold = shell.isGold
+	isSPG = 'SPG' in vehicleDescriptor.type.tags
 
-	return shellType, explosionRadius, isShellGold
+	shellIndex = 0
+	if shell.kind in _SHELL_NAME_TO_ID:
+		shellIndex = _SHELL_NAME_TO_ID[shell.kind]
+
+	if isSPG and shell.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
+		shellIndex += 1
+		if hasStun:
+			shellIndex += 1
+
+	return _SHELL_PARAMS(shellIndex, explosionRadius, shell.isGold, isSPG, hasStun)
 
 def parseLangFields(langFile):
 	"""split items by lines and key value by ':'

@@ -48,17 +48,17 @@ class MODEL_TYPES:
 	DOME = 'dome'
 
 class MODEL_NAMES:
-	SHELL = ('ap', 'apcr', 'heat', 'he', )
+	SHELL = ('ap', 'apcr', 'heat', 'he', 'hespg', 'hespgstun')
 	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical', )
 	SPLASH = ('large', 'middle', 'small', )
 	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
 				'15', 'cross', )
 
 class MODEL_PATHS:
-	SHELL = 'content/battlehits/%s/shells/%s/shell.model'
-	EFFECT = 'content/battlehits/%s/effects/%s/effect.model'
-	SPLASH = 'content/battlehits/%s/explosions/%s/explosion.model'
-	RICOCHET = 'content/battlehits/%s/ricochets/%s/ricochet.model'
+	SHELL = 'content/battlehits/common/shells/{type}/shell.model'
+	EFFECT = 'content/battlehits/{style}/effects/{type}/effect.model'
+	SPLASH = 'content/battlehits/{style}/explosions/{type}/explosion.model'
+	RICOCHET = 'content/battlehits/{style}/ricochets/{type}/ricochet.model'
 	DOME = 'content/battlehits/doom/doom.model'
 
 from external_strings_utils import unicode_from_utf8

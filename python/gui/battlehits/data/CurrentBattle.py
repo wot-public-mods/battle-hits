@@ -1,7 +1,7 @@
 from items import vehicles
 
 from ..events import g_eventsManager
-from ..utils import getShell, getShellParams
+from ..utils import getShellParams
 from ..data import AbstractData
 
 class CurrentBattle(AbstractData):
@@ -52,7 +52,7 @@ class CurrentBattle(AbstractData):
 		attackerCompDesc = vehicles.VehicleDescr(compactDescr=attackerCompDescStr)
 		victimCompDesc = vehicles.VehicleDescr(compactDescr=victimCompDescStr)
 
-		shellType, shellSplash, _ = getShellParams(attackerCompDesc, hitData['effectsIndex'])
+		shellParams = getShellParams(attackerCompDesc, hitData['effectsIndex'])
 
 		self.__victim = {
 			'name': victimInfo['name'],
@@ -78,11 +78,9 @@ class CurrentBattle(AbstractData):
 			'isExplosion': hitData['isExplosion'],
 			'damageFactor': hitData['damageFactor'],
 			'aimParts': hitData['aimParts'],
-			'shellType': shellType,
-			'shellSplash': shellSplash,
+			'shellParams': shellParams,
 			'points': hitData['points'],
-			'position': hitData['position'],
-			'descriptor': getShell(attackerCompDesc, hitData['effectsIndex'])
+			'position': hitData['position']
 		}
 
 		g_eventsManager.onChangedHitData()
