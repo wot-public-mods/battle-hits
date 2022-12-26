@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.8.4
+
+* improved shells ui and 3d renderers
+* fixed header buttons overlaps
+* fixed hangar swap logic (closed #8)
+* fixed camera location in own hangar (closed #7)
+* added small camera pivot for scene right positioning
+
+## v1.8.3
+
+* wot 1.19.0 fixes
+* Chinese Simplified translation update by lokisonl@qq.com
+
 ## v1.8.2
 
 * wot 1.18.1 fixes
