@@ -59,7 +59,7 @@ class MODEL_PATHS:
 	EFFECT = 'content/battlehits/{style}/effects/{type}/effect.model'
 	SPLASH = 'content/battlehits/{style}/explosions/{type}/explosion.model'
 	RICOCHET = 'content/battlehits/{style}/ricochets/{type}/ricochet.model'
-	DOME = 'content/battlehits/doom/doom.model'
+	DOME = 'content/battlehits/common/doom/doom.model'
 
 from external_strings_utils import unicode_from_utf8
 prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]

@@ -4,5 +4,5 @@
 		<min> -35.000000 0.000000 -35.000000 </min>
 		<max> 35.000000 50.000000 35.000000 </max>
 	</visibilityBox>
-	<nodelessVisual> content/battlehits/doom/doom </nodelessVisual>
+	<nodelessVisual> content/battlehits/common/doom/doom </nodelessVisual>
 </root>
