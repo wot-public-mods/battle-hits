@@ -7,7 +7,7 @@ from debug_utils import LOG_ERROR
 from helpers import dependency
 from gui import ClientHangarSpace
 from gui.app_loader.settings import APP_NAME_SPACE
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
@@ -49,14 +49,13 @@ def getVehicleEntity(baseMethod, baseObject):
 	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
 
 # hangarCamera
-@override(HangarCameraManager, "_HangarCameraManager__handleLobbyViewMouseEvent")
-def hangarCameraManager_updateCameraByMouseMove(baseMethod, baseObject, event):
+@override(HangarCameraManager, "_HangarCameraManager__updateCameraByMouseMove")
+def hangarCameraManager_updateCameraByMouseMove(baseMethod, baseObject, dx, dy, dz):
 	hangarCamera = dependency.instance(IHangarCamera)
 	if hangarCamera.enabled:
-		ctx = event.ctx
-		hangarCamera.updateCamera(ctx['dx'], ctx['dy'], ctx['dz'])
+		hangarCamera.updateCamera(dx, dy, dz)
 	else:
-		baseMethod(baseObject, event)
+		baseMethod(baseObject, dx, dy, dz)
 
 @override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
 def hangarCameraIdle_updateIdleMovement(baseMethod, baseObject):
