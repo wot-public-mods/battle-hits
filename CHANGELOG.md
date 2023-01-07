@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.8.5
+
+* wot 1.19.0 fixes
+* updated assets
+
 ## v1.8.4
 
 * improved shells ui and 3d renderers
