@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.6
+
+* 1.20.0 space binary
+
 ## v1.8.5
 
 * wot 1.19.0 fixes
