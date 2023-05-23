@@ -27,7 +27,7 @@ from .utils import override
 
 __all__ = ()
 
-GUI_SPACE_BATTLE = 6
+GUI_SPACE_BATTLE = 5
 
 # app battle loaded
 def onGUISpaceEntered(spaceID):

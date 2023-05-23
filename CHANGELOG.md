@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.8.7
+
+* 1.21.0 space binary
+* camera fix
+* battle load fix
+
 ## v1.8.6
 
 * 1.20.0 space binary
