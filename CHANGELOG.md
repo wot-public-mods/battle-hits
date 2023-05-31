@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.8
+
+* fix camera stuck
+
 ## v1.8.7
 
 * 1.21.0 space binary

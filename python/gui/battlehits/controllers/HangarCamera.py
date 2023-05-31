@@ -65,17 +65,22 @@ class HangarCamera(AbstractController):
 
 		if lim[2]:
 			camera.pivotMinDist = lim[2][0]
-		camera.target.setTranslate(Math.Vector3(target))
+		if camera.target:
+			camera.target.setTranslate(Math.Vector3(target))
 		camera.pivotPosition = Math.Vector3(0.0, 0.3, 0.0)
 
 		# force update camera
 		if self.__forcedUpdate:
 			self.__forcedUpdate = False
-			def forceCameraUpdate():
-				self.updateCamera(0.0, 0.0, 1.0)
-				camera.forceUpdate()
-			forceCameraUpdate()
-			BigWorld.callback(.0, forceCameraUpdate)
+			self.forceUpdateCamera()
+			BigWorld.callback(.0, self.forceUpdateCamera)
+
+	def forceUpdateCamera(self):
+		camera = BigWorld.camera()
+		if not camera:
+			return
+		self.updateCamera(0.0, 0.0, 1.0)
+		camera.forceUpdate()
 
 	def updateCamera(self, dx, dy, dz):
 

@@ -48,7 +48,15 @@ g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
 def getVehicleEntity(baseMethod, baseObject):
 	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
 
-# hangarCamera
+# hangarCamera initizlization
+@override(HangarCameraManager, "onCameraAdded")
+def onCameraAdded(baseMethod, baseObject, *a, **kw):
+	baseMethod(baseObject, baseObject *a, **kw)
+	hangarCamera = dependency.instance(IHangarCamera)
+	if hangarCamera.enabled:
+		return hangarCamera.forceUpdateCamera()
+
+# hangarCamera movement
 @override(HangarCameraManager, "_HangarCameraManager__handleLobbyViewMouseEvent")
 def hangarCameraManager_updateCameraByMouseMove(baseMethod, baseObject, event):
 	hangarCamera = dependency.instance(IHangarCamera)
