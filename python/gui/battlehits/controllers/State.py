@@ -110,9 +110,8 @@ class State(AbstractController):
 
 		self.enabled = True
 
+		self.hangarSpace.onSpaceCreate += self._onSpaceCreate
 		if self.hangarSpace.spacePath != BATTLE_HITS_SPACE_PATH:
-			self.hangarSpace.onSpaceCreate += self.hangarSceneCtrl.create
-			self.hangarSpace.onSpaceCreate += self.hangarCameraCtrl.enable
 			self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
 		else:
 			self.hangarCameraCtrl.enable()
@@ -128,6 +127,8 @@ class State(AbstractController):
 		self.hangarSceneCtrl.destroy()
 		self.currentBattleData.clean()
 
+		self.hangarSpace.onSpaceCreate -= self._onSpaceCreate
+
 		self.enabled = False
 
 		if isinstance(BigWorld.player(), PlayerAccount) and not silent:
@@ -139,4 +140,9 @@ class State(AbstractController):
 		lobbyHeader = getLobbyHeader()
 		if lobbyHeader:
 			lobbyHeader.disableLobbyHeaderControls(False)
+
+	def _onSpaceCreate(self):
+		if self.hangarSpace.spacePath == BATTLE_HITS_SPACE_PATH:
+			self.hangarSceneCtrl.create()
+			self.hangarCameraCtrl.enable()
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.8.9
+
+* fix camera stuck
+* space.settings 1.21.1 update
+
 ## v1.8.8
 
 * fix camera stuck

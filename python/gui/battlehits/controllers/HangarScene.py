@@ -6,8 +6,6 @@ import BigWorld
 import Math
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
 from debug_utils import LOG_ERROR
-from helpers import dependency
-from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartIndexes
 
 from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
@@ -17,8 +15,6 @@ from ..events import g_eventsManager
 from ..utils import cancelCallbackSafe
 
 class HangarScene(AbstractController):
-
-	hangarSpace = dependency.descriptor(IHangarSpace)
 
 	def __init__(self):
 		super(HangarScene, self).__init__()
@@ -40,8 +36,7 @@ class HangarScene(AbstractController):
 		}
 
 	def create(self):
-
-		self.hangarSpace.onSpaceCreate -= self.create
+		self.destroy()
 
 		g_eventsManager.onChangedBattleData += self.__onBattleChanged
 		g_eventsManager.onChangedHitData += self.__onHitChanged

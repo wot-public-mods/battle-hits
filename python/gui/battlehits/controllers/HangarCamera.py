@@ -30,7 +30,6 @@ class HangarCamera(AbstractController):
 		self.__targetPosition = None
 
 	def enable(self):
-		self.hangarSpace.onSpaceCreate -= self.enable
 		if self.hangarSpace.space:
 			self.enabled = True
 		self.setCameraData(*CAMERA_DEFAULTS)
@@ -102,6 +101,14 @@ class HangarCamera(AbstractController):
 
 		camera = BigWorld.camera()
 		if not camera:
+			return
+
+		# sometimes camera is not a BigWorld.SphericalTransitionCamera
+		# so we can properly update is
+		# it can be BigWorld.CollidableTransitionCamera 
+		# or BigWorld.RouteTransitionCamera 
+		# or even BigWorld.FreeCamera
+		if not isinstance(camera, BigWorld.SphericalTransitionCamera):
 			return
 
 		yaw = math_utils.reduceToPI(self.__yaw - self.__offset)

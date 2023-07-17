@@ -49,10 +49,12 @@ def getVehicleEntity(baseMethod, baseObject):
 	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
 
 # hangarCamera initizlization
-@override(HangarCameraManager, "onCameraAdded")
-def onCameraAdded(baseMethod, baseObject, *a, **kw):
-	baseMethod(baseObject, baseObject *a, **kw)
+@override(HangarCameraManager, "switchToTank")
+def onCameraAdded(baseMethod, baseObject, instantly=True, resetTransform=True):
 	hangarCamera = dependency.instance(IHangarCamera)
+	if hangarCamera.enabled:
+		instantly = True
+	baseMethod(baseObject, instantly, resetTransform)
 	if hangarCamera.enabled:
 		return hangarCamera.forceUpdateCamera()
 
