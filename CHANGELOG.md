@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0
+
+* fix hangar loading bug
+
 ## v1.8.9
 
 * fix camera stuck

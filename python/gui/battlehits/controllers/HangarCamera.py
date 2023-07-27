@@ -58,7 +58,7 @@ class HangarCamera(AbstractController):
 
 		self.updateCamera(0.0, 0.0, 0.0)
 
-		camera = BigWorld.camera()
+		camera = self._get_camera()
 		if not camera:
 			return
 
@@ -75,7 +75,7 @@ class HangarCamera(AbstractController):
 			BigWorld.callback(.0, self.forceUpdateCamera)
 
 	def forceUpdateCamera(self):
-		camera = BigWorld.camera()
+		camera = self._get_camera()
 		if not camera:
 			return
 		self.updateCamera(0.0, 0.0, 1.0)
@@ -98,17 +98,8 @@ class HangarCamera(AbstractController):
 		if self.__distLimits:
 			self.__dist = math_utils.clamp(self.__distLimits[0], self.__distLimits[1], self.__dist)
 
-
-		camera = BigWorld.camera()
+		camera = self._get_camera()
 		if not camera:
-			return
-
-		# sometimes camera is not a BigWorld.SphericalTransitionCamera
-		# so we can properly update is
-		# it can be BigWorld.CollidableTransitionCamera 
-		# or BigWorld.RouteTransitionCamera 
-		# or even BigWorld.FreeCamera
-		if not isinstance(camera, BigWorld.SphericalTransitionCamera):
 			return
 
 		yaw = math_utils.reduceToPI(self.__yaw - self.__offset)
@@ -136,3 +127,15 @@ class HangarCamera(AbstractController):
 		cameraMatrix.setRotateYPR((yaw, pitch, 0.0))
 		camera.source = cameraMatrix
 		camera.pivotMaxDist = dist
+
+	# We can properly work only with BigWorld.SphericalTransitionCamera
+	# Sometimes camera is not a BigWorld.SphericalTransitionCamera
+	# so we can properly update it
+	# It can be BigWorld.CollidableTransitionCamera 
+	# or BigWorld.RouteTransitionCamera 
+	# or BigWorld.FreeCamera
+	# in all this cases we just skip any our logic
+	def _get_camera(self):
+		camera = BigWorld.camera()
+		if isinstance(camera, BigWorld.SphericalTransitionCamera):
+			return camera
