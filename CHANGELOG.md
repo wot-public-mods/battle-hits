@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.1
+
+* 1.22.0 space binary
+
 ## v1.9.0
 
 * fix hangar loading bug
