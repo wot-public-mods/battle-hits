@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.2
+
+* hangars list updated
+* resources for compatibility with non wg clients
+
 ## v1.9.1
 
 * 1.22.0 space binary
