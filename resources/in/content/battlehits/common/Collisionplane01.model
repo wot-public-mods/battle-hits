@@ -1,0 +1,8 @@
+<root>
+	<materialNames/>
+	<visibilityBox>
+		<min> -1.5 0.000000 -0.000000 </min>
+		<max> 1.5 2 0.0663001 </max>
+	</visibilityBox>
+	<nodelessVisual> content/battlehits/common/Collisionplane01 </nodelessVisual>
+</root>
