@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.3
+
+* fixes for ingame event
+
 ## v1.9.2
 
 * hangars list updated
