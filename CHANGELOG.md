@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.4
+
+* fixed new whelled tanks display bug
+
 ## v1.9.3
 
 * fixes for ingame event
