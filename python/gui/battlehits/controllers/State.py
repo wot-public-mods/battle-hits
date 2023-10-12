@@ -12,7 +12,7 @@ from skeletons.gui.shared.utils import IHangarSpace
 from ..controllers import AbstractController
 from ..events import g_eventsManager
 from ..utils import getLobbyHeader
-from .._constants import BATTLE_HITS_SPACE_PATH, BATTLE_ROYALE_SPACE_PATH, SETTINGS
+from .._constants import BATTLE_HITS_SPACE_PATH
 
 class State(AbstractController):
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.5
+
+* fixed list of default spaces
+
 ## v1.9.4
 
 * fixed new whelled tanks display bug

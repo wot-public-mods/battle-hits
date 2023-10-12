@@ -70,10 +70,9 @@ SETTINGS_VERSION = 11
 CACHE_VERSION = 35
 
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
-BATTLE_ROYALE_SPACE_PATH = 'spaces/h33_battle_royale_2021'
 DEFAULT_HANGAR_SPACES = ('spaces/hangar_v3', 'spaces/hangar_v3_poster_2020', 'spaces/h34_lunar_ny_2022',
-	'spaces/hangar_v3_rts', 'spaces/h33_hangar_v3_wt_2021', 'spaces/hangar_v3_hw22', 'spaces/h30_newyear_2023',
-	'spaces/h01_victory_day_2023', 'spaces/h02_tmday_2015', 'spaces/h04_remday_2015', )
+	'spaces/hangar_v3_rts', 'spaces/hangar_v3_hw22', 'spaces/h30_newyear_2023', 'spaces/h33_comp7', 
+	'spaces/h01_victory_day_2023', 'spaces/h02_tmday_2015', 'spaces/h04_remday_2015', 'spaces/h34_halloween_2023', )
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 
