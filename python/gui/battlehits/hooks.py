@@ -213,12 +213,17 @@ def _getHangarPath(baseMethod, isPremium, isPremIGR):
 	return fixHangarPath(path)
 
 # Fix vehicle insignia rank display on preview vehicle.
-@override(HangarVehicleAppearance, '_getThisVehicleDossierInsigniaRank')
-def getThisVehicleDossierInsigniaRank(baseMethod, baseObject):
-	stateCtrl = dependency.instance(IState)
-	if stateCtrl.enabled:
-		return 0
-	return baseMethod(baseObject)
+# compatibility with non wot clients
+method_name = '_getThisVehicleDossierInsigniaRank'
+if not hasattr(HangarVehicleAppearance, method_name):
+	method_name = 'getThisVehicleDossierInsigniaRank'
+if hasattr(HangarVehicleAppearance, method_name):
+	@override(HangarVehicleAppearance, method_name)
+	def getThisVehicleDossierInsigniaRank(baseMethod, baseObject):
+		stateCtrl = dependency.instance(IState)
+		if stateCtrl.enabled:
+			return 0
+		return baseMethod(baseObject)
 
 # Fix vehicle rebuild bug on currentVehicle present.
 @override(_CurrentVehicle, 'updateVehicleDescriptorInModel')

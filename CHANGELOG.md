@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.6
+
+* compatibility with non wg clients
+
 ## v1.9.5
 
 * fixed list of default spaces
