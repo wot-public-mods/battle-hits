@@ -6,7 +6,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.shared import event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
@@ -15,6 +14,7 @@ from .._constants import SETTINGS
 from ..events import g_eventsManager
 from ..lang import l10n
 from .._skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
+from ..utils import getParentWindow
 
 class BattleHitsMainViewMeta(LobbySubView, View):
 
@@ -65,11 +65,6 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 	hits = dependency.descriptor(IHitsData)
 	battles = dependency.descriptor(IBattlesData)
 
-	def __init__(self, ctx=None):
-		super(BattleHitsMainView, self).__init__(ctx)
-		self.__vehicleCD = ctx.get('itemCD')
-		self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
-
 	def _populate(self):
 		super(BattleHitsMainView, self)._populate()
 		self.__updateStaticData()
@@ -89,11 +84,8 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		super(BattleHitsMainView, self)._dispose()
 
 	def closeView(self):
-		if self.__backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
-			event_dispatcher.showResearchView(self.__vehicleCD)
-		else:
-			event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__backAlias))
-			self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+		params = SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR, parent=getParentWindow())
+		self.fireEvent(g_entitiesFactories.makeLoadEvent(params), scope=EVENT_BUS_SCOPE.LOBBY)
 
 	def hitsToPlayerClick(self, hitsToPlayer):
 		if self.settingsCtrl:

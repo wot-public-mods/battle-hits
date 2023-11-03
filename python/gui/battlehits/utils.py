@@ -3,6 +3,8 @@ import types
 import ResMgr
 from collections import namedtuple
 from constants import SHELL_TYPES
+from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 
 __all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 
 			'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cacheResult')
@@ -154,3 +156,8 @@ def cacheResult(function):
 			memo[cache_key] = rv
 			return rv
 	return wrapper
+
+def getParentWindow():
+	uiLoader = dependency.instance(IGuiLoader)
+	if uiLoader and uiLoader.windowsManager:
+		return uiLoader.windowsManager.getMainWindow()
