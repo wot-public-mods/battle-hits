@@ -2,7 +2,7 @@ from helpers import dependency
 from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
 from .._constants import SETTINGS, MODEL_STYLE
-from ..skeletons import IBattlesHistory, ISettings
+from .._skeletons import IBattlesHistory, ISettings
 from ..lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):

@@ -14,7 +14,7 @@ from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
 from .._constants import SETTINGS
 from ..events import g_eventsManager
 from ..lang import l10n
-from ..skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
+from .._skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
 
 class BattleHitsMainViewMeta(LobbySubView, View):
 

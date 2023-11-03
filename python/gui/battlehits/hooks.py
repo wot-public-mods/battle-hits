@@ -22,7 +22,7 @@ from vehicle_systems.CompoundAppearance import CompoundAppearance
 from ._constants import SETTINGS, BATTLE_HITS_SPACE_PATH, DEFAULT_HANGAR_SPACES
 from .events import g_eventsManager
 from .lang import l10n
-from .skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState, ISettings
+from ._skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState, ISettings
 from .utils import override
 
 __all__ = ()

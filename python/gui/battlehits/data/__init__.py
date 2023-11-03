@@ -1,5 +1,5 @@
 from helpers import dependency
-from ..skeletons import *
+from .._skeletons import *
 
 __all__ = ('AbstractData', 'AbstractDataProvider')
 
