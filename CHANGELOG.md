@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.7
+
+* fixed header buttons layout
+
 ## v1.9.6
 
 * compatibility with non wg clients

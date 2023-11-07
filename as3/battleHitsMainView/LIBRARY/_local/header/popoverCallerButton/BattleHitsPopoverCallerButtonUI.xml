@@ -1,8 +1,8 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/popoverCallerButton/BattleHitsPopoverCallerButtonUI" itemID="5be477ed-00000084" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.controls.PopoverCallerButton" linkageClassName="BattleHitsPopoverCallerButtonUI" lastModified="1544552105">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="_local/header/popoverCallerButton/BattleHitsPopoverCallerButtonUI" itemID="5be477ed-00000084" linkageExportForAS="true" linkageBaseClass="me.poliroid.battleHits.controls.PopoverCallerButton" linkageClassName="BattleHitsPopoverCallerButtonUI" lastModified="1699373340" lastUniqueIdentifier="6">
   <timeline>
     <DOMTimeline name="BattleHitsPopoverCallerButtonUI">
       <layers>
-        <DOMLayer name="Layer 3" color="#FF800A">
+        <DOMLayer name="Layer 3" color="#FF800A" locked="true">
           <frames>
             <DOMFrame index="0" duration="9" keyMode="9728">
               <elements/>
@@ -59,11 +59,11 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 2" color="#16FEEA" locked="true">
+        <DOMLayer name="hitMc" color="#16FEEA" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/mask" name="hitMc" centerPoint3DX="45" centerPoint3DY="16">
+                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/mask" name="hitMc" selected="true" centerPoint3DX="45" centerPoint3DY="16">
                   <matrix>
                     <Matrix a="1.22222900390625" tx="-10"/>
                   </matrix>
@@ -78,11 +78,11 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 3" color="#37AAE5" locked="true">
+        <DOMLayer name="iconContainer" color="#37AAE5" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="50" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/iconAnim" name="iconContainer" centerPoint3DX="84" centerPoint3DY="16">
+                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/iconAnim" name="iconContainer" selected="true" centerPoint3DX="84" centerPoint3DY="16">
                   <matrix>
                     <Matrix tx="68"/>
                   </matrix>
@@ -94,9 +94,9 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 4" color="#BB58A0" current="true" isSelected="true">
+        <DOMLayer name="filtersMC" color="#BB58A0" locked="true" autoNamed="false">
           <frames>
-            <DOMFrame index="0" duration="11" keyMode="9728">
+            <DOMFrame index="0" duration="10" keyMode="9728">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" selected="true" centerPoint3DX="25.35" centerPoint3DY="16.55">
                   <matrix>
@@ -108,7 +108,7 @@
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
-            <DOMFrame index="11" keyMode="9728">
+            <DOMFrame index="10" duration="9" tweenType="motion" motionTweenSnap="true" keyMode="22017">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
                   <matrix>
@@ -118,117 +118,12 @@
                     <Point/>
                   </transformationPoint>
                   <color>
-                    <Color redOffset="11" blueOffset="1" greenOffset="3"/>
+                    <Color/>
                   </color>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
-            <DOMFrame index="12" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="22" blueOffset="2" greenOffset="7"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="13" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="33" blueOffset="3" greenOffset="10"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="14" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="44" blueOffset="4" greenOffset="13"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="15" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="56" blueOffset="6" greenOffset="17"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="16" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="67" blueOffset="7" greenOffset="20"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="17" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="78" blueOffset="8" greenOffset="23"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="18" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="89" blueOffset="9" greenOffset="27"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="19" duration="2" keyMode="9728">
+            <DOMFrame index="19" tweenType="motion" motionTweenSnap="true" keyMode="22017">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
                   <matrix>
@@ -243,7 +138,7 @@
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
-            <DOMFrame index="21" keyMode="9728">
+            <DOMFrame index="20" duration="9" tweenType="motion" motionTweenSnap="true" keyMode="22017">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
                   <matrix>
@@ -253,12 +148,12 @@
                     <Point/>
                   </transformationPoint>
                   <color>
-                    <Color redOffset="89" blueOffset="9" greenOffset="27"/>
+                    <Color redOffset="100" blueOffset="10" greenOffset="30"/>
                   </color>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
-            <DOMFrame index="22" keyMode="9728">
+            <DOMFrame index="29" tweenType="motion" motionTweenSnap="true" keyMode="22017">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
                   <matrix>
@@ -268,102 +163,12 @@
                     <Point/>
                   </transformationPoint>
                   <color>
-                    <Color redOffset="78" blueOffset="8" greenOffset="23"/>
+                    <Color/>
                   </color>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
-            <DOMFrame index="23" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="67" blueOffset="7" greenOffset="20"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="24" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="56" blueOffset="6" greenOffset="17"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="25" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="44" blueOffset="4" greenOffset="13"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="26" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="33" blueOffset="3" greenOffset="10"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="27" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="22" blueOffset="2" greenOffset="7"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="28" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
-                  <matrix>
-                    <Matrix ty="7"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color redOffset="11" blueOffset="1" greenOffset="3"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="29" duration="21" keyMode="9728">
+            <DOMFrame index="30" duration="20" keyMode="9728">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/textField" name="filtersMC" centerPoint3DX="25.35" centerPoint3DY="16.55">
                   <matrix>
@@ -377,9 +182,69 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="Layer 5" color="#F3ECDC">
+        <DOMLayer name="shineMc" color="#F3ECDC" locked="true" current="true" isSelected="true" autoNamed="false">
           <frames>
-            <DOMFrame index="0" duration="11" keyMode="9728">
+            <DOMFrame index="0" duration="10" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" selected="true" centerPoint3DX="55" centerPoint3DY="16">
+                  <matrix>
+                    <Matrix tx="10" ty="-4"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <color>
+                    <Color alphaMultiplier="0"/>
+                  </color>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="10" duration="9" tweenType="motion" motionTweenSnap="true" keyMode="22017">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" selected="true" centerPoint3DX="55" centerPoint3DY="16">
+                  <matrix>
+                    <Matrix tx="10" ty="-4"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <color>
+                    <Color alphaMultiplier="0"/>
+                  </color>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="19" tweenType="motion" motionTweenSnap="true" keyMode="22017">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
+                  <matrix>
+                    <Matrix tx="10" ty="-4"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <color>
+                    <Color/>
+                  </color>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="20" duration="9" tweenType="motion" motionTweenSnap="true" keyMode="22017">
+              <elements>
+                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
+                  <matrix>
+                    <Matrix tx="10" ty="-4"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point/>
+                  </transformationPoint>
+                  <color>
+                    <Color/>
+                  </color>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="29" tweenType="motion" motionTweenSnap="true" keyMode="22017">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
                   <matrix>
@@ -394,259 +259,7 @@
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
-            <DOMFrame index="11" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.109375"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="12" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.21875"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="13" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.328125"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="14" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.44921875"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="15" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.55078125"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="16" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.671875"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="17" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.78125"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="18" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.890625"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="19" duration="2" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="21" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.890625"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="22" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.78125"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="23" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.671875"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="24" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.55078125"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="25" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.44921875"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="26" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.328125"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="27" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.21875"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="28" keyMode="9728">
-              <elements>
-                <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
-                  <matrix>
-                    <Matrix tx="10" ty="-4"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point/>
-                  </transformationPoint>
-                  <color>
-                    <Color alphaMultiplier="0.109375"/>
-                  </color>
-                </DOMSymbolInstance>
-              </elements>
-            </DOMFrame>
-            <DOMFrame index="29" duration="21" keyMode="9728">
+            <DOMFrame index="30" duration="20" keyMode="9728">
               <elements>
                 <DOMSymbolInstance libraryItemName="_local/header/popoverCallerButton/glow" name="shineMc" centerPoint3DX="55" centerPoint3DY="16">
                   <matrix>

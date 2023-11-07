@@ -66,8 +66,8 @@
 				var screenWidth:int = App.appWidth;
 				background.width = int(screenWidth);
 				titleTF.x = int((screenWidth - titleTF.width) / 2);
-				closeBtn.x = int(screenWidth - closeBtn.width - BUTTONS_OFFSET);
-				settingsBtn.x = int(closeBtn.x - settingsBtn.width - BUTTONS_OFFSET);
+				closeBtn.x = int(screenWidth - getButtonOffset(closeBtn) - BUTTONS_OFFSET);
+				settingsBtn.x = int(closeBtn.x - getButtonOffset(settingsBtn));
 				hitsTypeToPlayer.x = int((screenWidth - HIT_TYPE_BTN_OFFSET * 2) / 2);
 				hitsTypeFromPlayer.x = int(hitsTypeToPlayer.x + HIT_TYPE_BTN_OFFSET);
 			}
@@ -81,7 +81,9 @@
 		public function updateDP(model:BatHitsHeaderVO): void
 		{
 			closeBtn.label = model.closeBtnLabel;
+			closeBtn.validateNow();
 			settingsBtn.label = model.settingsLabel;
+			settingsBtn.validateNow();
 			titleTF.text = model.titleLabel;
 			hitsTypeToPlayer.label = model.typeBtnMe;
 			hitsTypeFromPlayer.label = model.typeBtnEnemys;
@@ -112,6 +114,11 @@
 			dispatchEvent(new BatHitsEvent(BatHitsEvent.FROM_PLAYER_CLICK, true));
 			hitsTypeToPlayer.isActive = false;
 			hitsTypeFromPlayer.isActive = true;
+		}
+
+		private function getButtonOffset(button:CloseButtonText): uint
+		{
+			return button.iconContainer.x + button.iconContainer.width + BUTTONS_OFFSET;
 		}
 	}
 }
