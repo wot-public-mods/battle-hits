@@ -18,6 +18,12 @@ class Vehicle(AbstractController):
 
 	hangarSpace = dependency.descriptor(IHangarSpace)
 
+	def __init__(self):
+		super(Vehicle, self).__init__()
+		self._components = {}
+		self._vehicleStrCD = None
+		self._presentCBID = None
+
 	@property
 	def vehicleEntity(self):
 		if not self.hangarSpace:
@@ -66,9 +72,6 @@ class Vehicle(AbstractController):
 		return False
 
 	def initialize(self):
-		self._components = {}
-		self._vehicleStrCD = None
-		self._presentCBID = None
 		self.hangarSpace.onVehicleChanged += self._onVehicleChanged
 
 	def init(self):
