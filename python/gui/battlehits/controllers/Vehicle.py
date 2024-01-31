@@ -261,6 +261,10 @@ class Vehicle(AbstractController):
 		if partIndex in TankPartIndexes.ALL:
 			return TankPartIndexes.getName(partIndex)
 
+		tracksConfig = self.compactDescr.chassis.tracks
+		if tracksConfig and not self.isWheeledTech:
+			return DamageFromShotDecoder.convertComponentIndex(partIndex, self.compactDescr)
+
 		wheelsConfig = self.compactDescr.chassis.generalWheelsAnimatorConfig
 		if wheelsConfig is not None:
 			partIndex -= len(TankPartIndexes.ALL)
@@ -273,9 +277,5 @@ class Vehicle(AbstractController):
 				result2.append(wheelNodeLength - delta[i] + 1)
 			result = result1 + result2
 			return wheelNodeNames[result.index(partIndex)]
-
-		tracksConfig = self.compactDescr.chassis.tracks
-		if tracksConfig is not None:
-			return DamageFromShotDecoder.convertComponentIndex(partIndex, self.compactDescr)
 
 		return partIndex
