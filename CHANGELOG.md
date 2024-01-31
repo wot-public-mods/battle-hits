@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.9.8
+
+* fixed track configured vehicles visual bug
+* fixed AttributeError in logs
+* update copyright
+
 ## v1.9.7
 
 * fixed header buttons layout
