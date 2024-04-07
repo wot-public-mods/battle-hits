@@ -6,8 +6,8 @@ from constants import SHELL_TYPES
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parseLangFields', 'readFromVFS', 
-			'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cacheResult')
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parse_lang_fields', 'readFromVFS', 
+			'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cache_result')
 
 def override(holder, name, wrapper=None, setter=None):
 	"""Override methods, properties, functions, attributes
@@ -87,7 +87,7 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 
 	return _SHELL_PARAMS(shellIndex, explosionRadius, shell.isGold, isSPG, hasStun)
 
-def parseLangFields(langFile):
+def parse_lang_fields(langFile):
 	"""split items by lines and key value by ':'
 	like yaml format"""
 	result = {}
@@ -97,7 +97,7 @@ def parseLangFields(langFile):
 			if ': ' not in item:
 				continue
 			key, value = item.split(": ", 1)
-			result[key] = value
+			result[key] = value.replace('\\n', '\n')
 	return result
 
 def readFromVFS(path):
@@ -145,15 +145,15 @@ def cancelCallbackSafe(cbid):
 	except (AttributeError, ValueError):
 		return False
 
-def cacheResult(function):
+def cache_result(function):
 	memo = {}
 	@functools.wraps(function)
-	def wrapper(cache_key):
+	def wrapper(*args):
 		try:
-			return memo[cache_key]
+			return memo[args]
 		except KeyError:
-			rv = function(cache_key)
-			memo[cache_key] = rv
+			rv = function(*args)
+			memo[args] = rv
 			return rv
 	return wrapper
 

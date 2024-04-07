@@ -1,36 +1,57 @@
 
-from constants import DEFAULT_LANGUAGE
 from helpers import getClientLanguage
 
-from ._constants import DEFAULT_UI_LANGUAGE, LANGUAGE_CODES, LANGUAGE_FILE_MASK
-from .utils import parseLangFields, cacheResult
+from ._constants import LANGUAGE_DEFAULT_UI, LANGUAGE_CODES, LANGUAGE_FILE_MASK, LANGUAGE_RU_FALLBACK
+from .utils import parse_lang_fields, cache_result
 
 __all__ = ('l10n', )
 
-_LANGUAGE = {}
-_LANGUAGES = {}
+class Localization:
 
-for lang_code in LANGUAGE_CODES:
-	vfs_path = LANGUAGE_FILE_MASK % lang_code
-	vfs_data = parseLangFields(vfs_path)
-	if vfs_data:
-		_LANGUAGES[lang_code] = vfs_data
+	def __init__(self, file_mask, codes=LANGUAGE_CODES, default=LANGUAGE_DEFAULT_UI, fallback=LANGUAGE_RU_FALLBACK):
+		self.language = {}
+		self.languages = {}
 
-_CLIENT_LANGUAGE = getClientLanguage()
-if _CLIENT_LANGUAGE in _LANGUAGES.keys():
-	_LANGUAGE = _LANGUAGES[_CLIENT_LANGUAGE]
-elif DEFAULT_LANGUAGE in _LANGUAGES.keys():
-	_LANGUAGE = _LANGUAGES[DEFAULT_LANGUAGE]
-else:
-	_LANGUAGE = _LANGUAGES[DEFAULT_UI_LANGUAGE]
+		for langCode in codes:
+			vfs_path = file_mask % langCode
+			lang_data = parse_lang_fields(vfs_path)
+			if lang_data:
+				self.languages[langCode] = lang_data
 
-@cacheResult
-def l10n(locale_key):
-	'''returns localized value relative to locale_key'''
-	if locale_key in _LANGUAGE:
-		return _LANGUAGE[locale_key]
-	elif locale_key in _LANGUAGES[DEFAULT_LANGUAGE]:
-		return _LANGUAGES[DEFAULT_LANGUAGE][locale_key]
-	elif locale_key in _LANGUAGES[DEFAULT_UI_LANGUAGE]:
-		return _LANGUAGES[DEFAULT_UI_LANGUAGE][locale_key]
-	return locale_key
+		client_language = getClientLanguage()
+		self._client_default = 'en'
+		if client_language in fallback:
+			self._client_default = 'ru'
+
+		self._file_mask = file_mask
+		self._ui_default = default
+
+		if client_language in self.languages.keys():
+			self.language = self.languages[client_language]
+		elif self._client_default in self.languages.keys():
+			self.language = self.languages[self._client_default]
+		else:
+			self.language = self.languages[self._ui_default]
+
+	@cache_result
+	def __call__(self, locale_key):
+		if locale_key in self.language:
+			return self.language[locale_key]
+		elif locale_key in self.languages[self._client_default]:
+			return self.languages[self._client_default][locale_key]
+		elif locale_key in self.languages[self._ui_default]:
+			return self.languages[self._ui_default][locale_key]
+		return locale_key
+
+	@cache_result
+	def get_sentences(self):
+		result = {}
+		for k, v in self.languages[self._ui_default].items():
+			result[k] = v
+		for k, v in self.languages[self._client_default].items():
+			result[k] = v
+		for k, v in self.language.items():
+			result[k] = v
+		return result
+
+l10n = Localization(LANGUAGE_FILE_MASK)
