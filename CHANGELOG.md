@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.9.9
+
+* localization fallback implementation
+* 1.24.1 space binary
+* up cache revision
+
 ## v1.9.8
 
 * fixed track configured vehicles visual bug

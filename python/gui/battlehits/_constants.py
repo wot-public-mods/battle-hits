@@ -67,7 +67,7 @@ SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'm
 CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'cache.dat'))
 
 SETTINGS_VERSION = 11
-CACHE_VERSION = 35
+CACHE_VERSION = 36
 
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 DEFAULT_HANGAR_SPACES = ('spaces/hangar_v3', 'spaces/hangar_v3_poster_2020', 'spaces/h34_lunar_ny_2022',
