@@ -3,6 +3,7 @@
 ## v2.0.00
 
 * update credentials & license
+* fix new vehicle shell mechanics
 
 ## v1.9.9
 

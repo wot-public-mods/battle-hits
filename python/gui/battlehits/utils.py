@@ -4,6 +4,7 @@ import ResMgr
 from collections import namedtuple
 from constants import SHELL_TYPES
 from helpers import dependency
+from items import vehicles
 from skeletons.gui.impl import IGuiLoader
 
 __all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parse_lang_fields', 'readFromVFS', 
@@ -40,13 +41,6 @@ def byteify(data):
 		result = data.encode('utf-8')
 	return result
 
-def getShell(vehicleDescriptor, effectsIndex):
-	"""get shellDescr by effectsIndex"""
-	for shellDescr in vehicleDescriptor.gun.shots:
-		if effectsIndex == shellDescr.shell.effectsIndex:
-			return shellDescr
-	return None
-
 _SHELL_PARAMS = namedtuple('ShellParams', ['index', 'explosionRadius', 'isImproved', 'isSpg',
 										'hasStun'])
 _SHELL_PARAMS.__new__.__defaults__ = (None,) * len(_SHELL_PARAMS._fields)
@@ -58,34 +52,51 @@ _SHELL_NAME_TO_ID = {
 	SHELL_TYPES.HIGH_EXPLOSIVE: 3,
 }
 
+def _common_effect_name(effectsIndex):
+	value = vehicles.g_cache.shotEffectsNames.get(effectsIndex, '')
+	for item in ('ArmorPiercing', 'APCR', 'HighExplosive', 'HollowCharge'):
+		if item.lower() in value.lower():
+			return item.lower()
+
 def getShellParams(vehicleDescriptor, effectsIndex):
-	"""form shell params from shellDescr"""
-	shellDescr = getShell(vehicleDescriptor, effectsIndex)
+	# get shell from gun shells by it effectsIndex
+	shellDescr = None
+	gunDamageMutable = False
+	for shotDescr in vehicleDescriptor.gun.shots:
+		gunDamageMutable |= getattr(shotDescr.shell, 'isDamageMutable', False)
+		if effectsIndex == shotDescr.shell.effectsIndex:
+			shellDescr = shotDescr.shell
+			break
 
-	# return None if shellDescr is None
-	if shellDescr is None:
+	# get shell by common shell type
+	# poland with mutable damage, intoduces in 1.24.1
+	if not shellDescr and gunDamageMutable:
+		effectName = _common_effect_name(effectsIndex)
+		for shotDescr in vehicleDescriptor.gun.shots:
+			if effectName == _common_effect_name(shotDescr.shell.effectsIndex):
+				shellDescr = shotDescr.shell
+				break
+
+	if not shellDescr:
 		return _SHELL_PARAMS()
-
-	shell = shellDescr.shell
 
 	explosionRadius = 0
 	hasStun = False
-	if shell.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
-		explosionRadius = shell.type.explosionRadius
-		hasStun = shell.stun is not None
-
-	isSPG = 'SPG' in vehicleDescriptor.type.tags
+	if shellDescr.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
+		explosionRadius = shellDescr.type.explosionRadius
+		hasStun = shellDescr.stun is not None
 
 	shellIndex = 0
-	if shell.kind in _SHELL_NAME_TO_ID:
-		shellIndex = _SHELL_NAME_TO_ID[shell.kind]
+	if shellDescr.kind in _SHELL_NAME_TO_ID:
+		shellIndex = _SHELL_NAME_TO_ID[shellDescr.kind]
 
-	if isSPG and shell.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
+	isSPG = 'SPG' in vehicleDescriptor.type.tags
+	if isSPG and shellDescr.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
 		shellIndex += 1
 		if hasStun:
 			shellIndex += 1
 
-	return _SHELL_PARAMS(shellIndex, explosionRadius, shell.isGold, isSPG, hasStun)
+	return _SHELL_PARAMS(shellIndex, explosionRadius, shellDescr.isGold, isSPG, hasStun)
 
 def parse_lang_fields(langFile):
 	"""split items by lines and key value by ':'
@@ -125,17 +136,16 @@ def getLobbyHeader():
 	return view.components.get(VIEW_ALIAS.LOBBY_HEADER, None)
 
 def simplifyVehicleCompactDescr(compactDescr):
-	from items.vehicles import _combineVehicleCompactDescr, _splitVehicleCompactDescr
 	if not compactDescr:
 		return
-	splitted = _splitVehicleCompactDescr(compactDescr)
+	splitted = vehicles._splitVehicleCompactDescr(compactDescr)
 	fixed = []
 	for idx, param in enumerate(splitted):
 		if idx < 2: fixed.append(param)
 		elif idx == 2: fixed.append(0)
 		elif idx == 3: fixed.append('')
 		else: fixed.append(None)
-	return _combineVehicleCompactDescr(*fixed)
+	return vehicles._combineVehicleCompactDescr(*fixed)
 
 def cancelCallbackSafe(cbid):
 	import BigWorld

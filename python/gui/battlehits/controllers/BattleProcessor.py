@@ -225,6 +225,11 @@ class BattleProcessor(AbstractController):
 			return None
 
 		player = BigWorld.player()
+
+		# skip if player is not attacker or victim
+		if player.playerVehicleID != victimID and player.playerVehicleID != attackerID:
+			return None
+
 		atacker = player.arena.vehicles.get(attackerID)
 		victim = player.arena.vehicles.get(victimID)
 
@@ -234,10 +239,6 @@ class BattleProcessor(AbstractController):
 
 		# skip if attacker or victim vehicleType not initizlized
 		if not atacker['vehicleType'] or not victim['vehicleType']:
-			return None
-
-		# skip if player is not attacker or victim
-		if player.playerVehicleID != victimID and player.playerVehicleID != attackerID:
 			return None
 
 		# skip on use airstrike bombers or artilery strike
