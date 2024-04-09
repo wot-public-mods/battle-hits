@@ -1,12 +1,7 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2015-2024 Andrii Andrushchyshyn
 
-__author__ = "Andrii Andrushchyshyn"
-__copyright__ = "Copyright 2024, poliroid"
-__credits__ = ["Andrii Andrushchyshyn"]
-__license__ = "LGPL-3.0-or-later"
-__version__ = "1.9.9"
-__maintainer__ = "Andrii Andrushchyshyn"
-__email__ = "contact@poliroid.me"
-__status__ = "Production"
+__version__ = "2.0.00"
 
 from .controllers import *
 from .events import *

@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.00
+
+* update credentials & license
+
 ## v1.9.9
 
 * localization fallback implementation
