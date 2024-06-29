@@ -3,10 +3,39 @@ import datetime
 import json
 import os
 import shutil
+import logging
 import subprocess
 import sys
 import zipfile
 import time
+import signal
+import string
+import psutil
+import random
+
+def rand_str(num):
+	return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(num))
+
+class ElapsedFormatter():
+
+	def __init__(self):
+		self.start_time = time.time()
+
+	def format(self, record):
+		elapsed_seconds = record.created - self.start_time
+		elapsed = datetime.timedelta(seconds = elapsed_seconds)
+		return "{}.{} {}".format(
+			str(elapsed.seconds).zfill(3), # seconds
+			str(elapsed.microseconds).zfill(6), # microseconds
+			record.getMessage() # message
+		)
+
+handler = logging.StreamHandler()
+handler.setFormatter(ElapsedFormatter())
+logging.getLogger().addHandler(handler)
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 def copytree(source, destination, ignore=None):
 	"""implementation of shutil.copytree
@@ -64,36 +93,20 @@ def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
 				info = fileInfo(filePath)
 				zipfh.writestr(info, open(filePath, 'rb').read())
 
-def processRunning(path):
+def process_running(path):
 	"""Cheek is process runing, no"""
 	processName = os.path.basename(path).lower()
-	try:
-		import psutil
-		for proc in psutil.process_iter():
-			if proc.name().lower() == processName:
-				return True
-		return False
-	except ImportError:
-		if os.name == 'nt':
-			for task in (x.split() for x in subprocess.check_output('tasklist').splitlines()):
-				if task and task[0].lower() == processName:
-					return True
-			return False
-		else:
-			print('cant list process on your system')
-			print('run -> pip install psutil')
-			raise NotImplementedError
+	for proc in psutil.process_iter():
+		if proc.name().lower() == processName:
+			return True
+	return False
 
-def buildFlash():
+def build_flash():
 	if not BUILD_FLASH:
 		return
 
 	# working directory URI for Animate
 	flashWD = os.getcwd().replace('\\', '/').replace(':', '|')
-
-	# JSFL file with commands for Animate
-	jsflFile = 'build.jsfl'
-	jsflContent = ''
 
 	files = set()
 
@@ -108,36 +121,33 @@ def buildFlash():
 	if not files:
 		return
 
+	if not process_running(CONFIG.software.animate):
+		raise Exception('Animate not running') 
+
 	for dirPath, fileName, logName in files:
+		# JSFL file with commands for Animate
+		jsflFile = 'build-%s.jsfl' % rand_str(5)
+		jsflContent = ''
 		documentURI = 'file:///{}/{}/{}'.format(flashWD, dirPath, fileName)
 		logFileURI = 'file:///{}/{}'.format(flashWD, logName)
 		jsflContent += 'fl.publishDocument("{}", "Default");\n'.format(documentURI)
 		jsflContent += 'fl.compilerErrors.save("{}", false, true);\n'.format(logFileURI)
 		jsflContent += '\n'
 
-	# add close command only if Animate not opened
-	if not processRunning(CONFIG.software.animate):
-		jsflContent += 'fl.quit(false);'
+		with open(jsflFile, 'w') as fh:
+			fh.write(jsflContent)
 
-	# save commands for Animate
-	with open(jsflFile, 'w') as fh:
-		fh.write(jsflContent)
-
-	# run Animate
-	try:
-		subprocess.call([CONFIG.software.animate, '-e', jsflFile, '-AlwaysRunJSFL'], stderr=subprocess.STDOUT)
-	except subprocess.CalledProcessError as e:
-		print (e)
-
-	# publishing can be asynchronous when Animate is already opened
-	# so waiting script file unlock to remove, which means publishing is done
-	while os.path.exists(jsflFile):
 		try:
-			os.remove(jsflFile)
-		except: #NOSONAR
-			time.sleep(.1)
+			subprocess.check_call([CONFIG.software.animate, '-e', jsflFile, '-AlwaysRunJSFL'], stderr=subprocess.STDOUT)
+		except subprocess.CalledProcessError as e:
+			logger.exception('build_flash')
 
-	for dirPath, fileName, logName in files:
+		while os.path.exists(jsflFile):
+			try:
+				os.remove(jsflFile)
+			except: #NOSONAR
+				time.sleep(.01)
+
 		log_data = ''
 		if os.path.isfile(logName):
 			data = open(logName, 'r').read().splitlines()
@@ -146,12 +156,11 @@ def buildFlash():
 			os.remove(logName)
 
 		if log_data:
-			print ('Failed publish: {}/{}'.format(dirPath, fileName))
-			print (log_data)
+			logger.error('failed flash publish %s/%s\n%s', dirPath, fileName, log_data)
 		else:
-			print ('Published: {}/{}'.format(dirPath, fileName))
+			logger.info('flash published: %s/%s', dirPath, fileName)
 
-def buildPython():
+def build_python():
 	for dirPath, _, fileNames in os.walk('python'):
 		for fileName in fileNames:
 			if not fileName.endswith('.py'):
@@ -160,11 +169,9 @@ def buildPython():
 			try:
 				subprocess.check_output([CONFIG.software.python, '-m', 'py_compile', filePath],
 												stderr=subprocess.STDOUT).decode()
-				print ('Compiled: {}'.format(filePath))
+				logger.info('python compiled: %s', filePath)
 			except subprocess.CalledProcessError as e:
-				print ('\nFailed compile: {}'.format(filePath))
-				output = e.output.decode()
-				print (output)
+				logger.error('python fail compile: %s\n%s', filePath, e.output.decode())
 
 # handle args from command line
 BUILD_FLASH = 'flash' in sys.argv
@@ -211,11 +218,11 @@ if os.path.isdir('build'):
 	shutil.rmtree('build')
 os.makedirs('build')
 
-# build flash
-buildFlash()
-
 # build python
-buildPython()
+build_python()
+
+# build flash
+build_flash()
 
 # copy all staff
 if os.path.isdir('resources/in'):
@@ -231,6 +238,13 @@ zipFolder('temp', 'build/{}'.format(PACKAGE_NAME))
 
 # copy package into game
 if COPY_INTO_GAME:
+	for proc in psutil.process_iter():
+		if 'worldoftanks' in proc.name().lower():
+			os.kill(proc.pid, signal.SIGTERM)
+			logger.info('wot client closed (pid: %s)', proc.pid)
+	while process_running('worldoftanks.exe'):
+		time.sleep(.01)
+	logger.info('copied into wot: %s%s', WOT_PACKAGES_DIR, PACKAGE_NAME)
 	shutil.copy2('build/{}'.format(PACKAGE_NAME), WOT_PACKAGES_DIR)
 
 # create distribution
