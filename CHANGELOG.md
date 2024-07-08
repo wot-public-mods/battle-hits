@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.01
+
+* update license
+
 ## v2.0.00
 
 * update credentials & license

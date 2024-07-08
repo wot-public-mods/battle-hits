@@ -3,7 +3,6 @@
 
 import BigWorld
 from Account import PlayerAccount
-from gui import ClientHangarSpace as chs
 from helpers import dependency
 from gui.shared import event_dispatcher
 from gui.shared.personality import ServicesLocator

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2024 Andrii Andrushchyshyn
 
-__version__ = "2.0.00"
+__version__ = "2.0.01"
 
 from .controllers import *
 from .events import *
