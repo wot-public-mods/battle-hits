@@ -3,6 +3,7 @@
 ## v2.1.00
 
 * prefabs versions (3 and 4)
+* 1.26 space binary
 
 ## v2.0.01
 
