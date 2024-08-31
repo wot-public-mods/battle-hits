@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.00
+
+* prefabs versions (3 and 4)
+
 ## v2.0.01
 
 * update license
