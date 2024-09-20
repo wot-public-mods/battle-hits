@@ -7,14 +7,9 @@ import os
 import BigWorld
 import Math
 
-LANGUAGE_CODES = ('ru', 'uk', 'be', 'en', 'de', 'et', 'bg',
-	'da', 'fi', 'fil', 'fr', 'el', 'hu', 'id', 'it', 'ja', 'ms',
-	'nl', 'no', 'pl', 'pt', 'pt_br', 'ro', 'sr', 'vi', 'zh_sg',
-	'zh_tw', 'hr', 'th', 'lv', 'lt', 'cs', 'es_ar', 'tr', 'zh_cn',
-	'es', 'kk', 'sv', )
-LANGUAGE_FILE_MASK = 'mods/poliroid.battlehits/text/%s.yml'
-LANGUAGE_DEFAULT_UI = 'en'
-LANGUAGE_RU_FALLBACK = ('ru', 'be', 'kk', )
+LANGUAGE_FILES = 'mods/poliroid.battlehits/text'
+LANGUAGE_DEFAULT = 'en'
+LANGUAGE_FALLBACK = ('ru', 'be', 'kk', )
 
 BATTLE_HITS_MAIN_VIEW_ALIAS = "BattleHitsMainView"
 BATTLE_HITS_PREFERENCES_POPOVER_ALIAS = "BattleHitsPreferencesPopover"

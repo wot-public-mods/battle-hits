@@ -3,31 +3,37 @@
 
 from helpers import getClientLanguage
 
-from ._constants import LANGUAGE_DEFAULT_UI, LANGUAGE_CODES, LANGUAGE_FILE_MASK, LANGUAGE_RU_FALLBACK
-from .utils import parse_lang_fields, cache_result
+from ._constants import LANGUAGE_DEFAULT, LANGUAGE_FALLBACK, LANGUAGE_FILES
+from .utils import parse_localization_file, vfs_dir_list_files, cache_result
 
 __all__ = ('l10n', )
 
 class Localization:
 
-	def __init__(self, file_mask, codes=LANGUAGE_CODES, default=LANGUAGE_DEFAULT_UI, fallback=LANGUAGE_RU_FALLBACK):
-		self.language = {}
+	def __init__(self, locale_folder, default=LANGUAGE_DEFAULT, fallback=LANGUAGE_FALLBACK):
+
+		# all available languages
 		self.languages = {}
-
-		for langCode in codes:
-			vfs_path = file_mask % langCode
-			lang_data = parse_lang_fields(vfs_path)
+		for file_name in vfs_dir_list_files(locale_folder):
+			if not file_name.endswith('.yml'):
+				continue
+			file_path = '%s/%s' % (locale_folder, file_name)
+			lang_data = parse_localization_file(file_path)
 			if lang_data:
-				self.languages[langCode] = lang_data
+				lang_code = file_name.replace('.yml', '')
+				self.languages[lang_code] = lang_data
 
-		client_language = getClientLanguage()
-		self._client_default = 'en'
-		if client_language in fallback:
-			self._client_default = 'ru'
-
-		self._file_mask = file_mask
+		# default language
 		self._ui_default = default
 
+		# client language (with fallback)
+		client_language = getClientLanguage()
+		self._client_default = default
+		if client_language in fallback:
+			self._client_default = fallback[0]
+
+		# use most suitable language
+		self.language = {}
 		if client_language in self.languages.keys():
 			self.language = self.languages[client_language]
 		elif self._client_default in self.languages.keys():
@@ -56,4 +62,4 @@ class Localization:
 			result[k] = v
 		return result
 
-l10n = Localization(LANGUAGE_FILE_MASK)
+l10n = Localization(LANGUAGE_FILES)

@@ -10,8 +10,8 @@ from helpers import dependency
 from items import vehicles
 from skeletons.gui.impl import IGuiLoader
 
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'parse_lang_fields', 'readFromVFS', 
-			'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cache_result')
+__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'vfs_dir_list_files', 'vfs_file_read', 
+			'parse_localization_file', 'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cache_result')
 
 def override(holder, name, wrapper=None, setter=None):
 	"""Override methods, properties, functions, attributes
@@ -101,25 +101,36 @@ def getShellParams(vehicleDescriptor, effectsIndex):
 
 	return _SHELL_PARAMS(shellIndex, explosionRadius, shellDescr.isGold, isSPG, hasStun)
 
-def parse_lang_fields(langFile):
+def vfs_file_read(path):
+	"""using for read files from VFS"""
+	fileInst = ResMgr.openSection(path)
+	if fileInst is not None and ResMgr.isFile(path):
+		return str(fileInst.asBinary)
+	return None
+
+def vfs_dir_list_files(folder_path):
+	"""using for list files in VFS dir"""
+	result = []
+	folder = ResMgr.openSection(folder_path)
+	if folder is not None and ResMgr.isDir(folder_path):
+		for item_name in folder.keys():
+			item_path = '%s/%s' % (folder_path, item_name)
+			if item_name not in result and ResMgr.isFile(item_path):
+				result.append(item_name)
+	return result
+
+def parse_localization_file(file_path):
 	"""split items by lines and key value by ':'
 	like yaml format"""
 	result = {}
-	langData = readFromVFS(langFile)
-	if langData:
-		for item in langData.splitlines():
-			if ': ' not in item:
+	file_data = vfs_file_read(file_path)
+	if file_data:
+		for test_line in file_data.splitlines():
+			if ': ' not in test_line:
 				continue
-			key, value = item.split(": ", 1)
-			result[key] = value.replace('\\n', '\n')
+			key, value = test_line.split(': ', 1)
+			result[key] = value.replace('\\n', '\n').strip()
 	return result
-
-def readFromVFS(path):
-	"""using for read files from VFS"""
-	file = ResMgr.openSection(path)
-	if file is not None and ResMgr.isFile(path):
-		return str(file.asBinary)
-	return None
 
 def getLobbyHeader():
 	""" Getter of LobbyHeader view instance """

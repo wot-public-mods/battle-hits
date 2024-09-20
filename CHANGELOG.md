@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.01
+
+* improved localization
+
 ## v2.1.00
 
 * prefabs versions (3 and 4)
