@@ -15,9 +15,6 @@
 /build/*.wotmod
 /build/*.zip
 
-# sonar cloud
-.scannerwork
-
 # batch files
 /*.cmd
 

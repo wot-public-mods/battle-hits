@@ -2,8 +2,7 @@
 	"version": 3,
 	"software": {
 		"animate": "/path/to/adobe_animate",
-		"python": "/path/to/python_27",
-		"sonar": ""
+		"python": "/path/to/python_27"
 	},
 	"game": {
 		"folder": "/path/to/wot_dir",

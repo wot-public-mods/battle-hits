@@ -145,7 +145,7 @@ def build_flash():
 		while os.path.exists(jsflFile):
 			try:
 				os.remove(jsflFile)
-			except: #NOSONAR
+			except:
 				time.sleep(.01)
 
 		log_data = ''
@@ -177,7 +177,6 @@ def build_python():
 BUILD_FLASH = 'flash' in sys.argv
 COPY_INTO_GAME = 'ingame' in sys.argv
 CREATE_DISTRIBUTE = 'distribute' in sys.argv
-RUN_SONAR = 'sonar' in sys.argv
 
 # load config
 assert os.path.isfile('build.json'), 'Config not found'
@@ -278,7 +277,3 @@ for path in cleanup_list:
 		shutil.rmtree(path)
 	elif os.path.isfile(path):
 		os.remove(path)
-
-# run sonar
-if RUN_SONAR and os.path.isfile(CONFIG.software.sonar):
-		subprocess.call([CONFIG.software.sonar])

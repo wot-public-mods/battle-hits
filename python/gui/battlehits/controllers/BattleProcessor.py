@@ -116,7 +116,7 @@ class BattleProcessor(AbstractController):
 
 		try:
 			self.__vehicles[vehicle.id] = int(vehicle.health) if vehicle.isAlive() else 0
-		except: #NOSONAR
+		except:
 			self.__vehicles[vehicle.id] = -1
 
 	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):

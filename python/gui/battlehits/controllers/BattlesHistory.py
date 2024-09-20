@@ -91,7 +91,7 @@ class BattlesHistory(AbstractController):
 					if version == CACHE_VERSION:
 						succes = True
 						self.__battles = battles
-		except Exception: #NOSONAR
+		except Exception:
 			LOG_ERROR('Error while unpickling cache data information', data)
 
 		if not succes:

@@ -58,7 +58,7 @@ class Settings(AbstractController):
 					if version == SETTINGS_VERSION:
 						succes = True
 						self.__settings = settings
-		except Exception: #NOSONAR
+		except Exception:
 			LOG_ERROR('Error while unpickling settings data information', data)
 
 		if not succes:
