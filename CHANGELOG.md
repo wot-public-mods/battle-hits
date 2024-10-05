@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.02
+
+* wot 1.26.1 fixes
+
 ## v2.1.01
 
 * improved localization
