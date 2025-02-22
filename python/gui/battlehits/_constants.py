@@ -67,13 +67,13 @@ CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods
 SETTINGS_VERSION = 11
 CACHE_VERSION = 36
 
-def getSpacePath():
-	from .utils import is_mt_client
-	if is_mt_client():
-		return 'spaces/battlehits_mt'
-	else:
-		return 'spaces/battlehits_wot'
-BATTLE_HITS_SPACE_PATH = getSpacePath()
+try:
+	import version_utils
+	IS_MT_CLIENT = True
+except ImportError:
+	IS_MT_CLIENT = False
+
+BATTLE_HITS_SPACE_PATH = 'spaces/battlehits_%s' % ('mt' if IS_MT_CLIENT else 'wot')
 
 DEFAULT_HANGAR_SPACES = (
 	# wot spaces

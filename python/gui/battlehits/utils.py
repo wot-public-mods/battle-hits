@@ -10,6 +10,8 @@ from helpers import dependency
 from items import vehicles
 from skeletons.gui.impl import IGuiLoader
 
+from ._constants import IS_MT_CLIENT
+
 __all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'vfs_dir_list_files', 'vfs_file_read', 
 			'parse_localization_file', 'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cache_result')
 
@@ -185,11 +187,3 @@ def getParentWindow():
 	uiLoader = dependency.instance(IGuiLoader)
 	if uiLoader and uiLoader.windowsManager:
 		return uiLoader.windowsManager.getMainWindow()
-
-def is_mt_client():
-	try:
-		import version_utils
-		return True
-	except ImportError:
-		pass
-	return False
