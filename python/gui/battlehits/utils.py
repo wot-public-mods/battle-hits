@@ -56,6 +56,10 @@ _SHELL_NAME_TO_ID = {
 	SHELL_TYPES.HOLLOW_CHARGE: 2,
 	SHELL_TYPES.HIGH_EXPLOSIVE: 3,
 }
+if IS_MT_CLIENT:
+	_SHELL_NAME_TO_ID.update({
+		'ARMOR_PIERCING_FSDS': 6
+	})
 
 def _common_effect_name(effectsIndex):
 	value = vehicles.g_cache.shotEffectsNames.get(effectsIndex, '')

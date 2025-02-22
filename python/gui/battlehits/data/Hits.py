@@ -4,7 +4,7 @@
 from items import vehicles
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
-from .._constants import SETTINGS
+from .._constants import SETTINGS, IS_MT_CLIENT
 from ..events import g_eventsManager
 from ..lang import l10n
 from ..utils import getShellParams
@@ -25,6 +25,10 @@ _SHELL_LABELS = {
 	4: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 	5: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 }
+if IS_MT_CLIENT:
+	_SHELL_LABELS.update({
+		6: '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_FSDS'
+	})
 
 _RESULT_LABELS = {
 	0: l10n('hits.shotResult.armorPiercesNoDamage'),

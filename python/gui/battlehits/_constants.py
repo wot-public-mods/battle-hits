@@ -46,7 +46,7 @@ class MODEL_TYPES:
 	DOME = 'dome'
 
 class MODEL_NAMES:
-	SHELL = ('ap', 'apcr', 'heat', 'hemodern', 'hespg', 'hespgstun')
+	SHELL = ('ap', 'apcr', 'heat', 'hemodern', 'hespg', 'hespgstun', 'apfsds', )
 	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical', )
 	SPLASH = ('large', 'middle', 'small', )
 	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
