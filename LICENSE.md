@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-Copyright © 2015-2024 Andrii Andruschyshyn
+Copyright © 2015-2025 Andrii Andruschyshyn
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

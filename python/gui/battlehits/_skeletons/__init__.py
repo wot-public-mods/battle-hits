@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Copyright (c) 2015-2024 Andrii Andrushchyshyn
+# Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
 __all__ = ('IBattlesHistory', 'IBattleProcessor', 'IHangarCamera', 'IHangarScene', 'IHotkeys',
 			'IState', 'ISettings', 'IVehicle', 'IBattlesData', 'IHitsData', 'ICurrentBattleData')

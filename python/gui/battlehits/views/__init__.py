@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Copyright (c) 2015-2024 Andrii Andrushchyshyn
+# Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.Scaleform.framework import g_entitiesFactories, GroupedViewSettings, ScopeTemplates, ViewSettings
