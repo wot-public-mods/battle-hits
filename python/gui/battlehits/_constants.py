@@ -67,10 +67,22 @@ CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods
 SETTINGS_VERSION = 11
 CACHE_VERSION = 36
 
-BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
-DEFAULT_HANGAR_SPACES = ('spaces/hangar_v3', 'spaces/hangar_v3_poster_2020', 'spaces/h34_lunar_ny_2022',
-	'spaces/hangar_v3_rts', 'spaces/hangar_v3_hw22', 'spaces/h30_newyear_2023', 'spaces/h33_comp7', 
-	'spaces/h01_victory_day_2023', 'spaces/h02_tmday_2015', 'spaces/h04_remday_2015', 'spaces/h34_halloween_2023', )
+def getSpacePath():
+	from .utils import is_mt_client
+	if is_mt_client():
+		return 'spaces/battlehits_mt'
+	else:
+		return 'spaces/battlehits_wot'
+BATTLE_HITS_SPACE_PATH = getSpacePath()
+
+DEFAULT_HANGAR_SPACES = (
+	# wot spaces
+	'spaces/hangar_v3',                # default wot hangar
+	'spaces/h34_lunar_ny_2025',        # lunar_ny wot hangar
+	# mt spaces
+	'spaces/h08_mt_hangar',            # default mt hangar
+	'spaces/h10_mt_23feb_2025'         # special mt hangar
+)
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
 

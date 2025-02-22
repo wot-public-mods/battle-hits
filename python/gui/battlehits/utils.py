@@ -185,3 +185,11 @@ def getParentWindow():
 	uiLoader = dependency.instance(IGuiLoader)
 	if uiLoader and uiLoader.windowsManager:
 		return uiLoader.windowsManager.getMainWindow()
+
+def is_mt_client():
+	try:
+		import version_utils
+		return True
+	except ImportError:
+		pass
+	return False
