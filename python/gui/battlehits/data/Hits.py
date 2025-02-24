@@ -57,6 +57,7 @@ class Hits(AbstractDataProvider):
 		self.__sortingReversed = self.settingsCtrl.get(SETTINGS.SORTING_REVERSED)
 		self.__sortingRule = self.settingsCtrl.get(SETTINGS.SORTING_RULE)
 		self.__hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, True)
+		self.__processFlamethrowers = self.settingsCtrl.get(SETTINGS.PROCESS_FLAMETHROWERS, False)
 
 		self.__sortingMap = {
 			1 : (int, "id", True),
@@ -75,6 +76,12 @@ class Hits(AbstractDataProvider):
 		g_eventsManager.invalidateHitsDP()
 
 	def __onSettingsChanged(self, key, value):
+
+		if key == SETTINGS.PROCESS_FLAMETHROWERS:
+			self.__processFlamethrowers = value
+			self.stateCtrl.currentHitID = self.desiredID
+			g_eventsManager.invalidateHitsDP()
+
 		if key == SETTINGS.HITS_TO_PLAYER:
 			if value == self.__hitsToPlayer:
 				return
@@ -114,6 +121,10 @@ class Hits(AbstractDataProvider):
 
 			# skip hit if shell is not shell (gaus gun of waffentrager, etc)
 			if shellParams.index is None:
+				continue
+
+			# skip hit if shell is flame and flamethrowers disabled
+			if not self.__processFlamethrowers and shellParams.index == FLAME_INDEX:
 				continue
 
 			hitResult = [max(_RESULT_LABELS)] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]

@@ -1,16 +1,16 @@
-<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" currentTimeline="1" xflVersion="2.971" creatorInfo="Adobe Animate" platform="Windows" versionInfo="Saved by Animate Windows 20.0 build 19255" majorVersion="20" buildNumber="19255" viewAngle3D="31.2421376975057" vanishingPoint3DX="512" vanishingPoint3DY="384" nextSceneIdentifier="3" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F" fileGUID="FB9753F3D838114AAECCF29948DC9F5B">
+<DOMDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" currentTimeline="1" xflVersion="23.0" creatorInfo="Adobe Animate" platform="Windows" versionInfo="Saved by Animate Windows 23.0 build 103" majorVersion="23" buildNumber="103" viewAngle3D="31.2421376975057" vanishingPoint3DX="512" vanishingPoint3DY="384" nextSceneIdentifier="3" playOptionsPlayLoop="false" playOptionsPlayPages="false" playOptionsPlayFrameActions="false" filetypeGUID="DD0DDBBF-5BEF-45B2-9F24-A3048D2A676F" fileGUID="FB9753F3D838114AAECCF29948DC9F5B">
      <fonts>
           <DOMFontItem name="$TitleFont" itemID="4aeab54f-0000030c" linkageImportForRS="true" linkageExportInFirstFrame="false" linkageClassName="$TitleFont" linkageURL="gfxfontlib.swf" font="ZurichCondBold" size="0" id="1" sourceLastImported="1484257096"/>
      </fonts>
      <symbols>
-          <Include href="BatHitsPreferencesPopoverUI.xml" itemID="5900c3e8-00000197" lastModified="1596219149"/>
+          <Include href="BatHitsPreferencesPopoverUI.xml" itemID="5900c3e8-00000197" lastModified="1740384668"/>
           <Include href="ButtonNormal.xml" itemID="58909760-00000155" lastModified="1485930323"/>
           <Include href="CheckBox.xml" itemID="58bcea0f-00000720" lastModified="1493234495"/>
      </symbols>
      <timelines>
           <DOMTimeline name="Scene 1">
                <layers>
-                    <DOMLayer name="Layer 1" color="#9933CC" current="true" isSelected="true" autoNamed="false" heightLiteral="24">
+                    <DOMLayer name="Layer 1" color="#9933CC" current="true" isSelected="true" autoNamed="false">
                          <frames>
                               <DOMFrame index="0" keyMode="9728">
                                    <elements>
@@ -25,7 +25,7 @@
       <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="260" type="Number"/>
    </property>
    <property id="height">
-      <Inspectable name="height" unlocalizedName="" variable="height" category="" verbose="0" defaultValue="200" type="Number"/>
+      <Inspectable name="height" unlocalizedName="" variable="height" category="" verbose="0" defaultValue="230" type="Number"/>
    </property>
 ]]></parametersAsXML>
                                         </DOMComponentInstance>

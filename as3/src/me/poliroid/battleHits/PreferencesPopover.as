@@ -14,8 +14,12 @@
 		public var saveOnlySession:CheckBox = null;
 		public var processReplays:CheckBox = null;
 		public var swapHangar:CheckBox = null;
+		public var processFlamethrowers:CheckBox = null;
 		public var changeStyle:SoundButton = null; 
 		public var deleteHistory:SoundButton = null;
+
+		private static const LAYOUT_HEIGHT:uint = 200;
+		private static const LAYOUT_HEIGHT_WITH_FLAMETHROVER:uint = 240;
 
 		override protected function onDispose(): void 
 		{
@@ -25,18 +29,21 @@
 			processReplays.removeEventListener(Event.SELECT, handeCheckBoxSelect);
 			saveOnlySession.removeEventListener(Event.SELECT, handeCheckBoxSelect);
 			swapHangar.removeEventListener(Event.SELECT, handeCheckBoxSelect);
+			processFlamethrowers.removeEventListener(Event.SELECT, handeCheckBoxSelect);
 
 			changeStyle.dispose();
 			deleteHistory.dispose();
 			processReplays.dispose();
 			saveOnlySession.dispose();
 			swapHangar.dispose();
+			processFlamethrowers.dispose();
 
 			changeStyle = null;
 			deleteHistory = null;
 			processReplays = null;
 			saveOnlySession = null;
 			swapHangar = null;
+			processFlamethrowers = null;
 
 			super.onDispose();
 		}
@@ -49,6 +56,7 @@
 			processReplays.addEventListener(Event.SELECT, handeCheckBoxSelect);
 			saveOnlySession.addEventListener(Event.SELECT, handeCheckBoxSelect);
 			swapHangar.addEventListener(Event.SELECT, handeCheckBoxSelect);
+			processFlamethrowers.addEventListener(Event.SELECT, handeCheckBoxSelect);
 
 			super.configUI();
 		}
@@ -77,6 +85,13 @@
 
 			deleteHistory.label = data.deleteHistoryLabel;
 
+			processFlamethrowers.label = data.processFlamethrowersLabel;
+			processFlamethrowers.toolTip = data.processFlamethrowersDescription;
+			processFlamethrowers.selected = data.processFlamethrowers;
+			processFlamethrowers.visible = data.flamethrowersMechanicExist;
+
+			height = data.flamethrowersMechanicExist ? LAYOUT_HEIGHT_WITH_FLAMETHROVER : LAYOUT_HEIGHT;
+
 			updateProcessReplays();
 		}
 
@@ -95,7 +110,7 @@
 
 		private function handeCheckBoxSelect(e:Event): void
 		{
-			invokeSettingsChangeS(processReplays.selected, saveOnlySession.selected, swapHangar.selected);
+			invokeSettingsChangeS(processReplays.selected, saveOnlySession.selected, swapHangar.selected, processFlamethrowers.selected);
 			updateProcessReplays();
 		}
 

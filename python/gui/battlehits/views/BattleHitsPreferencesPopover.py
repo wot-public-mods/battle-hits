@@ -4,13 +4,13 @@
 from helpers import dependency
 from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
-from .._constants import SETTINGS, MODEL_STYLE
+from .._constants import SETTINGS, MODEL_STYLE, IS_MT_CLIENT
 from .._skeletons import IBattlesHistory, ISettings
 from ..lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 
-	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar):
+	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar, processFlamethrowers):
 		self._printOverrideError('invokeSettingsChange')
 
 	def invokeStyleChange(self):
@@ -33,12 +33,15 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 		super(BattleHitsPreferencesPopover, self)._populate()
 		self.__updateStaticData()
 
-	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar):
+	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar, processFlamethrowers):
 		if not self.settingsCtrl:
 			return
-		self.settingsCtrl.apply({SETTINGS.PROCESS_REPLAYS: processReplays,
-								SETTINGS.SAVE_ONLY_SESSION: saveOnlySession,
-								SETTINGS.SWAP_HANGAR: swapHangar})
+		self.settingsCtrl.apply({
+			SETTINGS.PROCESS_REPLAYS: processReplays,
+			SETTINGS.SAVE_ONLY_SESSION: saveOnlySession,
+			SETTINGS.SWAP_HANGAR: swapHangar,
+			SETTINGS.PROCESS_FLAMETHROWERS: processFlamethrowers
+		})
 
 	def invokeStyleChange(self):
 		if not self.settingsCtrl:
@@ -65,4 +68,8 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			'swapHangarDescription': l10n('popover.swapHangarDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel'),
 			'deleteHistoryLabel': l10n('popover.deleteHistoryLabel'),
-			})
+			'flamethrowersMechanicExist': IS_MT_CLIENT,
+			'processFlamethrowers': self.settingsCtrl.get(SETTINGS.PROCESS_FLAMETHROWERS),
+			'processFlamethrowersLabel': l10n('popover.processFlamethrowersLabel'),
+			'processFlamethrowersDescription': l10n('popover.processFlamethrowersDescription')
+		})

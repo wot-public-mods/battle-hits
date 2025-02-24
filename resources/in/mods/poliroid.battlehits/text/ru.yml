@@ -37,3 +37,5 @@ popover.changeStyleLabel: Изменить оформление
 popover.deleteHistoryLabel: Удалить историю
 popover.swapHangarLabel: Заменить ангар
 popover.swapHangarDescription: {HEADER}Заменить ангар{/HEADER}{BODY}Вместо стандартного ангара будет отображаться ангар модификации.<br>Во время игровых событий будет отображаться ангар события.{/BODY}
+popover.processFlamethrowersLabel: Обрабатывать огнеметы
+popover.processFlamethrowersDescription: {HEADER}Обрабатывать огнеметы{/HEADER}{BODY}Все попадания из огнеметов будут сохранены вместе со стандартными попаданиями.{/BODY}

@@ -18,6 +18,11 @@ package me.poliroid.battleHits.data
 		public var changeStyleLabel:String = "changeStyleLabel";
 		public var deleteHistoryLabel:String = "deleteHistoryLabel";
 
+		public var flamethrowersMechanicExist:Boolean = false;
+		public var processFlamethrowers:Boolean = false;
+		public var processFlamethrowersLabel:String = "processFlamethrowersLabel";
+		public var processFlamethrowersDescription:String = "processFlamethrowersDescription";
+
 		public function BattleHitsPreferencesDataVO(data:Object): void
 		{
 			super(data);

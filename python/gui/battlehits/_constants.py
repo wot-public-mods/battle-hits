@@ -27,6 +27,7 @@ class SETTINGS:
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
 	SWAP_HANGAR = 'swapHangar'
+	PROCESS_FLAMETHROWERS = 'processFlamethrowers'
 
 DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,

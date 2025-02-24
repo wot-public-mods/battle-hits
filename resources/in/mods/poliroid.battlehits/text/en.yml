@@ -37,3 +37,5 @@ popover.changeStyleLabel: Switch styles
 popover.deleteHistoryLabel: Delete history
 popover.swapHangarLabel: Replace Hangar
 popover.swapHangarDescription: {HEADER}Replace Hangar{/HEADER}{BODY}The modification hangar will be displayed instead of the standard hangar.<br>During game events, the event hangar will be displayed.{/BODY}
+popover.processFlamethrowersLabel: Process flamethrowers
+popover.processFlamethrowersDescription: {HEADER}Process flamethrowers{/HEADER}{BODY}All hits from flamethrowers will be saved along with standard hits.{/BODY}
