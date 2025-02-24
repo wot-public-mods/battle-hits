@@ -91,3 +91,5 @@ CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
 				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET)
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25
+
+FLAME_INDEX = 7

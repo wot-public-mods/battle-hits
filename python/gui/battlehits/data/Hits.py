@@ -4,7 +4,7 @@
 from items import vehicles
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
-from .._constants import SETTINGS, IS_MT_CLIENT
+from .._constants import SETTINGS, IS_MT_CLIENT, FLAME_INDEX
 from ..events import g_eventsManager
 from ..lang import l10n
 from ..utils import getShellParams
@@ -27,7 +27,8 @@ _SHELL_LABELS = {
 }
 if IS_MT_CLIENT:
 	_SHELL_LABELS.update({
-		6: '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_FSDS'
+		6: '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_FSDS',
+		FLAME_INDEX: '#ingame_gui:damageLog/shellType/FLAME'
 	})
 
 _RESULT_LABELS = {
@@ -38,7 +39,7 @@ _RESULT_LABELS = {
 	4: l10n('hits.shotResult.armorPierces'),
 	5: l10n('hits.shotResult.criticalHit'),
 	6: l10n('hits.shotResult.criticalHit'),
-	7: l10n('hits.shotResult.splash'),
+	FLAME_INDEX: l10n('hits.shotResult.splash'),
 }
 
 class Hits(AbstractDataProvider):

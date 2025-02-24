@@ -12,7 +12,7 @@ from debug_utils import LOG_ERROR
 from vehicle_systems.tankStructure import TankPartIndexes
 
 from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
-									SCENE_OFFSET, CAMERA_DEFAULTS)
+							SCENE_OFFSET, CAMERA_DEFAULTS, FLAME_INDEX)
 from ..controllers import AbstractController
 from ..events import g_eventsManager
 from ..utils import cancelCallbackSafe
@@ -209,6 +209,10 @@ class HangarScene(AbstractController):
 			return
 
 		shellParams = hitData['shellParams']
+
+		if shellParams.index == FLAME_INDEX:
+			return
+
 		motor = self.__motors[MODEL_TYPES.SHELL][shellParams.index]
 		model = self.__models[MODEL_TYPES.SHELL][shellParams.index]
 

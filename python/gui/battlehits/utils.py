@@ -10,7 +10,7 @@ from helpers import dependency
 from items import vehicles
 from skeletons.gui.impl import IGuiLoader
 
-from ._constants import IS_MT_CLIENT
+from ._constants import IS_MT_CLIENT, FLAME_INDEX
 
 __all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'vfs_dir_list_files', 'vfs_file_read', 
 			'parse_localization_file', 'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cache_result')
@@ -58,7 +58,8 @@ _SHELL_NAME_TO_ID = {
 }
 if IS_MT_CLIENT:
 	_SHELL_NAME_TO_ID.update({
-		'ARMOR_PIERCING_FSDS': 6
+		'ARMOR_PIERCING_FSDS': 6,
+		'FLAME': FLAME_INDEX,
 	})
 
 def _common_effect_name(effectsIndex):
