@@ -3,6 +3,7 @@
 
 import Math
 import BigWorld
+import Vehicular
 
 from gui.shared.gui_items.Vehicle import Vehicle as VehicleItem
 from helpers import dependency
@@ -174,6 +175,12 @@ class Vehicle(AbstractController):
 		matrix = Math.Matrix()
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
+
+		drivingJoints = dict(self.compactDescr.gun.drivenJoints or {}).get('default', None)
+		if drivingJoints:
+			component = self.vehicleAppearance.gameObject.findComponentByType(Vehicular.LinkedNodesPitchAnimator)
+			if not component:
+				self.vehicleAppearance.createComponent(Vehicular.LinkedNodesPitchAnimator, self.compoundModel, drivingJoints)
 
 	def __updateStickers(self):
 		if not self.compoundModel:
