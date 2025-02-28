@@ -30,7 +30,7 @@ class Settings(AbstractController):
 
 	def apply(self, data):
 		for key, value in data.iteritems():
-			if self.__settings[key] != value:
+			if self.__settings.get(key, None) != value:
 				self.__settings[key] = value
 				g_eventsManager.onSettingsChanged(key, value)
 			else:

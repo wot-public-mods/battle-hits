@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.2.0
+
+* fix bug with broken gun parts pith
+* process APFSDS shells
+* process Flamethrowers
+* separate space binaries for wg and non wg clients
+* update credentials & license
+
 ## v2.1.02
 
 * wot 1.26.1 fixes
