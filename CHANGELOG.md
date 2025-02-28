@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.2
+
+* fix texture not found problem
+
 ## v2.2.1
 
 * removed customization environments (size reduced by 4 megabytes)
