@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.2.1
+
+* removed customization environments (size reduced by 4 megabytes)
+* optimized textures (size reduced by 15 megabytes)
+
 ## v2.2.0
 
 * fix bug with broken gun parts pith
