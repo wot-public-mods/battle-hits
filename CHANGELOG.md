@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.3
+
+* fix broken import
+
 ## v2.2.2
 
 * fix texture not found problem

@@ -133,7 +133,7 @@ def handleKeyEvent(baseMethod, event):
 # Data Collect
 g_dataCollector = None
 try:
-	from gui.battlehits import __version__
+	from ..mods.mod_battlehits import __version__
 	from .data_collector import g_dataCollector
 except ImportError:
 	LOG_ERROR('datacollector broken')
