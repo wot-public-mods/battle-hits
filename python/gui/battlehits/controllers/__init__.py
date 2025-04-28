@@ -3,6 +3,7 @@
 
 from helpers import dependency
 from .._skeletons import *
+from ..utils import get_dependency_manager
 
 __all__ = ('AbstractController', )
 
@@ -38,7 +39,6 @@ class AbstractController(object):
 		pass
 
 def configure():
-	from helpers.dependency import _g_manager as manager
 	from gui.battlehits.controllers.BattlesHistory import BattlesHistory
 	from gui.battlehits.controllers.BattleProcessor import BattleProcessor
 	from gui.battlehits.controllers.HangarCamera import HangarCamera
@@ -48,6 +48,9 @@ def configure():
 	from gui.battlehits.controllers.Settings import Settings
 	from gui.battlehits.controllers.Vehicle import Vehicle
 
+	manager = get_dependency_manager()
+	if not manager:
+		return
 	manager.addInstance(IBattlesHistory, BattlesHistory(), finalizer='fini')
 	manager.addInstance(IBattleProcessor, BattleProcessor(), finalizer='fini')
 	manager.addInstance(IHangarCamera, HangarCamera(), finalizer='fini')
