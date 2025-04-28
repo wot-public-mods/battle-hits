@@ -80,10 +80,11 @@ BATTLE_HITS_SPACE_PATH = 'spaces/battlehits_%s' % ('mt' if IS_MT_CLIENT else 'wo
 DEFAULT_HANGAR_SPACES = (
 	# wot spaces
 	'spaces/hangar_v3',                # default wot hangar
-	'spaces/h34_lunar_ny_2025',        # lunar_ny wot hangar
+	'spaces/h34_lunar_ny_2025',        # special wot hangar
 	# mt spaces
 	'spaces/h08_mt_hangar',            # default mt hangar
-	'spaces/h10_mt_23feb_2025'         # special mt hangar
+	'spaces/h10_mt_23feb_2025',        # special mt hangar
+	'spaces/h01_victory_day_2025'      # special mt hangar
 )
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)

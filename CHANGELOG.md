@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.2.4
+
+* fix dependency manager on non wg clients
+* fix default hangar spaces list
+
 ## v2.2.3
 
 * fix broken import
