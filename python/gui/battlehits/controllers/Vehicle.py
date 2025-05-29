@@ -137,7 +137,7 @@ class Vehicle(AbstractController):
 			return
 		vehicleStrCD = simplifyVehicleCompactDescr(self.currentBattleData.victim['compDescrStr'])
 		if self._vehicleStrCD != vehicleStrCD:
-			vehicle, outfit = VehicleItem(strCompactDescr=vehicleStrCD), Outfit()
+			vehicle, outfit = VehicleItem(strCompactDescr=vehicleStrCD), Outfit(vehicleCD=vehicleStrCD)
 			self.hangarSpace.updatePreviewVehicle(vehicle, outfit)
 		else:
 			self._presentCallback()

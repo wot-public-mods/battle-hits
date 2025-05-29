@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.5
+
+* fix constant loading in 1.29.0 game version
+
 ## v2.2.4
 
 * fix dependency manager on non wg clients
