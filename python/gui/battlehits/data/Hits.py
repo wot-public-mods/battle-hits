@@ -4,7 +4,7 @@
 from items import vehicles
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
-from .._constants import SETTINGS, IS_MT_CLIENT, FLAME_INDEX
+from .._constants import SETTINGS
 from ..events import g_eventsManager
 from ..lang import l10n
 from ..utils import getShellParams
@@ -25,11 +25,6 @@ _SHELL_LABELS = {
 	4: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 	5: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
 }
-if IS_MT_CLIENT:
-	_SHELL_LABELS.update({
-		6: '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_FSDS',
-		FLAME_INDEX: '#ingame_gui:damageLog/shellType/FLAME'
-	})
 
 _RESULT_LABELS = {
 	0: l10n('hits.shotResult.armorPiercesNoDamage'),
@@ -38,8 +33,7 @@ _RESULT_LABELS = {
 	3: l10n('hits.shotResult.armorNotPierces'),
 	4: l10n('hits.shotResult.armorPierces'),
 	5: l10n('hits.shotResult.criticalHit'),
-	6: l10n('hits.shotResult.criticalHit'),
-	FLAME_INDEX: l10n('hits.shotResult.splash'),
+	6: l10n('hits.shotResult.criticalHit')
 }
 
 class Hits(AbstractDataProvider):
@@ -57,7 +51,6 @@ class Hits(AbstractDataProvider):
 		self.__sortingReversed = self.settingsCtrl.get(SETTINGS.SORTING_REVERSED)
 		self.__sortingRule = self.settingsCtrl.get(SETTINGS.SORTING_RULE)
 		self.__hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, True)
-		self.__processFlamethrowers = self.settingsCtrl.get(SETTINGS.PROCESS_FLAMETHROWERS, False)
 
 		self.__sortingMap = {
 			1 : (int, "id", True),
@@ -76,12 +69,6 @@ class Hits(AbstractDataProvider):
 		g_eventsManager.invalidateHitsDP()
 
 	def __onSettingsChanged(self, key, value):
-
-		if key == SETTINGS.PROCESS_FLAMETHROWERS:
-			self.__processFlamethrowers = value
-			self.stateCtrl.currentHitID = self.desiredID
-			g_eventsManager.invalidateHitsDP()
-
 		if key == SETTINGS.HITS_TO_PLAYER:
 			if value == self.__hitsToPlayer:
 				return
@@ -121,10 +108,6 @@ class Hits(AbstractDataProvider):
 
 			# skip hit if shell is not shell (gaus gun of waffentrager, etc)
 			if shellParams.index is None:
-				continue
-
-			# skip hit if shell is flame and flamethrowers disabled
-			if not self.__processFlamethrowers and shellParams.index == FLAME_INDEX:
 				continue
 
 			hitResult = [max(_RESULT_LABELS)] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]

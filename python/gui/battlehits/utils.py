@@ -10,12 +10,6 @@ from helpers import dependency
 from items import vehicles
 from skeletons.gui.impl import IGuiLoader
 
-from ._constants import IS_MT_CLIENT, FLAME_INDEX
-
-__all__ = ('byteify', 'override', 'getShellParams', 'getShell', 'vfs_dir_list_files', 'vfs_file_read', 
-			'parse_localization_file', 'simplifyVehicleCompactDescr', 'cancelCallbackSafe', 'cache_result',
-			'safe_import', 'get_dependency_manager')
-
 def override(holder, name, wrapper=None, setter=None):
 	"""Override methods, properties, functions, attributes
 	:param holder: holder in which target will be overrided
@@ -57,11 +51,6 @@ _SHELL_NAME_TO_ID = {
 	SHELL_TYPES.HOLLOW_CHARGE: 2,
 	SHELL_TYPES.HIGH_EXPLOSIVE: 3,
 }
-if IS_MT_CLIENT:
-	_SHELL_NAME_TO_ID.update({
-		'ARMOR_PIERCING_FSDS': 6,
-		'FLAME': FLAME_INDEX,
-	})
 
 def _common_effect_name(effectsIndex):
 	value = vehicles.g_cache.shotEffectsNames.get(effectsIndex, '')
@@ -169,7 +158,7 @@ def simplifyVehicleCompactDescr(compactDescr):
 		else: fixed.append(None)
 	return vehicles._combineVehicleCompactDescr(*fixed)
 
-def cancelCallbackSafe(cbid):
+def cancel_callback_safe(cbid):
 	import BigWorld
 	try:
 		BigWorld.cancelCallback(cbid)
@@ -189,52 +178,7 @@ def cache_result(function):
 			return rv
 	return wrapper
 
-def getParentWindow():
+def get_parent_window():
 	uiLoader = dependency.instance(IGuiLoader)
 	if uiLoader and uiLoader.windowsManager:
 		return uiLoader.windowsManager.getMainWindow()
-
-def safe_import(path, target, initialized=False):
-	"""Import a module and get its attribute safely.
-
-	Args:
-		path (str): Module path like 'package.module'.
-		target (str): Attribute or function name to get.
-		initialized (bool): If True, use already loaded module. Default is False.
-
-	Returns:
-		object: The attribute or None if not found or failed.
-	"""
-	import sys
-	import importlib
-
-	try:
-		if initialized:
-			# Get module from already loaded ones.
-			module = sys.modules.get(path, None)
-		else:
-			# Import the module.
-			module = importlib.import_module(path)
-
-		# Return the target or None.
-		return getattr(module, target, None)
-
-	except ImportError:
-		# Return None if import fails.
-		return None
-
-def get_dependency_manager():
-	"""Retrieves dependency manager from supported implementations."""
-	# Ordered list of (module_path, manager_attribute) pairs to import attempt
-	IMPORT_CANDIDATES = [
-		# WG implementation
-		('helpers.dependency', '_g_manager'),
-		# Non WG implementation
-		('dependency_injection_container', '_g_manager')
-	]
-
-	for module_path, manager_attr in IMPORT_CANDIDATES:
-		dependency_manager = safe_import(module_path, manager_attr)
-		if dependency_manager is not None:
-			return dependency_manager
-	return None

@@ -3,7 +3,6 @@
 
 from helpers import dependency
 from .._skeletons import *
-from ..utils import get_dependency_manager
 
 __all__ = ('AbstractController', )
 
@@ -48,9 +47,8 @@ def configure():
 	from gui.battlehits.controllers.Settings import Settings
 	from gui.battlehits.controllers.Vehicle import Vehicle
 
-	manager = get_dependency_manager()
-	if not manager:
-		return
+	from helpers.dependency import DependencyManager, _g_manager
+	manager = _g_manager # type: DependencyManager
 	manager.addInstance(IBattlesHistory, BattlesHistory(), finalizer='fini')
 	manager.addInstance(IBattleProcessor, BattleProcessor(), finalizer='fini')
 	manager.addInstance(IHangarCamera, HangarCamera(), finalizer='fini')

@@ -27,7 +27,6 @@ class SETTINGS:
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
 	SWAP_HANGAR = 'swapHangar'
-	PROCESS_FLAMETHROWERS = 'processFlamethrowers'
 
 DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,
@@ -36,8 +35,7 @@ DEFAULT_SETTINGS = {
 	SETTINGS.SORTING_RULE: 1,
 	SETTINGS.SORTING_REVERSED: True,
 	SETTINGS.HITS_TO_PLAYER: True,
-	SETTINGS.SWAP_HANGAR: False,
-	SETTINGS.PROCESS_FLAMETHROWERS: True
+	SETTINGS.SWAP_HANGAR: False
 }
 
 class MODEL_TYPES:
@@ -48,7 +46,7 @@ class MODEL_TYPES:
 	DOME = 'dome'
 
 class MODEL_NAMES:
-	SHELL = ('ap', 'apcr', 'heat', 'hemodern', 'hespg', 'hespgstun', 'apfsds', )
+	SHELL = ('ap', 'apcr', 'heat', 'hemodern', 'hespg', 'hespgstun', )
 	EFFECT = ('ricochet', 'notpenetration', 'penetration', 'critical', )
 	SPLASH = ('large', 'middle', 'small', )
 	RICOCHET = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
@@ -69,22 +67,13 @@ CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods
 SETTINGS_VERSION = 12
 CACHE_VERSION = 37
 
-try:
-	import version_utils
-	IS_MT_CLIENT = True
-except ImportError:
-	IS_MT_CLIENT = False
-
-BATTLE_HITS_SPACE_PATH = 'spaces/battlehits_%s' % ('mt' if IS_MT_CLIENT else 'wot')
+BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 
 DEFAULT_HANGAR_SPACES = (
 	# wot spaces
-	'spaces/hangar_v3',                # default wot hangar
-	'spaces/h34_lunar_ny_2025',        # special wot hangar
-	# mt spaces
-	'spaces/h08_mt_hangar',            # default mt hangar
-	'spaces/h10_mt_23feb_2025',        # special mt hangar
-	'spaces/h01_victory_day_2025'      # special mt hangar
+	'spaces/hangar_v3',                # default hangar
+	'spaces/h34_lunar_ny_2025',        # special event hangar
+	'spaces/hangar_v3_wot_bday_2025',  # special event hangar
 )
 
 SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
@@ -94,5 +83,3 @@ CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
 				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET)
 
 CAMERA_UNDER_FLOOR_OFFSET = 0.25
-
-FLAME_INDEX = 7

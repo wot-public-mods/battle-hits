@@ -3,7 +3,6 @@
 
 from helpers import dependency
 from .._skeletons import *
-from ..utils import get_dependency_manager
 
 __all__ = ('AbstractData', 'AbstractDataProvider')
 
@@ -91,9 +90,8 @@ def configure():
 	from .Hits import Hits
 	from .Battles import Battles
 
-	manager = get_dependency_manager()
-	if not manager:
-		return
+	from helpers.dependency import DependencyManager, _g_manager
+	manager = _g_manager # type: DependencyManager
 	manager.addInstance(ICurrentBattleData, CurrentBattle(), finalizer='clean')
 	manager.addInstance(IHitsData, Hits(), finalizer='clean')
 	manager.addInstance(IBattlesData, Battles(), finalizer='clean')

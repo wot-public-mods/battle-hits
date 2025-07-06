@@ -12,10 +12,10 @@ from debug_utils import LOG_ERROR
 from vehicle_systems.tankStructure import TankPartIndexes
 
 from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
-							SCENE_OFFSET, CAMERA_DEFAULTS, FLAME_INDEX)
+							SCENE_OFFSET, CAMERA_DEFAULTS)
 from ..controllers import AbstractController
 from ..events import g_eventsManager
-from ..utils import cancelCallbackSafe
+from ..utils import cancel_callback_safe
 
 class HangarScene(AbstractController):
 
@@ -109,7 +109,7 @@ class HangarScene(AbstractController):
 			model.visible = False
 
 		if self._ricochetCBID is not None:
-			cancelCallbackSafe(self._ricochetCBID)
+			cancel_callback_safe(self._ricochetCBID)
 			self._ricochetCBID = None
 
 	def _deleteModels(self):
@@ -209,9 +209,6 @@ class HangarScene(AbstractController):
 			return
 
 		shellParams = hitData['shellParams']
-
-		if shellParams.index == FLAME_INDEX:
-			return
 
 		motor = self.__motors[MODEL_TYPES.SHELL][shellParams.index]
 		model = self.__models[MODEL_TYPES.SHELL][shellParams.index]

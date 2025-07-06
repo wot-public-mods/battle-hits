@@ -17,7 +17,7 @@ from .._constants import SETTINGS
 from ..events import g_eventsManager
 from ..lang import l10n
 from .._skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
-from ..utils import getParentWindow
+from ..utils import get_parent_window
 
 class BattleHitsMainViewMeta(LobbySubView, View):
 
@@ -87,7 +87,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		super(BattleHitsMainView, self)._dispose()
 
 	def closeView(self):
-		params = SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR, parent=getParentWindow())
+		params = SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR, parent=get_parent_window())
 		self.fireEvent(g_entitiesFactories.makeLoadEvent(params), scope=EVENT_BUS_SCOPE.LOBBY)
 
 	def hitsToPlayerClick(self, hitsToPlayer):

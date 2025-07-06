@@ -16,7 +16,7 @@ from VehicleStickers import SlotTypes
 from .._constants import SCENE_OFFSET
 from ..controllers import AbstractController
 from ..events import g_eventsManager
-from ..utils import simplifyVehicleCompactDescr, cancelCallbackSafe
+from ..utils import simplifyVehicleCompactDescr, cancel_callback_safe
 
 class Vehicle(AbstractController):
 
@@ -90,7 +90,7 @@ class Vehicle(AbstractController):
 	def removeVehicle(self):
 		self.hangarSpace.removeVehicle()
 		if self._presentCBID is not None:
-			cancelCallbackSafe(self._presentCBID)
+			cancel_callback_safe(self._presentCBID)
 			self._presentCBID = None
 		self._components = {}
 		self._presentCBID = None
@@ -127,7 +127,7 @@ class Vehicle(AbstractController):
 		BigWorld.callback(.0, g_eventsManager.onVehicleBuilded)
 
 		if self._presentCBID is not None:
-			cancelCallbackSafe(self._presentCBID)
+			cancel_callback_safe(self._presentCBID)
 			self._presentCBID = None
 		self._presentCBID = BigWorld.callback(.1, self._presentCallback)
 

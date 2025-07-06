@@ -87,21 +87,6 @@
    </property>
 ]]></parametersAsXML>
                 </DOMComponentInstance>
-                <DOMComponentInstance libraryItemName="CheckBox" name="processFlamethrowers" uniqueID="8">
-                  <matrix>
-                    <Matrix tx="20" ty="190"/>
-                  </matrix>
-                  <transformationPoint>
-                    <Point x="10.75" y="10.75"/>
-                  </transformationPoint>
-                  <parametersAsXML><![CDATA[   <property id="width">
-      <Inspectable name="width" unlocalizedName="width" variable="width" category="" verbose="0" defaultValue="250" type="Number"/>
-   </property>
-   <property id="infoIcoType">
-      <Inspectable name="infoIcoType" unlocalizedName="infoIcoType" variable="infoIcoType" category="" verbose="0" defaultValue="info" type="String"/>
-   </property>
-]]></parametersAsXML>
-                </DOMComponentInstance>
               </elements>
             </DOMFrame>
           </frames>
