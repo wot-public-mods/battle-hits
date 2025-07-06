@@ -85,22 +85,20 @@ def hangarCameraParallax_update(baseMethod, baseObject):
 
 # battlesHistory
 @override(Vehicle, "showDamageFromShot")
-def showDamageFromShot(baseMethod, baseObject, attackerID, points, effectsIndex, damageFactor, *a, **kw):
-	baseMethod(baseObject, attackerID, points, effectsIndex, damageFactor, *a, **kw)
+def showDamageFromShot(baseMethod, *args, **kwargs):
+	baseMethod(*args, **kwargs)
 	battleProcessor = dependency.instance(IBattleProcessor)
-	battleProcessor.processShot(baseObject, attackerID, points, effectsIndex, damageFactor)
+	# args: self, attackerID, hitPoints, effectsIndex, prefabEffIndex, damage, damageFactor, lastMaterialIsShield, shellTypeIdx, shellCaliber, shellVelocity
+	battleProcessor.processShot(vehicle=args[0], attackerID=args[1], hitPoints=args[2],
+							 effectsIndex=args[3], damage=args[5], damageFactor=args[6])
 
 @override(Vehicle, "showDamageFromExplosion")
-def showDamageFromExplosion(baseMethod, baseObject, attackerID, center, effectsIndex, damageFactor, *a, **kw):
-	baseMethod(baseObject, attackerID, center, effectsIndex, damageFactor, *a, **kw)
+def showDamageFromExplosion(baseMethod, *args, **kwargs):
+	baseMethod(*args, **kwargs)
 	battleProcessor = dependency.instance(IBattleProcessor)
-	battleProcessor.processExplosion(baseObject, attackerID, center, effectsIndex, damageFactor)
-
-@override(Vehicle, "onHealthChanged")
-def onHealthChanged(baseMethod, baseObject, newHealth, oldHealth, attackerID, attackReasonID, *a, **kw):
-	baseMethod(baseObject, newHealth, oldHealth, attackerID, attackReasonID, *a, **kw)
-	battleProcessor = dependency.instance(IBattleProcessor)
-	battleProcessor.processHealthChanged(baseObject, newHealth, attackerID, attackReasonID)
+	# args: self, attackerID, center, effectsIndex, damage, damageFactor
+	battleProcessor.processExplosion(vehicle=args[0], attackerID=args[1], center=args[2],
+								  effectsIndex=args[3], damage=args[4], damageFactor=args[5])
 
 @override(Vehicle, "_Vehicle__onAppearanceReady")
 def onAppearanceReady(baseMethod, baseObject, appearance):

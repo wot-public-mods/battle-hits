@@ -7,14 +7,11 @@ class IBattleProcessor(object):
 	def processVehicleInit(self, vehicle):
 		raise NotImplementedError
 
-	def processHealthChanged(self, vehicle, newHealth, attackerID, attackReasonID):
-		raise NotImplementedError
-
 	def onModelsRefresh(self, vehicle, modelState):
 		raise NotImplementedError
 
-	def processShot(self, vehicle, attackerID, points, effectsIndex, damageFactor):
+	def processShot(self, vehicle, attackerID, hitPoints, effectsIndex, damage, damageFactor):
 		raise NotImplementedError
 
-	def processExplosion(self, vehicle, attackerID, center, effectsIndex, damageFactor):
+	def processExplosion(self, vehicle, attackerID, center, effectsIndex, damage, damageFactor):
 		raise NotImplementedError

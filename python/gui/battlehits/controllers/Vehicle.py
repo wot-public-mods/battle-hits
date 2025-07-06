@@ -276,7 +276,7 @@ class Vehicle(AbstractController):
 
 		tracksConfig = self.compactDescr.chassis.tracks
 		if tracksConfig and not self.isWheeledTech:
-			return DamageFromShotDecoder.convertComponentIndex(partIndex, self.compactDescr)
+			return DamageFromShotDecoder.convertComponentIndex(partIndex, self.collision)
 
 		wheelsConfig = self.compactDescr.chassis.generalWheelsAnimatorConfig
 		if wheelsConfig is not None:
