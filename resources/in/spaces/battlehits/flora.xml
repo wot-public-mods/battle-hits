@@ -1,0 +1,36 @@
+<root>
+	<speedgrass>
+		<slopeMin> 0.00 </slopeMin>
+		<slopeMax> 30.00 </slopeMax>
+		<sizeLimit> 0.00 </sizeLimit>
+		<oscillationFreqMin> 1.0 </oscillationFreqMin>
+		<oscillationFreqMax> 6.0 </oscillationFreqMax>
+		<population>
+			<name> population1 </name>
+			<grassType>
+				<name> Pinecone_2 </name>
+				<tintWeight> 0.00 0.00 </tintWeight>
+				<waving> 1.00 1.00 2.00 1.00 </waving>
+				<sniperModeBhvr> 0 </sniperModeBhvr>
+				<oscillation> 0.5 0.5 </oscillation>
+				<layer>
+					<name> Pinecone_2_lod1 </name>
+					<comment> comment </comment>
+					<model> vegetation/Grass/Pinecone_2/Pinecone_2_lod1.srt </model>
+					<castShadow> false </castShadow>
+					<density> 1.0000 </density>
+					<densityMin> 0.0000 </densityMin>
+					<scale> 1.00 </scale>
+					<scaleDeviation> 0.00 </scaleDeviation>
+					<fadeout> 5.00 </fadeout>
+					<range> 10.00 </range>
+					<alignToSurface> true </alignToSurface>
+					<seed> 0 </seed>
+					<tintWeight> 0.00 0.00 </tintWeight>
+					<waving> 1.00 1.00 2.00 1.00 </waving>
+				</layer>
+			</grassType>
+		</population>
+	</speedgrass>
+	<tintMap/>
+</root>

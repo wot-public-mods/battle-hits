@@ -1,0 +1,16 @@
+<root>
+	<forward>
+		<name> default </name>
+		<preload>
+			<shader> data/shaders/ps.fx </shader>
+			<texture> particles/content_forward/PFX_textures/eff_tex_cust.dds </texture>
+		</preload>
+	</forward>
+	<deferred>
+		<name> default </name>
+		<preload>
+			<shader> data/shaders/ps.fx </shader>
+			<texture> particles/content_deferred/PFX_textures/eff_tex_cust.dds </texture>
+		</preload>
+	</deferred>
+</root>
