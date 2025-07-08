@@ -259,7 +259,7 @@ class Vehicle(AbstractController):
 			result.preMultiply(rotation)
 			return result
 
-		if self.compoundModel and self.isWheeledTech and partIndex > TankPartIndexes.ALL[-1]:
+		if self.compoundModel and self.isWheeledTech:
 			worldMatrix = Math.Matrix(self.compoundModel.node(partName))
 			result = Math.Matrix()
 			result.setTranslate(worldMatrix.translation)
@@ -280,15 +280,6 @@ class Vehicle(AbstractController):
 
 		wheelsConfig = self.compactDescr.chassis.generalWheelsAnimatorConfig
 		if wheelsConfig is not None:
-			partIndex -= len(TankPartIndexes.ALL)
-			wheelNodeNames = wheelsConfig.getWheelNodeNames()
-			wheelNodeLength = len(wheelNodeNames)
-			delta = [2, wheelNodeLength, 4, 6]
-			result1, result2 = [], []
-			for i in range(wheelNodeLength / 2):
-				result1.append(wheelNodeLength - delta[i])
-				result2.append(wheelNodeLength - delta[i] + 1)
-			result = result1 + result2
-			return wheelNodeNames[result.index(partIndex)]
+			return self.collision.getPartName(partIndex)
 
 		return partIndex

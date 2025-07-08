@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.2.6
+
+* refactor: Get damage directly from game events
+* refactor: Optimize battlehits space
+* refactor: Remove unused features and content
+* chore: Update space binary for 1.29.1
+* feat(Vehicle): Adapt to game version 1.29.1 component indexing
+
 ## v2.2.5
 
 * fix constant loading in 1.29.0 game version

@@ -65,7 +65,7 @@ SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'm
 CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'cache.dat'))
 
 SETTINGS_VERSION = 12
-CACHE_VERSION = 37
+CACHE_VERSION = 38
 
 BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
 
