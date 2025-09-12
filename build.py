@@ -1,294 +1,406 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
-import collections
+"""
+Build script for creating and packaging World of Tanks modifications.
+
+This script handles:
+- Compiling Python scripts.
+- Publishing Adobe Animate projects.
+- Packaging mod files into a .wotmod archive.
+- Creating a distributable .zip archive.
+- Copying the mod to the game directory and running the game.
+"""
+
+import argparse
 import datetime
 import json
-import os
-import shutil
 import logging
+import os
+import pathlib
+import random
+import shutil
+import string
 import subprocess
 import sys
-import zipfile
 import time
-import signal
-import string
-import psutil
-import random
+import xml.etree.ElementTree as ET
+import zipfile
+from typing import Any, Dict, List, Optional, Set
 
-def rand_str(num):
-	return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(num))
+try:
+    import psutil
+except ImportError:
+    raise ImportError("psutil is not installed. Please run 'pip install psutil' to install it.")
 
-class ElapsedFormatter():
 
-	def __init__(self):
-		self.start_time = time.time()
+# --- Logger Setup ---
 
-	def format(self, record):
-		elapsed_seconds = record.created - self.start_time
-		elapsed = datetime.timedelta(seconds = elapsed_seconds)
-		return "{}.{} {}".format(
-			str(elapsed.seconds).zfill(3), # seconds
-			str(elapsed.microseconds).zfill(6), # microseconds
-			record.getMessage() # message
-		)
+class ElapsedFormatter(logging.Formatter):
+    """A logging formatter that includes the elapsed time since initialization."""
 
-handler = logging.StreamHandler()
-handler.setFormatter(ElapsedFormatter())
-logging.getLogger().addHandler(handler)
+    def __init__(self) -> None:
+        """Initializes the formatter and records the start time."""
+        super().__init__()
+        self.start_time = time.time()
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+    def format(self, record: logging.LogRecord) -> str:
+        """Formats the log record to include elapsed time."""
+        elapsed_seconds = record.created - self.start_time
+        elapsed = datetime.timedelta(seconds=elapsed_seconds)
+        # Format as S.MS for quick reading
+        return f"{elapsed.seconds:03d}.{int(elapsed.microseconds / 1000):03d} {record.getMessage()}"
 
-def copytree(source, destination, ignore=None):
-	"""implementation of shutil.copytree
-	original sometimes throw error on folders create"""
-	for item in os.listdir(source):
-		# skip git files
-		if '.gitkeep' in item:
-			continue
-		sourcePath = os.path.join(source, item)
-		destinationPath = os.path.join(destination, item)
-		# use copytree for directory
-		if not os.path.isfile(sourcePath):
-			copytree(sourcePath, destinationPath, ignore)
-			continue
-		# make dir by os module
-		dirName, fileName = os.path.split(destinationPath)
-		if not os.path.isdir(dirName):
-			os.makedirs(dirName)
-		# skip files by ignore pattern
-		if ignore:
-			ignored_names = ignore(source, os.listdir(source))
-			if fileName in ignored_names:
-				continue
-		# copy file
-		shutil.copy2(sourcePath, destinationPath)
 
-def zipFolder(source, destination, mode='w', compression=zipfile.ZIP_STORED):
-	""" ZipFile by default dont create folders info in result zip """
-	def dirInfo(path):
-		"""return fixed ZipInfo for directory"""
-		info = zipfile.ZipInfo(path, now)
-		info.filename = info.filename[seek_offset:]
-		if not info.filename:
-			return None
-		if not info.filename.endswith('/'):
-			info.filename += '/'
-		info.compress_type = compression
-		return info
-	def fileInfo(path):
-		"""return fixed ZipInfo for file"""
-		info = zipfile.ZipInfo(path, now)
-		info.external_attr = 33206 << 16 # -rw-rw-rw-
-		info.filename = info.filename[seek_offset:]
-		info.compress_type = compression
-		return info
-	with zipfile.ZipFile(destination, mode, compression) as zipfh:
-		now = tuple(datetime.datetime.now().timetuple())[:6]
-		seek_offset = len(source) + 1
-		for dirName, _, files in os.walk(source):
-			info = dirInfo(dirName)
-			if info:
-				zipfh.writestr(info, '')
-			for fileName in files:
-				filePath = os.path.join(dirName, fileName)
-				info = fileInfo(filePath)
-				zipfh.writestr(info, open(filePath, 'rb').read())
+def setup_logger() -> logging.Logger:
+    """Configures and returns a root logger."""
+    handler = logging.StreamHandler()
+    handler.setFormatter(ElapsedFormatter())
 
-def process_running(path):
-	"""Cheek is process runing, no"""
-	processName = os.path.basename(path).lower()
-	for proc in psutil.process_iter():
-		if proc.name().lower() == processName:
-			return True
-	return False
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+    return logger
 
-def build_flash():
-	if not BUILD_FLASH:
-		return
 
-	# working directory URI for Animate
-	flashWD = os.getcwd().replace('\\', '/').replace(':', '|')
+# --- Configuration Classes ---
 
-	files = set()
+class AppConfig:
+    """A class to hold the application configuration from build.json."""
 
-	# add publishDocument command for all *.fla and *.xfl files
-	for dirPath, _, fileNames in os.walk('as3'):
-		for fileName in fileNames:
-			if fileName.endswith('.fla') or fileName.endswith('.xfl'):
-				dirPath = dirPath.replace('\\', '/')
-				logName = fileName.replace('.fla', '.log').replace('.xfl', '.log')
-				files.add((dirPath, fileName, logName))
+    class Software:
+        """Holds paths to external software."""
+        def __init__(self, data: Dict[str, Any]) -> None:
+            self.animate: Optional[str] = data.get('animate')
+            self.python: Optional[str] = data.get('python')
 
-	if not files:
-		return
+    class Game:
+        """Holds game-related configuration."""
+        def __init__(self, data: Dict[str, Any]) -> None:
+            self.force: bool = data.get('force', False)
+            self.folder: Optional[str] = data.get('folder')
+            self.version: Optional[str] = data.get('version')
 
-	if not process_running(CONFIG.software.animate):
-		raise Exception('Animate not running') 
+    class Info:
+        """Holds mod metadata."""
+        def __init__(self, data: Dict[str, Any]) -> None:
+            self.id: Optional[str] = data.get('id')
+            self.name: Optional[str] = data.get('name')
+            self.description: Optional[str] = data.get('description')
+            self.version: Optional[str] = data.get('version')
 
-	for dirPath, fileName, logName in files:
-		# JSFL file with commands for Animate
-		jsflFile = 'build-%s.jsfl' % rand_str(5)
-		jsflContent = ''
-		documentURI = 'file:///{}/{}/{}'.format(flashWD, dirPath, fileName)
-		logFileURI = 'file:///{}/{}'.format(flashWD, logName)
-		jsflContent += 'fl.publishDocument("{}", "Default");\n'.format(documentURI)
-		jsflContent += 'fl.compilerErrors.save("{}", false, true);\n'.format(logFileURI)
-		jsflContent += '\n'
+    def __init__(self, data: Dict[str, Any]) -> None:
+        """Initializes the main configuration object from a dictionary."""
+        self.version: int = data.get('version', 0)
+        self.software = self.Software(data.get('software', {}))
+        self.game = self.Game(data.get('game', {}))
+        self.info = self.Info(data.get('info', {}))
 
-		with open(jsflFile, 'w') as fh:
-			fh.write(jsflContent)
 
-		try:
-			subprocess.check_call([CONFIG.software.animate, '-e', jsflFile, '-AlwaysRunJSFL'], stderr=subprocess.STDOUT)
-		except subprocess.CalledProcessError as e:
-			logger.exception('build_flash')
+# --- Utility Functions ---
 
-		while os.path.exists(jsflFile):
-			try:
-				os.remove(jsflFile)
-			except:
-				time.sleep(.01)
+def rand_str(num: int) -> str:
+    """Generates a random alphanumeric string of a given length."""
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(num))
 
-		log_data = ''
-		if os.path.isfile(logName):
-			data = open(logName, 'r').read().splitlines()
-			if len(data) > 1:
-				log_data = '\n'.join(data[:-2])
-			os.remove(logName)
 
-		if log_data:
-			logger.error('failed flash publish %s/%s\n%s', dirPath, fileName, log_data)
-		else:
-			logger.info('flash published: %s/%s', dirPath, fileName)
+def copytree(source: str, destination: str, ignore: Optional[callable] = None) -> None:
+    """
+    A custom copytree implementation that is more lenient about existing directories.
+    
+    Args:
+        source: The source directory path.
+        destination: The destination directory path.
+        ignore: A callable compatible with shutil.ignore_patterns.
+    """
+    source_path = pathlib.Path(source)
+    dest_path = pathlib.Path(destination)
+    dest_path.mkdir(parents=True, exist_ok=True)
 
-def build_python():
-	for dirPath, _, fileNames in os.walk('python'):
-		for fileName in fileNames:
-			if not fileName.endswith('.py'):
-				continue
-			filePath = "{}/{}".format(dirPath, fileName).replace('\\', '/')
-			try:
-				subprocess.check_output([CONFIG.software.python, '-m', 'py_compile', filePath],
-												stderr=subprocess.STDOUT).decode()
-				logger.info('python compiled: %s', filePath)
-			except subprocess.CalledProcessError as e:
-				logger.error('python fail compile: %s\n%s', filePath, e.output.decode())
+    names = os.listdir(source_path)
+    ignored_names: Set[str] = ignore(str(source_path), names) if ignore else set()
 
-# handle args from command line
-BUILD_FLASH = 'flash' in sys.argv
-COPY_INTO_GAME = 'ingame' in sys.argv
-CREATE_DISTRIBUTE = 'distribute' in sys.argv
-RUN_GAME = 'run' in sys.argv
+    for name in names:
+        if name in ignored_names or '.gitkeep' in name:
+            continue
 
-# load config
-assert os.path.isfile('build.json'), 'Config not found'
-with open('build.json', 'r') as fh:
-	hook = lambda x: collections.namedtuple('object', x.keys())(*x.values())
-	CONFIG = json.loads(fh.read(), object_hook=hook)
+        srcname = source_path / name
+        dstname = dest_path / name
 
-GAME_FOLDER = os.environ.get('WOT_FOLDER', CONFIG.game.folder)
-GAME_VERSION = os.environ.get('WOT_VERSION', CONFIG.game.version)
-if CONFIG.version > 3 and CONFIG.game.force:
-	GAME_FOLDER = CONFIG.game.folder
-	GAME_VERSION = CONFIG.game.version
+        try:
+            if srcname.is_dir():
+                copytree(str(srcname), str(dstname), ignore)
+            else:
+                shutil.copy2(str(srcname), str(dstname))
+        except (IOError, os.error) as why:
+            logger.error("Can't copy %s to %s: %s", srcname, dstname, str(why))
 
-# cheek ingame folder
-WOT_PACKAGES_DIR = '{wot}/mods/{version}/'.format(wot=GAME_FOLDER, version=GAME_VERSION)
-if COPY_INTO_GAME:
-	assert os.path.isdir(WOT_PACKAGES_DIR), 'Wot mods folder notfound'
 
-# package data
-PACKAGE_NAME = '{author}.{name}_{version}.wotmod'.format(author=CONFIG.info.author,
-				name=CONFIG.info.id, version=CONFIG.info.version)
+def zip_folder(source: str, destination: str, mode: str = 'w', compression: int = zipfile.ZIP_STORED) -> None:
+    """
+    Zips a folder, including empty directories, with consistent metadata.
 
-# generate package meta file
-META = """<root>
-	<!-- Techical MOD ID -->
-	<id>{author}.{id}</id>
-	<!-- Package version -->
-	<version>{version}</version>
-	<!-- Human readable name -->
-	<name>{name}</name>
-	<!-- Human readable description -->
-	<description>{description}</description>
-</root>""".format(author=CONFIG.info.author, id=CONFIG.info.id, name=CONFIG.info.name,
-					description=CONFIG.info.description, version=CONFIG.info.version)
+    Args:
+        source: The source directory to zip.
+        destination: The path to the output zip file.
+        mode: The file mode for the zip file ('w', 'a', etc.).
+        compression: The compression method to use.
+    """
+    source_path = pathlib.Path(source)
+    with zipfile.ZipFile(destination, mode, compression) as zipfh:
+        # Use a fixed timestamp for reproducible builds
+        now = tuple(datetime.datetime.now().timetuple())[:6]
+        for file_path in source_path.rglob('*'):
+            arcname = file_path.relative_to(source_path)
+            if file_path.is_dir():
+                # Add directory entry
+                info = zipfile.ZipInfo(str(arcname).replace('\\', '/') + '/', now)
+                info.compress_type = compression
+                zipfh.writestr(info, '')
+            else:
+                # Add file entry with standard permissions
+                info = zipfile.ZipInfo(str(arcname).replace('\\', '/'), now)
+                info.external_attr = 33206 << 16 # -rw-rw-rw-
+                info.compress_type = compression
+                zipfh.writestr(info, file_path.read_bytes())
 
-# prepere folders
-if os.path.isdir('temp'):
-	shutil.rmtree('temp')
-os.makedirs('temp')
-if os.path.isdir('build'):
-	shutil.rmtree('build')
-os.makedirs('build')
 
-# build python
-build_python()
+def is_process_running(path: str) -> bool:
+    """
+    Checks if a process with the given executable name is running.
 
-# build flash
-build_flash()
+    Args:
+        path: The path to the executable.
 
-# copy all staff
-if os.path.isdir('resources/in'):
-	copytree('resources/in', 'temp/res')
-if os.path.isdir('as3/bin'):
-	copytree('as3/bin', 'temp/res/gui/flash')
-copytree('python', 'temp/res/scripts/client', ignore=shutil.ignore_patterns('*.py'))
-with open('temp/meta.xml', 'w') as fh:
-	fh.write(META)
+    Returns:
+        True if the process is running, False otherwise.
+    """
+    process_name = pathlib.Path(path).name.lower()
+    return any(proc.info['name'].lower() == process_name for proc in psutil.process_iter(['name']))
 
-# create package
-zipFolder('temp', 'build/{}'.format(PACKAGE_NAME))
 
-# copy package into game
-if COPY_INTO_GAME:
-	for exe_name in ('worldoftanks', 'tanki'):
-		for proc in psutil.process_iter():
-			if exe_name in proc.name().lower():
-				os.kill(proc.pid, signal.SIGTERM)
-				logger.info('wot client closed (pid: %s)', proc.pid)
-		while process_running('%s.exe' % exe_name):
-			time.sleep(.01)
-	logger.info('copied into wot: %s%s', WOT_PACKAGES_DIR, PACKAGE_NAME)
-	shutil.copy2('build/{}'.format(PACKAGE_NAME), WOT_PACKAGES_DIR)
+# --- Build Steps ---
 
-# create distribution
-if CREATE_DISTRIBUTE:
-	os.makedirs('temp/distribute/mods/{}'.format(GAME_VERSION))
-	shutil.copy2('build/{}'.format(PACKAGE_NAME), 'temp/distribute/mods/{}'.format(GAME_VERSION))
-	if os.path.isdir('resources/out'):
-		copytree('resources/out', 'temp/distribute')
-	zipFolder('temp/distribute', 'build/{name}_{version}.zip'.format(name=CONFIG.info.id,
-				version=CONFIG.info.version))
+def build_flash(config: AppConfig, args: argparse.Namespace) -> None:
+    """
+    Builds Adobe Animate projects (.fla, .xfl).
 
-# list for cleaning
-cleanup_list = set([])
+    Args:
+        config: The application configuration.
+        args: The command-line arguments.
+    """
+    if not args.flash:
+        return
 
-# builder temporary
-cleanup_list.add('temp')
+    files_to_process = list(pathlib.Path('as3').rglob('*.fla')) + list(pathlib.Path('as3').rglob('*.xfl'))
+    if not files_to_process:
+        logger.info("No Flash files found to build.")
+        return
 
-# Animate unnecessary
-cleanup_list.add('EvalScript error.tmp')
-cleanup_list.add('as3/DataStore')
+    if not config.software.animate or not is_process_running(config.software.animate):
+        raise Exception('Adobe Animate is not running or not configured in build.json.')
 
-# python bytecode
-for dirName, _, files in os.walk('python'):
-	for fileName in files:
-		if fileName.endswith('.pyc'):
-			cleanup_list.add(os.path.join(dirName, fileName))
+    for file_path in files_to_process:
+        log_path = file_path.with_suffix('.log')
+        jsfl_file = pathlib.Path(f'build-{rand_str(5)}.jsfl')
+        document_uri = file_path.resolve().as_uri()
+        log_file_uri = log_path.resolve().as_uri()
 
-# delete files
-for path in cleanup_list:
-	if os.path.isdir(path):
-		shutil.rmtree(path)
-	elif os.path.isfile(path):
-		os.remove(path)
+        # JSFL commands to publish the document and save compiler errors
+        jsfl_content = f'fl.publishDocument("{document_uri}", "Default");\n'
+        jsfl_content += f'fl.compilerErrors.save("{log_file_uri}", false, true);\n'
+        jsfl_file.write_text(jsfl_content, encoding='utf-8')
 
-# start client on build finish
-if RUN_GAME:
-	for exe_name in ('worldoftanks', 'tanki'):
-		executable_path = '%s/%s.exe' % (GAME_FOLDER, exe_name)
-		if os.path.isfile(executable_path):
-			subprocess.Popen([executable_path])
+        try:
+            subprocess.check_call(
+                [config.software.animate, '-e', str(jsfl_file), '-AlwaysRunJSFL'],
+                stderr=subprocess.STDOUT
+            )
+        except subprocess.CalledProcessError:
+            logger.exception('build_flash failed for %s', file_path)
+
+        # Cleanup: Poll until the file is no longer locked by Animate
+        while jsfl_file.exists():
+            try:
+                jsfl_file.unlink()
+            except OSError:
+                time.sleep(0.01)
+
+        # Check for compilation errors
+        log_data = ''
+        if log_path.is_file():
+            lines = log_path.read_text(encoding='utf-8', errors='ignore').splitlines()
+            if len(lines) > 1:
+                log_data = '\n'.join(lines[:-2])  # Animate adds extra lines at the end
+            log_path.unlink()
+
+        if log_data:
+            logger.error('Failed flash publish %s\n%s', file_path, log_data)
+        else:
+            logger.info('Flash published: %s', file_path)
+
+
+def build_python(config: AppConfig) -> None:
+    """
+    Compiles all .py files into .pyc bytecode.
+
+    Args:
+        config: The application configuration.
+    """
+    python_source_dir = pathlib.Path('python')
+    if not config.software.python:
+        raise ValueError("Python executable path is not configured in build.json")
+
+    for file_path in python_source_dir.rglob('*.py'):
+        try:
+            subprocess.check_output(
+                [config.software.python, '-m', 'py_compile', str(file_path)],
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding='utf-8'
+            )
+            logger.info('Python compiled: %s', file_path)
+        except subprocess.CalledProcessError as e:
+            logger.error('Python fail compile: %s\n%s', file_path, e.output)
+
+
+def main() -> None:
+    """The main entry point for the build script."""
+    # --- Argument Parsing ---
+    parser = argparse.ArgumentParser(description='Build script for WoT mods.')
+    parser.add_argument('--flash', action='store_true', help='Build flash assets.')
+    parser.add_argument('--ingame', action='store_true', help='Copy the build into the game directory.')
+    parser.add_argument('--distribute', action='store_true', help='Create a distributable archive.')
+    parser.add_argument('--run', action='store_true', help='Run the game after a successful build.')
+    args = parser.parse_args()
+
+    # --- Configuration Loading ---
+    config_path = pathlib.Path('build.json')
+    if not config_path.is_file():
+        raise FileNotFoundError('Config not found: build.json')
+
+    with config_path.open('r', encoding='utf-8') as fh:
+        config_data = json.load(fh)
+        config = AppConfig(config_data)
+
+    # Determine game folder and version from config or environment variables
+    if config.game.force:
+        game_folder = pathlib.Path(config.game.folder) if config.game.folder else None
+        game_version = config.game.version
+    else:
+        game_folder = pathlib.Path(os.environ.get('WOT_FOLDER', config.game.folder or ''))
+        game_version = os.environ.get('WOT_VERSION', config.game.version or '')
+
+    if not game_folder or not game_version:
+        raise ValueError("Game folder or version is not configured.")
+
+    # --- Folder Preparation ---
+    temp_dir = pathlib.Path('temp')
+    build_dir = pathlib.Path('build')
+    if temp_dir.is_dir():
+        shutil.rmtree(temp_dir)
+    temp_dir.mkdir()
+    if build_dir.is_dir():
+        shutil.rmtree(build_dir)
+    build_dir.mkdir()
+
+    # --- Build Steps ---
+    logger.info("Starting build process...")
+    build_python(config)
+    build_flash(config, args)
+
+    # --- Packaging ---
+    logger.info("Packaging mod...")
+    package_name = f'{config.info.id}_{config.info.version}.wotmod'
+
+    # Generate meta.xml using ElementTree for safe XML creation
+    root = ET.Element('root')
+    ET.SubElement(root, 'id').text = config.info.id
+    ET.SubElement(root, 'version').text = config.info.version
+    ET.SubElement(root, 'name').text = config.info.name
+    ET.SubElement(root, 'description').text = config.info.description
+    
+    # Pretty print the XML
+    ET.indent(root, space="    ")
+    meta_content = ET.tostring(root, encoding='unicode')
+
+    # Copy resources to temp directory
+    if pathlib.Path('resources/in').is_dir():
+        copytree('resources/in', str(temp_dir / 'res'))
+    if pathlib.Path('as3/bin').is_dir():
+        copytree('as3/bin', str(temp_dir / 'res/gui/flash'))
+    copytree('python', str(temp_dir / 'res/scripts/client'), ignore=shutil.ignore_patterns('*.py'))
+    (temp_dir / 'meta.xml').write_text(meta_content, encoding='utf-8')
+
+    # Create the .wotmod package
+    zip_folder(str(temp_dir), str(build_dir / package_name))
+    logger.info("Package created: %s", build_dir / package_name)
+
+    # --- Post-Build Actions ---
+    wot_packages_dir = game_folder / 'mods' / game_version
+    if args.ingame:
+        if not wot_packages_dir.is_dir():
+            raise FileNotFoundError(f'WoT mods folder not found: {wot_packages_dir}')
+
+        # Terminate game client if running
+        exe_name = 'worldoftanks.exe'
+        for proc in psutil.process_iter(['name', 'pid']):
+            if exe_name in proc.info['name'].lower():
+                try:
+                    p = psutil.Process(proc.info['pid'])
+                    p.terminate()
+                    logger.info('WoT client closing (pid: %s)', proc.info['pid'])
+                    p.wait(timeout=10)
+                except psutil.Error as e:
+                    logger.warning("Could not terminate WoT client (pid: %s): %s", proc.info['pid'], e)
+
+        logger.info('Copying package to: %s', wot_packages_dir / package_name)
+        shutil.copy2(str(build_dir / package_name), str(wot_packages_dir))
+
+    if args.distribute:
+        logger.info("Creating distribution archive...")
+        dist_dir = temp_dir / 'distribute'
+        dist_mods_dir = dist_dir / 'mods' / game_version
+        dist_mods_dir.mkdir(parents=True)
+
+        shutil.copy2(str(build_dir / package_name), str(dist_mods_dir))
+        if pathlib.Path('resources/out').is_dir():
+            copytree('resources/out', str(dist_dir))
+
+        zip_name = f'{config.info.id}_{config.info.version}.zip'
+        zip_folder(str(dist_dir), str(build_dir / zip_name))
+        logger.info("Distribution archive created: %s", build_dir / zip_name)
+
+    # --- Cleanup ---
+    logger.info("Cleaning up temporary files...")
+    cleanup_paths: List[pathlib.Path] = [
+        temp_dir,
+        pathlib.Path('EvalScript error.tmp'),
+        pathlib.Path('as3/DataStore')
+    ]
+    cleanup_paths.extend(pathlib.Path('python').rglob('*.pyc'))
+
+    for path in cleanup_paths:
+        if path.is_dir():
+            shutil.rmtree(path, ignore_errors=True)
+        elif path.is_file():
+            path.unlink(missing_ok=True)
+
+    if args.run:
+        executable_path = game_folder / 'worldoftanks.exe'
+        if executable_path.is_file():
+            logger.info("Starting World of Tanks client...")
+            subprocess.Popen([str(executable_path)])
+        else:
+            logger.warning("Could not find game executable to run at: %s", executable_path)
+
+    logger.info("Build finished successfully.")
+
+
+if __name__ == '__main__':
+    logger = setup_logger()
+    try:
+        main()
+    except Exception as e:
+        logger.exception("An unhandled error occurred: %s", e)
+        sys.exit(1)

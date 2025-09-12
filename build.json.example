@@ -1,5 +1,5 @@
 {
-	"version": 4,
+	"version": 5,
 	"software": {
 		"animate": "/path/to/adobe_animate",
 		"python": "/path/to/python_27"
@@ -10,8 +10,7 @@
 		"version": "wot_version"
 	},
 	"info": {
-		"id": "battlehits",
-		"author": "me.poliroid",
+		"id": "me.poliroid.battlehits",
 		"name": "Battle Hits",
 		"description": "Explore received and given hits by your vehicle in battle",
 		"version": "mod_version"
