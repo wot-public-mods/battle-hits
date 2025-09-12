@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.3.0
+
+* feat: Switch to sub-hangar and implement Gameface UI
+* refactor(build): Overhaul build script for readability and reliability
+
 ## v2.2.6
 
 * refactor: Get damage directly from game events
