@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: vehicule
 hits.sorting.result: résultat
@@ -14,19 +13,15 @@ hits.shotResult.splash: splash
 
 ui.typeMe: MOI
 ui.typeEnemys: ENNEMIES
-ui.closeButton: FERMER
-ui.settingsButton: PARAMETRES
 ui.title: Battle Hits
 
 ui.battle.noData: Aucune batailles trouvées
 ui.battle.multiVehicle:  +%s pcs.
 ui.hits.noDataMe: Pas de tirs reçu
 ui.hits.noDataEnemys: Pas de tirs infligés
-ui.detailedhit.noData: '################'
 
 modslist.name: Battle Hits
 modslist.description: Explorez les tirs reçu par votre véhicule dans la bataille
-
 
 popover.titleLabel: Paramètres
 popover.saveOnlySessionLabel: Session en cours uniquement

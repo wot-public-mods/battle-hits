@@ -10,7 +10,6 @@ class AbstractController(object):
 
 	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
 	battleProcessorCtrl = dependency.descriptor(IBattleProcessor)
-	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
 	hangarSceneCtrl = dependency.descriptor(IHangarScene)
 	hotkeysCtrl = dependency.descriptor(IHotkeys)
 	stateCtrl = dependency.descriptor(IState)
@@ -40,7 +39,6 @@ class AbstractController(object):
 def configure():
 	from gui.battlehits.controllers.BattlesHistory import BattlesHistory
 	from gui.battlehits.controllers.BattleProcessor import BattleProcessor
-	from gui.battlehits.controllers.HangarCamera import HangarCamera
 	from gui.battlehits.controllers.HangarScene import HangarScene
 	from gui.battlehits.controllers.Hotkeys import Hotkeys
 	from gui.battlehits.controllers.State import State
@@ -51,14 +49,13 @@ def configure():
 	manager = _g_manager # type: DependencyManager
 	manager.addInstance(IBattlesHistory, BattlesHistory(), finalizer='fini')
 	manager.addInstance(IBattleProcessor, BattleProcessor(), finalizer='fini')
-	manager.addInstance(IHangarCamera, HangarCamera(), finalizer='fini')
 	manager.addInstance(IHangarScene, HangarScene(), finalizer='destroy')
 	manager.addInstance(IHotkeys, Hotkeys(), finalizer='fini')
 	manager.addInstance(IState, State(), finalizer='fini')
 	manager.addInstance(ISettings, Settings(), finalizer='fini')
 	manager.addInstance(IVehicle, Vehicle(), finalizer='fini')
 
-	services = [IBattlesHistory, IBattleProcessor, IHangarCamera, IHangarScene, IHotkeys, IState,
+	services = [IBattlesHistory, IBattleProcessor, IHangarScene, IHotkeys, IState,
 				ISettings, IVehicle]
 	for service in services:
 		serviceIns = dependency.instance(service)

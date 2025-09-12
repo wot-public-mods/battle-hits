@@ -10,7 +10,7 @@ from ..lang import l10n
 
 class BattleHitsPreferencesPopoverMeta(AbstractPopOverView):
 
-	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar):
+	def invokeSettingsChange(self, processReplays, saveOnlySession):
 		self._printOverrideError('invokeSettingsChange')
 
 	def invokeStyleChange(self):
@@ -33,13 +33,12 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 		super(BattleHitsPreferencesPopover, self)._populate()
 		self.__updateStaticData()
 
-	def invokeSettingsChange(self, processReplays, saveOnlySession, swapHangar):
+	def invokeSettingsChange(self, processReplays, saveOnlySession):
 		if not self.settingsCtrl:
 			return
 		self.settingsCtrl.apply({
 			SETTINGS.PROCESS_REPLAYS: processReplays,
-			SETTINGS.SAVE_ONLY_SESSION: saveOnlySession,
-			SETTINGS.SWAP_HANGAR: swapHangar
+			SETTINGS.SAVE_ONLY_SESSION: saveOnlySession
 		})
 
 	def invokeStyleChange(self):
@@ -62,9 +61,6 @@ class BattleHitsPreferencesPopover(BattleHitsPreferencesPopoverMeta):
 			'processReplays': self.settingsCtrl.get(SETTINGS.PROCESS_REPLAYS),
 			'processReplaysLabel': l10n('popover.processReplaysLabel'),
 			'processReplaysDescription': l10n('popover.processReplaysDescription'),
-			'swapHangar': self.settingsCtrl.get(SETTINGS.SWAP_HANGAR),
-			'swapHangarLabel': l10n('popover.swapHangarLabel'),
-			'swapHangarDescription': l10n('popover.swapHangarDescription'),
 			'changeStyleLabel': l10n('popover.changeStyleLabel'),
 			'deleteHistoryLabel': l10n('popover.deleteHistoryLabel')
 		})

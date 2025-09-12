@@ -13,6 +13,7 @@ LANGUAGE_FALLBACK = ('ru', 'be', 'kk', )
 
 BATTLE_HITS_MAIN_VIEW_ALIAS = "BattleHitsMainView"
 BATTLE_HITS_PREFERENCES_POPOVER_ALIAS = "BattleHitsPreferencesPopover"
+BATTLE_HITS_VIEW_HEADER = 'BattleHitsHeaderView'
 
 class MODEL_STYLE:
 	CLEAN = 'style1'
@@ -26,7 +27,6 @@ class SETTINGS:
 	SORTING_RULE = 'sortingRule'
 	SORTING_REVERSED = 'sortingReversed'
 	HITS_TO_PLAYER = 'hitsToPlayer'
-	SWAP_HANGAR = 'swapHangar'
 
 DEFAULT_SETTINGS = {
 	SETTINGS.PROCESS_REPLAYS: False,
@@ -34,8 +34,7 @@ DEFAULT_SETTINGS = {
 	SETTINGS.CURRENT_STYLE: MODEL_STYLE.CLEAN,
 	SETTINGS.SORTING_RULE: 1,
 	SETTINGS.SORTING_REVERSED: True,
-	SETTINGS.HITS_TO_PLAYER: True,
-	SETTINGS.SWAP_HANGAR: False
+	SETTINGS.HITS_TO_PLAYER: True
 }
 
 class MODEL_TYPES:
@@ -43,7 +42,6 @@ class MODEL_TYPES:
 	EFFECT = 'effect'
 	SPLASH = 'splash'
 	RICOCHET = 'ricochet'
-	DOME = 'dome'
 
 class MODEL_NAMES:
 	SHELL = ('ap', 'apcr', 'heat', 'hemodern', 'hespg', 'hespgstun', )
@@ -57,29 +55,17 @@ class MODEL_PATHS:
 	EFFECT = 'content/battlehits/{style}/effects/{type}/effect.model'
 	SPLASH = 'content/battlehits/{style}/explosions/{type}/explosion.model'
 	RICOCHET = 'content/battlehits/{style}/ricochets/{type}/ricochet.model'
-	DOME = 'content/battlehits/common/doom/doom.model'
 
 from external_strings_utils import unicode_from_utf8
 prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
 SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'setting.dat'))
 CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'cache.dat'))
 
-SETTINGS_VERSION = 12
-CACHE_VERSION = 38
+SETTINGS_VERSION = 13
+CACHE_VERSION = 39
 
-BATTLE_HITS_SPACE_PATH = 'spaces/battlehits'
-
-DEFAULT_HANGAR_SPACES = (
-	# wot spaces
-	'spaces/hangar_v3',                # default hangar
-	'spaces/h34_lunar_ny_2025',        # special event hangar
-	'spaces/hangar_v3_wot_bday_2025',  # special event hangar
-)
-
-SCENE_OFFSET = Math.Vector3(0.0, 200.0, 0.0)
-
-CAMERA_DEFAULTS = ((math.radians(160), -math.radians(25.0)), (math.radians(160),
-				-math.radians(25.0), 10.0), (math.radians(0.001), math.radians(0.001),
-				(10.0, 10.001)), (0.005, 0.005, 0.001), SCENE_OFFSET)
-
-CAMERA_UNDER_FLOOR_OFFSET = 0.25
+CAMERA_DEFAULTS = [
+	math.radians(160),
+	-math.radians(25.0),
+	[10.0, 10.0]
+]

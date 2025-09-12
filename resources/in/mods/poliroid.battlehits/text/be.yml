@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: машына
 hits.sorting.result: вынік
@@ -14,19 +13,15 @@ hits.shotResult.splash: трапл. асколкамі
 
 ui.typeMe: ПА МНЕ
 ui.typeEnemys: ПА ВОРАГАХ
-ui.closeButton: ЗАКРЫЦЬ
-ui.settingsButton: НАЛАДЫ
 ui.title: Прагляд траплянняў
 
 ui.battle.noData: Не было адваявана ніводнага бою
 ui.battle.multiVehicle:  +%s шт.
 ui.hits.noDataMe: У баі не было атрымана траплянняў
 ui.hits.Enemys: У баі не было атрымана траплянняў
-ui.detailedhit.noData: '################'
 
 modslist.name: Прагляд траплянняў
 modslist.description: Прагляд атрыманых вамі траплянняў у адваяваных баях
-
 
 popover.titleLabel: Налады
 popover.saveOnlySessionLabel: Толькі гульнявая сесія
@@ -35,5 +30,3 @@ popover.processReplaysLabel: Апрацоўваць запісы бою
 popover.processReplaysDescription: {HEADER}Апрацоўваць запісы бою{/HEADER}{BODY}Мадыфікацыя будзе захоўваць інфармацыю не толькі пра адваяваныя баі, але і пра прагледжаныя запісы баёў.{/BODY}
 popover.changeStyleLabel: Змяніць афармленне
 popover.deleteHistoryLabel: Выдаліць гісторыю
-popover.swapHangarLabel: Замяніць ангар
-popover.swapHangarDescription: {HEADER}Замяніць ангар{/HEADER}{BODY}Замест стандартнага ангара будзе адлюстроўвацца ангар мадыфікацыі.<br>Падчас гульнявых падзей будзе адлюстроўвацца ангар падзеі.{/BODY}

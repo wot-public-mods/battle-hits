@@ -9,30 +9,9 @@
 
 	public class BattleHitsMeta extends AbstractView
 	{
-		public var closeView:Function;
 		public var selectBattle:Function;
 		public var selectHit:Function;
 		public var sortClick:Function;
-		public var preferencesClick:Function;
-		public var hitsToPlayerClick:Function;
-
-		public function closeViewS(): void
-		{
-			App.utils.asserter.assertNotNull(closeView, "closeView" + Errors.CANT_NULL);
-			closeView();
-		}
-
-		public function preferencesClickS(): void
-		{
-			App.utils.asserter.assertNotNull(preferencesClick, "preferencesClick" + Errors.CANT_NULL);
-			preferencesClick();
-		}
-
-		public function hitsToPlayerClickS(param1: Boolean): void
-		{
-			App.utils.asserter.assertNotNull(hitsToPlayerClick, "hitsToPlayerClick" + Errors.CANT_NULL);
-			hitsToPlayerClick(param1);
-		}
 
 		public function onBattleSelectS(param1: Number): void
 		{

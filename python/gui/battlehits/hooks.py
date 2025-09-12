@@ -1,31 +1,26 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
-import BigWorld
 import game
 
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from CurrentVehicle import _CurrentVehicle
 from debug_utils import LOG_ERROR
-from helpers import dependency
-from gui import ClientHangarSpace
 from gui.app_loader.settings import APP_NAME_SPACE
-from cgf_components.hangar_camera_manager import HangarCameraManager
-from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
-from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import EventDispatcher
 from gui.prb_control.prb_getters import getQueueType
 from gui.shared import g_eventBus, events
 from gui.shared.personality import ServicesLocator
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from Vehicle import Vehicle
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 
-from ._constants import SETTINGS, BATTLE_HITS_SPACE_PATH, DEFAULT_HANGAR_SPACES
 from .events import g_eventsManager
 from .lang import l10n
-from ._skeletons import IHangarCamera, IBattleProcessor, IHotkeys, IState, ISettings
+from ._skeletons import IBattleProcessor, IHotkeys, IState
 from .utils import override
 
 __all__ = ()
@@ -45,43 +40,6 @@ def onAppDestroyed(event):
 		return
 	g_eventsManager.onDestroyBattle()
 g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
-
-# fix space change vehicle getVehicleEntity error
-@override(ClientHangarSpace.ClientHangarSpace, 'getVehicleEntity')
-def getVehicleEntity(baseMethod, baseObject):
-	return BigWorld.entity(baseObject.vehicleEntityId) if baseObject.vehicleEntityId else None
-
-# hangarCamera initizlization
-@override(HangarCameraManager, "switchToTank")
-def onCameraAdded(baseMethod, baseObject, instantly=True, resetTransform=True):
-	hangarCamera = dependency.instance(IHangarCamera)
-	if hangarCamera.enabled:
-		instantly = True
-	baseMethod(baseObject, instantly, resetTransform)
-	if hangarCamera.enabled:
-		return hangarCamera.forceUpdateCamera()
-
-# hangarCamera movement
-@override(HangarCameraManager, "_HangarCameraManager__handleLobbyViewMouseEvent")
-def hangarCameraManager_updateCameraByMouseMove(baseMethod, baseObject, event):
-	hangarCamera = dependency.instance(IHangarCamera)
-	if hangarCamera.enabled:
-		return hangarCamera.updateCamera(event.ctx['dx'], event.ctx['dy'], event.ctx['dz'])
-	return baseMethod(baseObject, event)
-
-@override(HangarCameraIdle, "_HangarCameraIdle__updateIdleMovement")
-def hangarCameraIdle_updateIdleMovement(baseMethod, baseObject):
-	hangarCamera = dependency.instance(IHangarCamera)
-	if not hangarCamera.enabled:
-		return baseMethod(baseObject)
-	return 0.0
-
-@override(HangarCameraParallax, "_HangarCameraParallax__update")
-def hangarCameraParallax_update(baseMethod, baseObject):
-	hangarCamera = dependency.instance(IHangarCamera)
-	if not hangarCamera.enabled:
-		return baseMethod(baseObject)
-	return 0.0
 
 # battlesHistory
 @override(Vehicle, "showDamageFromShot")
@@ -113,6 +71,17 @@ def onModelsRefresh(baseMethod, baseObject, modelState, resourceList):
 	if vehicle:
 		battleProcessor = dependency.instance(IBattleProcessor)
 		battleProcessor.onModelsRefresh(baseObject.getVehicle(), modelState)
+
+@dependency.replace_none_kwargs(appLoader=IAppLoader)
+def onAppInitializing(event, appLoader=None):
+	if event.ns != APP_NAME_SPACE.SF_LOBBY:
+		return
+	app = appLoader.getApp()
+	from .controllers.State import registerStates, registerTransitions
+	app.stateMachine.addStateConfigurator(registerStates)
+	app.stateMachine.addTransitionConfigurator(registerTransitions)
+
+g_eventBus.addListener(events.AppLifeCycleEvent.INITIALIZING, onAppInitializing)
 
 # handling keystrokes
 @override(game, 'handleKeyEvent')
@@ -191,27 +160,6 @@ def handleAvailability(stateCtrl=None):
 		stateCtrl.switch()
 
 g_eventsManager.onDestroyBattle += handleAvailability
-
-@dependency.replace_none_kwargs(settingsCtrl=ISettings, stateCtrl=IState)
-def fixHangarPath(path, settingsCtrl=None, stateCtrl=None):
-	if stateCtrl.enabled:
-		return BATTLE_HITS_SPACE_PATH
-	swapHangar = settingsCtrl.get(SETTINGS.SWAP_HANGAR, False)
-	if not swapHangar:
-		return path
-	if path not in DEFAULT_HANGAR_SPACES:
-		return path
-	return BATTLE_HITS_SPACE_PATH
-
-@override(ClientHangarSpace, 'getDefaultHangarPath')
-def getDefaultHangarPath(baseMethod, isPremium):
-	path = baseMethod(isPremium)
-	return fixHangarPath(path)
-
-@override(ClientHangarSpace, '_getHangarPath')
-def _getHangarPath(baseMethod, isPremium, isPremIGR):
-	path = baseMethod(isPremium, isPremIGR)
-	return fixHangarPath(path)
 
 @override(HangarVehicleAppearance, '_getThisVehicleDossierInsigniaRank')
 def getThisVehicleDossierInsigniaRank(baseMethod, baseObject):

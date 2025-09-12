@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: танк
 hits.sorting.result: результат
@@ -14,19 +13,15 @@ hits.shotResult.splash: сплэш
 
 ui.typeMe: ПО МНЕ
 ui.typeEnemys: ПО ВРАГАМ
-ui.closeButton: ЗАКРЫТЬ
-ui.settingsButton: НАСТРОЙКИ
 ui.title: Просмотр попаданий
 
 ui.battle.noData: Не было сыграно ни одного боя
 ui.battle.multiVehicle:  +%s шт.
 ui.hits.noDataMe: В бою не было получено попаданий
 ui.hits.noDataEnemys: В бою не было нанесено попаданий
-ui.detailedhit.noData: '################'
 
 modslist.name: Просмотр попаданий
 modslist.description: Просмотр попаданий, полученных и нанесенных вами в проведённых боях.
-
 
 popover.titleLabel: Настройки
 popover.saveOnlySessionLabel: Только игровая сессия
@@ -35,5 +30,3 @@ popover.processReplaysLabel: Обрабатывать реплеи
 popover.processReplaysDescription: {HEADER}Обрабатывать реплеи{/HEADER}{BODY}Модификация будет сохранять информацию не только из боев, но и из просмотренных реплеев.{/BODY}
 popover.changeStyleLabel: Изменить оформление
 popover.deleteHistoryLabel: Удалить историю
-popover.swapHangarLabel: Заменить ангар
-popover.swapHangarDescription: {HEADER}Заменить ангар{/HEADER}{BODY}Вместо стандартного ангара будет отображаться ангар модификации.<br>Во время игровых событий будет отображаться ангар события.{/BODY}

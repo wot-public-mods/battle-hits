@@ -2,24 +2,49 @@
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
 from gui.app_loader.settings import APP_NAME_SPACE
-from gui.Scaleform.framework import g_entitiesFactories, GroupedViewSettings, ScopeTemplates, ViewSettings
+from gui.Scaleform.framework import (g_entitiesFactories, ComponentSettings, GroupedViewSettings, 
+									 ScopeTemplates, ViewSettings)
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.personality import ServicesLocator
 from frameworks.wulf import WindowLayer
 
-from .._constants import BATTLE_HITS_MAIN_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS
+from .._constants import BATTLE_HITS_MAIN_VIEW_ALIAS, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, BATTLE_HITS_VIEW_HEADER
 from ..events import g_eventsManager
 from ..utils import get_parent_window
 from .BattleHitsMainView import BattleHitsMainView
 from .BattleHitsPreferencesPopover import BattleHitsPreferencesPopover
+from .BattleHitsHeaderView import BattleHitsHeaderInjectComponent, BattleHitsHeaderView
 
 def getViewSettings():
 	viewSettings = []
-	viewSettings.append(ViewSettings(BATTLE_HITS_MAIN_VIEW_ALIAS, BattleHitsMainView, 'battleHitsMainView.swf',
-			WindowLayer.SUB_VIEW, None, ScopeTemplates.LOBBY_SUB_SCOPE))
-	viewSettings.append(GroupedViewSettings(BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, BattleHitsPreferencesPopover,
-			'battleHitsPreferencesPopover.swf', WindowLayer.WINDOW, BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
-			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS, ScopeTemplates.DEFAULT_SCOPE))
+	viewSettings.append(
+		ViewSettings(
+			BATTLE_HITS_MAIN_VIEW_ALIAS,
+			BattleHitsMainView,
+			'battleHitsMainView.swf',
+			WindowLayer.SUB_VIEW,
+			None,
+			ScopeTemplates.LOBBY_SUB_SCOPE
+		)
+	)
+	viewSettings.append(
+		GroupedViewSettings(
+			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
+			BattleHitsPreferencesPopover,
+			'battleHitsPreferencesPopover.swf',
+			WindowLayer.WINDOW,
+			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
+			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
+			ScopeTemplates.DEFAULT_SCOPE
+		)
+	)
+	viewSettings.append(
+		ComponentSettings(
+			BATTLE_HITS_VIEW_HEADER,
+			BattleHitsHeaderInjectComponent,
+			ScopeTemplates.DEFAULT_SCOPE
+		)
+	)
 	return viewSettings
 
 for item in getViewSettings():

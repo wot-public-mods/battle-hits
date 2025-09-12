@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: 車輌
 hits.sorting.result: 結果
@@ -14,19 +13,15 @@ hits.shotResult.splash: 爆風
 
 ui.typeMe: 自車輌
 ui.typeEnemys: 敵車輌
-ui.closeButton: 閉じる
-ui.settingsButton: 設定
 ui.title: Battle Hits
 
 ui.battle.noData: 戦闘が見つかりません
 ui.battle.multiVehicle:  +%s 回
 ui.hits.noDataMe: 被弾はありません
 ui.hits.noDataEnemys: 命中弾はありません
-ui.detailedhit.noData: '################'
 
 modslist.name: Battle Hits
 modslist.description: 戦闘時の被弾状況を表示します
-
 
 popover.titleLabel: 設定
 popover.saveOnlySessionLabel: 現在のセッションのみ保存

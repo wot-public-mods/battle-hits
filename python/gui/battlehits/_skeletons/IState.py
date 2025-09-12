@@ -15,7 +15,7 @@ class IState(object):
 	def enable(self):
 		raise NotImplementedError
 
-	def disable(self, silent=False):
+	def disable(self):
 		raise NotImplementedError
 
 	def switch(self):

@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: vehicle
 hits.sorting.result: result
@@ -14,19 +13,15 @@ hits.shotResult.splash: splash
 
 ui.typeMe: ME
 ui.typeEnemys: ENEMIES
-ui.closeButton: CLOSE
-ui.settingsButton: SETTINGS
 ui.title: Battle Hits
 
 ui.battle.noData: No battles found
 ui.battle.multiVehicle:  +%s pcs.
 ui.hits.noDataMe: No hits received
 ui.hits.noDataEnemys: No hits inflicted
-ui.detailedhit.noData: '################'
 
 modslist.name: Battle Hits
 modslist.description: Explore hits received by your vehicle in battle
-
 
 popover.titleLabel: Settings
 popover.saveOnlySessionLabel: Current session only
@@ -35,5 +30,3 @@ popover.processReplaysLabel: Process replays
 popover.processReplaysDescription: {HEADER}Process replays{/HEADER}{BODY}Modification will also save information from viewed replays.{/BODY}
 popover.changeStyleLabel: Switch styles
 popover.deleteHistoryLabel: Delete history
-popover.swapHangarLabel: Replace Hangar
-popover.swapHangarDescription: {HEADER}Replace Hangar{/HEADER}{BODY}The modification hangar will be displayed instead of the standard hangar.<br>During game events, the event hangar will be displayed.{/BODY}

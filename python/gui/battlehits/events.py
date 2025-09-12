@@ -18,7 +18,6 @@ class EventsManager(object):
 
 		self.showPreferencesPopover = Event.Event()
 		self.showMainView = Event.Event()
-		self.closeMainView = Event.Event()
 
 		self.onShowBattle = Event.Event()
 		self.onDestroyBattle = Event.Event()

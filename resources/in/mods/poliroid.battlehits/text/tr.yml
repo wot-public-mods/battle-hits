@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: Araç
 hits.sorting.result: Sonuç
@@ -14,19 +13,15 @@ hits.shotResult.splash: patlama hasarı
 
 ui.typeMe: Ben
 ui.typeEnemys: Düşmanlar
-ui.closeButton: KAPAT
-ui.settingsButton: AYARLAR
 ui.title: Battle Hits
 
 ui.battle.noData: Savaş bulunamadı.
 ui.battle.multiVehicle:  +%s adet.
 ui.hits.noDataMe: Hasar alınmadı
 ui.hits.noDataEnemys: Hasar verilmedi.
-ui.detailedhit.noData: '################'
 
 modslist.name: Battle Hits
 modslist.description: Savaşta tankına gelen atışları gör.
-
 
 popover.titleLabel: Ayarlar
 popover.saveOnlySessionLabel: Sadece Şimdiki Oturum

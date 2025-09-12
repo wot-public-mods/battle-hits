@@ -13,11 +13,10 @@
 	{
 		public var saveOnlySession:CheckBox = null;
 		public var processReplays:CheckBox = null;
-		public var swapHangar:CheckBox = null;
 		public var changeStyle:SoundButton = null; 
 		public var deleteHistory:SoundButton = null;
 
-		private static const LAYOUT_HEIGHT:uint = 200;
+		private static const LAYOUT_HEIGHT:uint = 170;
 
 		override protected function onDispose(): void 
 		{
@@ -26,19 +25,16 @@
 
 			processReplays.removeEventListener(Event.SELECT, handeCheckBoxSelect);
 			saveOnlySession.removeEventListener(Event.SELECT, handeCheckBoxSelect);
-			swapHangar.removeEventListener(Event.SELECT, handeCheckBoxSelect);
 
 			changeStyle.dispose();
 			deleteHistory.dispose();
 			processReplays.dispose();
 			saveOnlySession.dispose();
-			swapHangar.dispose();
 
 			changeStyle = null;
 			deleteHistory = null;
 			processReplays = null;
 			saveOnlySession = null;
-			swapHangar = null;
 
 			super.onDispose();
 		}
@@ -50,7 +46,6 @@
 
 			processReplays.addEventListener(Event.SELECT, handeCheckBoxSelect);
 			saveOnlySession.addEventListener(Event.SELECT, handeCheckBoxSelect);
-			swapHangar.addEventListener(Event.SELECT, handeCheckBoxSelect);
 
 			super.configUI();
 		}
@@ -70,10 +65,6 @@
 			processReplays.label = data.processReplaysLabel;
 			processReplays.toolTip = data.processReplaysDescription;
 			processReplays.selected = data.processReplays;
-
-			swapHangar.label = data.swapHangarLabel;
-			swapHangar.toolTip = data.swapHangarDescription;
-			swapHangar.selected = data.swapHangar;
 
 			changeStyle.label = data.changeStyleLabel;
 
@@ -99,7 +90,7 @@
 
 		private function handeCheckBoxSelect(e:Event): void
 		{
-			invokeSettingsChangeS(processReplays.selected, saveOnlySession.selected, swapHangar.selected);
+			invokeSettingsChangeS(processReplays.selected, saveOnlySession.selected);
 			updateProcessReplays();
 		}
 

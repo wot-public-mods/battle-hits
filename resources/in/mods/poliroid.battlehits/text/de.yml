@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: Panzer
 hits.sorting.result: Resultat
@@ -14,19 +13,15 @@ hits.shotResult.splash: Splash
 
 ui.typeMe: ICH
 ui.typeEnemys: GEGNER
-ui.closeButton: Schliessen
-ui.settingsButton: Einstellungen
 ui.title: Treffer im Gefecht
 
 ui.battle.noData: Keine Gefechte gefunden
 ui.battle.multiVehicle:  +%s Stück
 ui.hits.noDataMe: Keine Treffer erhalten
 ui.hits.noDataEnemys: Keine Treffer erzielt
-ui.detailedhit.noData: '################'
 
 modslist.name: Battle Hits
 modslist.description: Im Gefecht erhaltene Treffer betrachten
-
 
 popover.titleLabel: Einstellungen
 popover.saveOnlySessionLabel: Nur aktuelle Sitzung
@@ -35,6 +30,3 @@ popover.processReplaysLabel: Replays verarbeiten
 popover.processReplaysDescription: {HEADER}Replays verarbeiten{/HEADER}{BODY}Der Mod speichert auch Informationen aus angesehenen Replays.{/BODY}
 popover.changeStyleLabel: Stil ändern
 popover.deleteHistoryLabel: Verlauf löschen
-popover.swapHangarLabel: Hangar ersetzen
-popover.swapHangarDescription: {HEADER}Hangar ersetzen{/HEADER}{BODY}Der Modifikationshangar wird anstelle des Standardhangars angezeigt.<br>Während Spielereignissen wird der Ereignishangar angezeigt.{/BODY}
-

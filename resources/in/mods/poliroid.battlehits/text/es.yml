@@ -1,4 +1,3 @@
-
 hits.sorting.num: №
 hits.sorting.tank: Vehiculo
 hits.sorting.result: Resultado
@@ -14,19 +13,15 @@ hits.shotResult.splash: Area
 
 ui.typeMe: YO
 ui.typeEnemys: ENEMIGOS
-ui.closeButton: CERRAR
-ui.settingsButton: AJUSTES
 ui.title: Impactos de Batalla
 
 ui.battle.noData: Batallas no encontradas
 ui.battle.multiVehicle:  +%s unid.
 ui.hits.noDataMe: Ningún impacto recibido
-ui.hits.noDataEnemys:Ningún impacto infligido
-ui.detailedhit.noData: '################'
+ui.hits.noDataEnemys: Ningún impacto infligido
 
 modslist.name: Impactos de Batalla
 modslist.description: Explora los impactos recibidos en tu vehículo en una batalla
-
 
 popover.titleLabel: Ajustes
 popover.saveOnlySessionLabel: Sólo en la sesión actual

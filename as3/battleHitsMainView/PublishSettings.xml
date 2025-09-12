@@ -57,7 +57,7 @@
     <WindowMode>0</WindowMode>
     <DisplayMenu>1</DisplayMenu>
     <DeviceFont>0</DeviceFont>
-    <TemplateFileName>C:\Users\poliroid\AppData\Local\Adobe\Animate 2020\en_US\Configuration\HTML\Default.html</TemplateFileName>
+    <TemplateFileName>C:\Users\poliroid\AppData\Local\Adobe\Animate 2023\en_US\Configuration\HTML\Default.html</TemplateFileName>
     <showTagWarnMsg>1</showTagWarnMsg>
   </PublishHtmlProperties>
   <PublishFlashProperties enabled="true">
@@ -81,7 +81,7 @@
     <PackagePaths></PackagePaths>
     <AS3PackagePaths>./src/</AS3PackagePaths>
     <AS3ConfigConst>CONFIG::FLASH_AUTHORING=&quot;true&quot;;</AS3ConfigConst>
-    <DebuggingPermitted>0</DebuggingPermitted>
+    <DebuggingPermitted>1</DebuggingPermitted>
     <DebuggingPassword></DebuggingPassword>
     <CompressMovie>1</CompressMovie>
     <CompressionType>0</CompressionType>

@@ -4,9 +4,6 @@ package me.poliroid.battleHits.interfaces
 
 	public interface IBattleHitsMeta extends IEventDispatcher
 	{
-		function closeViewS(): void;
-		function preferencesClickS(): void;
-		function hitsToPlayerClickS(toPlayer:Boolean): void;
 		function onBattleSelectS(id:Number): void;
 		function onHitSelectS(id:Number): void;
 		function onSortClickS(id:Number): void;

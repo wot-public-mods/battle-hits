@@ -1,0 +1,12 @@
+[
+    {
+        "type": "Layout",
+        "path": "coui://gui/gameface/mods/poliroid/BattleHitsHeaderView/BattleHitsHeaderView.html",
+        "parameters": {
+            "extension": "",
+            "entrance": "BattleHitsHeaderView",
+            "impl": "gameface"
+        },
+        "itemID": "BattleHitsHeaderView"
+    }
+]

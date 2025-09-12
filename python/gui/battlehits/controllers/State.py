@@ -1,19 +1,23 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
-import BigWorld
-from Account import PlayerAccount
-from helpers import dependency
-from gui.shared import event_dispatcher
-from gui.shared.personality import ServicesLocator
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+import typing
+
+from gui.app_loader.settings import APP_NAME_SPACE
+from gui.lobby_state_machine.states import SFViewLobbyState, LobbyStateDescription, SubScopeSubLayerState
 from gui.Scaleform.framework.entities.View import ViewKey
+from gui.Scaleform.lobby_entry import LobbyEntry
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showHangar
+from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvider, SubhangarStateGroups, SubhangarStateGroupConfig, CameraMover
+from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared.utils import IHangarSpace
 
 from ..controllers import AbstractController
 from ..events import g_eventsManager
-from ..utils import getLobbyHeader
-from .._constants import BATTLE_HITS_SPACE_PATH
+from .._constants import BATTLE_HITS_MAIN_VIEW_ALIAS
+from ..lang import l10n
 
 class State(AbstractController):
 
@@ -83,22 +87,9 @@ class State(AbstractController):
 			self.disable()
 
 	def enable(self):
+
 		if self.hangarSpace is None or self.hangarSpace.space is None:
 			return
-
-		# in case if we in Vehicle Preview
-		# try load hangar first
-		app = ServicesLocator.appLoader.getApp()
-		if app is not None and app.containerManager is not None:
-			viewKey = ViewKey(VIEW_ALIAS.VEHICLE_PREVIEW)
-			previewWindow = app.containerManager.getViewByKey(viewKey)
-			if previewWindow is not None:
-				event_dispatcher.showHangar()
-
-		# disable lobby header state
-		lobbyHeader = getLobbyHeader()
-		if lobbyHeader:
-			lobbyHeader.disableLobbyHeaderControls(True)
 
 		if self.currentBattleID is not None:
 			self.currentBattleData.battleByID(self.currentBattleID)
@@ -109,41 +100,44 @@ class State(AbstractController):
 		else:
 			self.currentBattleID = self.battlesData.desiredID
 
+		BattleHitsState.goTo()
 		self.enabled = True
+		self.hangarSceneCtrl.create()
 
-		self.hangarSpace.onSpaceCreate += self._onSpaceCreate
-		if self.hangarSpace.spacePath != BATTLE_HITS_SPACE_PATH:
-			self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
-		else:
-			self.hangarCameraCtrl.enable()
-			self.hangarSceneCtrl.create()
-
-	def disable(self, silent=False):
+	def disable(self):
 
 		self.__battleID = None
 		self.__hitID = None
 
 		self.vehicleCtrl.removeVehicle()
-		self.hangarCameraCtrl.disable()
 		self.hangarSceneCtrl.destroy()
 		self.currentBattleData.clean()
 
-		self.hangarSpace.onSpaceCreate -= self._onSpaceCreate
-
 		self.enabled = False
 
-		if isinstance(BigWorld.player(), PlayerAccount) and not silent:
-			self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
+		showHangar()
 
-		g_eventsManager.closeMainView()
+@SubScopeSubLayerState.parentOf
+class BattleHitsState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
+	VIEW_KEY = ViewKey(BATTLE_HITS_MAIN_VIEW_ALIAS)
+	STATE_ID = "battlehits"
 
-		# restore lobby header state
-		lobbyHeader = getLobbyHeader()
-		if lobbyHeader:
-			lobbyHeader.disableLobbyHeaderControls(False)
+	def getSubhangarStateGroupConfig(self):
+		return SubhangarStateGroupConfig((
+			SubhangarStateGroups.VehicleHub,
+			SubhangarStateGroups.VehicleHubArmorLargeTank,
+		))
 
-	def _onSpaceCreate(self):
-		if self.hangarSpace.spacePath == BATTLE_HITS_SPACE_PATH:
-			self.hangarSceneCtrl.create()
-			self.hangarCameraCtrl.enable()
+	def getNavigationDescription(self):
+		return LobbyStateDescription(title=l10n('ui.title'))
 
+	def registerTransitions(self):
+		lsm = self.getMachine()
+		lsm.addNavigationTransitionFromParent(self)
+
+def registerStates(machine):
+	machine.addState(BattleHitsState())
+
+def registerTransitions(machine):
+	vehicleHub = machine.getStateByCls(BattleHitsState)
+	machine.addNavigationTransitionFromParent(vehicleHub)

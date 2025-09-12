@@ -13,19 +13,15 @@ hits.shotResult.splash: 溅射
 
 ui.typeMe: 自身
 ui.typeEnemys: 敌人
-ui.closeButton: 关闭
-ui.settingsButton: 设置
 ui.title: Battle Hits 炮弹落点分析
 
 ui.battle.noData: 无战斗记录
 ui.battle.multiVehicle:  +%s 次
 ui.hits.noDataMe: 未受到攻击
 ui.hits.noDataEnemys: 未造成伤害
-ui.detailedhit.noData: '################'
 
 modslist.name: 炮弹落点分析
 modslist.description: 查看您的坦克在战斗中被击中以及击中敌人的效果
-
 
 popover.titleLabel: 设置
 popover.saveOnlySessionLabel: 仅当前战斗记录
@@ -34,5 +30,3 @@ popover.processReplaysLabel: 记录录像回放
 popover.processReplaysDescription:  {HEADER}记录录像回放{/HEADER}{BODY}启用后将保存观看录像时的战斗信息。{/BODY}
 popover.changeStyleLabel: 切换样式
 popover.deleteHistoryLabel: 删除历史记录
-popover.swapHangarLabel: 替换标准车库
-popover.swapHangarDescription: {HEADER}替换标准车库{/HEADER}{BODY}将普通车库样式替换为本模组自带的模拟车库。<br>在游戏活动期间，仍将显示活动车库。{/BODY}

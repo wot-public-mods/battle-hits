@@ -1,0 +1,251 @@
+#root,
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 14rem;
+    position: relative;
+}
+
+:root {
+    --color-general-primary: #ede6d9;
+    --color-general-secondary: #b2afab;
+}
+
+.HeaderWrapper {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.HeaderContainer {
+    width: auto;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 370rem;
+}
+
+.HorizontalTabsContent {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.TabBorder, .TabBackground, .TabBackgroundPattern, .TabInnerBorderImage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.Tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.24s ease-out, color 0.24s ease-out;
+    cursor: pointer;
+}
+
+.TabBaseThemePrimary {
+    color: var(--color-general-primary);
+}
+
+.TabContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 64rem;
+    max-width: 360rem;
+    position: relative;
+}
+
+.TabBase {
+    display: flex;
+}
+
+.TabBase .TabContent {
+    padding: 11rem 24rem;
+}
+
+.TabBaseThemePrimary .TabBorder {
+    border: 1rem solid transparent;
+    box-shadow: inset 0 0 0 1rem rgba(40, 40, 40, 0.4);
+    transition: border-color 0.24s ease-out;
+}
+
+.TabBackground {
+    background-size: 100% 100%;
+    transition: background-color 0.24s ease-out;
+}
+
+.TabBaseThemePrimary .TabBackground {
+    background-color: var(--color-general-secondary);
+    opacity: 0.2;
+}
+
+.TabBaseActive .TabBackground {
+    background-color: #000;
+}
+
+.TabBaseThemePrimary.TabBaseInactive:hover .TabBackground {
+    background-color: #6c6b6a;
+}
+
+.TabBackgroundPattern {
+    border-radius: 3rem;
+    opacity: 0.15;
+}
+
+.TabBaseThemePrimary .TabBackgroundPattern {
+    background: url(R.images.gui.maps.icons.ui_kit.patterns.default_background_pattern) repeat center/100% auto;
+}
+
+.TabBaseThemePrimary .TabInnerBorderImage {
+    border-image-source: url(R.images.gui.maps.icons.ui_kit.horizontal_tabs.border_inner);
+    border-image-slice: 1;
+    border-image-width: 1rem;
+    border-image-repeat: repeat;
+    opacity: 0.3;
+    mix-blend-mode: color-dodge;
+}
+
+.TruncateText {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.TabsNavigation {
+    width: 300rem;
+    height: auto;
+    position: relative;
+}
+
+.HorizontalTabs {
+    height: auto;
+    padding: 0;
+    font-weight: 600;
+    line-height: 1.15;
+    width: 300rem;
+}
+
+.HorizontalTabsBase {
+    font-size: 18rem;
+}
+
+.HorizontalTabsOuterBorder {
+    padding: 2rem;
+    position: relative;
+}
+
+.HorizontalTabsBase .HorizontalTabsOuterBorder {
+    height: 50rem;
+}
+
+.HorizontalTabsBaseThemePrimary .HorizontalTabsOuterBorder {
+    border: 1rem solid transparent;
+    transition: border-color 0.24s ease-out;
+}
+
+.HorizontalTabsBaseThemePrimary .HorizontalTabsOuterBorderImage {
+    border-image-source: url(R.images.gui.maps.icons.ui_kit.horizontal_tabs.noise);
+    border-image-slice: 1;
+    border-image-width: 1rem;
+    border-image-repeat: repeat;
+    opacity: 0.02;
+}
+
+.HorizontalTabsMainBorder {
+    width: 100%;
+    height: 100%;
+    padding: 3rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.HorizontalTabsBaseThemePrimary .HorizontalTabsMainBorder {
+    border: 1rem solid transparent;
+    transition: border-color 0.24s ease-out;
+}
+
+.HorizontalTabsOuterBorderImage, .HorizontalTabsMainBorderImage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.HorizontalTabsBaseThemePrimary .HorizontalTabsMainBorderImage {
+    border-image-source: url(R.images.gui.maps.icons.ui_kit.horizontal_tabs.noise);
+    border-image-slice: 1;
+    border-image-width: 1rem;
+    border-image-repeat: repeat;
+    opacity: 0.25;
+}
+
+.TabsNavigationOuterBorder,
+.TabsNavigationMainBorder,
+.TabsNavigationContent {
+    width: 100%;
+    height: auto;
+}
+
+.TabsNavigationMainBorder {
+    overflow: visible;
+}
+
+.BattleHitsTab {
+    flex: 1;
+    position: relative;
+    z-index: 0;
+}
+
+.BattleHitsTab .BattleHitsTabContent {
+    padding: 9rem 14rem;
+}
+
+.SettingsButton {
+    width: 51rem;
+    margin-left: 10rem;
+}
+
+.SettingsButtonImage {
+    background: url(./settings_button_image.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 34rem;
+    width: 34rem;
+}
+
+.SettingsButton .HorizontalTabs {
+    width: 53rem;
+}
+
+.SettingsButton .HorizontalTabsContent {
+    width: 100%;
+    height: 39rem;
+}
+
+.SettingsButton .TabBase {
+    width: 100%;
+    height: 100%;
+}
+
+.SettingsButton .TabContent {
+    width: 100%;
+    padding: 0rem;
+}

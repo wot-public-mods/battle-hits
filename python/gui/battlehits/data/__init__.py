@@ -10,7 +10,6 @@ class AbstractData(object):
 
 	battlesHistoryCtrl = dependency.descriptor(IBattlesHistory)
 	battleProcessorCtrl = dependency.descriptor(IBattleProcessor)
-	hangarCameraCtrl = dependency.descriptor(IHangarCamera)
 	hangarSceneCtrl = dependency.descriptor(IHangarScene)
 	hotkeysCtrl = dependency.descriptor(IHotkeys)
 	stateCtrl = dependency.descriptor(IState)

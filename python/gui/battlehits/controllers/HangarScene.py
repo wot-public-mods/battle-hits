@@ -7,24 +7,30 @@ import math
 import math_utils
 import BigWorld
 import Math
+import CGF
+
+from cgf_components.hangar_camera_manager import HangarCameraManager
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
 from debug_utils import LOG_ERROR
+from gui.ClientHangarSpace import customizationHangarCFG
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartIndexes
 
-from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS,
-							SCENE_OFFSET, CAMERA_DEFAULTS)
+from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS, CAMERA_DEFAULTS)
 from ..controllers import AbstractController
 from ..events import g_eventsManager
 from ..utils import cancel_callback_safe
 
 class HangarScene(AbstractController):
 
+	hangarSpace = dependency.descriptor(IHangarSpace)
+
 	def __init__(self):
 		super(HangarScene, self).__init__()
 		self._ricochetCBID = None
 
 		self.__models = {
-			MODEL_TYPES.DOME: None,
 			MODEL_TYPES.SHELL: [],
 			MODEL_TYPES.EFFECT: [],
 			MODEL_TYPES.SPLASH: [],
@@ -41,12 +47,12 @@ class HangarScene(AbstractController):
 	def create(self):
 		self.destroy()
 
+		self.vehicleCtrl.init()
+
 		g_eventsManager.onChangedBattleData += self.__onBattleChanged
 		g_eventsManager.onChangedHitData += self.__onHitChanged
 		g_eventsManager.onSettingsChanged += self.__onSettingsChanged
 		g_eventsManager.onVehicleBuilded += self.__onVehicleBuilded
-
-		self.vehicleCtrl.initialize()
 
 		self._assambleModels()
 
@@ -55,6 +61,7 @@ class HangarScene(AbstractController):
 		g_eventsManager.showMainView()
 
 	def destroy(self):
+		self.vehicleCtrl.fini()
 
 		g_eventsManager.onChangedBattleData -= self.__onBattleChanged
 		g_eventsManager.onChangedHitData -= self.__onHitChanged
@@ -64,8 +71,7 @@ class HangarScene(AbstractController):
 		self._deleteModels()
 
 	def processNoData(self):
-
-		self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
+		self._setCameraData(*CAMERA_DEFAULTS)
 
 		self.vehicleCtrl.removeVehicle()
 		self._hideModels()
@@ -76,10 +82,6 @@ class HangarScene(AbstractController):
 
 		currentStyle = self.settingsCtrl.get(SETTINGS.CURRENT_STYLE)
 		currentSpaceID = BigWorld.camera().spaceID
-
-		domeModel = self.__models[MODEL_TYPES.DOME] = BigWorld.Model(MODEL_PATHS.DOME)
-		domeModel.position = SCENE_OFFSET
-		BigWorld.addModel(domeModel, currentSpaceID)
 
 		SHELL_SET = (self.__models[MODEL_TYPES.SHELL], self.__motors[MODEL_TYPES.SHELL],
 					MODEL_NAMES.SHELL, MODEL_PATHS.SHELL)
@@ -113,11 +115,6 @@ class HangarScene(AbstractController):
 			self._ricochetCBID = None
 
 	def _deleteModels(self):
-		if self.__models[MODEL_TYPES.DOME]:
-			domeModel = self.__models[MODEL_TYPES.DOME]
-			if domeModel in BigWorld.models():
-				BigWorld.delModel(domeModel)
-			self.__models[MODEL_TYPES.DOME] = None
 
 		SHELL_SET = (self.__models[MODEL_TYPES.SHELL], self.__motors[MODEL_TYPES.SHELL])
 		EFFECT_SET = (self.__models[MODEL_TYPES.EFFECT], self.__motors[MODEL_TYPES.EFFECT])
@@ -130,6 +127,24 @@ class HangarScene(AbstractController):
 					BigWorld.delModel(model)
 			del models[:], motors[:]
 
+	def _setCameraData(self, yaw, pitch, distConstraints, targetPos=None):
+		cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
+		if not cameraManager:
+			return
+
+		if targetPos is None:
+			hangarConfig = customizationHangarCFG()
+			targetPos = hangarConfig['v_start_pos'] + (.0, 0.5, .0)
+
+		cameraManager.moveCamera(
+			targetPos=targetPos,
+			yaw=yaw,
+			pitch=pitch,
+			distance=distConstraints[1] - distConstraints[0] / 2,
+			duration=0.5,
+			distConstraints=distConstraints,
+		)
+
 	def __onBattleChanged(self):
 		self._hideModels()
 
@@ -137,7 +152,7 @@ class HangarScene(AbstractController):
 		self._hideModels()
 
 		if not self.currentBattleData.victim:
-			self.hangarCameraCtrl.setCameraData(*CAMERA_DEFAULTS)
+			self._setCameraData(*CAMERA_DEFAULTS)
 			self.vehicleCtrl.removeVehicle()
 			return
 
@@ -165,19 +180,19 @@ class HangarScene(AbstractController):
 			return
 
 		if hitData['isExplosion']:
+			from gui.ClientHangarSpace import customizationHangarCFG
+			hangarConfig = customizationHangarCFG()
+			fallenPoint = hangarConfig['v_start_pos'] + Math.Vector3(hitData['position'])
+			worldHitDirection = hangarConfig['v_start_pos'] - fallenPoint
 
-			fallenPoint = SCENE_OFFSET + Math.Vector3(hitData['position'])
-			worldHitDirection = SCENE_OFFSET - fallenPoint
-
-			targetPoint = fallenPoint + Math.Vector3(0.0, (SCENE_OFFSET - fallenPoint).length / 2.0, 0.0)
+			targetPoint = fallenPoint + Math.Vector3(0.0, (hangarConfig['v_start_pos'] - fallenPoint).length / 2.0, 0.0)
 
 			# default, current, limits, sens, targetPoint
-			self.hangarCameraCtrl.setCameraData(
-				(math_utils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0)),
-				(math_utils.reduceToPI(worldHitDirection.yaw), -math.radians(25.0), 10.0),
-				(None, math.radians(20.0), (5.0, 15.0)),
-				(0.005, 0.005, 0.001),
-				targetPoint
+			self._setCameraData(
+				targetPos=targetPoint,
+				yaw=math_utils.reduceToPI(worldHitDirection.yaw),
+				pitch=-math.radians(25.0),
+				distConstraints=(5.0, 15.0)
 			)
 		else:
 
@@ -190,13 +205,11 @@ class HangarScene(AbstractController):
 
 			worldHitDirection = worldEndPoint - worldStartPoint
 
-			# default, current, limits, sens, targetPoint
-			self.hangarCameraCtrl.setCameraData(
-				(worldHitDirection.yaw, -worldHitDirection.pitch),
-				(worldHitDirection.yaw + 0.2, -worldHitDirection.pitch, 4.0),
-				(math.radians(35.0), math.radians(25.0), (2.9, 9.0)),
-				(0.005, 0.005, 0.001),
-				worldStartPoint
+			self._setCameraData(
+				targetPos=worldStartPoint,
+				yaw=worldHitDirection.yaw,
+				pitch=-worldHitDirection.pitch,
+				distConstraints=(2.9, 9.0)
 			)
 
 	def __updateShell(self):
@@ -307,8 +320,10 @@ class HangarScene(AbstractController):
 			else:
 				splashIndex = 0
 
+			from gui.ClientHangarSpace import customizationHangarCFG
+			hangarConfig = customizationHangarCFG()
 			worldContactMatrix = Math.Matrix()
-			worldContactMatrix.translation = Math.Vector3(SCENE_OFFSET + Math.Vector3(hitData['position']))
+			worldContactMatrix.translation = Math.Vector3(hangarConfig['v_start_pos'] + Math.Vector3(hitData['position']))
 
 			self.__motors[MODEL_TYPES.SPLASH][splashIndex].signal = worldContactMatrix
 			self.__models[MODEL_TYPES.SPLASH][splashIndex].visible = True

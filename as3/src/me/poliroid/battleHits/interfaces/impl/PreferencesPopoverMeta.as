@@ -18,10 +18,10 @@
 			return Linkages.SMART_POPOVER;
 		}
 
-		public function invokeSettingsChangeS(processReplays:Boolean, saveOnlySession:Boolean, swapHangar:Boolean): void
+		public function invokeSettingsChangeS(processReplays:Boolean, saveOnlySession:Boolean): void
 		{
 			App.utils.asserter.assertNotNull(invokeSettingsChange, "invokeSettingsChange" + Errors.CANT_NULL);
-			invokeSettingsChange(processReplays, saveOnlySession, swapHangar);
+			invokeSettingsChange(processReplays, saveOnlySession);
 		}
 
 		public function invokeStyleChangeS(): void

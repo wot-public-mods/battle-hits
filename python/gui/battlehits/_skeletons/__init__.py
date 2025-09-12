@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
-__all__ = ('IBattlesHistory', 'IBattleProcessor', 'IHangarCamera', 'IHangarScene', 'IHotkeys',
+__all__ = ('IBattlesHistory', 'IBattleProcessor', 'IHangarScene', 'IHotkeys',
 			'IState', 'ISettings', 'IVehicle', 'IBattlesData', 'IHitsData', 'ICurrentBattleData')
 
 from .IBattlesHistory import IBattlesHistory
 from .IBattleProcessor import IBattleProcessor
-from .IHangarCamera import IHangarCamera
 from .IHangarScene import IHangarScene
 from .IHotkeys import IHotkeys
 from .IState import IState

@@ -5,11 +5,7 @@ import Keys
 
 from helpers import dependency
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.sounds.ambients import LobbySubViewEnv
 from gui.veh_post_progression.sounds import PP_VIEW_SOUND_SPACE
 
@@ -17,12 +13,8 @@ from .._constants import SETTINGS
 from ..events import g_eventsManager
 from ..lang import l10n
 from .._skeletons import IHotkeys, ISettings, IState, IBattlesData, IHitsData
-from ..utils import get_parent_window
 
 class BattleHitsMainViewMeta(LobbySubView, View):
-
-	def hitsToPlayerClick(self, hitsToPlayer):
-		self._printOverrideError('hitsToPlayerClick')
 
 	def selectBattle(self, battleID):
 		self._printOverrideError('selectBattle')
@@ -32,9 +24,6 @@ class BattleHitsMainViewMeta(LobbySubView, View):
 
 	def sortClick(self, sortRow):
 		self._printOverrideError('sortClick')
-
-	def preferencesClick(self):
-		self._printOverrideError('preferencesClick')
 
 	def as_setStaticDataS(self, data):
 		""":param data: Represented by BatHitsStaticDataVO (AS)"""
@@ -50,11 +39,6 @@ class BattleHitsMainViewMeta(LobbySubView, View):
 		""":param data: Represented by BatHitsHitsVO (AS)"""
 		if self._isDAAPIInited():
 			return self.flashObject.as_updateHitsDPData(data)
-
-	def as_updateDetailedHitDataS(self, data):
-		""":param data: Represented by BatHitsDetailedHitVO (AS)"""
-		if self._isDAAPIInited():
-			return self.flashObject.as_updateDetailedHitData(data)
 
 class BattleHitsMainView(BattleHitsMainViewMeta):
 
@@ -73,22 +57,16 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		self.__updateStaticData()
 		g_eventsManager.invalidateBattlesDP += self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP += self.__onHitsDPUpdated
-		g_eventsManager.closeMainView += self.closeView
 		self.hotkeysCtrl.addForced(self.handleKeyEvent)
 
 	def _dispose(self):
 		g_eventsManager.invalidateBattlesDP -= self.__onBattlesDPUpdated
 		g_eventsManager.invalidateHitsDP -= self.__onHitsDPUpdated
-		g_eventsManager.closeMainView -= self.closeView
 		if self.hotkeysCtrl:
 			self.hotkeysCtrl.delForced(self.handleKeyEvent)
 		if self.stateCtrl.enabled:
 			self.stateCtrl.switch()
 		super(BattleHitsMainView, self)._dispose()
-
-	def closeView(self):
-		params = SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR, parent=get_parent_window())
-		self.fireEvent(g_entitiesFactories.makeLoadEvent(params), scope=EVENT_BUS_SCOPE.LOBBY)
 
 	def hitsToPlayerClick(self, hitsToPlayer):
 		if self.settingsCtrl:
@@ -107,9 +85,6 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 	def sortClick(self, sortRow):
 		sortRow = int(sortRow)
 		self.hits.sort(sortRow)
-
-	def preferencesClick(self):
-		g_eventsManager.showPreferencesPopover()
 
 	def handleKeyEvent(self, event):
 		result = False
@@ -133,7 +108,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 			self.__updateStaticData()
 			result = True
 		elif event.key == Keys.KEY_ESCAPE:
-			self.closeView()
+			self.stateCtrl.switch()
 			result = True
 		return result
 
@@ -148,15 +123,6 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 			hitsNoDataLabel = l10n('ui.hits.noDataEnemys')
 
 		return {
-			'header': {
-				'closeBtnLabel': l10n('ui.closeButton'),
-				'settingsLabel': l10n('ui.settingsButton'),
-				'titleLabel': l10n('ui.title'),
-				'typeBtnMe': l10n('ui.typeMe'),
-				'typeBtnEnemys': l10n('ui.typeEnemys'),
-				'typeBtnMeActive': hitsToPlayer,
-				'typeBtnEnemysActive': not hitsToPlayer
-			},
 			'battles': {
 				'noDataLabel': l10n('ui.battle.noData'),
 				'battles': self.battles.dataVO,
@@ -167,9 +133,6 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 				'hits': self.hits.dataVO,
 				'sorting': self.hits.sortingVO,
 				'selectedIndex': self.hits.selectedIndex
-			},
-			'detailedHit': {
-				'noDataLabel': l10n('ui.detailedhit.noData')
 			}
 		}
 

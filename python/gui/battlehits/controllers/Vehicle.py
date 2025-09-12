@@ -13,7 +13,6 @@ from vehicle_outfit.outfit import Outfit
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, TankNodeNames
 from VehicleStickers import SlotTypes
 
-from .._constants import SCENE_OFFSET
 from ..controllers import AbstractController
 from ..events import g_eventsManager
 from ..utils import simplifyVehicleCompactDescr, cancel_callback_safe
@@ -75,14 +74,11 @@ class Vehicle(AbstractController):
 			return self.compactDescr.type.isWheeledVehicle
 		return False
 
-	def initialize(self):
+	def init(self):
 		self.hangarSpace.onVehicleChanged += self._onVehicleChanged
 
-	def init(self):
-		g_eventsManager.closeMainView += self.__on_closeMainView
-
 	def fini(self):
-		g_eventsManager.closeMainView -= self.__on_closeMainView
+		self.hangarSpace.onVehicleChanged -= self._onVehicleChanged
 		self._components = {}
 		self._presentCBID = None
 		self._vehicleStrCD = None
@@ -95,10 +91,6 @@ class Vehicle(AbstractController):
 		self._components = {}
 		self._presentCBID = None
 		self._vehicleStrCD = None
-
-	def __on_closeMainView(self):
-		self.hangarSpace.onVehicleChanged -= self._onVehicleChanged
-		self.removeVehicle()
 
 	def _onVehicleChanged(self):
 		self.onVehicleChanged()
@@ -161,9 +153,11 @@ class Vehicle(AbstractController):
 			return
 		if not self.currentBattleData.hit:
 			return
+		from gui.ClientHangarSpace import customizationHangarCFG
+		hangarConfig = customizationHangarCFG()
 		matrix = Math.Matrix()
-		matrix.setRotateYPR((0.0, 0.0, 0.0))
-		matrix.translation = SCENE_OFFSET
+		matrix.setRotateYPR((hangarConfig['v_start_angles'][0], hangarConfig['v_start_angles'][1], hangarConfig['v_start_angles'][2]))
+		matrix.translation = hangarConfig['v_start_pos']
 		self.compoundModel.matrix = matrix
 
 		turretYaw, gunPitch = self.currentBattleData.hit['aimParts']
@@ -250,12 +244,15 @@ class Vehicle(AbstractController):
 	def partWorldMatrix(self, partIndex):
 		partName = self.__getPartName(partIndex)
 
+		from gui.ClientHangarSpace import customizationHangarCFG
+		hangarConfig = customizationHangarCFG()
+
 		if partName in self._components:
 			localMatrix = self._components[partName]
 			rotation = Math.Matrix()
 			rotation.setRotateYPR((localMatrix.yaw, localMatrix.pitch, 0.0))
 			result = Math.Matrix()
-			result.setTranslate(localMatrix.translation + SCENE_OFFSET)
+			result.setTranslate(localMatrix.translation + hangarConfig['v_start_pos'])
 			result.preMultiply(rotation)
 			return result
 
@@ -266,7 +263,7 @@ class Vehicle(AbstractController):
 			return result
 
 		result = Math.Matrix()
-		result.setTranslate(SCENE_OFFSET)
+		result.setTranslate(hangarConfig['v_start_pos'])
 		return result
 
 	def __getPartName(self, partIndex):

@@ -7,13 +7,12 @@
 	import me.poliroid.battleHits.data.BatHitsBattlesVO;
 	import me.poliroid.battleHits.data.BatHitsHitsVO;
 	import me.poliroid.battleHits.data.BatHitsStaticDataVO;
-	import me.poliroid.battleHits.events.BatHitsEvent;
 	import me.poliroid.battleHits.events.BatHitsIndexEvent;
-	import me.poliroid.battleHits.interfaces.IBatHitsHeader;
-	import me.poliroid.battleHits.interfaces.IBatHitsHitsPanel;
 	import me.poliroid.battleHits.interfaces.IBatHitsBattlesPanel;
+	import me.poliroid.battleHits.interfaces.IBatHitsHitsPanel;
 	import me.poliroid.battleHits.interfaces.IBattleHitsMeta;
 	import me.poliroid.battleHits.interfaces.impl.BattleHitsMeta;
+	import net.wg.gui.components.containers.inject.GFInjectComponent;
 
 	public class BattleHits extends BattleHitsMeta implements IBattleHitsMeta
 	{
@@ -23,22 +22,31 @@
 		private static const SHOW_SLOTS_ALPHA:Number = 1;
 		private static const HIDE_SLOTS_ALPHA:Number = 0;
 
-		public var header:IBatHitsHeader = null;
 		public var hitsPanel:IBatHitsHitsPanel = null;
 		public var battlesPanel:IBatHitsBattlesPanel = null;
 
 		private var _tweenInfoHide:Tween = null;
 		private var _tweenInfoShow:Tween = null;
 
+		public var _headerInject:GFInjectComponent = null;
+		private static const HEADER_INJECT_ALIAS:String = 'BattleHitsHeaderView';
+		private static const HEADER_INJECT_WIDTH:int = 400;
+		private static const HEADER_INJECT_HEIGHT:int = 90;
+
 		override public function updateStage(_width:Number, _height:Number): void
 		{
-			header.invalidateSize();
 			battlesPanel.x = int(_width - battlesPanel.width);
+			_updateHeaderInject();
+		}
+
+		override protected function configUI(): void
+		{
+			super.configUI();
+			_createHeaderInject();
 		}
 
 		override protected function setStaticData(model:BatHitsStaticDataVO): void
 		{
-			header.updateDP(model.header);
 			battlesPanel.updateDP(model.battles);
 			hitsPanel.updateDP(model.hits);
 		}
@@ -65,10 +73,6 @@
 
 			App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.REGISTER_DRAGGING));
 
-			addEventListener(BatHitsEvent.CLOSE_CLICK, onCloseClickHandler);
-			addEventListener(BatHitsEvent.PREFERENCES_CLICK, onPreferencesClickHandler);
-			addEventListener(BatHitsEvent.TO_PLAYER_CLICK, onToPlayerClickHandler);
-			addEventListener(BatHitsEvent.FROM_PLAYER_CLICK, onFromPlayerClickHandler);
 			addEventListener(BatHitsIndexEvent.BATTLE_CHANGED, onBattleSelectHandler);
 			addEventListener(BatHitsIndexEvent.HIT_CHANGED, onHitSelectHandler);
 			addEventListener(BatHitsIndexEvent.SORT_CLICKED, onSortClickHandler);
@@ -86,13 +90,11 @@
 
 			App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.UNREGISTER_DRAGGING));
 
-			removeEventListener(BatHitsEvent.CLOSE_CLICK, onCloseClickHandler);
-			removeEventListener(BatHitsEvent.PREFERENCES_CLICK, onPreferencesClickHandler);
-			removeEventListener(BatHitsEvent.TO_PLAYER_CLICK, onToPlayerClickHandler);
-			removeEventListener(BatHitsEvent.FROM_PLAYER_CLICK, onFromPlayerClickHandler);
 			removeEventListener(BatHitsIndexEvent.BATTLE_CHANGED, onBattleSelectHandler);
 			removeEventListener(BatHitsIndexEvent.HIT_CHANGED, onHitSelectHandler);
 			removeEventListener(BatHitsIndexEvent.SORT_CLICKED, onSortClickHandler);
+
+			_destroyHeaderInject();
 
 			super.onBeforeDispose();
 		}
@@ -113,11 +115,9 @@
 			}
 			_tweenInfoShow = null;
 
-			header.dispose();
 			hitsPanel.dispose();
 			battlesPanel.dispose();
 
-			header = null;
 			hitsPanel = null;
 			battlesPanel = null;
 
@@ -155,11 +155,6 @@
 			_tweenInfoHide = new Tween(ANIMATION_DURATION, this, {"alpha": HIDE_SLOTS_ALPHA}, {"delay": ANIMATION_DELAY});
 		}
 
-		private function onCloseClickHandler(e:BatHitsEvent): void
-		{
-			closeViewS();
-		}
-
 		private function onBattleSelectHandler(e:BatHitsIndexEvent): void
 		{
 			onBattleSelectS(e.selectedIndex);
@@ -175,21 +170,32 @@
 			onSortClickS(e.selectedIndex);
 		}
 
-		private function onPreferencesClickHandler(e:BatHitsEvent): void
+		private function _createHeaderInject(): void
 		{
-			preferencesClickS();
-			App.popoverMgr.hide();
-			App.popoverMgr.show(header.preferenceButton, POPOVER_ALIAS);
+			if (_headerInject)
+				return;
+			_headerInject = new GFInjectComponent();
+			_headerInject.setManageSize(true);
+			addChild(_headerInject);
+			registerFlashComponentS(_headerInject, HEADER_INJECT_ALIAS);
 		}
 
-		private function onToPlayerClickHandler(e:BatHitsEvent): void
+		private function _destroyHeaderInject(): void
 		{
-			hitsToPlayerClickS(true);
+			if (!_headerInject)
+				return;
+			unregisterFlashComponentS(HEADER_INJECT_ALIAS);
+			removeChild(_headerInject);
+			_headerInject = null;
 		}
 
-		private function onFromPlayerClickHandler(e:BatHitsEvent): void
+		private function _updateHeaderInject(): void
 		{
-			hitsToPlayerClickS(false);
+			if (!_headerInject)
+				return;
+			_headerInject.x = int((App.appWidth - HEADER_INJECT_WIDTH) * 0.5);
+			_headerInject.y = 0;
+			_headerInject.setSize(HEADER_INJECT_WIDTH, HEADER_INJECT_HEIGHT);
 		}
 	}
 }
