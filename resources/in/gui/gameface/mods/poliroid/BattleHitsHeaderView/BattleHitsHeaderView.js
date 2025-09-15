@@ -1,5 +1,4 @@
 
-import { debugElement } from "../../libs/debug.js";
 import { MediaContext } from "../../libs/media.js";
 import { ModelObserver } from "../../libs/model.js";
 import { playSound } from "../../libs/sound.js";

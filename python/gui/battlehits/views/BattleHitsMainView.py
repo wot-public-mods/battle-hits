@@ -87,7 +87,7 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		self.hits.sort(sortRow)
 
 	def closeWindow(self):
-		self.stateCtrl.switch()
+		self.stateCtrl.disable(True)
 
 	def handleKeyEvent(self, event):
 		result = False

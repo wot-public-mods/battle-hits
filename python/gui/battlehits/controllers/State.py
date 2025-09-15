@@ -1,22 +1,17 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
-import typing
-
-from gui.app_loader.settings import APP_NAME_SPACE
 from gui.lobby_state_machine.states import SFViewLobbyState, LobbyStateDescription, SubScopeSubLayerState
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.Scaleform.lobby_entry import LobbyEntry
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showHangar
-from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvider, SubhangarStateGroups, SubhangarStateGroupConfig, CameraMover
+from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvider, SubhangarStateGroups, SubhangarStateGroupConfig
 from helpers import dependency
-from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared.utils import IHangarSpace
 
 from ..controllers import AbstractController
 from ..events import g_eventsManager
 from .._constants import BATTLE_HITS_MAIN_VIEW_ALIAS
+from .._skeletons import IState
 from ..lang import l10n
 
 class State(AbstractController):
@@ -87,6 +82,8 @@ class State(AbstractController):
 			self.disable()
 
 	def enable(self):
+		if self.enabled:
+			return
 
 		if self.hangarSpace is None or self.hangarSpace.space is None:
 			return
@@ -104,7 +101,9 @@ class State(AbstractController):
 		self.enabled = True
 		self.hangarSceneCtrl.create()
 
-	def disable(self):
+	def disable(self, goToHangar=True):
+		if not self.enabled:
+			return
 
 		self.__battleID = None
 		self.__hitID = None
@@ -115,10 +114,12 @@ class State(AbstractController):
 
 		self.enabled = False
 
-		showHangar()
+		if goToHangar:
+			showHangar()
 
 @SubScopeSubLayerState.parentOf
 class BattleHitsState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
+
 	VIEW_KEY = ViewKey(BATTLE_HITS_MAIN_VIEW_ALIAS)
 	STATE_ID = "battlehits"
 
@@ -135,9 +136,14 @@ class BattleHitsState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
 		lsm = self.getMachine()
 		lsm.addNavigationTransitionFromParent(self)
 
+	@dependency.replace_none_kwargs(stateCtrl=IState)
+	def _onExited(self, stateCtrl=None):
+		stateCtrl.disable(goToHangar=False)
+		super(BattleHitsState, self)._onExited()
+
 def registerStates(machine):
 	machine.addState(BattleHitsState())
 
 def registerTransitions(machine):
-	vehicleHub = machine.getStateByCls(BattleHitsState)
-	machine.addNavigationTransitionFromParent(vehicleHub)
+	battlhits = machine.getStateByCls(BattleHitsState)
+	machine.addNavigationTransitionFromParent(battlhits)
