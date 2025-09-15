@@ -16,6 +16,7 @@
 
 ## 📦 Dependency
 This project relies on the [Mods List](https://gitlab.com/wot-public-mods/mods-list) mod. Make sure to include this mod to ensure the proper functionality of **BattleHits**.
+This project relies on the [OpenWG Gameface](https://gitlab.com/openwg/wot.gameface) mod. Make sure to include this mod to ensure the proper functionality of **BattleHits**.
 
 ## 💡 How It Works
 
