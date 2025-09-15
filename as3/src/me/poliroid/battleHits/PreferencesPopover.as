@@ -8,6 +8,7 @@
 	import me.poliroid.battleHits.data.BattleHitsPreferencesDataVO;
 	import me.poliroid.battleHits.interfaces.IPreferencesPopover
 	import me.poliroid.battleHits.interfaces.impl.PreferencesPopoverMeta
+	import net.wg.data.constants.Linkages;
 
 	public class PreferencesPopover extends PreferencesPopoverMeta implements IPreferencesPopover 
 	{
@@ -81,9 +82,11 @@
 			{
 				case changeStyle:
 					invokeStyleChangeS();
+					App.popoverMgr.hide();
 					break;
 				case deleteHistory:
 					invokeHistoryDeleteS();
+					App.popoverMgr.hide();
 					break;
 			}
 		}

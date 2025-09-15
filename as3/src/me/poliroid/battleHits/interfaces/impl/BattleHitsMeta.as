@@ -12,6 +12,7 @@
 		public var selectBattle:Function;
 		public var selectHit:Function;
 		public var sortClick:Function;
+		public var closeWindow:Function;
 
 		public function onBattleSelectS(param1: Number): void
 		{
@@ -29,6 +30,12 @@
 		{
 			App.utils.asserter.assertNotNull(sortClick, "sortClick" + Errors.CANT_NULL);
 			sortClick(param1);
+		}
+
+		public function closeWindowS(): void
+		{
+			App.utils.asserter.assertNotNull(closeWindow, "closeWindow" + Errors.CANT_NULL);
+			closeWindow();
 		}
 
 		public final function as_setStaticData(param1:Object): void

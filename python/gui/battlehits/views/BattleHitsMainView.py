@@ -86,6 +86,9 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 		sortRow = int(sortRow)
 		self.hits.sort(sortRow)
 
+	def closeWindow(self):
+		self.stateCtrl.switch()
+
 	def handleKeyEvent(self, event):
 		result = False
 		if not event.isKeyDown():
@@ -106,9 +109,6 @@ class BattleHitsMainView(BattleHitsMainViewMeta):
 			hitsToPlayer = self.settingsCtrl.get(SETTINGS.HITS_TO_PLAYER, False)
 			self.hitsToPlayerClick(not hitsToPlayer)
 			self.__updateStaticData()
-			result = True
-		elif event.key == Keys.KEY_ESCAPE:
-			self.stateCtrl.switch()
 			result = True
 		return result
 

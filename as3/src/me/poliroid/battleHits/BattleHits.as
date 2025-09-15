@@ -1,7 +1,13 @@
 ﻿package me.poliroid.battleHits
 {
 	import flash.display.InteractiveObject;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+
+	import scaleform.clik.events.InputEvent;
 	import scaleform.clik.motion.Tween;
+
+	import net.wg.gui.components.containers.inject.GFInjectComponent;
 	import net.wg.gui.events.LobbyEvent;
 
 	import me.poliroid.battleHits.data.BatHitsBattlesVO;
@@ -12,7 +18,6 @@
 	import me.poliroid.battleHits.interfaces.IBatHitsHitsPanel;
 	import me.poliroid.battleHits.interfaces.IBattleHitsMeta;
 	import me.poliroid.battleHits.interfaces.impl.BattleHitsMeta;
-	import net.wg.gui.components.containers.inject.GFInjectComponent;
 
 	public class BattleHits extends BattleHitsMeta implements IBattleHitsMeta
 	{
@@ -71,6 +76,8 @@
 		{
 			super.onPopulate();
 
+			App.gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, onEscapeKeyDownHandler, true);
+
 			App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.REGISTER_DRAGGING));
 
 			addEventListener(BatHitsIndexEvent.BATTLE_CHANGED, onBattleSelectHandler);
@@ -85,6 +92,8 @@
 
 		override protected function onBeforeDispose(): void
 		{
+			App.gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, onEscapeKeyDownHandler);
+			
 			App.stage.removeEventListener(LobbyEvent.DRAGGING_START, onDraggingStartHandler);
 			App.stage.removeEventListener(LobbyEvent.DRAGGING_END, onDraggingEndHandler);
 
@@ -120,6 +129,8 @@
 
 			hitsPanel = null;
 			battlesPanel = null;
+
+			App.toolTipMgr.hide();
 
 			super.onDispose();
 		}
@@ -168,6 +179,11 @@
 		private function onSortClickHandler(e:BatHitsIndexEvent): void
 		{
 			onSortClickS(e.selectedIndex);
+		}
+
+		private function onEscapeKeyDownHandler(event:InputEvent):void
+		{
+			closeWindowS();
 		}
 
 		private function _createHeaderInject(): void

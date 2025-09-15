@@ -13,7 +13,7 @@ from ..events import g_eventsManager
 from ..utils import get_parent_window
 from .BattleHitsMainView import BattleHitsMainView
 from .BattleHitsPreferencesPopover import BattleHitsPreferencesPopover
-from .BattleHitsHeaderView import BattleHitsHeaderInjectComponent, BattleHitsHeaderView
+from .BattleHitsHeaderView import BattleHitsHeaderInjectComponent
 
 def getViewSettings():
 	viewSettings = []
@@ -32,10 +32,10 @@ def getViewSettings():
 			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
 			BattleHitsPreferencesPopover,
 			'battleHitsPreferencesPopover.swf',
-			WindowLayer.WINDOW,
+			WindowLayer.TOP_WINDOW,
 			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
 			BATTLE_HITS_PREFERENCES_POPOVER_ALIAS,
-			ScopeTemplates.DEFAULT_SCOPE
+			ScopeTemplates.WINDOW_VIEWED_MULTISCOPE
 		)
 	)
 	viewSettings.append(
