@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.2
+* fix(state): enable stateCtrl on navigation back
+
 ## v2.3.1
 * fix(state): Correctly handle view state transitions
 * feat: Close window on ESC key press

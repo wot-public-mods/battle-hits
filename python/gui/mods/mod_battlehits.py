@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2025 Andrii Andrushchyshyn
 
-__version__ = "2.3.1"
+__version__ = "2.3.2"
 
 try:
 	import openwg_gameface
@@ -13,9 +13,9 @@ except ImportError:
 	logger.error('\n' +
 				'!!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!\n'
 				'!!!\n'
-				'!!!   Battle hits requires the openwg_gameface module to function.\n'
-				'!!!   Without it, this and other GF UI mods will not work correctly.\n'
-				'!!!   Please download and install it from: https://gitlab.com/openwg/wot.gameface/-/releases/\n'
+				'!!!   Battle hits requires the openwg_gameface module to function. \n'
+				'!!!   Without it, this and other GF UI mods will not work correctly. \n'
+				'!!!   Please download and install it from: https://gitlab.com/openwg/wot.gameface/-/releases/ \n'
 				'!!!\n'
 				'!!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!   !!!\n')
 	# Kill game client

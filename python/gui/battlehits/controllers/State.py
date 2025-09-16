@@ -122,6 +122,7 @@ class BattleHitsState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
 
 	VIEW_KEY = ViewKey(BATTLE_HITS_MAIN_VIEW_ALIAS)
 	STATE_ID = "battlehits"
+	stateCtrl = dependency.descriptor(IState)
 
 	def getSubhangarStateGroupConfig(self):
 		return SubhangarStateGroupConfig((
@@ -136,9 +137,12 @@ class BattleHitsState(SFViewLobbyState, SubhangarStateGroupConfigProvider):
 		lsm = self.getMachine()
 		lsm.addNavigationTransitionFromParent(self)
 
-	@dependency.replace_none_kwargs(stateCtrl=IState)
+	def _onEntered(self, event):
+		self.stateCtrl.enable()
+		super(BattleHitsState, self)._onEntered(event)
+
 	def _onExited(self, stateCtrl=None):
-		stateCtrl.disable(goToHangar=False)
+		self.stateCtrl.disable(goToHangar=False)
 		super(BattleHitsState, self)._onExited()
 
 def registerStates(machine):
