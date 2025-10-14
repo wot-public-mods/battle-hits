@@ -5,7 +5,6 @@ import math
 import os
 
 import BigWorld
-import Math
 
 LANGUAGE_FILES = 'mods/poliroid.battlehits/text'
 LANGUAGE_DEFAULT = 'en'

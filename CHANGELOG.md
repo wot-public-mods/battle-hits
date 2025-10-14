@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.3
+* chore(release): bump version to 2.3.3
+
 ## v2.3.2
 * fix(state): enable stateCtrl on navigation back
 

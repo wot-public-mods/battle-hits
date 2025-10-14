@@ -17,7 +17,7 @@ from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import TankPartIndexes
 
-from .._constants import (MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS, CAMERA_DEFAULTS)
+from .._constants import MODEL_NAMES, MODEL_PATHS, MODEL_TYPES, SETTINGS, CAMERA_DEFAULTS
 from ..controllers import AbstractController
 from ..events import g_eventsManager
 from ..utils import cancel_callback_safe
