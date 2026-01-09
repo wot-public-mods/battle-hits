@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-# Copyright (c) 2015-2025 Andrii Andrushchyshyn
+# Copyright (c) 2015-2026 Andrii Andrushchyshyn
 
 from gui.lobby_state_machine.states import SFViewLobbyState, LobbyStateDescription, SubScopeSubLayerState
 from gui.Scaleform.framework.entities.View import ViewKey
