@@ -138,7 +138,7 @@ class HangarScene(AbstractController):
 
 		cameraManager.moveCamera(
 			targetPos=targetPos,
-			yaw=yaw,
+			yaw=yaw + 0.1, # add a small offset to the camera direction
 			pitch=pitch,
 			distance=distConstraints[1] - distConstraints[0] / 2,
 			duration=0.5,

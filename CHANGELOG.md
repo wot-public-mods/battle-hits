@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.4
+* feat(hangar): add small offset to camera yaw direction
+* chore: update copyright year to 2026
+
 ## v2.3.3
 * chore(release): bump version to 2.3.3
 
