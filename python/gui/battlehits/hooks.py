@@ -46,7 +46,7 @@ g_eventBus.addListener(events.AppLifeCycleEvent.DESTROYED, onAppDestroyed)
 def showDamageFromShot(baseMethod, *args, **kwargs):
 	baseMethod(*args, **kwargs)
 	battleProcessor = dependency.instance(IBattleProcessor)
-	# args: self, attackerID, hitPoints, effectsIndex, prefabEffIndex, damage, damageFactor, lastMaterialIsShield, shellTypeIdx, shellCaliber, shellVelocity
+	# args: self, attackerID, hitPoints, effectsIndex, prefabEffIndex, damage, damageFactor, lastMaterialIsShield, shellVelocity, gunInstallationIndex
 	battleProcessor.processShot(vehicle=args[0], attackerID=args[1], hitPoints=args[2],
 							 effectsIndex=args[3], damage=args[5], damageFactor=args[6])
 
@@ -54,7 +54,7 @@ def showDamageFromShot(baseMethod, *args, **kwargs):
 def showDamageFromExplosion(baseMethod, *args, **kwargs):
 	baseMethod(*args, **kwargs)
 	battleProcessor = dependency.instance(IBattleProcessor)
-	# args: self, attackerID, center, effectsIndex, damage, damageFactor
+	# args: self, attackerID, center, effectsIndex, damage, damageFactor, gunInstallationIndex
 	battleProcessor.processExplosion(vehicle=args[0], attackerID=args[1], center=args[2],
 								  effectsIndex=args[3], damage=args[4], damageFactor=args[5])
 

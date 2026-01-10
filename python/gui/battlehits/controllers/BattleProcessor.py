@@ -120,7 +120,7 @@ class BattleProcessor(AbstractController):
 
 		pointsData = []
 		for hitPoint in hitPoints:
-			compIdx, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.parseHitPoint(hitPoint,
+			compIdx, _, startPoint, endPoint, hitEffectCode, __, ___ = DamageFromShotDecoder.parseHitPoint(hitPoint,
 															vehicle.appearance.collisions)
 			pointsData.append((compIdx, hitEffectCode, tuple(startPoint), tuple(endPoint)))
 

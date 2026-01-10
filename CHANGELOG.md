@@ -1,6 +1,7 @@
 # Changelog
 
 ## v2.3.4
+* fix: update DamageFromShotDecoder.parseHitPoint unpacking
 * feat(hangar): add small offset to camera yaw direction
 * chore: update copyright year to 2026
 
