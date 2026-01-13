@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.5
+* refactor(hangar): simplify ricochet normal calculation using native game method
+
 ## v2.3.4
 * fix: update DamageFromShotDecoder.parseHitPoint unpacking
 * feat(hangar): add small offset to camera yaw direction

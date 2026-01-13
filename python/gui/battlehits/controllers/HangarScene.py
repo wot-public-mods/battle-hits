@@ -411,25 +411,20 @@ class HangarScene(AbstractController):
 			worldEndPoint = worldComponentMatrix.applyPoint(localEndPoint)
 			worldHitPoint = (worldStartPoint + worldEndPoint) / 2
 
-			collisionResult = self.vehicleCtrl.collision.collideAllWorld(worldStartPoint, worldEndPoint)
-			if not collisionResult:
+			collisionResultWorld = self.vehicleCtrl.collision.collideAllWorld(worldStartPoint, worldEndPoint)
+			collisionResultLocal = self.vehicleCtrl.collision.collideLocalPoint(componentIDx, localHitPoint, 10.0)
+			if not collisionResultWorld or not collisionResultLocal:
 				attemp += 1
 				timeout = attemp / 100.0
 				callback = functools.partial(self.__updateOutRicochet, attemp)
 				self._ricochetCBID = BigWorld.callback(timeout, callback)
 				return
 
-			collisionPoints = []
-			for offsetVector in (0.0001, 0.0, 0.0), (0.0, 0.0001, 0.0), (0.0, 0.0, 0.0001):
-				collisionPoint = self.vehicleCtrl.collision.collideLocalPoint(componentIDx, localHitPoint + offsetVector, 10.0)
-				collisionPoints.append(collisionPoint)
-
-			planeNormal = (collisionPoints[1] - collisionPoints[0]) * (collisionPoints[2] - collisionPoints[0])
-			planeNormal.normalise()
+			planeNormal = collisionResultLocal[2]
 			if (localStartPoint - (localHitPoint - planeNormal)).length > (localStartPoint - (localHitPoint + planeNormal)).length:
 				planeNormal = -planeNormal
 
-			_, hitAngleCos, _, _ = collisionResult[0]
+			hitAngleCos = collisionResultWorld[0][1]
 
 			worldNormalDirection = worldComponentMatrix.applyVector(planeNormal)
 			worldNormalDirection.normalise()
