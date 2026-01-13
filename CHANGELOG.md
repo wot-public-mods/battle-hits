@@ -2,6 +2,7 @@
 
 ## v2.3.5
 * refactor(hangar): simplify ricochet normal calculation using native game method
+* chore(data): up cache revision to 40
 
 ## v2.3.4
 * fix: update DamageFromShotDecoder.parseHitPoint unpacking
