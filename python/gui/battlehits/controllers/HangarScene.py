@@ -134,7 +134,7 @@ class HangarScene(AbstractController):
 
 		if targetPos is None:
 			hangarConfig = customizationHangarCFG()
-			targetPos = hangarConfig['v_start_pos'] + (.0, 0.5, .0)
+			targetPos = hangarConfig['v_start_pos'] + (.0, 1.0, .0)
 
 		cameraManager.moveCamera(
 			targetPos=targetPos,
