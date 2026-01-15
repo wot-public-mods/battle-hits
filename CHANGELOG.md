@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.6
+* fix(hits): resolve issue where interface failed to open due to out-of-bounds indices
+
 ## v2.3.5
 * refactor(hangar): simplify ricochet normal calculation using native game method
 * chore(data): up cache revision to 40

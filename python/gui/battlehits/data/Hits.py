@@ -10,31 +10,30 @@ from ..lang import l10n
 from ..utils import getShellParams
 from ..data import AbstractDataProvider
 
-_SORTING_LABELS = {
-	1: l10n('hits.sorting.num'),
-	2: l10n('hits.sorting.tank'),
-	3: l10n('hits.sorting.result'),
-	4: l10n('hits.sorting.damage')
-}
+_SORTING_LABELS = [
+	l10n('hits.sorting.num'),
+	l10n('hits.sorting.tank'),
+	l10n('hits.sorting.result'),
+	l10n('hits.sorting.damage')
+]
 
-_SHELL_LABELS = {
-	0: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING,
-	1: INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR,
-	2: INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
-	3: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
-	4: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
-	5: INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE,
-}
+_SHELL_LABELS = [
+	INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING,
+	INGAME_GUI.DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR,
+	INGAME_GUI.DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE,
+	INGAME_GUI.DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE
+]
+_MAX_SHELL_INDEX = len(_SHELL_LABELS) - 1
 
-_RESULT_LABELS = {
-	0: l10n('hits.shotResult.armorPiercesNoDamage'),
-	1: l10n('hits.shotResult.intermediateRicochet'),
-	2: l10n('hits.shotResult.finalRicochet'),
-	3: l10n('hits.shotResult.armorNotPierces'),
-	4: l10n('hits.shotResult.armorPierces'),
-	5: l10n('hits.shotResult.criticalHit'),
-	6: l10n('hits.shotResult.criticalHit')
-}
+_RESULT_LABELS = [
+	l10n('hits.shotResult.armorPiercesNoDamage'),
+	l10n('hits.shotResult.intermediateRicochet'),
+	l10n('hits.shotResult.finalRicochet'),
+	l10n('hits.shotResult.armorNotPierces'),
+	l10n('hits.shotResult.armorPierces'),
+	l10n('hits.shotResult.criticalHit')
+]
+_MAX_RESULT_INDEX = len(_RESULT_LABELS) - 1
 
 class Hits(AbstractDataProvider):
 
@@ -110,7 +109,7 @@ class Hits(AbstractDataProvider):
 			if shellParams.index is None:
 				continue
 
-			hitResult = [max(_RESULT_LABELS)] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
+			hitResult = [_MAX_RESULT_INDEX] if hitData['isExplosion'] else [hitData['points'][-1:][0][1]]
 			if hitResult != [4] and hitData['damageFactor'] > 0:
 				hitResult += [4]
 
@@ -143,8 +142,8 @@ class Hits(AbstractDataProvider):
 			return
 
 		for itemData in self.__data:
-			resultLabel = " + ".join([_RESULT_LABELS[x] for x in itemData["result"]])
-			shellLabel = _SHELL_LABELS[itemData["shell"]]
+			resultLabel = " + ".join([_RESULT_LABELS[min(_MAX_RESULT_INDEX, x)] for x in itemData["result"]])
+			shellLabel = _SHELL_LABELS[min(_MAX_SHELL_INDEX, itemData["shell"])]
 			damageLabel = str(itemData["damage"]) if itemData["damage"] > 0 else "--"
 			self.dataVO.append({
 				"id": itemData["id"],
@@ -172,7 +171,7 @@ class Hits(AbstractDataProvider):
 				return {'id': id, 'label': label, 'active': self.__sortingRule == id,
 						'reversed': self.__sortingReversed}
 
-			self.__sortingVO = [genSortItemVO(x, _SORTING_LABELS[x]) for x in xrange(1, 5)]
+			self.__sortingVO = list(genSortItemVO(x, y) for x, y in enumerate(_SORTING_LABELS))
 
 			for itemID, itemData in enumerate(self.__data):
 				if self.stateCtrl.currentHitID == itemData["id"]:

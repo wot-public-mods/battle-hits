@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2026 Andrii Andrushchyshyn
 
-__version__ = "2.3.5"
+__version__ = "2.3.6"
 
 try:
 	import openwg_gameface
