@@ -14,6 +14,7 @@ This script handles:
 
 import argparse
 import datetime
+import hashlib
 import json
 import logging
 import os
@@ -102,6 +103,24 @@ class AppConfig:
 def rand_str(num: int) -> str:
     """Generates a random alphanumeric string of a given length."""
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(num))
+
+
+def get_file_hash(path: str) -> str:
+    """
+    Calculates the SHA256 hash of a file.
+
+    Args:
+        path: The path to the file.
+
+    Returns:
+        The hexadecimal representation of the hash.
+    """
+    sha256_hash = hashlib.sha256()
+    with open(path, "rb") as f:
+        # Read and update hash string value in blocks of 4K
+        for byte_block in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
 
 
 def copytree(source: str, destination: str, ignore: Optional[callable] = None) -> None:
@@ -238,6 +257,13 @@ def build_flash(config: AppConfig, args: argparse.Namespace) -> None:
             logger.error('Failed flash publish %s\n%s', file_path, log_data)
         else:
             logger.info('Flash published: %s', file_path)
+            # Calculate and log SHA256 hash of the compiled .swf file
+            swf_path = pathlib.Path('as3/bin') / file_path.with_suffix('.swf').name
+            if swf_path.is_file():
+                file_hash = get_file_hash(str(swf_path))
+                logger.info('SHA256 (%s): %s', swf_path.name, file_hash)
+            else:
+                logger.warning('Could not find compiled SWF file at: %s', swf_path)
 
 
 def build_python(config: AppConfig) -> None:
@@ -325,11 +351,11 @@ def main() -> None:
     meta_content = ET.tostring(root, encoding='unicode')
 
     # Copy resources to temp directory
-    if pathlib.Path('resources/in').is_dir():
-        copytree('resources/in', str(temp_dir / 'res'))
     if pathlib.Path('as3/bin').is_dir():
         copytree('as3/bin', str(temp_dir / 'res/gui/flash'))
     copytree('python', str(temp_dir / 'res/scripts/client'), ignore=shutil.ignore_patterns('*.py'))
+    if pathlib.Path('resources/in').is_dir():
+        copytree('resources/in', str(temp_dir / 'res'))
     (temp_dir / 'meta.xml').write_text(meta_content, encoding='utf-8')
 
     # Create the .wotmod package
