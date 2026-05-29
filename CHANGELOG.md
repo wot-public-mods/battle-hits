@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.7
+* chore(data): up cache revision to 41
+* chore(release): bump version to 2.3.7
+
 ## v2.3.6
 * fix(hits): resolve issue where interface failed to open due to out-of-bounds indices
 

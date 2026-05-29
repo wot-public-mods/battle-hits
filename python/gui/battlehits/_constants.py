@@ -61,7 +61,7 @@ SETTINGS_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'm
 CACHE_FILE = os.path.normpath(os.path.join(os.path.dirname(prefsFilePath), 'mods', 'battlehits', 'cache.dat'))
 
 SETTINGS_VERSION = 13
-CACHE_VERSION = 40
+CACHE_VERSION = 41
 
 CAMERA_DEFAULTS = [
 	math.radians(160),
