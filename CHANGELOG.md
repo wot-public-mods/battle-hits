@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.4.00
+* fix(vehicle): disable driven joint animation crashes
+* chore(release): bump version to 2.4.00
+
 ## v2.3.8
 * fix(hangar): update camera integration for 2.3.1 wot client
 

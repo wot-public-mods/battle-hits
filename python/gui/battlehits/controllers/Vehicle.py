@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2026 Andrii Andrushchyshyn
 
-import Math
 import BigWorld
+import CGF
+import Math
 import Vehicular
 
 from gui.shared.gui_items.Vehicle import Vehicle as VehicleItem
@@ -170,11 +171,18 @@ class Vehicle(AbstractController):
 		matrix.setRotateYPR((0.0, gunPitch, 0.0))
 		self.compoundModel.node(TankNodeNames.GUN_INCLINATION, matrix)
 
+		# Although this code was updated to the latest codebase, it may cause
+		# client crashes, so it is fully removed as a temporary solution.
+		# Visually this does not affect tanks with drivenJoints and can be treated
+		# as a fully working solution until problematic reports appear.
+		"""
 		drivingJoints = dict(self.compactDescr.gun.drivenJoints or {}).get('default', None)
 		if drivingJoints:
-			component = self.vehicleAppearance.gameObject.findComponentByType(Vehicular.LinkedNodesPitchAnimator)
-			if not component:
-				self.vehicleAppearance.createComponent(Vehicular.LinkedNodesPitchAnimator, self.compoundModel, drivingJoints)
+			component = self.vehicleAppearance.gameObject.findWrite(Vehicular.LinkedNodesPitchAnimator)
+			if not component and self.hangarSpace:
+				queue = CGF.CommandQueue(self.hangarSpace.spaceID)
+				queue.createComponent(self.vehicleAppearance.gameObject, Vehicular.LinkedNodesPitchAnimator, self.compoundModel, drivingJoints)
+		"""
 
 	def __updateStickers(self):
 		if not self.compoundModel:
