@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.8
+* fix(hangar): update camera integration for 2.3.1 wot client
+
 ## v2.3.7
 * chore(data): up cache revision to 41
 * chore(release): bump version to 2.3.7

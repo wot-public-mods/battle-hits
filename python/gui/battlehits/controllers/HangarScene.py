@@ -9,7 +9,7 @@ import BigWorld
 import Math
 import CGF
 
-from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.hangar_camera_manager import HangarCameraSystem
 from constants import VEHICLE_HIT_EFFECT as HIT_EFFECT
 from debug_utils import LOG_ERROR
 from gui.ClientHangarSpace import customizationHangarCFG
@@ -128,7 +128,7 @@ class HangarScene(AbstractController):
 			del models[:], motors[:]
 
 	def _setCameraData(self, yaw, pitch, distConstraints, targetPos=None):
-		cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
+		cameraManager = CGF.getSystem(self.hangarSpace.spaceID, HangarCameraSystem)
 		if not cameraManager:
 			return
 

@@ -1,11 +1,10 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2015-2026 Andrii Andrushchyshyn
 
-__version__ = "2.3.7"
+__version__ = "2.3.8"
 
 try:
 	import openwg_gameface
-	from gui.battlehits import *
 except ImportError:
 	# log to handle with sentry
 	import logging
@@ -21,3 +20,5 @@ except ImportError:
 	# Kill game client
 	import sys
 	sys.exit()
+
+from gui.battlehits import *
